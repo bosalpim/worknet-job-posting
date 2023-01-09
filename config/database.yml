@@ -2,22 +2,42 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV["DB_POOL"] || 5  %>
-  database: <%= ENV['DB_NAME'] || 'worknet_job_posting_development' %>
-  username: <%= ENV['DB_USER'] || ENV['USER'] %>
-  password: <%= ENV['DB_PASS'] %>
-  host: <%= ENV["DB_HOST"] %>
-  url: <%= ENV['DATABASE_URL'] %> # takes higher precedence than other settings
-  reconnect: true
 
 development:
   <<: *default
-  database: <%= ENV['DB_NAME'] || 'worknet_job_posting_development' %>
+  database: bosalpim_development
+  username: ken
+  host: <%= ENV["DB_HOST_DEV"] || 'localhost' %>
+  password: <%= ENV["DB_PASSWORD_DEV"] %>
 
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: worknet_job_posting_test
+  database: bosalpim_test
+  socket: /tmp/mysql.sock
+  host: <%= ENV["DB_HOST_TEST"] || 'localhost' %>
+  password: <%= ENV["DB_PASSWORD_TEST"] %>
+
+staging:
+  adapter: postgresql
+  # Configure additional properties here.
+  # [END cloud_sql_mysql_activerecord_create_socket]
+  pool: 5
+  timeout: 5000
+  database: backend_production
+  username: rails_user
+  password: <%= ENV['DB_PASSWORD_STAGING'] %>
+  host: "/cloudsql/capable-conduit-334605:asia-northeast3:web-staging-main"
 
 production:
-  <<: *default
-  database: worknet_job_posting_production
-  url: <%= ENV['DATABASE_URL'] %>
+  adapter: postgresql
+  # Configure additional properties here.
+  # [END cloud_sql_mysql_activerecord_create_socket]
+  pool: 5
+  timeout: 5000
+  database: backend_production
+  username: rails_user
+  password: <%= ENV['DB_PASSWORD_PRODUCTION'] %>
+  host: "/cloudsql/capable-conduit-334605:asia-northeast3:web-production-main"
