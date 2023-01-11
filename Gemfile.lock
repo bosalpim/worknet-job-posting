@@ -46,7 +46,7 @@ GEM
       rainbow
       thor
       zeitwerk
-    aws-partitions (1.689.0)
+    aws-partitions (1.691.0)
     aws-sdk-apigateway (1.80.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
@@ -151,11 +151,6 @@ GEM
     httpclient (2.8.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    jetpacker (0.6.0)
-      activesupport (>= 5.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
     jets (3.2.0)
       actionmailer (~> 6.1.0)
       actionpack (~> 6.1.0)
@@ -231,7 +226,7 @@ GEM
       racc (~> 1.4)
     os (1.1.4)
     pg (1.2.3)
-    pry (0.14.1)
+    pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.1)
@@ -239,8 +234,6 @@ GEM
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.5)
-    rack-proxy (0.7.4)
-      rack
     rack-test (2.0.2)
       rack (>= 1.3)
     rails-dom-testing (2.0.3)
@@ -278,7 +271,6 @@ GEM
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
     ruby2_keywords (0.0.5)
-    semantic_range (3.0.0)
     serverlessgems (0.2.0)
       gems
       memoist
@@ -312,7 +304,6 @@ DEPENDENCIES
   faraday
   google-apis-indexing_v3 (~> 0.1)
   httparty
-  jetpacker
   jets (~> 3.2.0)
   launchy
   pg (~> 1.2.3)

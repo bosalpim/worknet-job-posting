@@ -1,6 +1,6 @@
 Jets.application.configure do
   config.project_name = "worknet-job-posting"
-  config.mode = "html"
+  config.mode = "api"
 
   config.prewarm.enable = true # default is true
   # config.prewarm.rate = '30 minutes' # default is '30 minutes'
@@ -62,4 +62,5 @@ Jets.application.configure do
   # testing suite output readable.
   # config.logger = Jets::Logger.new($stderr)
 
+  config.controllers.default_protect_from_forgery = false
 end

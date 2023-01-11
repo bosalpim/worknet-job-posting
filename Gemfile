@@ -2,9 +2,6 @@ source "https://rubygems.org"
 
 gem "jets", "~> 3.2.0"
 
-# Include jetpacker if you are building html pages
-gem "jetpacker"
-
 # Include pg gem if you are using ActiveRecord, remove next line
 # and config/database.yml file if you are not
 gem "pg", "~> 1.2.3"
