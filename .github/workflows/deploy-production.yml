@@ -35,3 +35,14 @@ jobs:
           JETS_ENV: production
           DB_PASSWORD_PRODUCTION: ${{ secrets.DB_PASSWORD }}
         run: echo y | bundle exec jets deploy
+
+
+      - name: Action Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: WorknetApiLambda Deployment
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always()
