@@ -45,8 +45,6 @@ class GetWorknetJobService
       business_info = job_detail_info.dig("corpInfo")
       job_posting_info = job_detail_info.dig("wantedInfo")
 
-      puts job_posting_info
-
       title = job_posting_info.dig("wantedTitle")
       description = job_posting_info.dig("jobCont")
 
@@ -66,7 +64,6 @@ class GetWorknetJobService
           hours_text = "#{work_start_time}~#{work_end_time}"
         rescue => e
           hours_text = job_posting_info.dig("workdayWorkhrCont")&.split(", ")[0]
-          puts e.message
         end
       end
 
@@ -216,9 +213,9 @@ class GetWorknetJobService
           google_api_service
         )
 
-        Rails.logger.info '[ActiveJob] Enqueued Worknet detail api job'
+        Jets.logger.info '[ActiveJob] Enqueued Worknet detail api job'
       rescue => e
-        puts Rails.logger.info "[Failed] Worknet api create job failed: #{e.message}"
+        puts Jets.logger.info "[Failed] Worknet api create job failed: #{e.message}"
       end
     end
   end
@@ -269,7 +266,7 @@ class GetWorknetJobService
         work_type: worknet_job_info.dig("jobs_code"),
         pay_type: worknet_job_info.dig("pay_type"),
         working_hours_type: worknet_job_info.dig("working_hours_type"),
-        region: worknet_job.dig("region")
+        region: worknet_job_info.dig("region")
       },
     )
     google_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env.production?
