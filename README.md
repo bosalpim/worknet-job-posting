@@ -1,11 +1,4 @@
-# Jets Project
+# Serverless 워크넷 채용공고 API를 이용한 프로세스 입니다.
 
-This README would normally document whatever steps are necessary to get the application up and running.
-
-Things you might want to cover:
-
-* Dependencies
-* Configuration
-* Database setup
-* How to run the test suite
-* Deployment instructions
+* 프레임웍: Ruby On Jets [https://rubyonjets.com/](https://rubyonjets.com/)
+* 배포: AWS (CloudFront, S3, Lambda 등)
