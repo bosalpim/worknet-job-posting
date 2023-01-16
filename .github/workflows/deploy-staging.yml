@@ -22,6 +22,16 @@ jobs:
       - name: Bundle install
         run: bundle install --path vendor/gems
 
+      - name: Action Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: WorknetApiLambda Deployment
+          fields: repo,message,commit,author,action,eventName,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always()
+
       - name: Generate Environment Variables File for Staging
         run: |
           echo "DB_PASSWORD_STAGING=$DB_PASSWORD_STAGING" >> .env.staging
@@ -33,7 +43,7 @@ jobs:
           echo "NAVER_API_KEY=$NAVER_API_KEY" >> .env.staging
           echo "KAKAO_REST_API_KEY=$KAKAO_REST_API_KEY" >> .env.staging
         env:
-          DB_PASSWORD_STAGING: ${{ secrets.DB_PASSWORD_STAGING }}
+          DB_PASSWORD_STAGING: ${{ secrets.$DB_PASSWORD_STAGING }}
           WORKNET_API_KEY: ${{ secrets.WORKNET_API_KEY }}
           GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
           GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
@@ -54,14 +64,3 @@ jobs:
         env:
           JETS_ENV: staging
         run: echo y | bundle exec jets deploy
-
-
-      - name: Action Slack
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          author_name: WorknetApiLambda Deployment
-          fields: repo,message,commit,author,action,eventName,workflow
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        if: always()
