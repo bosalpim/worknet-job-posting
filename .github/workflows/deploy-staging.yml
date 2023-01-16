@@ -24,7 +24,7 @@ jobs:
 
       - name: Generate Environment Variables File for Staging
         run: |
-          echo "DB_PASSWORD_STAGING=$DB_PASSWORD" >> .env.staging
+          echo "DB_PASSWORD_STAGING=$DB_PASSWORD_STAGING" >> .env.staging
           echo "WORKNET_API_KEY=$WORKNET_API_KEY" >> .env.staging
           echo "GOOGLE_PROJECT_ID=$GOOGLE_PROJECT_ID" >> .env.staging
           echo "GOOGLE_CLIENT_EMAIL=$GOOGLE_CLIENT_EMAIL" >> .env.staging
@@ -32,6 +32,7 @@ jobs:
           echo "NAVER_API_KEY_ID=$NAVER_API_KEY_ID" >> .env.staging
           echo "NAVER_API_KEY=$NAVER_API_KEY" >> .env.staging
           echo "KAKAO_REST_API_KEY=$KAKAO_REST_API_KEY" >> .env.staging
+        environment: staging
         env:
           DB_PASSWORD_STAGING: ${{ secrets.DB_PASSWORD }}
           WORKNET_API_KEY: ${{ secrets.WORKNET_API_KEY }}
