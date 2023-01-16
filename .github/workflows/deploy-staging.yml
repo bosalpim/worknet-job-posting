@@ -22,6 +22,26 @@ jobs:
       - name: Bundle install
         run: bundle install --path vendor/gems
 
+      - name: Generate Environment Variables File for Staging
+        run: |
+          echo "DB_PASSWORD_STAGING=$DB_PASSWORD_STAGING" >> .env.staging
+          echo "WORKNET_API_KEY=$WORKNET_API_KEY" >> .env.production
+          echo "GOOGLE_PROJECT_ID=$GOOGLE_PROJECT_ID" >> .env.production
+          echo "GOOGLE_CLIENT_EMAIL=$GOOGLE_CLIENT_EMAIL" >> .env.production
+          echo "GOOGLE_PRIVATE_KEY=$GOOGLE_PRIVATE_KEY" >> .env.production
+          echo "NAVER_API_KEY_ID=$NAVER_API_KEY_ID" >> .env.production
+          echo "NAVER_API_KEY=$NAVER_API_KEY" >> .env.production
+          echo "KAKAO_REST_API_KEY=$KAKAO_REST_API_KEY" >> .env.production
+        env:
+          DB_PASSWORD_STAGING: ${{ secrets.DB_PASSWORD }}
+          WORKNET_API_KEY: ${{ secrets.WORKNET_API_KEY }}
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+          GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+          NAVER_API_KEY_ID: ${{ secrets.NAVER_API_KEY_ID }}
+          NAVER_API_KEY: ${{ secrets.NAVER_API_KEY }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -33,7 +53,6 @@ jobs:
       - name: Jets deploy
         env:
           JETS_ENV: staging
-          DB_PASSWORD_STAGING: ${{ secrets.DB_PASSWORD }}
         run: echo y | bundle exec jets deploy
 
 
@@ -42,7 +61,7 @@ jobs:
         with:
           status: ${{ job.status }}
           author_name: WorknetApiLambda Deployment
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          fields: repo,message,commit,author,action,eventName,workflow
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
         if: always()
