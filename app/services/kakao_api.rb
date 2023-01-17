@@ -1,6 +1,4 @@
 class KakaoApi
-  include ExtendedHttparty
-
   ADDRESS_SEARCH_PATH  = "/local/search/address.json".freeze
 
   def initialize

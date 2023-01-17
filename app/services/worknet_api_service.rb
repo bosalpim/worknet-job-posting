@@ -1,6 +1,4 @@
 class WorknetApiService
-  include ExtendedHttparty
-
   JOB_CODE = {
     "550100": "요양보호사 및 간병인",
     "550102": "재가 간병인",
