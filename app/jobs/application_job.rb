@@ -1,4 +1,4 @@
 class ApplicationJob < Jets::Job::Base
   # Adjust to increase the default timeout for all Job classes
-  class_timeout 4500
+  class_timeout 3000
 end
