@@ -11,12 +11,12 @@ gem "zeitwerk", ">= 2.5.0"
 gem "httparty"
 gem "google-apis-indexing_v3", "~> 0.1"
 gem "faraday"
+gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
 # development and test groups are not bundled as part of the deployment
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'pry'
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'shotgun'
   gem 'rack'
   gem 'puma'
