@@ -38,7 +38,7 @@ class WorknetApiService
     cert
   )
     @base_url =
-      "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=#{ENV['WORKNET_API_KEY']}&returnType=XML"
+      "https://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=#{ENV['WORKNET_API_KEY']}&returnType=XML"
     @start_page = start_page
     @call_type = call_type
     @wanted_auth_no = wanted_auth_no
