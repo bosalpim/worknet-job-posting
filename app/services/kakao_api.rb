@@ -32,7 +32,7 @@ class KakaoApi
   attr_reader :base_url
 
   def send_request(path, body: {}, headers: {})
-    ExtendedHttparty.get(base_url + path, {
+    HTTParty.get(base_url + path, {
       headers: {
         **headers,
         Authorization: "KakaoAK #{ENV['KAKAO_REST_API_KEY']}"

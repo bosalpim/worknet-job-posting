@@ -57,7 +57,7 @@ class WorknetApiService
   attr_reader :base_url, :call_type, :wanted_auth_no, :start_page, :display, :reg_date, :occupation, :cert
 
   def get_job_postings
-    ExtendedHttparty.get(target_url, verify: true)
+    HTTParty.get(target_url, verify: true)
   end
 
   def target_url
