@@ -16,10 +16,10 @@ class GetWorknetJobService
 
   def create_job_postings_by_worknet
     loop.with_index do |_, index|
-      puts "================= index: #{index} ==================="
+      puts "================= index: #{index} ================="
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
       if data.present?
-        puts "================= Data Present!! ==================="
+        puts "================= Data Present!! ================="
         message_code = data.dig("messageCd")
         return if message_code == "006" || data.dig("total") == "0"  # 정보가 더 이상 존재하지 않는 경우
 
