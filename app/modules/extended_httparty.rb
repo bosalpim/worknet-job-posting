@@ -2,7 +2,7 @@ module ExtendedHttparty
   include HTTParty
 
   DEFAULT_TRIES = 3
-  SLEEP_DURATION = 1
+  SLEEP_DURATION = 3
 
   def self.included(base)
     HTTParty.included(base)
