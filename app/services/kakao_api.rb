@@ -1,4 +1,6 @@
 class KakaoApi
+  include ExtendedHttparty
+
   ADDRESS_SEARCH_PATH  = "/local/search/address.json".freeze
 
   def initialize
@@ -35,7 +37,8 @@ class KakaoApi
         **headers,
         Authorization: "KakaoAK #{ENV['KAKAO_REST_API_KEY']}"
       },
-      body: URI.encode_www_form(body)
+      body: URI.encode_www_form(body),
+      verify: true
     })
   end
 end
