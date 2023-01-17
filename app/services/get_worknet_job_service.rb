@@ -15,8 +15,9 @@ class GetWorknetJobService
   # attr_reader :test
 
   def create_job_postings_by_worknet
+    puts "#{JobPosting.first.name}"
     loop.with_index do |_, index|
-      puts "================= index: #{index} #{"http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=#{ENV['WORKNET_API_KEY']}&returnType=XML"} ==================="
+      puts "================= index: #{index} #{"https://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=#{ENV['WORKNET_API_KEY']}&returnType=XML"} ==================="
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0").dig("wantedRoot")
       if data.present?
         puts "================= Data Present!! ==================="
