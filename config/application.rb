@@ -28,8 +28,7 @@ Jets.application.configure do
   # More examples:
   # config.function.dead_letter_config = { target_arn: "arn" }
   config.function.vpc_config = {
-    security_group_ids: %w[sg-01a86a6e70d9f0388],
-    subnet_ids: %w[subnet-0958fbc8003de232c subnet-0adabac29ba2b76f9],
+    subnet_ids: %w[subnet-0bc1ca1dd2f511616 subnet-0f4fd9c32ac1837ae subnet-022ab46ae6d9ebb7e],
   }
   # config.function.ephemeral_storage = { size: 1536 }
   # The config.function settings to the CloudFormation Lambda Function properties.
