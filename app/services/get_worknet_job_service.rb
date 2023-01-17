@@ -16,23 +16,20 @@ class GetWorknetJobService
 
   def create_job_postings_by_worknet
     loop.with_index do |_, index|
-      puts "================= index: #{index} #{"https://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=#{ENV['WORKNET_API_KEY']}&returnType=XML"} ==================="
-      data = WorknetApiService.call(1, "L", nil, 100, "D-0")
+      puts "================= index: #{index} ==================="
+      data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
+      if data.present?
+        puts "================= Data Present!! ==================="
+        message_code = data.dig("messageCd")
+        return if message_code == "006" || data.dig("total") == "0"  # 정보가 더 이상 존재하지 않는 경우
 
-      puts JSON.dump(data)
-
-      # if data.present?
-      #   puts "================= Data Present!! ==================="
-      #   message_code = data.dig("messageCd")
-      #   return if message_code == "006" || data.dig("total") == "0"  # 정보가 더 이상 존재하지 않는 경우
-      #
-      #   jobs = data.dig("wanted")
-      #   if jobs.length > 0
-      #     create_worknet_job_postings(jobs)
-      #   else
-      #     return
-      #   end
-      # end
+        jobs = data.dig("wanted")
+        if jobs.length > 0
+          create_worknet_job_postings(jobs)
+        else
+          return
+        end
+      end
     end
   end
 
