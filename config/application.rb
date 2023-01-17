@@ -28,7 +28,7 @@ Jets.application.configure do
   # More examples:
   # config.function.dead_letter_config = { target_arn: "arn" }
   config.function.vpc_config = {
-    security_group_ids: %w[sg-01a86a6e70d9f0388 sg-013b44457c3b8ed5b],
+    security_group_ids: %w[sg-01a86a6e70d9f0388 sg-04299f99ea7b44046 sg-0f6f5bee969672854],
     subnet_ids: %w[subnet-0958fbc8003de232c subnet-0adabac29ba2b76f9],
   }
   # config.function.ephemeral_storage = { size: 1536 }
