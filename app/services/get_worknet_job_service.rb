@@ -37,7 +37,6 @@ class GetWorknetJobService
     jobs.each do |job_info|
       worknet_id = job_info.dig("wantedAuthNo")
       next if ScrapedWorknetJobPosting.find_by(original_id: worknet_id)
-      # TODO 찾은 경우 마감됐는지 파악해서 close 하는 부분 작성하기
 
       job_detail_info = WorknetApiService.call(1, "D", worknet_id).dig("wantedDtl")
       next if job_detail_info.dig("messageCd") == "006"
