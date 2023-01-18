@@ -46,7 +46,7 @@ class GetWorknetJobService
       emcharge_info = job_detail_info.dig("empchargeInfo")
 
       title = job_posting_info.dig("wantedTitle")
-      description = job_posting_info.dig("jobCont")
+      description = text_converter(job_posting_info.dig("jobCont"))
 
       work_hour_type_text = job_posting_info.dig("workdayWorkhrCont")
 
@@ -215,7 +215,7 @@ class GetWorknetJobService
           google_api_service
         )
 
-        Jets.logger.info '[ActiveJob] Enqueued Worknet detail api job'
+        Jets.logger.info '[ActiveJob] Get Worknet Job Successfully'
       rescue => e
         puts Jets.logger.info "[Failed] Worknet api create job failed: #{e.message}"
       end
@@ -378,9 +378,14 @@ class GetWorknetJobService
     gender
   end
 
-  def tmp
-    JobPosting.where('date(created_at) = ?', Date.today).destroy_all
-    ScrapedWorknetJobPosting.where('date(created_at) = ?', Date.today).destroy_all
-    Business.where('date(created_at) = ?', Date.today).destroy_all
+  def text_converter(text)
+    text&.gsub("\r\n", "\n")
+      &.gsub("&nbsp;", " ")
+      &.gsub("&lt;", "<")
+      &.gsub("&gt;", ">")
+      &.gsub("&amp;", "&")
+      &.gsub("&quot;", '"')
+      &.gsub("&#035;", '#')
+      &.gsub("&#039;", "'")
   end
 end
