@@ -15,7 +15,6 @@ class GetWorknetJobService
   # attr_reader :test
 
   def create_job_postings_by_worknet
-    puts KakaoApi.new.search_address("서울특별시 마포구 새창로8길 72")
     loop.with_index do |_, index|
       puts "================= Page: #{index + 1} ================="
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
@@ -45,6 +44,7 @@ class GetWorknetJobService
 
       business_info = job_detail_info.dig("corpInfo")
       job_posting_info = job_detail_info.dig("wantedInfo")
+      emcharge_info = job_detail_info.dig("empchargeInfo")
 
       title = job_posting_info.dig("wantedTitle")
       description = job_posting_info.dig("jobCont")
@@ -103,7 +103,8 @@ class GetWorknetJobService
             description: description,
             latitude: coords.present? ? coords[:lat].to_f : nil,
             longitude: coords.present? ? coords[:lng].to_f : nil,
-            contact_tel: job_posting_info.dig("empchargeInfo")&.dig("contactTelno"),
+            contact_tel: emcharge_info.dig("contactTelno"),
+            fax_number: emcharge_info.dig("chargerFaxNo"),
             applying_deadline: job_info.dig("closeDt"),
             welfares: job_posting_info.dig("etcWelfare")&.split(", "),
             jobs_code: work_type,
@@ -236,6 +237,7 @@ class GetWorknetJobService
           name: worknet_job_info.dig("center_name"),
           address: worknet_job_info.dig("center_address"),
           tel_number: worknet_job_info.dig("contact_tel"),
+          fax_number: worknet_job_info.dig("fax_number"),
           business_number: business_number,
           worker_count:
             worknet_job_info.dig("center_worker_count").present? &&
