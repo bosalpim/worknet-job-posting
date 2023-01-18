@@ -15,6 +15,7 @@ class GetWorknetJobService
   # attr_reader :test
 
   def create_job_postings_by_worknet
+    puts KakaoApi.new.search_address("서울특별시 마포구 새창로8길 72")
     loop.with_index do |_, index|
       puts "================= Page: #{index + 1} ================="
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
@@ -33,7 +34,7 @@ class GetWorknetJobService
   end
 
   def create_worknet_job_postings(jobs)
-    google_api_service = PostGoogleIndexingApiService.new
+    google_api_service = PostGoogleIndexingApiService.new rescue nil
     jobs.each do |job_info|
       worknet_id = job_info.dig("wantedAuthNo")
       next if ScrapedWorknetJobPosting.find_by(original_id: worknet_id)
@@ -72,6 +73,7 @@ class GetWorknetJobService
       address = job_info.dig("basicAddr")
       full_address = address
       full_address = address + " " + job_info.dig("detailAddr") if job_info.dig("detailAddr")
+
       coords = NaverApi.coords_from_address(address)
 
       pay_text = job_posting_info.dig("salTpNm")
@@ -269,7 +271,7 @@ class GetWorknetJobService
         region: worknet_job_info.dig("region")
       },
     )
-    google_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env.production?
+    google_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env.production? &&  google_api_service.present?
     job_posting
   end
 
