@@ -206,7 +206,7 @@ class GetWorknetJobService
             value: attach_file_info
           }
         ]
-        payload[:published_at] = DateTime.parse(job_info.dig("smodifyDtm"))
+        payload[:published_at] = DateTime.parse(job_info.dig("smodifyDtm") + "+0900")
 
         scraped_worknet_job_posting = ScrapedWorknetJobPosting.create!(payload)
         build_job_posting(
