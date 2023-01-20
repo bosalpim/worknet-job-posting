@@ -70,8 +70,11 @@ class GetWorknetJobService
       days_text = job_info.dig("holidayTpNm")
 
       address = job_info.dig("basicAddr")
+      detail_address = job_info.dig("detailAddr")
       full_address = address
-      full_address = address + ", " + job_info.dig("detailAddr") if job_info.dig("detailAddr")
+      if detail_address && detail_address != "0" && detail_address != "," && detail_address != "." && detail_address != ".." && detail_address != "..." && detail_address != "......" && detail_address != "-"&& detail_address != "*" && detail_address != "**" && detail_address != "****" && detail_address != "***-***"
+        full_address = address + ", " + detail_address
+      end
 
       coords = NaverApi.coords_from_address(job_info.dig("basicAddr"))
 
