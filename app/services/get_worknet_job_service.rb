@@ -73,7 +73,7 @@ class GetWorknetJobService
       full_address = address
       full_address = address + " " + job_info.dig("detailAddr") if job_info.dig("detailAddr")
 
-      coords = NaverApi.coords_from_address(address)
+      coords = NaverApi.coords_from_address(address.split.uniq.join(" "))
 
       pay_text = get_pure_pay_text(job_posting_info.dig("salTpNm"))
       begin
