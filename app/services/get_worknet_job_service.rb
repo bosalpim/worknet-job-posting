@@ -76,7 +76,6 @@ class GetWorknetJobService
       coords = NaverApi.coords_from_address(address)
 
       pay_text = get_pure_pay_text(job_posting_info.dig("salTpNm"))
-      byebug
       begin
         payload = {
           original_id: worknet_id,
