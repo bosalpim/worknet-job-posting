@@ -73,7 +73,8 @@ class GetWorknetJobService
       detail_address = job_info.dig("detailAddr")
 
       full_address = address
-      if detail_address && detail_address != "0" && detail_address != "," && detail_address != "." && detail_address != ".." && detail_address != "..." && detail_address != "......" && detail_address != "-"&& detail_address != "*" && detail_address != "**" && detail_address != "****" && detail_address != "***-***"
+
+      if detail_address && !%w[0 , . .. ... .... ..... ....... - * ** *** **** ***-***].include?(detail_address)
         full_address = address + ", " + detail_address
       end
 
