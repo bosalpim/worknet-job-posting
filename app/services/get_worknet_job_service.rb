@@ -63,7 +63,7 @@ class GetWorknetJobService
           work_end_time = "#{end_time_arr[0] > 9 ? end_time_arr[0] : "0#{end_time_arr[0]}"}:#{end_time_arr[1] > 9 ? end_time_arr[1] : "0#{end_time_arr[1]}"}"
           hours_text = "#{work_start_time}~#{work_end_time}"
         rescue => e
-          hours_text = job_posting_info.dig("workdayWorkhrCont")&.split(", ")[0]
+          hours_text = job_posting_info.dig("workdayWorkhrCont")
         end
       end
 
@@ -75,8 +75,8 @@ class GetWorknetJobService
 
       coords = NaverApi.coords_from_address(address)
 
-      pay_text = job_posting_info.dig("salTpNm")
-
+      pay_text = get_pure_pay_text(job_posting_info.dig("salTpNm"))
+      byebug
       begin
         payload = {
           original_id: worknet_id,
@@ -347,6 +347,14 @@ class GetWorknetJobService
       [start_hour, start_min],
       [end_hour, end_min]
     ]
+  end
+
+  def get_pure_pay_text(raw_pay_text)
+    pay_text = raw_pay_text.sub("이상,", "이상").sub("이하,", "이하")
+    if pay_text.include?("이상") && pay_text.include?("~")
+      pay_text = pay_text.sub(" 이상", "").sub(" 이하", "")
+    end
+    pay_text
   end
 
   def get_grade(title, description)
