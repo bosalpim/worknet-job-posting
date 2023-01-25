@@ -356,8 +356,8 @@ class GetWorknetJobService
       end_hour, end_min = end_text.split(":").map { |el| el.tr("^0-9", '').to_i }
     end
 
-    start_hour += 12 if start_text.match?(/오후/) || (start_text.match?(/자정/))
-    end_hour += 12 if end_text.match?(/오후/) || (end_text.match?(/자정/))
+    start_hour += 12 if (start_hour != 12 && start_text.match?(/오후/)) || (start_hour == 12 && start_text.match?(/오전/)) || (start_text.match?(/자정/))
+    end_hour += 12 if (end_hour != 12 && end_text.match?(/오후/))|| (end_hour == 12 && end_text.match?(/오전/)) || (end_text.match?(/자정/))
 
     [
       [start_hour, start_min],
@@ -396,9 +396,12 @@ class GetWorknetJobService
     if [/할아버지/, /남자/].filter do |w|
       title&.match(w) || description&.match(w)
     end.present?
-      gender = 'male'
+      if gender == 'female'
+        gender = nil
+      else
+        gender = 'male'
+      end
     end
-
     gender
   end
 
