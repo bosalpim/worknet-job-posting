@@ -98,7 +98,7 @@ class GetWorknetJobService
       full_address = fixed_address
     end
 
-    if detail_address && !%w[0 , . .. ... .... ..... ....... - * ** *** **** ***-***].include?(detail_address)
+    if detail_address && !%w[0 00 000 , . .. ... .... ..... ....... - * ** *** **** ***-***].include?(detail_address)
       full_address = address + ", " + detail_address
     end
 
@@ -276,14 +276,25 @@ class GetWorknetJobService
         )
     end
 
+    address = worknet_job_info.dig("address")
+    lat = worknet_job_info.dig("latitude")
+    lng = worknet_job_info.dig("longitude")
+    if lat.nil? || lng.nil?
+      fixed_address = address.split.uniq.join(' ')
+      coords = NaverApi.coords_from_address(fixed_address)
+      lat = coords[:lat] ? coords[:lat].to_f : nil
+      lng = coords[:lng] ? coords[:lng].to_f : nil
+      address = fixed_address
+    end
+
     job_posting = worknet_job.create_job_posting!(
       {
         business: business,
         title: worknet_job_info.dig("title"),
-        address: worknet_job_info.dig("address"),
+        address: address,
         description: worknet_job_info.dig("description"),
-        lat: worknet_job_info.dig("latitude"),
-        lng: worknet_job_info.dig("longitude"),
+        lat: lat,
+        lng: lng,
         gender: worknet_job_info.dig("gender"),
         grade: worknet_job_info.dig("grade"),
         published_at: worknet_job.published_at,
@@ -298,6 +309,7 @@ class GetWorknetJobService
         region: worknet_job_info.dig("region")
       },
     )
+    puts Jets.env.production?
     google_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env.production? &&  google_api_service.present?
     job_posting
   end
