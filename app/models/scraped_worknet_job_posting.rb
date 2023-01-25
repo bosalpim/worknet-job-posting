@@ -36,8 +36,8 @@ class ScrapedWorknetJobPosting < ApplicationRecord
           worknet_id: self.info['center_id'],
           name: self.info['center_name'],
           tel_number: self.info['contact_tel'],
+          phone_number: self.info['contact_tel'],
           address: self.info['center_address'],
-          # TODO - worker_count가 제대로 추출되지 않았음
           worker_count:
             self.info['center_worker_count'].present? &&
               self.info['center_worker_count'][/[^\d]*(\d+).*/, 1].to_i,

@@ -1,8 +1,5 @@
 # https://api.ncloud-docs.com/docs/ai-naver-mapsreversegeocoding-gc
 class NaverApi
-  DEFAULT_LAT = 37.555042
-  DEFAULT_LNG = 126.9769233
-
   def self.addresses_from_coords(lat, lng)
     api_response = reverse_geo_coding(lat, lng) rescue nil
 
@@ -21,9 +18,17 @@ class NaverApi
   def self.coords_from_address(address)
     api_response = geo_coding(address) rescue nil
 
-    return { lat: DEFAULT_LAT, lng: DEFAULT_LNG } if api_response.nil?
-
-    { lat: api_response.first['y'], lng: api_response.first['x'] }
+    if api_response.present?
+      { lat: api_response.first&.dig('y'), lng: api_response.first&.dig('x') }
+    else
+      kakao_api = KakaoApi.new
+      begin
+        return kakao_api.search_address(address)
+      rescue => e
+        Rails.logger.info e.message
+        return { lat: nil, lng: nil }
+      end
+    end
   end
 
   def self.reverse_geo_coding(lat, lng)
@@ -33,8 +38,7 @@ class NaverApi
       Faraday.new(
         url: 'https://naveropenapi.apigw.ntruss.com',
         headers: {
-          'X-NCP-APIGW-API-KEY-ID' =>
-            ENV['NAVER_API_KEY_ID'],
+          'X-NCP-APIGW-API-KEY-ID' => ENV['NAVER_API_KEY_ID'],
           'X-NCP-APIGW-API-KEY' => ENV['NAVER_API_KEY'],
         },
         ) do |f|
@@ -58,19 +62,19 @@ class NaverApi
       Faraday.new(
         url: 'https://naveropenapi.apigw.ntruss.com',
         headers: {
-          'X-NCP-APIGW-API-KEY-ID' =>
-            ENV['NAVER_API_KEY_ID'],
+          'X-NCP-APIGW-API-KEY-ID' => ENV['NAVER_API_KEY_ID'],
           'X-NCP-APIGW-API-KEY' => ENV['NAVER_API_KEY'],
           :'Accept' => 'application/json',
         },
         ) do |f|
+        f.request :retry, max: 2, interval: 0.05,
+                  interval_randomness: 0.5, backoff_factor: 2,
+                  exceptions: [Exception, 'Timeout::Error']
         f.response :json
         f.adapter :net_http
       end
 
     response = conn.get('/map-geocode/v2/geocode', { query: address })
-
-    puts response.body
 
     return nil if response.body['addresses'].blank?
 

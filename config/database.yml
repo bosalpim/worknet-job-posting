@@ -29,7 +29,7 @@ staging:
   database: backend_production
   username: rails_user
   password: <%= ENV['DB_PASSWORD_STAGING'] %>
-  host: "/cloudsql/capable-conduit-334605:asia-northeast3:web-staging-main"
+  host: <%= ENV['DB_HOST_STAGING'] %>
 
 production:
   adapter: postgresql
@@ -40,4 +40,4 @@ production:
   database: backend_production
   username: rails_user
   password: <%= ENV['DB_PASSWORD_PRODUCTION'] %>
-  host: "/cloudsql/capable-conduit-334605:asia-northeast3:web-production-main"
+  host: <%= ENV['DB_HOST_PRODUCTION'] %>

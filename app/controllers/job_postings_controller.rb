@@ -1,5 +1,5 @@
 class JobPostingsController < ApplicationController
   def create
-    # @job_posting = JobPosting.new(job_posting_params)
+    GetWorknetJobService.call
   end
 end

@@ -27,10 +27,10 @@ Jets.application.configure do
   # }
   # More examples:
   # config.function.dead_letter_config = { target_arn: "arn" }
-  # config.function.vpc_config = {
-  #   security_group_ids: %w[sg-1 sg-2],
-  #   subnet_ids: %w[subnet-1 subnet-2],
-  # }
+  config.function.vpc_config = {
+    security_group_ids: %w[sg-04daf636f3d105ed8],
+    subnet_ids: %w[subnet-0f4fd9c32ac1837ae subnet-022ab46ae6d9ebb7e],
+  }
   # config.function.ephemeral_storage = { size: 1536 }
   # The config.function settings to the CloudFormation Lambda Function properties.
   # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html

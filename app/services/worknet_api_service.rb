@@ -36,7 +36,7 @@ class WorknetApiService
     cert
   )
     @base_url =
-      "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=#{ENV['WORKNET_API_KEY']}&returnType=XML"
+      "https://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=#{ENV['WORKNET_API_KEY']}&returnType=XML"
     @start_page = start_page
     @call_type = call_type
     @wanted_auth_no = wanted_auth_no
@@ -55,7 +55,7 @@ class WorknetApiService
   attr_reader :base_url, :call_type, :wanted_auth_no, :start_page, :display, :reg_date, :occupation, :cert
 
   def get_job_postings
-    HTTParty.get(target_url)
+    HTTParty.get(target_url, verify: true, open_timeout: 120).parsed_response
   end
 
   def target_url
