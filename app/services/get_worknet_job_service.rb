@@ -49,6 +49,7 @@ class GetWorknetJobService
 
     job_detail_info = WorknetApiService.call(1, "D", worknet_id).dig("wantedDtl")
     return if job_detail_info.dig("messageCd") == "006"
+    return if job_detail_info.dig("jobsNm").include?("사회복지사")
 
     business_info = job_detail_info.dig("corpInfo")
     job_posting_info = job_detail_info.dig("wantedInfo")
