@@ -67,6 +67,7 @@ class GetWorknetJobService
     hours_text = nil
     if working_hours_type == 'normal' && work_type != "resident"
       begin
+        byebug
         start_time_arr, end_time_arr = get_hours_values(job_posting_info.dig("workdayWorkhrCont")&.split(", ")[0])
         work_start_time = "#{start_time_arr[0] > 9 ? start_time_arr[0] : "0#{start_time_arr[0]}"}:#{start_time_arr[1] > 9 ? start_time_arr[1] : "0#{start_time_arr[1]}"}"
         work_end_time = "#{end_time_arr[0] > 9 ? end_time_arr[0] : "0#{end_time_arr[0]}"}:#{end_time_arr[1] > 9 ? end_time_arr[1] : "0#{end_time_arr[1]}"}"
@@ -105,6 +106,7 @@ class GetWorknetJobService
           title: title,
           period_type: job_posting_info.dig("empTpCd"),
           days_text: days_text,
+          origin_hours_text: job_posting_info.dig("workdayWorkhrCont"),
           hours_text: hours_text,
           work_start_time: work_start_time,
           work_end_time: work_end_time,
