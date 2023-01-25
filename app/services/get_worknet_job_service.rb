@@ -14,6 +14,7 @@ class GetWorknetJobService
 
   # attr_reader :test
 
+
   def create_job_postings_by_worknet
     loop.with_index do |_, index|
       puts "================= Page: #{index + 1} ================="
@@ -49,7 +50,7 @@ class GetWorknetJobService
 
     job_detail_info = WorknetApiService.call(1, "D", worknet_id).dig("wantedDtl")
     return if job_detail_info.dig("messageCd") == "006"
-    return if job_detail_info.dig("jobsNm").include?("사회복지사")
+    return if job_detail_info.dig("wantedInfo")&.dig("jobsNm")&.include?("사회복지사")
 
     business_info = job_detail_info.dig("corpInfo")
     job_posting_info = job_detail_info.dig("wantedInfo")
@@ -68,7 +69,7 @@ class GetWorknetJobService
     hours_text = nil
     if working_hours_type == 'normal' && work_type != "resident"
       begin
-        if work_hour_type_text.include?("퐁당당")
+        if work_hour_type_text.include?("퐁당당") || work_hour_type_text.include?("퐁근무")
           work_hour_type_text = work_hour_type_text.split(",").first
           hours_text = work_hour_type_text
         else
