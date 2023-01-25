@@ -16,7 +16,6 @@ class GetWorknetJobService
 
 
   def create_job_postings_by_worknet
-    puts "ENV: #{Jets.env}"
     loop.with_index do |_, index|
       puts "================= Page: #{index + 1} ================="
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
@@ -99,7 +98,7 @@ class GetWorknetJobService
       full_address = fixed_address
     end
 
-    if detail_address && !%w[0 00 000 , . .. ... .... ..... ....... - * ** *** **** ***-***].include?(detail_address)
+    if detail_address && !%w[0 00 000 , . .. ... .... ..... ....... - * ** *** **** ***-*** /].include?(detail_address)
       full_address = address + ", " + detail_address
     end
 

@@ -76,8 +76,6 @@ class NaverApi
 
     response = conn.get('/map-geocode/v2/geocode', { query: address })
 
-    puts response.body
-
     return nil if response.body['addresses'].blank?
 
     response.body['addresses']
