@@ -318,6 +318,8 @@ class GetWorknetJobService
       "resident"
     elsif work_hour_type_text.match?(/데이케어/)
       "day_care"
+    elsif title.match?(/방문목욕/) || description.match?(/방문목욕/)
+      "bath_help"
     else
       case jobs_code
       when "550100"
