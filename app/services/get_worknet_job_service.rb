@@ -382,6 +382,13 @@ class GetWorknetJobService
     start_hour += 12 if (start_hour != 12 && start_text.match?(/오후/)) || (start_hour == 12 && start_text.match?(/오전/)) || (start_text.match?(/자정/))
     end_hour += 12 if (end_hour != 12 && end_text.match?(/오후/))|| (end_hour == 12 && end_text.match?(/오전/)) || (end_text.match?(/자정/))
 
+    if start_min % 10 != 0 || end_min % 10 != 0
+      start_hour = nil
+      start_min = nil
+      end_hour = nil
+      end_min = nil
+    end
+
     [
       [start_hour, start_min],
       [end_hour, end_min]

@@ -63,7 +63,7 @@ jobs:
         if: always()
         with:
           status: ${{ job.status }}
-          author_name: WorknetApiLambda Deployment
+          author_name: [PRODUCTION] Deployment
           fields: repo,message,commit,author,action,eventName,workflow,branch
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
