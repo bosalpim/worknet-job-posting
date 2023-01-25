@@ -68,11 +68,15 @@ class GetWorknetJobService
     hours_text = nil
     if working_hours_type == 'normal' && work_type != "resident"
       begin
-        byebug
-        start_time_arr, end_time_arr = get_hours_values(job_posting_info.dig("workdayWorkhrCont")&.split(", ")[0])
-        work_start_time = "#{start_time_arr[0] > 9 ? start_time_arr[0] : "0#{start_time_arr[0]}"}:#{start_time_arr[1] > 9 ? start_time_arr[1] : "0#{start_time_arr[1]}"}"
-        work_end_time = "#{end_time_arr[0] > 9 ? end_time_arr[0] : "0#{end_time_arr[0]}"}:#{end_time_arr[1] > 9 ? end_time_arr[1] : "0#{end_time_arr[1]}"}"
-        hours_text = "#{work_start_time}~#{work_end_time}"
+        if work_hour_type_text.include?("퐁당당")
+          work_hour_type_text = work_hour_type_text.split(",").first
+          hours_text = work_hour_type_text
+        else
+          start_time_arr, end_time_arr = get_hours_values(job_posting_info.dig("workdayWorkhrCont")&.split(", ")[0])
+          work_start_time = "#{start_time_arr[0] > 9 ? start_time_arr[0] : "0#{start_time_arr[0]}"}:#{start_time_arr[1] > 9 ? start_time_arr[1] : "0#{start_time_arr[1]}"}"
+          work_end_time = "#{end_time_arr[0] > 9 ? end_time_arr[0] : "0#{end_time_arr[0]}"}:#{end_time_arr[1] > 9 ? end_time_arr[1] : "0#{end_time_arr[1]}"}"
+          hours_text = "#{work_start_time}~#{work_end_time}"
+        end
       rescue => e
         hours_text = job_posting_info.dig("workdayWorkhrCont")
       end
