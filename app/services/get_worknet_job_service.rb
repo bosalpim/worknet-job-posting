@@ -309,8 +309,8 @@ class GetWorknetJobService
         region: worknet_job_info.dig("region")
       },
     )
-    puts Jets.env.production?
-    google_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env.production? &&  google_api_service.present?
+    puts Jets.env
+    google_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" &&  google_api_service.present?
     job_posting
   end
 
