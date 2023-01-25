@@ -16,6 +16,7 @@ class GetWorknetJobService
 
 
   def create_job_postings_by_worknet
+    puts "ENV: #{Jets.env}"
     loop.with_index do |_, index|
       puts "================= Page: #{index + 1} ================="
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
@@ -309,7 +310,6 @@ class GetWorknetJobService
         region: worknet_job_info.dig("region")
       },
     )
-    puts Jets.env
     google_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" &&  google_api_service.present?
     job_posting
   end
