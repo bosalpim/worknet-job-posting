@@ -64,6 +64,6 @@ jobs:
         with:
           status: ${{ job.status }}
           author_name: WorknetApiLambda Deployment
-          fields: repo,message,commit,author,action,eventName,workflow
+          fields: repo,message,commit,author,action,eventName,workflow,branch
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
