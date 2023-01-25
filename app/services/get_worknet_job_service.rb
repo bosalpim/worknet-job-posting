@@ -54,7 +54,7 @@ class GetWorknetJobService
     job_posting_info = job_detail_info.dig("wantedInfo")
     emcharge_info = job_detail_info.dig("empchargeInfo")
 
-    title = job_posting_info.dig("wantedTitle")
+    title = text_converter(job_posting_info.dig("wantedTitle"))
     description = text_converter(job_posting_info.dig("jobCont"))
 
     work_hour_type_text = job_posting_info.dig("workdayWorkhrCont")
