@@ -90,12 +90,17 @@ class GetWorknetJobService
 
     full_address = address
 
+    coords = NaverApi.coords_from_address(address)
+    if coords.dig(:lat).nil?
+      fixed_address = address.split.uniq.join(' ')
+      coords = NaverApi.coords_from_address(fixed_address)
+      address = fixed_address
+      full_address = fixed_address
+    end
+
     if detail_address && !%w[0 , . .. ... .... ..... ....... - * ** *** **** ***-***].include?(detail_address)
       full_address = address + ", " + detail_address
     end
-
-    coords = NaverApi.coords_from_address(address)
-    coords = NaverApi.coords_from_address(address.split.uniq.join(' ')) if coords.dig(:lat).nil?
 
     pay_text = get_pure_pay_text(job_posting_info.dig("salTpNm"))
     begin
