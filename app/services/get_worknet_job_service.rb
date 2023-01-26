@@ -49,8 +49,9 @@ class GetWorknetJobService
     return if ScrapedWorknetJobPosting.find_by(original_id: worknet_id)
 
     job_detail_info = WorknetApiService.call(1, "D", worknet_id).dig("wantedDtl")
+    job_name = job_detail_info.dig("wantedInfo")&.dig("jobsNm")
     return if job_detail_info.dig("messageCd") == "006"
-    return if job_detail_info.dig("wantedInfo")&.dig("jobsNm")&.include?("사회복지사")
+    return if job_name&.match?(/사회복지사/) || job_name&.match?(/건물 보수원/)
 
     business_info = job_detail_info.dig("corpInfo")
     job_posting_info = job_detail_info.dig("wantedInfo")
@@ -69,7 +70,7 @@ class GetWorknetJobService
     hours_text = nil
     if working_hours_type == 'normal' && work_type != "resident"
       begin
-        if work_hour_type_text.include?("퐁당당") || work_hour_type_text.include?("퐁근무")
+        if work_hour_type_text.match?(/퐁당당/) || work_hour_type_text.match?(/퐁근무/) || work_hour_type_text.match?(/주주야야비비/) || work_hour_type_text.match?(/주주야야휴휴/)
           work_hour_type_text = work_hour_type_text.split(",").first
           hours_text = work_hour_type_text
         else
@@ -382,7 +383,7 @@ class GetWorknetJobService
     start_hour += 12 if (start_hour != 12 && start_text.match?(/오후/)) || (start_hour == 12 && start_text.match?(/오전/)) || (start_text.match?(/자정/))
     end_hour += 12 if (end_hour != 12 && end_text.match?(/오후/))|| (end_hour == 12 && end_text.match?(/오전/)) || (end_text.match?(/자정/))
 
-    if start_min % 10 != 0 || end_min % 10 != 0
+    if start_min % 10 != 0 || end_min % 10 != 0 || raw_hours_text.match?(/또는/) || raw_hours_text.match?(/혹은/)
       start_hour = nil
       start_min = nil
       end_hour = nil
@@ -445,4 +446,24 @@ class GetWorknetJobService
       &.gsub("&#035;", '#')
       &.gsub("&#039;", "'")
   end
+
+  # def extract_time(raw_hours_text)
+  #   case1 = /\d\d:\d\d~\d\d:\d\d/
+  #   case2 = /\d\d:\d\d-\d\d:\d\d/
+  #   case3 = /\d\d시~\d\d시/
+  #   case4 = /\d\d시-\d\d시/
+  #   case5 = /\d\d시\d\d분~\d\d시\d\d분/
+  #   case6 = /\d\d시\d\d분-\d\d시\d\d분/
+  #
+  #   start_hour = nil
+  #   start_min = nil
+  #   end_hour = nil
+  #   end_min = nil
+  #
+  #   if raw_hours_text.match?(case1)
+  #     start_text, end_text = raw_hours_text[case1].split('~')
+  #     start_hour, start_min = start_text.split(':')
+  #     end_hour, end_min = end_text.split(':')
+  #   end
+  # end
 end

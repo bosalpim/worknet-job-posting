@@ -64,6 +64,6 @@ jobs:
         with:
           status: ${{ job.status }}
           author_name: [PRODUCTION] Deployment
-          fields: repo,message,commit,author,action,eventName,workflow,branch
+          fields: repo,message,commit,author,action,eventName,workflow
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
