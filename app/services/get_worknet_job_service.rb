@@ -99,7 +99,7 @@ class GetWorknetJobService
       full_address = fixed_address
     end
 
-    if detail_address && !%w[0 00 000 , . .. ... .... ..... ....... - * ** *** **** ***-*** /].include?(detail_address)
+    if detail_address && !%w[0 00 000 , . .. ... .... ..... ...... ....... - * ** *** **** ***-*** /].include?(detail_address)
       full_address = address + ", " + detail_address
     end
 
