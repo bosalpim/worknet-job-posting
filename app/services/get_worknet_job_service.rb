@@ -291,9 +291,9 @@ class GetWorknetJobService
     job_posting = worknet_job.create_job_posting!(
       {
         business: business,
-        title: worknet_job_info.dig("title"),
+        title: text_converter(worknet_job_info.dig("title")),
         address: address,
-        description: worknet_job_info.dig("description"),
+        description: text_converter(worknet_job_info.dig("description")),
         lat: lat,
         lng: lng,
         gender: worknet_job_info.dig("gender"),
