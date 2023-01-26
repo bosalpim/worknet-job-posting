@@ -343,10 +343,12 @@ class GetWorknetJobService
   end
 
   def get_working_hours_type(work_hour_type_text)
-    if work_hour_type_text.match?(/2교대/)
+    if work_hour_type_text.match?(/2교대/) || work_hour_type_text.match?(/주주야야휴휴/) || work_hour_type_text.match?(/주주야야비비/)
       "two_shift"
     elsif work_hour_type_text.match?(/3교대/)
       "three_shift"
+    elsif work_hour_type_text.match?(/1교대/) || work_hour_type_text.match?(/퐁당당/)
+      "one_shift"
     else
       "normal"
     end

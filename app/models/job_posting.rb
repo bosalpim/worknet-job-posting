@@ -29,6 +29,7 @@ class JobPosting < ApplicationRecord
     normal: 'normal',
     two_shift: 'two_shift',
     three_shift: 'three_shift',
+    one_shift: 'one_shift',
   }
 
   enum pay_type: {
