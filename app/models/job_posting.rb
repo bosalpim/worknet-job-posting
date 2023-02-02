@@ -2,6 +2,8 @@ class JobPosting < ApplicationRecord
   include PublicId
   include StringNumber
 
+  acts_as_geolocated
+
   set_string_number_fields :manager_phone_number
 
   validates :proposal_usable_count, numericality: { greater_than_or_equal_to: 0 }

@@ -1,8 +1,15 @@
 Jets.application.configure do
   config.project_name = "worknet-job-posting"
   config.mode = "api"
+  config.cors = %w[
+    localhost
+    *.carepartner.kr
+    *.dev-carepartner.kr
+    backend-staging-wemrofzktq-du.a.run.app
+    backend-production-wemrofzktq-du.a.run.app
+  ].join(",")
 
-  config.prewarm.enable = true # default is true
+  config.prewarm.enable = true # default is truec
   # config.prewarm.rate = '30 minutes' # default is '30 minutes'
   # config.prewarm.concurrency = 2 # default is 2
   # config.prewarm.public_ratio = 3 # default is 3
