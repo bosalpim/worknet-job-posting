@@ -2,7 +2,6 @@ class NotificationJob < ApplicationJob
   include Translation
   include JobPostingsHelper
 
-  rate "10 hours" # every 10 hours
   def dig
     # user = User.first
     # business = Business.first

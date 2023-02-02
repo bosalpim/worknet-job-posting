@@ -1,11 +1,16 @@
 class KakaoNotificationService < KakaoTemplateService
-  attr_reader :template_id, :base_url, :user_id, :profile, :sender_number, :phone, :message_type
+  attr_reader :template_id, :base_url, :user_id, :profile, :sender_number, :phone, :message_type, :reserve_dt
 
-  def self.call(template_id:, phone:, template_params:)
-    new(template_id: template_id, phone: phone).call(**template_params)
+  def self.call(template_id:, phone:, message_type: "AT", reserve_dt: "00000000000000" ,template_params:)
+    new(
+      template_id: template_id,
+      phone: phone,
+      message_type: message_type,
+      reserve_dt: reserve_dt
+    ).call(**template_params)
   end
 
-  def initialize(template_id:, phone:, message_type: "AT")
+  def initialize(template_id:, phone:, message_type:, reserve_dt:)
     super(template_id)
     @base_url = "https://alimtalk-api.bizmsg.kr/v2/sender/send"
     @user_id = "bosalpim21"
@@ -13,6 +18,7 @@ class KakaoNotificationService < KakaoTemplateService
     @sender_number = "15885877"
     @phone = phone
     @message_type = message_type
+    @reserve_dt = reserve_dt
   end
 
   def call(**template_params)
@@ -68,7 +74,8 @@ class KakaoNotificationService < KakaoTemplateService
       msgSms:       message,
       smsSender:    sender_number,
       smsLmsTit:    title,
-      img_url:      img_url
+      img_url:      img_url,
+      reserveDt:    reserve_dt
     }
   end
 
