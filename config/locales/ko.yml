@@ -1,0 +1,172 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   "true": "foo"
+#
+# To learn more, please read the Rails Internationalization guide
+# available at https://guides.rubyonrails.org/i18n.html.
+
+kr:
+  number:
+    currency:
+      format:
+        format: "%n%u"
+        unit: "원"
+  activerecord:
+    attributes:
+      user:
+        preferred_distance:
+          by_walk15: 도보 15분
+          by_walk30: 도보 30분
+          by_km_3: 3km
+          by_km_5: 5km
+      job_posting:
+        pay_type:
+          hourly: 시급
+          daily: 일급
+          monthly: 월급
+          yearly: 연봉
+          per_case: 건당
+        welfare_types:
+          social_insurance: 4대보험
+          severance_pay: 퇴직급여
+          pay_for_meal: 식사(비) 지원
+          driving_benefit: 운전수당
+          transportation_expenses: 교통비 지원
+          severe_disability_allowance: 중증가산수당
+          holiday_gift: 명절선물
+          cash_gift: 경조사비
+          long_service_gift: 장기근속 장려금
+          government_grants: 정부지원금
+        working_days:
+          monday: 월
+          tuesday: 화
+          wednesday: 수
+          thursday: 목
+          friday: 금
+          saturday: 토
+          sunday: 일
+        work_type:
+          commute: 방문요양
+          resident: 입주요양
+          bath_help: 방문목욕
+          day_care: 주야간보호
+          sanatorium: 요양원
+          hospital: 요양병원
+          facility: 시설
+        working_hours_type:
+          normal: 주간근무
+          one_shift: 3조 1교대
+          two_shift: 3조 2교대
+          three_shift: 3조 3교대
+        applying_options:
+          newbie: 초보가능
+          veterant: 경력우대
+          veterant_required: 경력필수
+          driver_license_required: 운전면허증 필수
+          dementia_education_required: 치매전문교육 이수
+        applying_methods:
+          phone: 전화
+          email: 이메일
+          visiting: 방문
+      business:
+        business_types:
+          commute: 방문요양 센터
+          bath_help: 방문 목욕
+          day_care: 주야간 보호소
+          sanatorium: 요양원
+          senior_hospital: 요양병원
+          etc: 기타
+      job_posting_customer:
+        gender:
+          male: 남성
+          female: 여성
+        grade:
+          none: 없음
+          first: 1등급
+          second: 2등급
+          third: 3등급
+          fourth: 4등급
+          fifth: 5등급
+          sixth: 인지지원등급
+        cognitive_disorder:
+          no_dementia: 정상
+          early_stage_dementia: 치매 초기
+          mid_stage_dementia: 치매 중기
+          end_stage_dementia: 치매 말기
+        cohabiting_family:
+          live_alone: 독거중
+          spouse_exist_on_service: 배우자와 동거하고 있으며 서비스 시간에도 집에 있음
+          spouse_not_exist_on_service: 배우자와 동거하고 있으나 서비스 시간에는 자리 비움
+          family_exist_on_service: 다른 가족과 동거하고 있으며 서비스 시간에도 집에 있음
+          family_not_exist_on_service: 다른 가족과 동거하고 있으나 서비스 시간에는 자리 비움
+        environment_options:
+          housekeeper: 가사도우미 있음
+          parking_enabled: 주차가능
+          has_pet: 애완동물 있음
+          over_102sqm: 30평 이상
+        meal_assistances:
+          self_meal: 스스로 식사 가능
+          prepare_required: 식사 차려드리기
+          cooking_required: 밥, 반찬 등 요리 필요
+          tube_feeding: 경관식 보조
+        excretion_assistances:
+          self_excretion: 스스로 배변 가능
+          help_required: 가끔 대소변 실수 시 도움
+          use_diaper: 기저귀 케어 필요
+          indwelling_catheter: 유치도뇨/방광루/장루 관리
+        movement_assistances:
+          self_movement: 스스로 거동 가능
+          help_required: 이동시 부축 도움
+          wheelchair: 휠체어 이동 보조
+          invalidity: 거동 불가
+        housework_assistances:
+          cleaning: 청소, 빨래 도움 필요
+          bath: 목욕 보조
+          going_hospital: 병원 동행
+          walk_exercise: 산책, 간단한 운동
+          crony: 말벗 등 정서지원
+          cognitive_stimulation_training: 인지자극 활동
+      proposal:
+        use_type:
+          free: 무료 제안권
+          paid: 유료 제안권
+      charge:
+        status:
+          recharged: 충전완료
+          refunded: 환불완료
+          deleted: 삭제완료
+        category:
+          paid: 유료결제
+          event: 이벤트
+          free: 무료제공
+
+    errors:
+      models:
+        business:
+          attributes:
+            business_number:
+              taken: 이미 등록된 사업자등록번호 입니다.
