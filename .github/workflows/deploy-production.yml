@@ -35,6 +35,7 @@ jobs:
           echo "NAVER_API_KEY_ID=$NAVER_API_KEY_ID" >> .env.production
           echo "NAVER_API_KEY=$NAVER_API_KEY" >> .env.production
           echo "KAKAO_REST_API_KEY=$KAKAO_REST_API_KEY" >> .env.production
+          echo "KAKAO_BIZMSG_PROFILE=$KAKAO_BIZMSG_PROFILE" >> .env.production
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
           DB_PASSWORD_PRODUCTION: ${{ secrets.DB_PASSWORD_PRODUCTION }}
@@ -45,6 +46,7 @@ jobs:
           NAVER_API_KEY_ID: ${{ secrets.NAVER_API_KEY_ID }}
           NAVER_API_KEY: ${{ secrets.NAVER_API_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+          KAKAO_BIZMSG_PROFILE: ${{ secrets.KAKAO_BIZMSG_PROFILE }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1

@@ -130,8 +130,8 @@ class GetWorknetJobService
           description: description,
           latitude: coords.present? ? coords[:lat].to_f : nil,
           longitude: coords.present? ? coords[:lng].to_f : nil,
-          contact_tel: emcharge_info.dig("contactTelno"),
-          fax_number: emcharge_info.dig("chargerFaxNo"),
+          contact_tel: emcharge_info.class == Array ? emcharge_info[0].dig("contactTelno") : emcharge_info.dig("contactTelno"),
+          fax_number: emcharge_info.class == Array ? emcharge_info[0].dig("chargerFaxNo") : emcharge_info.dig("chargerFaxNo"),
           applying_deadline: job_info.dig("closeDt"),
           welfares: job_posting_info.dig("etcWelfare")&.split(", "),
           jobs_code: work_type,
@@ -291,9 +291,9 @@ class GetWorknetJobService
     job_posting = worknet_job.create_job_posting!(
       {
         business: business,
-        title: worknet_job_info.dig("title"),
+        title: text_converter(worknet_job_info.dig("title")),
         address: address,
-        description: worknet_job_info.dig("description"),
+        description: text_converter(worknet_job_info.dig("description")),
         lat: lat,
         lng: lng,
         gender: worknet_job_info.dig("gender"),
