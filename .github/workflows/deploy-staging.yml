@@ -1,8 +1,10 @@
 name: Staging Deploy To AWS Lambda
 
 on:
-  push:
+  pull_request:
     branches: [ staging ]
+    types:
+      - closed
 
 jobs:
   deploy:
