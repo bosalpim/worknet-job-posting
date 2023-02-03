@@ -73,4 +73,17 @@ class User < ApplicationRecord
       "알수없음"
     end
   end
+
+  def simple_distance_from_ko(object)
+    distance = distance_from(object)
+    if distance.present?
+      if distance <= 1800
+        minutes = (distance / 60).to_i
+        minutes = minutes.zero? ? 1 : minutes
+        "걸어서 #{minutes}분"
+      else
+        "걸어서 30분 이상"
+      end
+    end
+  end
 end

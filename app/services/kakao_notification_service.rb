@@ -34,7 +34,6 @@ class KakaoNotificationService < KakaoTemplateService
   private
 
   def send_request(request_params)
-    byebug
     response = HTTParty.post(
       base_url,
       body: JSON.dump([request_params]),

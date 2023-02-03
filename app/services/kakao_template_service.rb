@@ -113,7 +113,7 @@ class KakaoTemplateService
     }
     {
       title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 새로운 일자리 추천드려요.\n(기준: #{"주소"})\n\n본 공고에 취업성공 하시면\n케어파트너에서 50,000원의 추가수당을 드려요!\n\n아래의 [채용 공고 확인하기]를 클릭하여, 상세 근무 내용을 확인해보세요!\n#{tem_params[:shorten_url]}",
+      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 새로운 일자리 추천드려요.\n(기준: #{tem_params[:address]&.truncate(19)})\n\n본 공고에 취업성공 하시면\n케어파트너에서 50,000원의 추가수당을 드려요!\n\n아래의 [채용 공고 확인하기]를 클릭하여, 상세 근무 내용을 확인해보세요!\n#{tem_params[:shorten_url]}",
       img_url: "https://mud-kage.kakao.com/dn/jHTgl/btrXQglg6yP/UMX1XIptljvShTiNz0w9y0/img_l.jpg",
       items: items,
       buttons: [
@@ -168,7 +168,7 @@ class KakaoTemplateService
     }
     {
       title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 새로운 일자리 정보 안내드려요.\n(기준: #{tem_params[:address]})\n\n본 공고에 취업성공 하시면\n케어파트너에서 50,000원의 추가수당을 드려요!\n\n아래의 [채용 공고 확인하기]를 클릭하여, 상세 근무 내용을 확인해보세요!\n#{tem_params[:shorten_url]}",
+      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 새로운 일자리 정보 안내드려요.\n(기준: #{tem_params[:address]&.truncate(19)})\n\n본 공고에 취업성공 하시면\n케어파트너에서 50,000원의 추가수당을 드려요!\n\n아래의 [채용 공고 확인하기]를 클릭하여, 상세 근무 내용을 확인해보세요!\n#{tem_params[:shorten_url]}",
       img_url: "https://mud-kage.kakao.com/dn/jHTgl/btrXQglg6yP/UMX1XIptljvShTiNz0w9y0/img_l.jpg",
       items: items,
       buttons: [
