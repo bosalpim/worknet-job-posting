@@ -25,7 +25,7 @@ class NaverApi
       begin
         return kakao_api.search_address(address)
       rescue => e
-        Rails.logger.info e.message
+        Jets.logger.info e.message
         return { lat: nil, lng: nil }
       end
     end
