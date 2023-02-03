@@ -11,6 +11,10 @@ class KakaoTemplateService
     case template_id
     when KakaoTemplate::PROPOSAL
       get_proposal_data(tem_params)
+    when KakaoTemplate::NEW_JOB_POSTING_VISIT
+      get_visit_job_posting_data(tem_params)
+    when KakaoTemplate::NEW_JOB_POSTING_FACILITY
+      get_facility_job_posting_data(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -64,11 +68,11 @@ class KakaoTemplateService
     }
   end
 
-  def get_new_job_posting_data(tem_params)
+  def get_visit_job_posting_data(tem_params)
     items = {
       itemHighlight: {
         title: tem_params[:title],
-        description: '요양보호사 신규 일자리 제안'
+        description: '요양보호사 신규 일자리'
       },
       item: {
         list: [
@@ -109,20 +113,73 @@ class KakaoTemplateService
     }
     {
       title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 새로운 일자리 정보 안내드려요.\n(기준: #{tem_params[:address]})\n\n본 공고에 취업성공 하시면\n케어파트너에서 50,000원의 추가수당을 드려요!\n\n아래의 [채용 공고 확인하기]를 클릭하여, 상세 근무 내용을 확인해보세요!",
+      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 새로운 일자리 추천드려요.\n(기준: #{"주소"})\n\n본 공고에 취업성공 하시면\n케어파트너에서 50,000원의 추가수당을 드려요!\n\n아래의 [채용 공고 확인하기]를 클릭하여, 상세 근무 내용을 확인해보세요!\n#{tem_params[:shorten_url]}",
       img_url: "https://mud-kage.kakao.com/dn/jHTgl/btrXQglg6yP/UMX1XIptljvShTiNz0w9y0/img_l.jpg",
       items: items,
       buttons: [
         {
           name: "채용공고 확인하기",
           type: "WL",
-          url_pc: "https://carepartner.kr/jobs/#{tem_params[:job_posting_public_id]}?new_notification=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_homecare",
-          url_mobile: "https://carepartner.kr/jobs/#{tem_params[:job_posting_public_id]}?new_notification=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_homecare"
+          url_mobile: tem_params[:origin_url],
         },
         {
           name: "알림 설정",
           type: "WL",
-          url_pc: "https://www.carepartner.kr/me",
+          url_mobile: "https://www.carepartner.kr/me"
+        }
+      ]
+    }
+  end
+
+  def get_facility_job_posting_data(tem_params)
+    items = {
+      itemHighlight: {
+        title: tem_params[:title],
+        description: '구인 정보'
+      },
+      item: {
+        list: [
+          {
+            title: '근무지',
+            description: tem_params[:address] || ""
+          },
+          {
+            title: '근무요일',
+            description: tem_params[:days_text]&.truncate(19) || ""
+          },
+          {
+            title: '근무시간',
+            description: tem_params[:hours_text]&.truncate(19) || ""
+          },
+          {
+            title: '임금조건',
+            description: tem_params[:pay_text]&.truncate(19) || ""
+          },
+          {
+            title: '복리후생',
+            description: tem_params[:welfare]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '기관명',
+            description: tem_params[:business_name]&.truncate(19) || "이름없음"
+          },
+        ]
+      }
+    }
+    {
+      title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
+      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 새로운 일자리 정보 안내드려요.\n(기준: #{tem_params[:address]})\n\n본 공고에 취업성공 하시면\n케어파트너에서 50,000원의 추가수당을 드려요!\n\n아래의 [채용 공고 확인하기]를 클릭하여, 상세 근무 내용을 확인해보세요!\n#{tem_params[:shorten_url]}",
+      img_url: "https://mud-kage.kakao.com/dn/jHTgl/btrXQglg6yP/UMX1XIptljvShTiNz0w9y0/img_l.jpg",
+      items: items,
+      buttons: [
+        {
+          name: "채용공고 확인하기",
+          type: "WL",
+          url_mobile: tem_params[:origin_url],
+        },
+        {
+          name: "알림 설정",
+          type: "WL",
           url_mobile: "https://www.carepartner.kr/me"
         }
       ]

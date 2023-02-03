@@ -2,12 +2,17 @@ class NewJobNotificationService
   include Translation
   include JobPostingsHelper
 
-  def self.call(job_posting_id)
-    new(job_posting_id).call
+  def self.call(job_posting)
+    new(job_posting).call
   end
 
-  def initialize(job_posting_id)
-    @job_posting = build_job_posting(job_posting_id)
+  def initialize(job_posting)
+    @job_posting = job_posting
+    @work_type_ko = translate_type('job_posting', job_posting, :work_type)
+    @job_posting_customer = job_posting.job_posting_customer
+    @homecare_yes = %w[commute resident bath_help].include?(job_posting.work_type)
+    @origin_url = "https://#{Jets.env == "production" ? "carepartner.kr" : "dev-carepartner.kr"}/jobs/#{job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{homecare_yes ? "new_job_homecare" : "new_job_facility"}"
+    @shorten_url = build_shorten_url(@origin_url)
   end
 
   def call
@@ -42,15 +47,12 @@ class NewJobNotificationService
 
   private
 
-  attr_reader :job_posting_id
+  attr_reader :job_posting_id, :work_type_ko, :job_posting_customer, :homecare_yes, :origin_url, :shorten_url
 
   def send_notification(user)
-    work_type_ko = translate_type('job_posting', job_posting, :work_type)
-    job_posting_customer = job_posting.job_posting_customer
-
     KakaoNotificationService.call(
-      template_id: KakaoTemplate::NEW_JOB_POSTING,
-      phone: '01097912095',
+      template_id: homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY,
+      phone: '01097912095', # user.phone
       template_params: {
         title: "[#{translate_type('job_posting_customer', job_posting_customer, :grade) || '등급없음'}/#{calculate_korean_age(job_posting_customer&.age) || '미상의연'}세/#{translate_type('job_posting_customer', job_posting_customer, :gender) || '성별미상'}] #{work_type_ko}",
         address: job_posting.address,
@@ -61,14 +63,18 @@ class NewJobNotificationService
         excretion_assistances: translate_type('job_posting_customer', job_posting_customer, :excretion_assistances),
         movement_assistances: translate_type('job_posting_customer', job_posting_customer, :movement_assistances),
         housework_assistances: translate_type('job_posting_customer', job_posting_customer, :housework_assistances),
-        user_name: user.name, # none
-        distance: user.distance_from_ko(job_posting), # none
+        welfare: get_welfare_text(job_posting),
+        business_name: job_posting.business.name,
+        user_name: user.name,
+        distance: user.distance_from_ko(job_posting),
+        origin_url: origin_url,
+        shorten_url: shorten_url,
         job_posting_public_id: job_posting.public_id
       }
     )
   end
 
-  def build_job_posting(job_posting_id)
-    JobPosting.find(job_posting_id)
+  def build_shorten_url(origin_url)
+    ShortUrl.build(origin_url).url
   end
 end
