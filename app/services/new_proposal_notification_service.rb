@@ -71,7 +71,7 @@ class NewProposalNotificationService
   end
 
   def build_client(current_client_id)
-    Client.find(current_client_id)
+    nil # Client.find(current_client_id)
   end
 
   def build_user(user_id)
