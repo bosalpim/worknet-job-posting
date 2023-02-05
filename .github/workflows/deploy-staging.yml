@@ -35,7 +35,7 @@ jobs:
           echo "KAKAO_REST_API_KEY=$KAKAO_REST_API_KEY" >> .env.staging
           echo "KAKAO_BIZMSG_PROFILE=$KAKAO_BIZMSG_PROFILE" >> .env.staging
         env:
-          DB_HOST_STAGING: ${{ secrets.DB_HOST_STAGING }}
+          DB_HOST_STAGING: 34.64.181.239
           DB_PASSWORD_STAGING: ${{ secrets.DB_PASSWORD_STAGING }}
           WORKNET_API_KEY: ${{ secrets.WORKNET_API_KEY }}
           GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
