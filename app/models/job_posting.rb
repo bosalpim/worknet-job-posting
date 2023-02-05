@@ -8,13 +8,6 @@ class JobPosting < ApplicationRecord
 
   validates :proposal_usable_count, numericality: { greater_than_or_equal_to: 0 }
 
-  belongs_to :client, optional: true
-  has_many :user_saved_job_postings
-  has_many :saving_users,
-           through: :user_saved_job_postings,
-           class_name: 'User',
-           foreign_key: 'user_id'
-
   enum status: { draft: 'draft', init: 'init', closed: 'closed' }
   enum work_type: {
     commute: 'commute',
