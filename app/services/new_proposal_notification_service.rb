@@ -83,6 +83,7 @@ class NewProposalNotificationService
   end
 
   def build_proposal(proposal_id)
-    Proposal.find(proposal_id)
+    # Proposal.find(proposal_id)
+    nil
   end
 end
