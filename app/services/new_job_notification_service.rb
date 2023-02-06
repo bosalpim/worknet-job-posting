@@ -50,7 +50,7 @@ class NewJobNotificationService
   end
 
   def test_call
-    user = User.find_by(public_id: "wcrfdca4ul")
+    user = User.last
     send_notification(user)
   end
 
@@ -59,7 +59,8 @@ class NewJobNotificationService
   attr_reader :job_posting, :work_type_ko, :job_posting_customer, :homecare_yes, :origin_url, :shorten_url
 
   def send_notification(user)
-    KakaoNotificationService.call(
+    Jets.logger.info user
+    response = KakaoNotificationService.call(
       template_id: homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY,
       phone: Jets.env == "production" ? user.phone : '01097912095',
       template_params: {
@@ -82,6 +83,7 @@ class NewJobNotificationService
         job_posting_public_id: job_posting.public_id
       }
     )
+    Jets.logger.info response
   end
 
   def build_shorten_url(origin_url)
