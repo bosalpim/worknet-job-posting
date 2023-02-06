@@ -50,7 +50,7 @@ class NewJobNotificationService
   end
 
   def test_call
-    user = User.last
+    user = User.find_by(public_id: "wcrfdca4ul")
     send_notification(user)
   end
 
