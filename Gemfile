@@ -12,7 +12,6 @@ gem "httparty"
 gem "google-apis-indexing_v3", "~> 0.1"
 gem "faraday"
 gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-gem 'activerecord-postgres-earthdistance'
 
 # development and test groups are not bundled as part of the deployment
 group :development, :test do

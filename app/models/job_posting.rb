@@ -1,8 +1,7 @@
 class JobPosting < ApplicationRecord
   include PublicId
   include StringNumber
-
-  acts_as_geolocated
+  include EarthDistance
 
   set_string_number_fields :manager_phone_number
 
