@@ -1,11 +1,8 @@
 class JobPosting < ApplicationRecord
   include PublicId
   include StringNumber
-
-  ActiveRecord::Base.send :include, EarthDistance::ActsAsGeolocated
-  ActiveRecord::Relation.send :include, EarthDistance::QueryMethods
-
-  acts_as_geolocated
+  include EarthDistance::ActsAsGeolocated
+  include EarthDistance::QueryMethods
 
   set_string_number_fields :manager_phone_number
 

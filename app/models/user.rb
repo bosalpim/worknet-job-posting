@@ -1,10 +1,7 @@
 class User < ApplicationRecord
   include PublicId
-
-  ActiveRecord::Base.send :include, EarthDistance::ActsAsGeolocated
-  ActiveRecord::Relation.send :include, EarthDistance::QueryMethods
-
-  acts_as_geolocated
+  include EarthDistance::ActsAsGeolocated
+  include EarthDistance::QueryMethods
 
   DEFAULT_LAT = 37.555042
   DEFAULT_LNG = 126.9769233
