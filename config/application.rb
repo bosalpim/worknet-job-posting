@@ -29,7 +29,7 @@ Jets.application.configure do
   #   global_app_key1: "global_app_value1",
   #   global_app_key2: "global_app_value2",
   # }
-  iam_policy(
+  config.iam_policy(
     version: "2012-10-17",
     statement: [{
                   action: ["logs:*"],
