@@ -1,8 +1,15 @@
 Jets.application.configure do
   config.project_name = "worknet-job-posting"
   config.mode = "api"
+  config.cors = %w[
+    localhost
+    *.carepartner.kr
+    *.dev-carepartner.kr
+    backend-staging-wemrofzktq-du.a.run.app
+    backend-production-wemrofzktq-du.a.run.app
+  ].join(",")
 
-  config.prewarm.enable = true # default is true
+  config.prewarm.enable = true # default is truec
   # config.prewarm.rate = '30 minutes' # default is '30 minutes'
   # config.prewarm.concurrency = 2 # default is 2
   # config.prewarm.public_ratio = 3 # default is 3
@@ -11,9 +18,6 @@ Jets.application.configure do
   # config.autoload_paths = []
 
   # config.asset_base_url = 'https://cloudfront.domain.com/assets' # example
-
-  # config.cors = true # for '*'' # defaults to false
-  # config.cors = '*.mydomain.com' # for specific domain
 
   # config.function.timeout = 30 # defaults to 30
   # config.function.role = "arn:aws:iam::#{Jets.aws.account}:role/service-role/pre-created"
@@ -25,8 +29,14 @@ Jets.application.configure do
   #   global_app_key1: "global_app_value1",
   #   global_app_key2: "global_app_value2",
   # }
-  # More examples:
-  # config.function.dead_letter_config = { target_arn: "arn" }
+  config.default_iam_policy = [
+    {
+      action: ["logs:*", "s3:*", "lambda:*"],
+      effect: "Allow",
+      resource: "*",
+    }
+  ]
+
   config.function.vpc_config = {
     security_group_ids: %w[sg-04daf636f3d105ed8],
     subnet_ids: %w[subnet-0f4fd9c32ac1837ae subnet-022ab46ae6d9ebb7e],
