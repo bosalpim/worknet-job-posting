@@ -8,8 +8,9 @@ class JobPostingsController < ApplicationController
 
   def new_notification
     event = { job_posting_id: params["job_posting_id"] }
-    NewJobNotificationJob.perform_now(:dig, event) if Jets.env.development?
-    NewJobNotificationJob.perform_later(:dig, event) unless Jets.env.development?
+    NewJobNotificationJob.perform_now(:dig, event)
+    # NewJobNotificationJob.perform_now(:dig, event) if Jets.env.development?
+    # NewJobNotificationJob.perform_later(:dig, event) unless Jets.env.development?
     render json: {
       success: true
     }, status: :ok
