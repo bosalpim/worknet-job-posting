@@ -29,13 +29,13 @@ Jets.application.configure do
   #   global_app_key1: "global_app_value1",
   #   global_app_key2: "global_app_value2",
   # }
-  config.default_iam_policy = [
-    {
-      action: ["logs:*", "s3:*", "lambda:*"],
-      effect: "Allow",
-      resource: "*",
-    }
-  ]
+  # config.default_iam_policy = [
+  #   {
+  #     action: ["logs:*", "s3:*", "lambda:*"],
+  #     effect: "Allow",
+  #     resource: "*",
+  #   }
+  # ]
 
   config.function.vpc_config = {
     security_group_ids: %w[sg-04daf636f3d105ed8],
