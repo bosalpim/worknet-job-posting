@@ -2,6 +2,8 @@ class User < ApplicationRecord
   include PublicId
   include EarthDistance
 
+  acts_as_geolocated
+
   DEFAULT_LAT = 37.555042
   DEFAULT_LNG = 126.9769233
 
