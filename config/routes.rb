@@ -5,6 +5,4 @@ Jets.application.routes.draw do
       post :new_notification
     end
   end
-
-  resources :proposals, only: :create
 end
