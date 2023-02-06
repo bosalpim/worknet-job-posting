@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   include PublicId
-  include EarthDistance
+
+  ActiveRecord::Base.send :include, EarthDistance::ActsAsGeolocated
+  ActiveRecord::Relation.send :include, EarthDistance::QueryMethods
 
   acts_as_geolocated
 

@@ -1,7 +1,9 @@
 class JobPosting < ApplicationRecord
   include PublicId
   include StringNumber
-  include EarthDistance
+
+  ActiveRecord::Base.send :include, EarthDistance::ActsAsGeolocated
+  ActiveRecord::Relation.send :include, EarthDistance::QueryMethods
 
   acts_as_geolocated
 
