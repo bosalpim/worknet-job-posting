@@ -21,28 +21,28 @@ class NewJobNotificationService
 
   def call
     # 반경 5km 설정한 요양보호사 발송
-    users_5km = User.within_radius(5_000, job_posting.lat, job_posting.lng)
+    users_5km = User.within_radius(5_000, job_posting.lat, job_posting.lng).receive_notifications
     users_5km = users_5km.by_km_5
     users_5km.find_each do |user|
       send_notification(user)
     end
 
     # 반경 3km 설정한 요양보호사 발송
-    users_3km = User.within_radius(3_000, job_posting.lat, job_posting.lng)
+    users_3km = User.within_radius(3_000, job_posting.lat, job_posting.lng).receive_notifications
     users_3km = users_3km.by_km_3
     users_3km.find_each do |user|
       send_notification(user)
     end
 
     # 30분 거리 설정한 요양보호사 발송
-    users_30_min = User.within_radius(1_800, job_posting.lat, job_posting.lng)
+    users_30_min = User.within_radius(1_800, job_posting.lat, job_posting.lng).receive_notifications
     users_30_min = users_30_min.by_walk30
     users_30_min.find_each do |user|
       send_notification(user)
     end
 
     # 15분 거리 설정한 요양보호사
-    users_15_min = User.within_radius(900, job_posting.lat, job_posting.lng)
+    users_15_min = User.within_radius(900, job_posting.lat, job_posting.lng).receive_notifications
     users_15_min = users_15_min.by_walk15
     users_15_min.find_each do |user|
       send_notification(user)
