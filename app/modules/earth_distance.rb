@@ -5,7 +5,7 @@ module EarthDistance
 
 
     module ClassMethods
-      def init(options = {})
+      def acts_as_geolocated(options = {})
         begin
           if table_exists?
             cattr_accessor :latitude_column, :longitude_column, :through_table, :distance_unit
@@ -23,7 +23,7 @@ module EarthDistance
       end
 
       def within_box(radius, lat, lng)
-        init
+        acts_as_geolocated
         radius = radius.try(:*, MILES_TO_METERS_FACTOR) if distance_unit === :miles
         earth_box = Arel::Nodes::NamedFunction.new(
           "earth_box",
@@ -40,7 +40,7 @@ module EarthDistance
       end
 
       def within_radius(radius, lat, lng)
-        init
+        acts_as_geolocated
         radius = radius.try(:*, MILES_TO_METERS_FACTOR) if distance_unit === :miles
         earth_distance = Utils.earth_distance(through_table_klass, lat, lng)
         within_box(radius, lat, lng)
@@ -48,13 +48,13 @@ module EarthDistance
       end
 
       def order_by_distance(lat, lng, order = "ASC")
-        init
+        acts_as_geolocated
         earth_distance = Utils.earth_distance(through_table_klass, lat, lng)
         joins(through_table).order(Arel.sql("#{earth_distance.to_sql} #{order}"))
       end
 
       def through_table_klass
-        init
+        acts_as_geolocated
         if through_table.present?
           reflections[through_table.to_s].klass
         else
