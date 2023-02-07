@@ -52,7 +52,7 @@ class NewJobNotificationService
             .where('id not in (?)', users.empty? ? [0] : users.map(&:id))
             .where(
               'has_certification = true OR expected_acquisition in (?)',
-              %w[2022/05 2022/08],
+              %w[2022/05 2022/08 2022/11],
             )
       end
     end
@@ -61,7 +61,7 @@ class NewJobNotificationService
     fail_count = 0
     fail_reasons = []
 
-    users.take(10).each do |user|
+    users.each do |user|
       response = send_notification(user)
       response.dig("code") == "success" ? success_count += 1 : fail_count += 1
       fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
