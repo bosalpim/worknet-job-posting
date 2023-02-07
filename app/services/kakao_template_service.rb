@@ -16,9 +16,9 @@ class KakaoTemplateService
     when KakaoTemplate::NEW_JOB_POSTING_FACILITY
       get_facility_job_posting_data(tem_params)
     when KakaoTemplate::PERSONALIZED
-      personalize_data(tem_params)
+      get_personalized_data(tem_params)
     when KakaoTemplate::EXTRA_BENEFIT
-      extra_benefit_data(tem_params)
+      get_extra_benefit_data(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -117,67 +117,8 @@ class KakaoTemplateService
     }
     {
       title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 새로운 일자리 추천드려요\n\n본 공고에 취업성공 하시면\n케어파트너에서 5만원 상당의 취업축하수당도 드려요!\n\n아래 링크 또는 버튼을 클릭하여, 상세 근무 내용을 확인해보세요!\n#{tem_params[:shorten_url]}",
+      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 일자리 추천드려요\n\n본 공고에 취업하시면\n케어파트너에서 5만원 상당의 취업축하수당도 드려요!\n\n아래 링크 또는 버튼을 클릭하여, 상세 근무 내용을 확인해보세요!\ncarepartner.kr#{tem_params[:path]}",
       img_url: "https://mud-kage.kakao.com/dn/jHTgl/btrXQglg6yP/UMX1XIptljvShTiNz0w9y0/img_l.jpg",
-      items: items,
-      buttons: [
-        {
-          name: "채용공고 확인하기",
-          type: "WL",
-          url_mobile: tem_params[:origin_url],
-        },
-        {
-          name: "알림 설정",
-          type: "WL",
-          url_mobile: "https://www.carepartner.kr/me"
-        }
-      ]
-    }
-  end
-
-  def get_facility_job_posting_data(tem_params)
-    items = {
-      itemHighlight: {
-        title: tem_params[:title],
-        description: '구인 정보'
-      },
-      item: {
-        list: [
-          {
-            title: '근무지',
-            description: tem_params[:address] || ""
-          },
-          {
-            title: '근무요일',
-            description: tem_params[:days_text]&.truncate(19) || ""
-          },
-          {
-            title: '근무유형',
-            description: tem_params[:work_type_ko]&.truncate(19) || ""
-          },
-          {
-            title: '근무시간',
-            description: tem_params[:hours_text]&.truncate(19) || ""
-          },
-          {
-            title: '임금조건',
-            description: tem_params[:pay_text]&.truncate(19) || ""
-          },
-          {
-            title: '복리후생',
-            description: tem_params[:welfare]&.truncate(19) || "정보없음"
-          },
-          {
-            title: '기관명',
-            description: tem_params[:business_name]&.truncate(19) || "이름없음"
-          },
-        ]
-      }
-    }
-    {
-      title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 새로운 일자리 추천드려요.\n(기준: #{tem_params[:address]&.truncate(19)})\n\n본 공고에 취업성공 하시면\n케어파트너에서 5만원 상당의 취업축하수당도 드려요!\n\n아래 링크 또는 버튼을 클릭하여, 상세 근무 내용을 확인해보세요!\n#{tem_params[:shorten_url]}",
-      img_url: "https://mud-kage.kakao.com/dn/8UKsq/btrXVlZQ7yu/Hg3LIdkh90YhDtM7gzjPk1/img_l.jpg",
       items: items,
       buttons: [
         {
@@ -194,7 +135,66 @@ class KakaoTemplateService
     }
   end
 
-  def personalize_data(tem_params)
+  def get_facility_job_posting_data(tem_params)
+    items = {
+      itemHighlight: {
+        title: tem_params[:title],
+        description: '요양보호사 신규 일자리'
+      },
+      item: {
+        list: [
+          {
+            title: '근무지',
+            description: tem_params[:address] || "정보없음"
+          },
+          {
+            title: '근무요일',
+            description: tem_params[:days_text]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '근무유형',
+            description: tem_params[:work_type_ko]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '근무시간',
+            description: tem_params[:hours_text]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '임금조건',
+            description: tem_params[:pay_text]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '복리후생',
+            description: tem_params[:welfare]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '기관명',
+            description: tem_params[:business_name]&.truncate(19) || "이름없음"
+          },
+        ]
+      }
+    }
+    {
+      title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
+      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 일자리 추천드려요\n\n본 공고에 취업하시면\n케어파트너에서 5만원 상당의 취업축하수당도 드려요!\n\n아래 링크 또는 버튼을 클릭하여, 상세 근무 내용을 확인해보세요!\ncarepartner.kr#{tem_params[:path]}",
+      img_url: "https://mud-kage.kakao.com/dn/8UKsq/btrXVlZQ7yu/Hg3LIdkh90YhDtM7gzjPk1/img_l.jpg",
+      items: items,
+      buttons: [
+        {
+          name: "채용공고 확인하기",
+          type: "WL",
+          url_mobile: tem_params[:origin_url],
+        },
+        {
+          name: "알림 설정",
+          type: "WL",
+          url_mobile: "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_facility"
+        }
+      ]
+    }
+  end
+
+  def get_personalized_data(tem_params)
     items = {
       itemHighlight: {
         title: "#{tem_params[:distance]} 내 일자리 #{tem_params[:job_postings_count]} 건 추천",
@@ -219,7 +219,7 @@ class KakaoTemplateService
     }
     {
       title: "케어파트너 맞춤 일자리 알림",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n\n설정하신 #{tem_params[:distance]} 내 #{tem_params[:job_postings_count]}건의 맞춤 일자리가 요양보호사님을 찾고 있어요.\n\n아래 링크를 클릭하여, 원하는 조건에 맞는 일자리를 확인해보세요!#{tem_params[:link]}",
+      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n\n설정하신 #{tem_params[:distance]} 내 #{tem_params[:job_postings_count]}건의 맞춤 일자리가 요양보호사님을 찾고 있어요.\n\n아래 링크를 클릭하여, 원하는 조건에 맞는 일자리를 확인해보세요!\ncarepartner.kr#{tem_params[:path]}",
       img_url: "https://mud-kage.kakao.com/dn/gNExl/btrX3r6mcbV/vpgICckvJ0EuF1JNdOVB7k/img_l.jpg",
       items: items,
       buttons: [
@@ -231,13 +231,13 @@ class KakaoTemplateService
         {
           name: "알림 설정",
           type: "WL",
-          url_mobile: "https://www.carepartner.kr/me"
+          url_mobile: "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=personalized_job"
         }
       ]
     }
   end
 
-  def extra_benefit_data(tem_params)
+  def get_extra_benefit_data(tem_params)
     items = {
       itemHighlight: {
         title: "#{tem_params[:distance]} 추가수당 일자리 #{tem_params[:job_postings_count]} 건 추천",

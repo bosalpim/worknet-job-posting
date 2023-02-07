@@ -57,7 +57,7 @@ class PersonalNotificationService
         resident_job_postings_count: "#{resident_job_postings_count} 건",
         facility_job_postings_count: "#{facility_job_postings_count} 건",
         user_name: user.name,
-        link: shorten_url
+        path: shorten_url.sub("https://carepartner.kr", "")
       }
     )
     Jets.logger.info response
