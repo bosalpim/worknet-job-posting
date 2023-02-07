@@ -50,10 +50,10 @@ class NewJobNotificationService
               type: prefer_work_type,
               )
             .where('id not in (?)', users.empty? ? [0] : users.map(&:id))
-            # .where(
-            #   'has_certification = true OR expected_acquisition in (?)',
-            #   %w[2022/05 2022/08],
-            # )
+            .where(
+              'has_certification = true OR expected_acquisition in (?)',
+              %w[2022/05 2022/08],
+            )
       end
     end
 
