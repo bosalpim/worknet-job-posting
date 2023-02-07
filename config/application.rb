@@ -29,31 +29,31 @@ Jets.application.configure do
   #   global_app_key1: "global_app_value1",
   #   global_app_key2: "global_app_value2",
   # }
-  # config.default_iam_policy = [{
-  #                                action: ["logs:*"],
-  #                                effect: "Allow",
-  #                                resource: "*"
-  #                              },
-  #                              {
-  #                                action: %w[s3:Get* s3:List* s3:HeadBucket],
-  #                                resource: "*",
-  #                                effect: "Allow"
-  #                              },
-  #                              {
-  #                                action: %w[cloudformation:DescribeStacks cloudformation:DescribeStackResources],
-  #                                resource: "*",
-  #                                effect: "Allow"
-  #                              },
-  #                              {
-  #                                action: %w[ec2:CreateNetworkInterface ec2:DeleteNetworkInterface ec2:DescribeNetworkInterfaces ec2:DescribeVpcs ec2:DescribeSubnets ec2:DescribeSecurityGroups],
-  #                                resource: "*",
-  #                                effect: "Allow"
-  #                              },
-  #                              {
-  #                                action: ["lambda:*"],
-  #                                effect: "Allow",
-  #                                resource: "*"
-  #                              }]
+  config.default_iam_policy = [{
+                                 action: ["logs:*"],
+                                 effect: "Allow",
+                                 resource: "*"
+                               },
+                               {
+                                 action: %w[s3:Get* s3:List* s3:HeadBucket],
+                                 resource: "*",
+                                 effect: "Allow"
+                               },
+                               {
+                                 action: %w[cloudformation:DescribeStacks cloudformation:DescribeStackResources],
+                                 resource: "*",
+                                 effect: "Allow"
+                               },
+                               {
+                                 action: %w[ec2:CreateNetworkInterface ec2:DeleteNetworkInterface ec2:DescribeNetworkInterfaces ec2:DescribeVpcs ec2:DescribeSubnets ec2:DescribeSecurityGroups],
+                                 resource: "*",
+                                 effect: "Allow"
+                               },
+                               {
+                                 action: ["lambda:*"],
+                                 effect: "Allow",
+                                 resource: "*"
+                               }]
 
   config.function.vpc_config = {
     security_group_ids: %w[sg-04daf636f3d105ed8],
