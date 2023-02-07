@@ -12,9 +12,22 @@ class PersonalNotificationService
   end
 
   def call
+    success_count = 0
+    fail_count = 0
+    fail_reasons = []
     User.active.receive_notifications.find_each do |user|
-      send_notification(user)
+      response = send_notification(user)
+      next if response.nil?
+      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
+      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
     end
+    KakaoNotificationResult.create!(
+      send_type: "personalized_notification",
+      template_id: KakaoTemplate::PERSONALIZED,
+      success_count: success_count,
+      fail_count: fail_count,
+      fail_reasons: fail_reasons.uniq.join(", ")
+    )
   end
 
   def test_call

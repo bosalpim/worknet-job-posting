@@ -12,9 +12,22 @@ class ExtraBenefitNotificationService
   end
 
   def call
+    success_count = 0
+    fail_count = 0
+    fail_reasons = []
     User.active.receive_notifications.find_each do |user|
-      send_notification(user)
+      response = send_notification(user)
+      next if response.nil?
+      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
+      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
     end
+    KakaoNotificationResult.create!(
+      send_type: "extra_benefit_notification",
+      template_id: KakaoTemplate::EXTRA_BENEFIT,
+      success_count: success_count,
+      fail_count: fail_count,
+      fail_reasons: fail_reasons.uniq.join(", ")
+    )
   end
 
   def test_call
@@ -30,11 +43,11 @@ class ExtraBenefitNotificationService
     job_postings = JobPosting.init.within_radius(radius, user.lat, user.lng).where(published_at: 2.weeks.ago..)
     job_postings = job_postings.where(grade: %w[first second]).or(job_postings.where(scraped_worknet_job_posting_id: nil))
     job_postings_count = job_postings.size
-    return if job_postings_count.zero?
+    return nil if job_postings_count.zero?
     cpt_job_postings_count = job_postings.where(scraped_worknet_job_posting_id: nil).size
     benefit_job_postings_count = job_postings.where(grade: %w[first second]).size
 
-    response = KakaoNotificationService.call(
+    KakaoNotificationService.call(
       template_id: KakaoTemplate::EXTRA_BENEFIT,
       phone: Jets.env == "production" ? user.phone_number : '01097912095',
       template_params: {
@@ -46,7 +59,6 @@ class ExtraBenefitNotificationService
         link: "https://carepartner.kr/jobs"
       }
     )
-    Jets.logger.info response
   end
 
   def get_radius(user)

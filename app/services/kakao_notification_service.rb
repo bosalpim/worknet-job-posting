@@ -1,9 +1,9 @@
 class KakaoNotificationService < KakaoTemplateService
-  DEFAULT_RESERVE_AT = "00000000000000".freeze
+  DEFAULT_RESERVE_AT = "00000000000000".freeze # send right now
 
   attr_reader :template_id, :base_url, :user_id, :profile, :sender_number, :phone, :message_type, :reserve_dt
 
-  def self.call(template_id:, phone:, message_type: "AT", reserve_dt: DEFAULT_RESERVE_AT ,template_params:)
+  def self.call(template_id:, phone:, message_type: "AT", reserve_dt: nil, template_params:)
     new(
       template_id: template_id,
       phone: phone,
@@ -20,16 +20,20 @@ class KakaoNotificationService < KakaoTemplateService
     @sender_number = "15885877"
     @phone = phone
     @message_type = message_type
-    @reserve_dt = get_reserve_dt
+    @reserve_dt = get_reserve_dt(reserve_dt)
   end
 
   def call(**template_params)
     request_params = get_final_request_params(template_params)
     begin
-      send_request(request_params)
+      return send_request(request_params)
     rescue => e
-      # Sentry.capture_exception(e)
       puts e.message
+      return {
+        "code" => "fail",
+        "originMessage" => e.message,
+        "message" => "error"
+      }
     end
   end
 
@@ -40,8 +44,9 @@ class KakaoNotificationService < KakaoTemplateService
       base_url,
       body: JSON.dump([request_params]),
       headers: headers
-    )
-    Jets.logger.info "KAKAOMESSAGE #{response.body.to_yaml}"
+    ).parsed_response
+    response = response.class == Array ? response.first : response
+    Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}"
     response
   end
 
@@ -89,7 +94,8 @@ class KakaoNotificationService < KakaoTemplateService
     }
   end
 
-  def get_reserve_dt
+  def get_reserve_dt(reserve_dt)
+    return reserve_dt if reserve_dt
     american_time = Time.current
     korean_offset = 9 * 60 * 60 # 9 hours ahead of American time
     korean_time = american_time + korean_offset

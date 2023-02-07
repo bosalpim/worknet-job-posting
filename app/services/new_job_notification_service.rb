@@ -20,33 +20,53 @@ class NewJobNotificationService
   end
 
   def call
+    success_count = 0
+    fail_count = 0
+    fail_reasons = []
+
     # 반경 5km 설정한 요양보호사 발송
     users_5km = User.within_radius(5_000, job_posting.lat, job_posting.lng).receive_notifications
     users_5km = users_5km.by_km_5
     users_5km.find_each do |user|
-      send_notification(user)
+      response = send_notification(user)
+      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
+      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
     end
 
     # 반경 3km 설정한 요양보호사 발송
     users_3km = User.within_radius(3_000, job_posting.lat, job_posting.lng).receive_notifications
     users_3km = users_3km.by_km_3
     users_3km.find_each do |user|
-      send_notification(user)
+      response = send_notification(user)
+      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
+      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
     end
 
     # 30분 거리 설정한 요양보호사 발송
     users_30_min = User.within_radius(1_800, job_posting.lat, job_posting.lng).receive_notifications
     users_30_min = users_30_min.by_walk30
     users_30_min.find_each do |user|
-      send_notification(user)
+      response = send_notification(user)
+      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
+      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
     end
 
     # 15분 거리 설정한 요양보호사
     users_15_min = User.within_radius(900, job_posting.lat, job_posting.lng).receive_notifications
     users_15_min = users_15_min.by_walk15
     users_15_min.find_each do |user|
-      send_notification(user)
+      response = send_notification(user)
+      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
+      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
     end
+
+    KakaoNotificationResult.create!(
+      send_type: "new_job_posting",
+      template_id: homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY,
+      success_count: success_count,
+      fail_count: fail_count,
+      fail_reasons: fail_reasons.uniq.join(", ")
+    )
   end
 
   def test_call
@@ -59,8 +79,7 @@ class NewJobNotificationService
   attr_reader :job_posting, :work_type_ko, :job_posting_customer, :homecare_yes, :origin_url, :shorten_url
 
   def send_notification(user)
-    Jets.logger.info user
-    response = KakaoNotificationService.call(
+    KakaoNotificationService.call(
       template_id: homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY,
       phone: Jets.env == "production" ? user.phone_number : '01097912095',
       template_params: {
@@ -83,7 +102,6 @@ class NewJobNotificationService
         job_posting_public_id: job_posting.public_id
       }
     )
-    Jets.logger.info response
   end
 
   def build_shorten_url(origin_url)
