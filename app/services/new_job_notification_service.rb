@@ -2,6 +2,13 @@ class NewJobNotificationService
   include Translation
   include JobPostingsHelper
 
+  DISTANCE_LIST = {
+    by_walk15: 900,
+    by_walk30: 1800,
+    by_km_3: 3000,
+    by_km_5: 5000,
+  }
+
   def self.call(job_posting)
     new(job_posting).call
   end
@@ -20,41 +27,41 @@ class NewJobNotificationService
   end
 
   def call
+    users = []
+    User.preferred_distances.each do |key, value|
+      prefer_work_type =
+        job_posting.work_type == 'hospital' ? 'etc' : job_posting.work_type
+
+      if job_posting.lat.present? && job_posting.lng.present?
+        users +=
+          User
+            .receive_notifications
+            .select(
+              "users.*, earth_distance(ll_to_earth(lat, lng), ll_to_earth(#{job_posting.lat}, #{job_posting.lng})) AS distance",
+              )
+            .within_radius(
+              DISTANCE_LIST[key.to_sym],
+              job_posting.lat,
+              job_posting.lng
+            )
+            .where(preferred_distance: key)
+            .where(
+              'preferred_work_types::jsonb ? :type',
+              type: prefer_work_type,
+              )
+            .where('id not in (?)', users.empty? ? [0] : users.map(&:id))
+            # .where(
+            #   'has_certification = true OR expected_acquisition in (?)',
+            #   %w[2022/05 2022/08],
+            # )
+      end
+    end
+
     success_count = 0
     fail_count = 0
     fail_reasons = []
 
-    # 반경 5km 설정한 요양보호사 발송
-    users_5km = User.within_radius(5_000, job_posting.lat, job_posting.lng).receive_notifications
-    users_5km = users_5km.by_km_5
-    users_5km.find_each do |user|
-      response = send_notification(user)
-      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
-      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
-    end
-
-    # 반경 3km 설정한 요양보호사 발송
-    users_3km = User.within_radius(3_000, job_posting.lat, job_posting.lng).receive_notifications
-    users_3km = users_3km.by_km_3
-    users_3km.find_each do |user|
-      response = send_notification(user)
-      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
-      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
-    end
-
-    # 30분 거리 설정한 요양보호사 발송
-    users_30_min = User.within_radius(1_800, job_posting.lat, job_posting.lng).receive_notifications
-    users_30_min = users_30_min.by_walk30
-    users_30_min.find_each do |user|
-      response = send_notification(user)
-      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
-      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
-    end
-
-    # 15분 거리 설정한 요양보호사
-    users_15_min = User.within_radius(900, job_posting.lat, job_posting.lng).receive_notifications
-    users_15_min = users_15_min.by_walk15
-    users_15_min.find_each do |user|
+    users.take(10).each do |user|
       response = send_notification(user)
       response.dig("code") == "success" ? success_count += 1 : fail_count += 1
       fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"

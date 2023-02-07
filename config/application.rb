@@ -40,7 +40,7 @@ Jets.application.configure do
                                  effect: "Allow"
                                },
                                {
-                                 action: %w[cloudformation:DescribeStacks cloudformation:DescribeStackResources],
+                                 action: %w[cloudformation:*],
                                  resource: "*",
                                  effect: "Allow"
                                },
