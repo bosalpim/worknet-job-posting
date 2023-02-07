@@ -1,4 +1,12 @@
 class ExtraBenefitNotificationService
+  def self.call
+    new.call
+  end
+
+  def self.test_call
+    new.test_call
+  end
+
   def initialize
     @shorten_url = build_shorten_url
   end

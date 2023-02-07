@@ -1,7 +1,9 @@
 class KakaoNotificationService < KakaoTemplateService
+  DEFAULT_RESERVE_AT = "00000000000000".freeze
+
   attr_reader :template_id, :base_url, :user_id, :profile, :sender_number, :phone, :message_type, :reserve_dt
 
-  def self.call(template_id:, phone:, message_type: "AT", reserve_dt: "00000000000000" ,template_params:)
+  def self.call(template_id:, phone:, message_type: "AT", reserve_dt: DEFAULT_RESERVE_AT ,template_params:)
     new(
       template_id: template_id,
       phone: phone,
@@ -18,7 +20,7 @@ class KakaoNotificationService < KakaoTemplateService
     @sender_number = "15885877"
     @phone = phone
     @message_type = message_type
-    @reserve_dt = reserve_dt
+    @reserve_dt = get_reserve_dt
   end
 
   def call(**template_params)
@@ -39,7 +41,7 @@ class KakaoNotificationService < KakaoTemplateService
       body: JSON.dump([request_params]),
       headers: headers
     )
-    Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}"
+    Jets.logger.info "KAKAOMESSAGE #{response.body.to_yaml}"
     response
   end
 
@@ -85,5 +87,20 @@ class KakaoNotificationService < KakaoTemplateService
       "Content-Type" => "application/json",
       "Accept" => "application/json"
     }
+  end
+
+  def get_reserve_dt
+    american_time = Time.current
+    korean_offset = 9 * 60 * 60 # 9 hours ahead of American time
+    korean_time = american_time + korean_offset
+
+    if korean_time.hour >= 21
+      next_day_time = korean_time + 1.day
+      next_day_time.strftime("%Y%m%d") + "080000"
+    elsif korean_time.hour < 8
+      korean_time.strftime("%Y%m%d") + "080000"
+    else
+      DEFAULT_RESERVE_AT
+    end
   end
 end
