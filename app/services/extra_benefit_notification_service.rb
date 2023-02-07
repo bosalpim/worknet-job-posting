@@ -56,7 +56,7 @@ class ExtraBenefitNotificationService
         cpt_job_postings_count: "#{cpt_job_postings_count} 건",
         benefit_job_postings_count: "#{benefit_job_postings_count} 건",
         user_name: user.name,
-        link: "https://carepartner.kr/jobs"
+        path: shorten_url.sub("https://carepartner.kr", "")
       }
     )
   end
@@ -77,6 +77,6 @@ class ExtraBenefitNotificationService
   end
 
   def build_shorten_url
-    ShortUrl.build("https://carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=extra_benefits_job").url
+    ShortUrl.build("https://carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=extra_benefits_job&workType=overtime_pay").url
   end
 end
