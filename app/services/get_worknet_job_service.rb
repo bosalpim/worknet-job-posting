@@ -260,6 +260,7 @@ class GetWorknetJobService
     if business.blank?
       business =
         Business.create(
+          worknet_id: worknet_job_info.dig("center_id"),
           name: worknet_job_info.dig("center_name"),
           address: worknet_job_info.dig("center_address"),
           tel_number: worknet_job_info.dig("contact_tel"),
