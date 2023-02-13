@@ -46,7 +46,7 @@ class KakaoNotificationService < KakaoTemplateService
       headers: headers
     ).parsed_response
     response = response.class == Array ? response.first : response
-    Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}"
+    Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}" if Jets.env != 'production'
     response
   end
 
