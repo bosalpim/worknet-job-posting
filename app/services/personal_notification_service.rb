@@ -65,7 +65,7 @@ class PersonalNotificationService
         path: shorten_url.sub("https://carepartner.kr", "")
       }
     )
-    Jets.logger.info response
+    response
   end
 
   def get_radius(user)
