@@ -18,8 +18,13 @@ class PersonalNotificationService
     User.active.receive_notifications.find_each do |user|
       response = send_notification(user)
       next if response.nil?
-      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
-      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
+      begin
+        response&.dig("code") == "success" ? success_count += 1 : fail_count += 1
+        fail_reasons.push(response&.dig("originMessage")) if response&.dig("message") != "K000"
+      rescue => e
+        fail_count += 1
+        fail_reasons.push(e.message)
+      end
     end
     KakaoNotificationResult.create!(
       send_type: "personalized_notification",
