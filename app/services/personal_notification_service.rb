@@ -7,18 +7,17 @@ class PersonalNotificationService
     new.test_call
   end
 
-  def initialize
-    @shorten_url = build_shorten_url
-  end
-
   def call
     success_count = 0
     fail_count = 0
     fail_reasons = []
-    User.active.receive_notifications.find_each do |user|
-      response = send_notification(user)
-      next if response.nil?
+    users = User.active.receive_notifications
+    users = users.limit(3) if Jets.env == "development"
+    users = test_users(users) if Jets.env == "staging"
+    users.find_each do |user|
       begin
+        response = send_notification(user)
+        next if response.nil?
         response&.dig("code") == "success" ? success_count += 1 : fail_count += 1
         fail_reasons.push(response&.dig("originMessage")) if response&.dig("message") != "K000"
       rescue => e
@@ -41,8 +40,6 @@ class PersonalNotificationService
 
   private
 
-  attr_reader :shorten_url
-
   def send_notification(user)
     radius = get_radius(user)
     job_postings = JobPosting.init.within_radius(radius, user.lat, user.lng).where(published_at: 2.weeks.ago..)
@@ -51,6 +48,7 @@ class PersonalNotificationService
     visit_job_postings_count = job_postings.where(work_type: %w[commute bath_help]).size
     resident_job_postings_count = job_postings.where(work_type: %w[resident]).size
     facility_job_postings_count = job_postings.where(work_type: %w[day_care sanatorium hospital facility]).size
+    shorten_url = build_shorten_url(user)
 
     response = KakaoNotificationService.call(
       template_id: KakaoTemplate::PERSONALIZED,
@@ -83,7 +81,14 @@ class PersonalNotificationService
     end
   end
 
-  def build_shorten_url
-    ShortUrl.build("https://www.carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=pesonalized_job").url
+  def build_shorten_url(user)
+    default_url = "https://www.carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=pesonalized_job"
+    default_url = default_url + "&address=" + user.address
+    default_url = default_url + "&distance=" + user.preferred_distance
+    ShortUrl.build(default_url).url
+  end
+
+  def test_users(users)
+    users.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746])
   end
 end

@@ -17,7 +17,6 @@ class GetWorknetJobService
 
   def create_job_postings_by_worknet
     loop.with_index do |_, index|
-      puts "================= Page: #{index + 1} ================="
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
       if data.present?
         message_code = data.dig("messageCd")

@@ -7,19 +7,23 @@ class ExtraBenefitNotificationService
     new.test_call
   end
 
-  def initialize
-    @shorten_url = build_shorten_url
-  end
-
   def call
     success_count = 0
     fail_count = 0
     fail_reasons = []
-    User.active.receive_notifications.find_each do |user|
-      response = send_notification(user)
-      next if response.nil?
-      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
-      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
+    users = User.active.receive_notifications
+    users = users.limit(3) if Jets.env == "development"
+    users = test_users(users) if Jets.env == "staging"
+    users.find_each do |user|
+      begin
+        response = send_notification(user)
+        next if response.nil?
+        response.dig("code") == "success" ? success_count += 1 : fail_count += 1
+        fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
+      rescue => e
+        fail_count += 1
+        fail_reasons.push(e.message)
+      end
     end
     KakaoNotificationResult.create!(
       send_type: "extra_benefit_notification",
@@ -36,8 +40,6 @@ class ExtraBenefitNotificationService
 
   private
 
-  attr_reader :shorten_url
-
   def send_notification(user)
     radius = get_radius(user)
     job_postings = JobPosting.init.within_radius(radius, user.lat, user.lng).where(published_at: 2.weeks.ago..)
@@ -46,6 +48,7 @@ class ExtraBenefitNotificationService
     return nil if job_postings_count.zero?
     cpt_job_postings_count = job_postings.where(scraped_worknet_job_posting_id: nil).size
     benefit_job_postings_count = job_postings.where(grade: %w[first second]).size
+    shorten_url = build_shorten_url(user)
 
     KakaoNotificationService.call(
       template_id: KakaoTemplate::EXTRA_BENEFIT,
@@ -76,7 +79,14 @@ class ExtraBenefitNotificationService
     end
   end
 
-  def build_shorten_url
-    ShortUrl.build("https://carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=extra_benefits_job&workType=overtime_pay").url
+  def build_shorten_url(user)
+    default_url = "https://www.carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=extra_benefits_job&workType=overtime_pay"
+    default_url = default_url + "&address=" + user.address
+    default_url = default_url + "&distance=" + user.preferred_distance
+    ShortUrl.build(default_url).url
+  end
+
+  def test_users(users)
+    users.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746])
   end
 end
