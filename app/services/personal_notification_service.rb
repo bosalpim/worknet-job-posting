@@ -95,7 +95,7 @@ class PersonalNotificationService
   def build_shorten_url(user)
     default_url = "https://www.carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=pesonalized_job"
     default_url = default_url + "&address=" + user.address
-    default_url = default_url + "&distance=" + user.preferred_distance
+    default_url = default_url + "&distance=" + URI.encode(user.preferred_distance)
     ShortUrl.build(default_url)
   end
 

@@ -240,7 +240,7 @@ class KakaoTemplateService
   def get_extra_benefit_data(tem_params)
     items = {
       itemHighlight: {
-        title: "#{tem_params[:distance]} 추가수당 일자리 #{tem_params[:job_postings_count]} 건 추천",
+        title: "#{tem_params[:distance]} 추가수당 일자리 #{tem_params[:job_postings_count]} 추천",
         description: '인기공고는 빠르게 마감됩니다.'
       },
       item: {
