@@ -13,7 +13,7 @@ class PersonalNotificationService
     fail_reasons = []
     users = User.active.receive_notifications
     users = users.limit(3) if Jets.env == "development"
-    users = test_users(users) if Jets.env == "staging"
+    users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
     users.find_each do |user|
       begin
         response = send_notification(user)
@@ -52,7 +52,7 @@ class PersonalNotificationService
 
     response = KakaoNotificationService.call(
       template_id: KakaoTemplate::PERSONALIZED,
-      phone: Jets.env == "production" ? user.phone_number : '01097912095',
+      phone: Jets.env.development? ? '01097912095' : user.phone_number,
       template_params: {
         distance: I18n.t("activerecord.attributes.user.preferred_distance.#{user.preferred_distance}"),
         job_postings_count: job_postings_count,
