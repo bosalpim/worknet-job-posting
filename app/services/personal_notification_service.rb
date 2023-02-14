@@ -12,9 +12,9 @@ class PersonalNotificationService
     tms_success_count = 0
     fail_count = 0
     fail_reasons = []
-    users = User.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746])
-    users = users.limit(3) if Jets.env == "development"
+    users = User.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746 01049195808])
     users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
+    users = users.limit(3) if Jets.env == "development"
     users.find_each do |user|
       begin
         response = send_notification(user)
@@ -94,8 +94,8 @@ class PersonalNotificationService
 
   def build_shorten_url(user)
     default_url = "https://www.carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=pesonalized_job"
-    default_url = default_url + "&address=" + user.address
-    default_url = default_url + "&distance=" + URI.encode(user.preferred_distance)
+    default_url = default_url + "&address=" + URI.encode(user.address)
+    default_url = default_url + "&distance=" + user.preferred_distance
     ShortUrl.build(default_url)
   end
 

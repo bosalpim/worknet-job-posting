@@ -12,9 +12,9 @@ class ExtraBenefitNotificationService
     tms_success_count = 0
     fail_count = 0
     fail_reasons = []
-    users = User.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746])
+    users = User.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746 01049195808])
+    # users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
     users = users.limit(3) if Jets.env == "development"
-    users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
     users.find_each do |user|
       begin
         response = send_notification(user)
@@ -52,7 +52,7 @@ class ExtraBenefitNotificationService
 
   def send_notification(user)
     radius = get_radius(user)
-    job_postings = JobPosting.init.within_radius(radius, user.lat, user.lng).where(published_at: 2.weeks.ago..)
+    job_postings = JobPosting.init.where(published_at: 2.weeks.ago..).within_radius(radius, user.lat, user.lng)
     job_postings = job_postings.where(grade: %w[first second]).or(job_postings.where(scraped_worknet_job_posting_id: nil))
     job_postings_count = job_postings.size
     return nil if job_postings_count.zero?
@@ -92,8 +92,8 @@ class ExtraBenefitNotificationService
 
   def build_shorten_url(user)
     default_url = "https://www.carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=extra_benefits_job&workType=overtime_pay"
-    default_url = default_url + "&address=" + user.address
-    default_url = default_url + "&distance=" + URI.encode(user.preferred_distance)
+    default_url = default_url + "&address=" + URI.encode(user.address)
+    default_url = default_url + "&distance=" + user.preferred_distance
     ShortUrl.build(default_url)
   end
 
