@@ -117,7 +117,7 @@ class KakaoTemplateService
     }
     {
       title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 일자리 추천드려요\n\n본 공고에 취업하시면\n케어파트너에서 5만원 상당의 취업축하수당도 드려요!\n\n아래 링크 또는 버튼을 클릭하여, 상세 근무 내용을 확인해보세요!\ncarepartner.kr#{tem_params[:path]}",
+      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 일자리 추천드려요\n\n본 공고에 취업하시면\n케어파트너가 5만원의 취업축하수당도 드려요!\n\n아래 링크 또는 버튼을 클릭하여, 상세 근무내용을 확인해보세요!\ncarepartner.kr#{tem_params[:path]}",
       img_url: "https://mud-kage.kakao.com/dn/jHTgl/btrXQglg6yP/UMX1XIptljvShTiNz0w9y0/img_l.jpg",
       items: items,
       buttons: [
@@ -176,7 +176,7 @@ class KakaoTemplateService
     }
     {
       title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 일자리 추천드려요\n\n본 공고에 취업하시면\n케어파트너에서 5만원 상당의 취업축하수당도 드려요!\n\n아래 링크 또는 버튼을 클릭하여, 상세 근무 내용을 확인해보세요!\ncarepartner.kr#{tem_params[:path]}",
+      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 일자리 추천드려요\n\n본 공고에 취업하시면\n케어파트너가 5만원의 취업축하수당도 드려요!\n\n아래 링크 또는 버튼을 클릭하여, 상세 근무내용을 확인해보세요!\ncarepartner.kr/#{tem_params[:path]}",
       img_url: "https://mud-kage.kakao.com/dn/8UKsq/btrXVlZQ7yu/Hg3LIdkh90YhDtM7gzjPk1/img_l.jpg",
       items: items,
       buttons: [
@@ -226,7 +226,7 @@ class KakaoTemplateService
         {
           name: "케어파트너 바로가기",
           type: "WL",
-          url_mobile: "https://www.carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=pesonalized_job",
+          url_mobile: tem_params[:original_url],
         },
         {
           name: "알림 설정",

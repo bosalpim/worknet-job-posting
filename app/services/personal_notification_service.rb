@@ -60,7 +60,8 @@ class PersonalNotificationService
         resident_job_postings_count: "#{resident_job_postings_count} 건",
         facility_job_postings_count: "#{facility_job_postings_count} 건",
         user_name: user.name,
-        path: shorten_url.sub("https://carepartner.kr", "")
+        path: shorten_url.url.sub("https://carepartner.kr", ""),
+        original_url: shorten_url.original_url
       }
     )
     response
@@ -85,7 +86,7 @@ class PersonalNotificationService
     default_url = "https://www.carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=pesonalized_job"
     default_url = default_url + "&address=" + user.address
     default_url = default_url + "&distance=" + user.preferred_distance
-    ShortUrl.build(default_url).url
+    ShortUrl.build(default_url)
   end
 
   def test_users(users)
