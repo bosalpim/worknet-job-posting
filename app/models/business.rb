@@ -6,6 +6,10 @@ class Business < ApplicationRecord
   validates :proposal_usable_count, numericality: { greater_than_or_equal_to: 0 }
 
   has_many :job_postings
+  has_many :business_clients
+  has_many :clients, through: :business_clients
+  has_many :proposals, dependent: :destroy
+  has_many :proposed_users, through: :proposals, source: :user
 
   validates :business_number, uniqueness: { allow_blank: true }
 end

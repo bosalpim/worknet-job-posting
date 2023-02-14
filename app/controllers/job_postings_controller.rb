@@ -4,6 +4,9 @@ class JobPostingsController < ApplicationController
 
   def create
     GetWorknetJobService.call
+    render json: {
+      success: true
+    }, status: :ok
   end
 
   def new_notification

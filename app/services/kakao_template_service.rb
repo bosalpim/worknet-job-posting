@@ -258,14 +258,14 @@ class KakaoTemplateService
     }
     {
       title: "케어파트너 맞춤 일자리 알림",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n\n요청하신 지역의 #{tem_params[:distance]} 거리의 일자리 추천드려요.\n50,000원의 취업축하금 또는 일 3,000원의 가산수당을 받을 수 있어요!\n\n아래 링크를 클릭하여, 조건에 맞는 일자리를 확인해보세요!\ncarepartner.kr#{tem_params[:path]}",
+      message: "안녕하세요 #{tem_params[:user_name]} 선생님\n\n요청하신 지역의 #{tem_params[:distance]} 거리의 일자리 추천드려요.\n50,000원의 취업축하금 또는 일 3,000원의 가산수당을 받을 수 있어요!\n\n아래 링크를 클릭하여, 일자리를 확인해보세요\ncarepartner.kr#{tem_params[:path]}",
       img_url: "https://mud-kage.kakao.com/dn/bEFFfY/btrX4lZueKC/WORpJClzQ6UKvpRXt5SzM1/img_l.jpg",
       items: items,
       buttons: [
         {
           name: "케어파트너 바로가기",
           type: "WL",
-          url_mobile: "https://carepartner.kr/jobs?workType=overtime_pay?utm_source=message&utm_medium=arlimtalk&utm_campaign=extra_benefits_job",
+          url_mobile: tem_params[:original_url],
         },
         {
           name: "알림 설정",
