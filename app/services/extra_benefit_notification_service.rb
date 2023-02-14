@@ -12,9 +12,9 @@ class ExtraBenefitNotificationService
     tms_success_count = 0
     fail_count = 0
     fail_reasons = []
-    users = User.active.receive_notifications
+    users = User.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746])
     users = users.limit(3) if Jets.env == "development"
-    users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
+    # users = test_users(users) # if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
     users.find_each do |user|
       begin
         response = send_notification(user)
@@ -98,6 +98,6 @@ class ExtraBenefitNotificationService
   end
 
   def test_users(users)
-    users.where(phone_number: %w[])
+    users.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746])
   end
 end
