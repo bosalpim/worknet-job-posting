@@ -98,6 +98,6 @@ class ExtraBenefitNotificationService
   end
 
   def test_users(users)
-    users.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746])
+    users.where(phone_number: %w[])
   end
 end
