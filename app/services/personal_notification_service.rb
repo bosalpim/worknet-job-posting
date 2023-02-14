@@ -9,6 +9,7 @@ class PersonalNotificationService
 
   def call
     success_count = 0
+    tms_success_count = 0
     fail_count = 0
     fail_reasons = []
     users = User.active.receive_notifications
@@ -18,7 +19,15 @@ class PersonalNotificationService
       begin
         response = send_notification(user)
         next if response.nil?
-        response&.dig("code") == "success" ? success_count += 1 : fail_count += 1
+        if response&.dig("code") == "success"
+          if response&.dig("message") == "K000"
+            success_count += 1
+          else
+            tms_success_count += 1
+          end
+        else
+          fail_count += 1
+        end
         fail_reasons.push(response&.dig("originMessage")) if response&.dig("message") != "K000"
       rescue => e
         fail_count += 1
@@ -29,6 +38,7 @@ class PersonalNotificationService
       send_type: "personalized_notification",
       template_id: KakaoTemplate::PERSONALIZED,
       success_count: success_count,
+      tms_success_count: tms_success_count,
       fail_count: fail_count,
       fail_reasons: fail_reasons.uniq.join(", ")
     )
@@ -42,7 +52,7 @@ class PersonalNotificationService
 
   def send_notification(user)
     radius = get_radius(user)
-    job_postings = JobPosting.init.within_radius(radius, user.lat, user.lng).where(published_at: 2.weeks.ago..)
+    job_postings = JobPosting.init.where(published_at: 2.weeks.ago..).within_radius(radius, user.lat, user.lng)
     job_postings_count = job_postings.size
     return if job_postings_count.zero?
     visit_job_postings_count = job_postings.where(work_type: %w[commute bath_help]).size
@@ -78,7 +88,7 @@ class PersonalNotificationService
     when 'by_km_5'
       5000
     else
-      1500
+      900
     end
   end
 
@@ -90,6 +100,6 @@ class PersonalNotificationService
   end
 
   def test_users(users)
-    users.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746])
+    users.where(phone_number: %w[])
   end
 end

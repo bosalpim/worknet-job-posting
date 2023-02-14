@@ -9,6 +9,7 @@ class ExtraBenefitNotificationService
 
   def call
     success_count = 0
+    tms_success_count = 0
     fail_count = 0
     fail_reasons = []
     users = User.active.receive_notifications
@@ -18,8 +19,16 @@ class ExtraBenefitNotificationService
       begin
         response = send_notification(user)
         next if response.nil?
-        response.dig("code") == "success" ? success_count += 1 : fail_count += 1
-        fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
+        if response&.dig("code") == "success"
+          if response&.dig("message") == "K000"
+            success_count += 1
+          else
+            tms_success_count += 1
+          end
+        else
+          fail_count += 1
+        end
+        fail_reasons.push(response&.dig("originMessage")) if response&.dig("message") != "K000"
       rescue => e
         fail_count += 1
         fail_reasons.push(e.message)
@@ -29,6 +38,7 @@ class ExtraBenefitNotificationService
       send_type: "extra_benefit_notification",
       template_id: KakaoTemplate::EXTRA_BENEFIT,
       success_count: success_count,
+      tms_success_count: tms_success_count,
       fail_count: fail_count,
       fail_reasons: fail_reasons.uniq.join(", ")
     )
