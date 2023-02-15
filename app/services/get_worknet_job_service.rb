@@ -48,6 +48,7 @@ class GetWorknetJobService
     return if ScrapedWorknetJobPosting.find_by(original_id: worknet_id)
 
     job_detail_info = WorknetApiService.call(1, "D", worknet_id).dig("wantedDtl")
+    return if job_detail_info.nil?
     job_name = job_detail_info.dig("wantedInfo")&.dig("jobsNm")
     return if job_detail_info.dig("messageCd") == "006"
     return if job_name&.match?(/사회복지사/) || job_name&.match?(/건물 보수원/)
