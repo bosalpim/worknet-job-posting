@@ -1,6 +1,17 @@
-class PersonalNotificationService
-  def self.call
-    new.call
+class PersonalNotificationService < PercentUserNotificationService
+  attr_reader :send_type, :template_id
+
+  def initialize(should_send_percent, sent_percent)
+    super(
+      should_send_percent,
+      sent_percent,
+      KakaoNotificationResult::PERSONALIZED,
+      KakaoTemplate::PERSONALIZED
+    )
+  end
+
+  def self.call(should_send_percent, sent_percent)
+    new(should_send_percent, sent_percent).call
   end
 
   def self.test_call
@@ -8,40 +19,7 @@ class PersonalNotificationService
   end
 
   def call
-    success_count = 0
-    tms_success_count = 0
-    fail_count = 0
-    fail_reasons = []
-    users = User.active.receive_notifications
-    users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
-    users = users.limit(3) if Jets.env == "development"
-    users.find_each do |user|
-      begin
-        response = send_notification(user)
-        next if response.nil?
-        if response.dig("code") == "success"
-          if response.dig("message") == "K000"
-            success_count += 1
-          else
-            tms_success_count += 1
-          end
-        else
-          fail_count += 1
-        end
-        fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
-      rescue => e
-        fail_count += 1
-        fail_reasons.push(e.message)
-      end
-    end
-    KakaoNotificationResult.create!(
-      send_type: "personalized_notification",
-      template_id: KakaoTemplate::PERSONALIZED,
-      success_count: success_count,
-      tms_success_count: tms_success_count,
-      fail_count: fail_count,
-      fail_reasons: fail_reasons.uniq.join(", ")
-    )
+    percent_call { |user| send_notification(user) }
   end
 
   def test_call
@@ -61,8 +39,8 @@ class PersonalNotificationService
     shorten_url = build_shorten_url(user)
 
     KakaoNotificationService.call(
-      template_id: KakaoTemplate::PERSONALIZED,
-      phone: Jets.env.development? ? '01097912095' : user.phone_number,
+      template_id: template_id,
+      phone: Jets.env != 'production' ? '01097912095' : user.phone_number,
       template_params: {
         distance: I18n.t("activerecord.attributes.user.preferred_distance.#{user.preferred_distance}"),
         job_postings_count: job_postings_count,
@@ -96,9 +74,5 @@ class PersonalNotificationService
     default_url = default_url + "&address=" + URI.encode(user.address)
     default_url = default_url + "&distance=" + user.preferred_distance
     ShortUrl.build(default_url)
-  end
-
-  def test_users(users)
-    users.where(phone_number: %w[])
   end
 end
