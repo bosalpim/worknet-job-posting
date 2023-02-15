@@ -9,6 +9,7 @@ Jets.application.configure do
     backend-production-wemrofzktq-du.a.run.app
   ].join(",")
 
+  config.retry_attempts = 0
   config.prewarm.enable = true # default is truec
   # config.prewarm.rate = '30 minutes' # default is '30 minutes'
   # config.prewarm.concurrency = 2 # default is 2
