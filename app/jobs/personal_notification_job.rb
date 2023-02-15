@@ -1,5 +1,5 @@
 class PersonalNotificationJob < ApplicationJob
-  cron "35 11 ? * TUE *" # “At 12:00 on Thursday in Korean Time”
+  cron "0 3 ? * Mon *" # “At 12:00 on Monday in Korean Time”
   def personal
     PersonalNotificationService.call
   end

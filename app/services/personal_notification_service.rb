@@ -12,15 +12,15 @@ class PersonalNotificationService
     tms_success_count = 0
     fail_count = 0
     fail_reasons = []
-    users = User.where(phone_number: %w[01097912095 01051119300 01094659404 01066121746 01029685055 01049195808])
-    # users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
-    # users = users.limit(3) if Jets.env == "development"
+    users = User.active.receive_notifications
+    users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
+    users = users.limit(3) if Jets.env == "development"
     users.find_each do |user|
       begin
         response = send_notification(user)
         next if response.nil?
-        if response&.dig("code") == "success"
-          if response&.dig("message") == "K000"
+        if response.dig("code") == "success"
+          if response.dig("message") == "K000"
             success_count += 1
           else
             tms_success_count += 1
@@ -28,7 +28,7 @@ class PersonalNotificationService
         else
           fail_count += 1
         end
-        fail_reasons.push(response&.dig("originMessage")) if response&.dig("message") != "K000"
+        fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
       rescue => e
         fail_count += 1
         fail_reasons.push(e.message)
@@ -60,7 +60,7 @@ class PersonalNotificationService
     facility_job_postings_count = job_postings.where(work_type: %w[day_care sanatorium hospital facility]).size
     shorten_url = build_shorten_url(user)
 
-    response = KakaoNotificationService.call(
+    KakaoNotificationService.call(
       template_id: KakaoTemplate::PERSONALIZED,
       phone: Jets.env.development? ? '01097912095' : user.phone_number,
       template_params: {
@@ -74,7 +74,6 @@ class PersonalNotificationService
         original_url: shorten_url.original_url
       }
     )
-    response
   end
 
   def get_radius(user)
