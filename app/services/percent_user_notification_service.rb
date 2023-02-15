@@ -16,8 +16,8 @@ class PercentUserNotificationService
     message_count = (total_count * should_send_percent).ceil
     sent_count = (total_count * sent_percent).ceil
 
-    next_sent_count = (total_count * (should_send_percent + sent_percent)).ceil
-    message_count -= 1 if message_count + sent_count > next_sent_count
+    next_send_count = (total_count * (should_send_percent + sent_percent)).ceil
+    message_count -= 1 if message_count + sent_count > next_send_count
 
     success_count = 0
     tms_success_count = 0
