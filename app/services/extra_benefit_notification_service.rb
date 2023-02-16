@@ -70,7 +70,7 @@ class ExtraBenefitNotificationService < PercentUserNotificationService
 
   def build_shorten_url(user)
     default_url = "https://www.carepartner.kr/jobs?utm_source=message&utm_medium=arlimtalk&utm_campaign=extra_benefits_job&workType=overtime_pay"
-    default_url = default_url + "&address=" + URI.encode(user.address)
+    default_url = default_url + "&address=" + URI::DEFAULT_PARSER.escape(user.address)
     default_url = default_url + "&distance=" + user.preferred_distance
     ShortUrl.build(default_url)
   end

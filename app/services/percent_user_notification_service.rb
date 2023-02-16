@@ -24,7 +24,7 @@ class PercentUserNotificationService
     fail_count = 0
     fail_reasons = []
     users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
-    users.offset(sent_count).limit(message_count).find_each(batch_size: BATCH_SIZE) do |user|
+    users.offset(sent_count + 200).limit(message_count).find_each(batch_size: BATCH_SIZE) do |user|
       begin
         response = yield(user)
         next if response.nil?
@@ -42,12 +42,10 @@ class PercentUserNotificationService
         fail_count += 1
         fail_reasons.push(e.message)
       end
-      sent_count += 1
-      break if sent_count >= message_count
     end
     KakaoNotificationResult.create!(
       send_type: send_type,
-      send_id: "#{should_send_percent}%",
+      send_id: "#{should_send_percent * 100}%",
       template_id: template_id,
       success_count: success_count,
       tms_success_count: tms_success_count,
