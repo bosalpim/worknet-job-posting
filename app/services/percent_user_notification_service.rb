@@ -11,7 +11,7 @@ class PercentUserNotificationService
   end
 
   def percent_call
-    users = User.active.receive_notifications.order(created_at: :desc)
+    users = User.active.receive_notifications.order(:created_at)
     total_count = users.size
     message_count = (total_count * should_send_percent).ceil
     sent_count = (total_count * sent_percent).ceil
@@ -41,6 +41,7 @@ class PercentUserNotificationService
       rescue => e
         fail_count += 1
         fail_reasons.push(e.message)
+        Jets.logger.info e.message
       end
     end
     KakaoNotificationResult.create!(
