@@ -24,7 +24,7 @@ class PercentUserNotificationService
     fail_count = 0
     fail_reasons = []
     users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
-    users.offset(sent_count + 200).limit(message_count).find_each(batch_size: BATCH_SIZE) do |user|
+    users.offset(sent_count + 201).limit(message_count).find_each(batch_size: BATCH_SIZE) do |user|
       begin
         response = yield(user)
         next if response.nil?

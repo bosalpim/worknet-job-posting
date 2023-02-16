@@ -19,7 +19,7 @@ class ExtraBenefitNotificationJob < ApplicationJob
     ExtraBenefitNotificationService.call(0.35, 0.30)
   end
 
-  cron "30 4 ? * THU *" # “At 12:30 on Thursday in Korean Time”
+  cron "10 5 ? * THU *" # “At 12:30 on Thursday in Korean Time”
   def send_last_35_percent
     ExtraBenefitNotificationService.call(0.35, 0.65)
   end
