@@ -44,7 +44,6 @@ class PercentUserNotificationService
         Jets.logger.info e.message
       end
     end
-    puts "Count: #{success_count}"
     KakaoNotificationResult.create!(
       send_type: send_type,
       send_id: "#{should_send_percent * 100}%",
