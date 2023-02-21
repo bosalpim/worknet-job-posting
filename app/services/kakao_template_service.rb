@@ -27,8 +27,8 @@ class KakaoTemplateService
   def get_proposal_data(tem_params)
     items = {
       itemHighlight: {
-        title: "#{tem_params[:user_name]}님! 채용제안을 받으신 기관에 전화해보세요",
-        description: '인기공고는 빠르게 마감됩니다.'
+        title: "#{tem_params[:user_name]}님! 제안 내용을 확인하고 응답해주세요",
+        description: '인기 공고는 빠르게 마감됩니다'
       },
       item: {
         list: [
@@ -58,15 +58,14 @@ class KakaoTemplateService
     }
     {
       title: "#{tem_params[:user_name]}님, 가까운 센터에서 일자리를 제안했어요!",
-      message: "#{tem_params[:user_name]}님! 근처의 #{tem_params[:business_name]}에서\n일자리를 제안했습니다.\n\n본 공고에 취업성공 하시면,\n케어파트너에서 50,000원의 추가수당을 드려요!\n\n센터번호: #{good_number(tem_params[:business_vn])}\n[ 빠르게 연락 하실수록 취업 가능성이 높아져요 ]",
+      message: "#{tem_params[:business_name]}에서 #{tem_params[:user_name]}님에게 일자리 제안을 보냈습니다.\n(7일 내 응답하지 않으면 자동 거절됩니다)\n\n본 공고에 취업하시면 5만원의 취업축하금을 드려요!\n\n[아래 버튼을 눌러 상세공고를 확인하시고 수락 여부를 결정해주세요]\n센터번호: #{good_number(tem_params[:business_vn])}",
       img_url: "https://mud-kage.kakao.com/dn/btfYkj/btrXIoI2ckc/85jhQdX5TuqNEdfrfBXgX0/img_l.jpg",
       items: items,
       buttons: [
         {
-          name: "채용공고 확인하기",
+          name: "일자리 제안 확인하기",
           type: "WL",
-          url_pc: "https://carepartner.kr/jobs/#{tem_params[:job_posting_public_id]}?proposal=true",
-          url_mobile: "https://carepartner.kr/jobs/#{tem_params[:job_posting_public_id]}?proposal=true"
+          url_mobile: "https://carepartner.kr/jobs/#{tem_params[:job_posting_public_id]}?proposal=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=job_proposal_response"
         },
       ]
     }
