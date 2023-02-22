@@ -24,8 +24,5 @@ class PostNaverCrawlingApiService
     end
   end
 
-  private
-
-  attr_reader :url_object, :google_service
 end
 
