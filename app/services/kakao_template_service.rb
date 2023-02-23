@@ -19,6 +19,10 @@ class KakaoTemplateService
       get_personalized_data(tem_params)
     when KakaoTemplate::EXTRA_BENEFIT
       get_extra_benefit_data(tem_params)
+    when KakaoTemplate::PROPOSAL_ACCEPTED
+      get_proposal_accepted_data(tem_params)
+    when KakaoTemplate::PROPOSAL_REJECTED
+      get_proposal_rejected_data(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -271,6 +275,104 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=extra_benefits_job"
         }
+      ]
+    }
+  end
+
+  def get_proposal_accepted_data(tem_params)
+    items = {
+      itemHighlight: {
+        title: "#{tem_params[:business_name]} 담당자님 제안이 수락되었습니다.",
+        description: '빠르게 연락해서 일자리를 제안하세요'
+      },
+      item: {
+        list: [
+          {
+            title: '공고명',
+            description: tem_params[:job_posting_title]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '요양보호사',
+            description: tem_params[:user_name]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '나이',
+            description: tem_params[:age]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '거주지',
+            description: tem_params[:address]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '경력',
+            description: tem_params[:career]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '자기소개',
+            description: tem_params[:self_introduce]&.truncate(19) || "정보없음"
+          },
+        ]
+      }
+    }
+    {
+      title: "#{tem_params[:business_name]} 담당자님 제안이 수락되었습니다.",
+      message: "[아래 버튼을 눌러 요양보호사의 정보를 확인하고 직접 전화해보세요]\n\n빠르게 연락할수록 채용확률이 높아집니다.",
+      items: items,
+      buttons: [
+        {
+          name: "전화번호 확인하기",
+          type: "WL",
+          url_mobile: "https://business.carepartner.kr/proposals/#{tem_params[:proposal_id]}?utm_source=message&utm_medium=arlimtalk&utm_campaign=proposal_accepted",
+        },
+      ]
+    }
+  end
+
+  def get_proposal_rejected_data(tem_params)
+    items = {
+      itemHighlight: {
+        title: "#{tem_params[:business_name]} 담당자님 제안이 거절되었습니다.",
+        description: '다른 요양보호사를 찾아보세요'
+      },
+      item: {
+        list: [
+          {
+            title: '공고명',
+            description: tem_params[:job_posting_title]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '요양보호사',
+            description: tem_params[:user_name]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '나이',
+            description: tem_params[:age]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '거주지',
+            description: tem_params[:address]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '경력',
+            description: tem_params[:career]&.truncate(19) || "정보없음"
+          },
+          {
+            title: '자기소개',
+            description: tem_params[:self_introduce]&.truncate(19) || "정보없음"
+          },
+        ]
+      }
+    }
+    {
+      title: "#{tem_params[:business_name]} 담당자님 제안이 수락되었습니다.",
+      message: "다른 요양보호사들이 일자리 제안을 기다리고 있어요.\n\n[아래 버튼을 눌러 다른 요양보호사들을 확인하고 일자리를 제안해보세요]",
+      items: items,
+      buttons: [
+        {
+          name: "다른 요양보호사 찾기",
+          type: "WL",
+          url_mobile: "https://business.carepartner.kr/recruitment_management/users/#{tem_params[:job_posting_public_id]}&utm_source=message&utm_medium+arlimtalk&utm_campaign=proposal_refused",
+        },
       ]
     }
   end
