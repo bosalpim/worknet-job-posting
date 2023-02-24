@@ -38,14 +38,6 @@ class PersonalNotificationService < PercentUserNotificationService
     facility_job_postings_count = job_postings.where(work_type: %w[day_care sanatorium hospital facility]).size
     shorten_url = build_shorten_url(user)
 
-    puts visit_job_postings_count
-    puts resident_job_postings_count
-    puts facility_job_postings_count
-
-    NaverApi.coords_from_address("서울 은평구 불광동 28-3")
-
-    return { "code" => "success", "message" => "K000" }
-
     KakaoNotificationService.call(
       template_id: template_id,
       phone: Jets.env != 'production' ? '01097912095' : user.phone_number,
