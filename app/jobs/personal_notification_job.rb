@@ -4,7 +4,7 @@ class PersonalNotificationJob < ApplicationJob
     self.class_eval <<~CODE
       cron "#{i * 5} 5 ? * FRI *"
       def send_step_#{i}
-        PersonalNotificationService.call(0.1, #{0.1 * i})
+        PersonalNotificationService.call(0.5, #{0.1 * i})
       end
     CODE
   end
