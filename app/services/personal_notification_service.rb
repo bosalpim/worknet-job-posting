@@ -44,7 +44,7 @@ class PersonalNotificationService < PercentUserNotificationService
 
     NaverApi.coords_from_address("서울 은평구 불광동 28-3")
 
-    return nil
+    return { "code" => "success", "message" => "K000" }
 
     KakaoNotificationService.call(
       template_id: template_id,
