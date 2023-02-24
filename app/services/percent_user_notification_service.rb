@@ -1,7 +1,7 @@
 class PercentUserNotificationService
   attr_reader :should_send_percent, :sent_percent, :send_type, :template_id
 
-  BATCH_SIZE = 10_000.freeze # find_each's default batch size is 1,000
+  BATCH_SIZE = 1_500.freeze # find_each's default batch size is 1,000
 
   def initialize(should_send_percent, sent_percent, send_type, template_id)
     @should_send_percent = should_send_percent
@@ -26,7 +26,8 @@ class PercentUserNotificationService
     users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
     users.offset(sent_count).limit(message_count).find_each(batch_size: BATCH_SIZE) do |user|
       begin
-        response = yield(user)
+        # response = yield(user)
+        response = nil # for test staging db active connection status
         next if response.nil?
         if response.dig("code") == "success"
           if response.dig("message") == "K000"
