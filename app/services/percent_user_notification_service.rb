@@ -26,8 +26,7 @@ class PercentUserNotificationService
     users = test_users(users) if Jets.env == "staging" # WARNING 바꾸면 실제 유저에게 배포됨
     users.offset(sent_count).limit(message_count).find_each(batch_size: BATCH_SIZE) do |user|
       begin
-        # response = yield(user)
-        response = nil # for test staging db active connection status
+        response = yield(user)
         next if response.nil?
         if response.dig("code") == "success"
           if response.dig("message") == "K000"
