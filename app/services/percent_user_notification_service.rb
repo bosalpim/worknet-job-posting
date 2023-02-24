@@ -1,7 +1,7 @@
 class PercentUserNotificationService
   attr_reader :should_send_percent, :sent_percent, :send_type, :template_id
 
-  BATCH_SIZE = 10_000.freeze # find_each's default batch size is 1,000
+  BATCH_SIZE = 1_500.freeze # find_each's default batch size is 1,000
 
   def initialize(should_send_percent, sent_percent, send_type, template_id)
     @should_send_percent = should_send_percent
