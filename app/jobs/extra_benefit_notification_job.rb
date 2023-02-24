@@ -1,4 +1,5 @@
 class ExtraBenefitNotificationJob < ApplicationJob
+  # "From 12:00 on Thursday in Korean Time"
   10.times do |i|
     self.class_eval <<~CODE
       cron "#{i * 5} 3 ? * THU *"
