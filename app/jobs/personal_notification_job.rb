@@ -31,22 +31,22 @@ class PersonalNotificationJob < ApplicationJob
     PersonalNotificationService.call(0.1, 0)
   end
 
-  cron "5 5 ? * MON *"
+  cron "5 5 ? * TUE *"
   def send_step_6
     PersonalNotificationService.call(0.1, 0)
   end
 
-  cron "15 5 ? * MON *"
+  cron "15 5 ? * TUE *"
   def send_step_7
     PersonalNotificationService.call(0.1, 0)
   end
 
-  cron "25 5 ? * MON *"
+  cron "25 5 ? * TUE *"
   def send_step_8
     PersonalNotificationService.call(0.1, 0)
   end
 
-  cron "35 5 ? * MON *"
+  cron "35 5 ? * TUE *"
   def send_step_9
     PersonalNotificationService.call(0.1, 0)
   end
