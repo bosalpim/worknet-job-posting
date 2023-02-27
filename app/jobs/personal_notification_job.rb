@@ -26,27 +26,27 @@ class PersonalNotificationJob < ApplicationJob
     PersonalNotificationService.call(0.1, 0.4)
   end
 
-  cron "15 5 ? * MON *"
+  cron "27 5 ? * MON *"
   def send_step_5
     PersonalNotificationService.call(0.1, 0.5)
   end
 
-  cron "25 5 ? * MON *"
+  cron "37 5 ? * MON *"
   def send_step_6
     PersonalNotificationService.call(0.1, 0.6)
   end
 
-  cron "35 5 ? * MON *"
+  cron "47 5 ? * MON *"
   def send_step_7
     PersonalNotificationService.call(0.1, 0.7)
   end
 
-  cron "45 5 ? * MON *"
+  cron "57 5 ? * MON *"
   def send_step_8
     PersonalNotificationService.call(0.1, 0.8)
   end
 
-  cron "55 5 ? * MON *"
+  cron "7 6 ? * MON *"
   def send_step_9
     PersonalNotificationService.call(0.1, 0.9)
   end
