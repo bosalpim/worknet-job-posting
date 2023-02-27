@@ -11,7 +11,7 @@ class PercentUserNotificationService
   end
 
   def percent_call
-    users = User.active.receive_notifications.order(:created_at)
+    users = User.active.receive_notifications.where(has_certification: true).order(:created_at)
     total_count = users.size
     message_count = (total_count * should_send_percent).ceil
     sent_count = (total_count * sent_percent).ceil
