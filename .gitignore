@@ -11,3 +11,4 @@ coverage
 pkg
 tmp
 .idea
+.gitmessage.txt
