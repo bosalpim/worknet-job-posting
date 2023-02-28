@@ -33,17 +33,17 @@ class GetWorknetJobService
   end
 
   def create_worknet_job_postings(jobs)
-    google_api_service = PostGoogleIndexingApiService.new rescue nil
+    search_api_service = PostJobSearchApiService.new rescue nil
     if jobs.class == Array
       jobs.each do |job_info|
-        parse_and_create_job_posting(job_info, google_api_service)
+        parse_and_create_job_posting(job_info, search_api_service)
       end
     elsif jobs.class == Hash
-      parse_and_create_job_posting(jobs, google_api_service)
+      parse_and_create_job_posting(jobs, search_api_service)
     end
   end
 
-  def parse_and_create_job_posting(job_info, google_api_service)
+  def parse_and_create_job_posting(job_info, search_api_service)
     worknet_id = job_info.dig("wantedAuthNo")
     return if ScrapedWorknetJobPosting.find_by(original_id: worknet_id)
 
@@ -240,7 +240,7 @@ class GetWorknetJobService
       build_job_posting(
         scraped_worknet_job_posting,
         business_info,
-        google_api_service
+        search_api_service
       )
 
       Jets.logger.info '[ActiveJob] Get Worknet Job Successfully'
@@ -249,7 +249,7 @@ class GetWorknetJobService
     end
   end
 
-  def build_job_posting(worknet_job, business_info, google_api_service)
+  def build_job_posting(worknet_job, business_info, search_api_service)
     return if worknet_job.job_posting.present?
     return if worknet_job.closed?
 
@@ -311,7 +311,7 @@ class GetWorknetJobService
         region: worknet_job_info.dig("region")
       },
     )
-    google_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" &&  google_api_service.present?
+    search_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" &&  search_api_service.present?
     job_posting
   end
 
