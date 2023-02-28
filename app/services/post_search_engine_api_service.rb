@@ -8,8 +8,8 @@ class PostSearchEngineApiService
   end
 
   def call(url)
-    post_google(url)
-    post_naver(url)
+    post_google(url) rescue nil
+    post_naver(url) rescue nil
   end
 
   def post_google(url)
