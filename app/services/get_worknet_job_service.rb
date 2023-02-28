@@ -33,7 +33,7 @@ class GetWorknetJobService
   end
 
   def create_worknet_job_postings(jobs)
-    search_api_service = PostJobSearchApiService.new rescue nil
+    search_api_service = PostSearchEngineApiService.new rescue nil
     if jobs.class == Array
       jobs.each do |job_info|
         parse_and_create_job_posting(job_info, search_api_service)

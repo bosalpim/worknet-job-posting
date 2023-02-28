@@ -1,4 +1,4 @@
-class PostJobSearchApiService
+class PostSearchEngineApiService
   def initialize
     @google_service = Google::Apis::IndexingV3::IndexingService.new
     authorization = Google::Auth::ServiceAccountCredentials.make_creds(scope: 'https://www.googleapis.com/auth/indexing')
