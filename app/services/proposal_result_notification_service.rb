@@ -24,7 +24,8 @@ class ProposalResultNotificationService
         address: user.address,
         career: user.career,
         self_introduce: user.self_introduce,
-        proposal_id: proposal.id
+        proposal_id: proposal.id,
+        auth_token: proposal.auth_token
       }
     )
 

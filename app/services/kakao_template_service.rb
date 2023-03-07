@@ -322,7 +322,8 @@ class KakaoTemplateService
         {
           name: "전화번호 확인하기",
           type: "WL",
-          url_mobile: "https://business.carepartner.kr/proposals/#{tem_params[:proposal_id]}?utm_source=message&utm_medium=arlimtalk&utm_campaign=proposal_accepted",
+          url_mobile: "https://business.carepartner.kr/proposals/#{tem_params[:proposal_id]}?auth_token=#{tem_params[:auth_token]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=proposal_accepted",
+          url_pc: "https://business.carepartner.kr/proposals/#{tem_params[:proposal_id]}?auth_token=#{tem_params[:auth_token]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=proposal_accepted"
         },
       ]
     }
