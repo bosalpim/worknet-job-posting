@@ -1,22 +1,22 @@
 class ShortUrl < ApplicationRecord
   validates_presence_of :original_url
 
-  def self.build(url)
-    short_url = ShortUrl.find_by(original_url: url)
+  def self.build(url, base_url = "https://carepartner.kr")
+    existing = ShortUrl.find_by(original_url: url)
 
-    if short_url.blank?
+    if existing.blank?
       slug = loop do
-        random_slub = SecureRandom.base36(10)
-        break random_slub unless ShortUrl.exists?(slug: random_slub)
+        random_slug = SecureRandom.base36(10)
+        break random_slug unless ShortUrl.exists?(slug: random_slug)
       end
 
-      short_url = ShortUrl.create(
+      existing = ShortUrl.create(
         original_url: url,
-        url: "https://carepartner.kr/s/#{slug}",
+        url:"#{base_url}/s/#{slug}",
         slug: slug
       )
     end
 
-    return short_url
+    return existing
   end
 end
