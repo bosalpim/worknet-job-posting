@@ -32,6 +32,7 @@ jobs:
           echo "GOOGLE_PRIVATE_KEY=$GOOGLE_PRIVATE_KEY" >> .env.staging
           echo "NAVER_API_KEY_ID=$NAVER_API_KEY_ID" >> .env.staging
           echo "NAVER_API_KEY=$NAVER_API_KEY" >> .env.staging
+          echo "NAVER_SEARCH_API_KEY=$NAVER_SEARCH_API_KEY" >> .env.staging
           echo "KAKAO_REST_API_KEY=$KAKAO_REST_API_KEY" >> .env.staging
           echo "KAKAO_BIZMSG_PROFILE=$KAKAO_BIZMSG_PROFILE" >> .env.staging
         env:
@@ -43,6 +44,7 @@ jobs:
           GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
           NAVER_API_KEY_ID: ${{ secrets.NAVER_API_KEY_ID }}
           NAVER_API_KEY: ${{ secrets.NAVER_API_KEY }}
+          NAVER_SEARCH_API_KEY: ${{ secrets.NAVER_SEARCH_API_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           KAKAO_BIZMSG_PROFILE: ${{ secrets.KAKAO_BIZMSG_PROFILE }}
 
