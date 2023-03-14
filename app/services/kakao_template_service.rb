@@ -382,7 +382,7 @@ class KakaoTemplateService
   def get_satisfaction_survey_data(tem_params)
     {
       title: "#{tem_params[:business_name]} 담당자님 제안이 수락되었습니다.",
-      message: "안녕하세요 #{tem_params[:business_name]} 담당자님,\n\n요양보호사님의 채용여부는 결정되었나요?\n케어파트너에게 채용경험을 들려주세요.\n(공고명: #{tem_params[:job_posting_title]})\n\n아래 버튼을 눌러 1분 채용결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n(여러 번 참여하면 당첨 확률 상승!)",
+      message: "안녕하세요 #{tem_params[:business_name]} 담당자님,\n\n요양보호사님의 채용여부는 결정되었나요?\n케어파트너에게 채용경험을 들려주세요.\n(공고명: #{tem_params[:job_posting_title]})\n\n아래 버튼을 눌러 1분 채용결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n(여러 번 참여하면 당첨 확률 상승!)\n#{tem_params[:link]}",
       buttons: [
         {
           name: "설문조사 참여하기",
