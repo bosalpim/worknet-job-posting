@@ -19,7 +19,7 @@ class JobPostingsController < ApplicationController
   end
 
   def new_satisfaction_survey
-    event = { job_posting_id: params["job_posting_id"] }
+    event = { job_posting_id: params["job_posting_id"], proposal_id: params["proposal_id"] }
     rsp = nil
     rsp = NewSatisfactionSurveyJob.perform_now(:dig, event) if Jets.env.development?
     rsp = NewSatisfactionSurveyJob.perform_later(:dig, event) unless Jets.env.development?

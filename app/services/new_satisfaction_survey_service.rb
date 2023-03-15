@@ -1,12 +1,13 @@
 class NewSatisfactionSurveyService
-  attr_reader :job_posting
+  attr_reader :job_posting, :proposal
 
-  def initialize(job_posting)
+  def initialize(job_posting, proposal_id)
     @job_posting = job_posting
+    @proposal = build_proposal(proposal_id)
   end
 
-  def self.call(job_posting)
-    new(job_posting).call
+  def self.call(job_posting, proposal_id)
+    new(job_posting, proposal_id).call
   end
 
   def call
@@ -19,7 +20,7 @@ class NewSatisfactionSurveyService
     template_id = KakaoTemplate::SATISFACTION_SURVEY
     response = KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env != 'production' ? '01097912095' : user.phone_number,
+      phone: Jets.env != 'production' ? '01097912095' : proposal.user.phone_number,
       template_params: {
         business_name: business.name,
         job_posting_title: job_posting.title,
@@ -59,5 +60,9 @@ class NewSatisfactionSurveyService
       fail_count: fail_count,
       fail_reasons: fail_reason
     )
+  end
+
+  def build_proposal(proposal_id)
+    Proposal.find(proposal_id)
   end
 end
