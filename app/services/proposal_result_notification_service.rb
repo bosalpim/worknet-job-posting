@@ -12,10 +12,11 @@ class ProposalResultNotificationService
     business = proposal.business
     job_posting = JobPosting.find_by(public_id: proposal.job_posting_id)
     template_id = KakaoTemplate::PROPOSAL_ACCEPTED
+    link = build_short_url(proposal)
 
     response = KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env == "production" ? user.phone_number : '01094659404',
+      phone: Jets.env == "production" ? user.phone_number : '01097912095',
       template_params: {
         business_name: business.name,
         job_posting_title: job_posting.title,
@@ -25,7 +26,8 @@ class ProposalResultNotificationService
         career: user.career,
         self_introduce: user.self_introduce,
         proposal_id: proposal.id,
-        auth_token: proposal.auth_token
+        auth_token: proposal.auth_token,
+        link: link,
       }
     )
 
@@ -84,6 +86,14 @@ class ProposalResultNotificationService
       fail_count: fail_count,
       fail_reasons: fail_reason
     )
+  end
+
+  def build_short_url(proposal)
+    short_url = ShortUrl.build(
+      "https://business.carepartner.kr/proposals/#{proposal.id}?auth_token=#{proposal.auth_token}&utm_source=message&utm_medium=arlimtalk&utm_campaign=proposal_accepted",
+      "https://business.carepartner.kr"
+    )
+    short_url.url
   end
 
   def build_proposal(proposal_id)
