@@ -284,7 +284,7 @@ class KakaoTemplateService
   def get_proposal_accepted_data(tem_params)
     items = {
       itemHighlight: {
-        title: "#{tem_params[:business_name]} 담당자님 제안이 수락되었습니다.",
+        title: "#{tem_params[:business_name]} 담당자님 제안이 수락되었습니다",
         description: '빠르게 연락해서 일자리를 제안하세요'
       },
       item: {
@@ -318,7 +318,7 @@ class KakaoTemplateService
     }
     {
       title: "#{tem_params[:business_name]} 담당자님 제안이 수락되었습니다.",
-      message: "[아래 버튼을 눌러 요양보호사의 정보를 확인하고 직접 전화해보세요]\n\n빠르게 연락할수록 채용확률이 높아집니다.",
+      message: "[아래 버튼 혹은 링크를 눌러 요양보호사의 정보를 확인하고 직접 전화해보세요]\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n#{tem_params[:link]}",
       items: items,
       buttons: [
         {
