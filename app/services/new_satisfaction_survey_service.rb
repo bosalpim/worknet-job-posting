@@ -1,12 +1,13 @@
 class NewSatisfactionSurveyService
-  attr_reader :job_posting
+  attr_reader :job_posting, :proposal
 
-  def initialize(job_posting)
+  def initialize(job_posting, proposal_id)
     @job_posting = job_posting
+    @proposal = build_proposal(proposal_id)
   end
 
-  def self.call(job_posting)
-    new(job_posting).call
+  def self.call(job_posting, proposal_id)
+    new(job_posting, proposal_id).call
   end
 
   def call
@@ -16,10 +17,10 @@ class NewSatisfactionSurveyService
       "https://business.carepartner.kr"
     )
 
-    puts short_url.url
-    KakaoNotificationService.call(
-      template_id: KakaoTemplate::SATISFACTION_SURVEY,
-      phone: Jets.env != 'production' ? '01097912095' : user.phone_number,
+    template_id = KakaoTemplate::SATISFACTION_SURVEY
+    response = KakaoNotificationService.call(
+      template_id: template_id,
+      phone: Jets.env != 'production' ? '01097912095' : proposal.user.phone_number,
       template_params: {
         business_name: business.name,
         job_posting_title: job_posting.title,
@@ -27,5 +28,41 @@ class NewSatisfactionSurveyService
         link: short_url.url
       }
     )
+    save_kakao_notification(response, KakaoNotificationResult::SATISFACTION_SURVEY, job_posting.id, template_id)
+    response
+  end
+
+  private
+
+  def save_kakao_notification(response, send_type, send_id, template_id)
+    success_count = 0
+    tms_success_count = 0
+    fail_count = 0
+    fail_reason = ""
+
+    if response.dig("code") == "success"
+      if response.dig("message") == "K000"
+        success_count += 1
+      else
+        tms_success_count += 1
+      end
+    else
+      fail_count += 1
+      fail_reason = response.dig("originMessage")
+    end
+
+    KakaoNotificationResult.create!(
+      send_type: send_type,
+      send_id: send_id,
+      template_id: template_id,
+      success_count: success_count,
+      tms_success_count: tms_success_count,
+      fail_count: fail_count,
+      fail_reasons: fail_reason
+    )
+  end
+
+  def build_proposal(proposal_id)
+    Proposal.find(proposal_id)
   end
 end
