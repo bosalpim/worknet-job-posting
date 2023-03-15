@@ -1,4 +1,6 @@
 class NewSatisfactionSurveyService
+  attr_reader :job_posting
+
   def initialize(job_posting)
     @job_posting = job_posting
   end
