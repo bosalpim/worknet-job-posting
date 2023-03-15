@@ -5,6 +5,7 @@ class KakaoNotificationResult < ApplicationRecord
   EXTRA_BENEFIT = "extra_benefit_notification".freeze
   PROPOSAL_ACCEPTED = "proposal_accepted".freeze
   PROPOSAL_REJECTED = "proposal_refused".freeze
+  SATISFACTION_SURVEY = "satisfaction_survey".freeze
 
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -18,5 +19,6 @@ class KakaoNotificationResult < ApplicationRecord
     EXTRA_BENEFIT => "extra_benefit_notification",
     PROPOSAL_ACCEPTED => "proposal_accepted",
     PROPOSAL_REJECTED => "proposal_refused",
+    SATISFACTION_SURVEY => SATISFACTION_SURVEY
   }
 end
