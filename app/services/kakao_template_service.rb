@@ -1,4 +1,6 @@
 class KakaoTemplateService
+  MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
+
   attr_reader :template_id
 
   def initialize(template_id)
@@ -40,23 +42,23 @@ class KakaoTemplateService
         list: [
           {
             title: '센터명',
-            description: tem_params[:business_name].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:business_name])
           },
           {
             title: '거리',
-            description: tem_params[:distance].presence || "정보없음"
+            description: convert_safe_text(tem_params[:distance])
           },
           {
             title: '근무지',
-            description: tem_params[:address].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:address])
           },
           {
             title: '근무유형',
-            description: tem_params[:work_type_ko].presence || "정보없음"
+            description: convert_safe_text(tem_params[:work_type_ko])
           },
           {
             title: '임금조건',
-            description: tem_params[:pay_text].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:pay_text])
           },
         ],
         summary: ""
@@ -87,35 +89,35 @@ class KakaoTemplateService
         list: [
           {
             title: '근무지',
-            description: tem_params[:address].presence || ""
+            description: convert_safe_text(tem_params[:address])
           },
           {
             title: '근무요일',
-            description: tem_params[:days_text].presence&.truncate(19) || ""
+            description: convert_safe_text(tem_params[:days_text])
           },
           {
             title: '근무시간',
-            description: tem_params[:hours_text].presence&.truncate(19) || ""
+            description: convert_safe_text(tem_params[:hours_text])
           },
           {
             title: '임금조건',
-            description: tem_params[:pay_text].presence&.truncate(19) || ""
+            description: convert_safe_text(tem_params[:pay_text])
           },
           {
             title: '어르신 식사',
-            description: tem_params[:meal_assistances].presence&.truncate(19) || "내용없음"
+            description: convert_safe_text(tem_params[:meal_assistances])
           },
           {
             title: '어르신 배변',
-            description: tem_params[:excretion_assistances].presence&.truncate(19) || "내용없음"
+            description: convert_safe_text(tem_params[:excretion_assistances])
           },
           {
             title: '어르신 거동',
-            description: tem_params[:movement_assistances].presence&.truncate(19) || "내용없음"
+            description: convert_safe_text(tem_params[:movement_assistances])
           },
           {
             title: '필요 서비스',
-            description: tem_params[:housework_assistances].presence&.truncate(19) || "내용없음"
+            description: convert_safe_text(tem_params[:housework_assistances])
           }
         ]
       }
@@ -150,31 +152,31 @@ class KakaoTemplateService
         list: [
           {
             title: '근무지',
-            description: tem_params[:address].presence || "정보없음"
+            description: convert_safe_text(tem_params[:address])
           },
           {
             title: '근무요일',
-            description: tem_params[:days_text].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:days_text])
           },
           {
             title: '근무유형',
-            description: tem_params[:work_type_ko].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:work_type_ko])
           },
           {
             title: '근무시간',
-            description: tem_params[:hours_text].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:hours_text])
           },
           {
             title: '임금조건',
-            description: tem_params[:pay_text].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:pay_text])
           },
           {
             title: '복리후생',
-            description: tem_params[:welfare].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:welfare])
           },
           {
             title: '기관명',
-            description: tem_params[:business_name].presence&.truncate(19) || "이름없음"
+            description: convert_safe_text(tem_params[:business_name])
           },
         ]
       }
@@ -209,15 +211,15 @@ class KakaoTemplateService
         list: [
           {
             title: '방문요양구인',
-            description: tem_params[:visit_job_postings_count].presence || "0 건"
+            description: convert_safe_text(tem_params[:visit_job_postings_count], "0 건")
           },
           {
             title: '입주요양구인',
-            description: tem_params[:resident_job_postings_count].presence || "0 건"
+            description: convert_safe_text(tem_params[:resident_job_postings_count], "0 건")
           },
           {
             title: '시설요양구인',
-            description: tem_params[:facility_job_postings_count].presence || "0 건"
+            description: convert_safe_text(tem_params[:facility_job_postings_count], "0 건")
           },
         ]
       }
@@ -252,11 +254,11 @@ class KakaoTemplateService
         list: [
           {
             title: '취업축하금',
-            description: tem_params[:cpt_job_postings_count].presence || "0 건"
+            description: convert_safe_text(tem_params[:cpt_job_postings_count], "0 건")
           },
           {
             title: '가산수당',
-            description: tem_params[:benefit_job_postings_count].presence || "0 건"
+            description: convert_safe_text(tem_params[:benefit_job_postings_count], "0 건")
           },
         ]
       }
@@ -291,27 +293,27 @@ class KakaoTemplateService
         list: [
           {
             title: '공고명',
-            description: tem_params[:job_posting_title].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:job_posting_title])
           },
           {
             title: '요양보호사',
-            description: tem_params[:user_name].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:user_name])
           },
           {
             title: '나이',
-            description: tem_params[:age].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:age])
           },
           {
             title: '거주지',
-            description: tem_params[:address].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:address])
           },
           {
             title: '경력',
-            description: tem_params[:career].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:career])
           },
           {
             title: '자기소개',
-            description: tem_params[:self_introduce].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:self_introduce])
           },
         ]
       }
@@ -341,27 +343,27 @@ class KakaoTemplateService
         list: [
           {
             title: '공고명',
-            description: tem_params[:job_posting_title].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:job_posting_title])
           },
           {
             title: '요양보호사',
-            description: tem_params[:user_name].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:user_name])
           },
           {
             title: '나이',
-            description: tem_params[:age].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:age])
           },
           {
             title: '거주지',
-            description: tem_params[:address].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:address])
           },
           {
             title: '경력',
-            description: tem_params[:career].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:career])
           },
           {
             title: '자기소개',
-            description: tem_params[:self_introduce].presence&.truncate(19) || "정보없음"
+            description: convert_safe_text(tem_params[:self_introduce])
           },
         ]
       }
@@ -401,5 +403,9 @@ class KakaoTemplateService
     else
       phone_number&.slice(0, 3) + "-" +  phone_number&.slice(3..)&.scan(/.{4}/)&.join('-') rescue nil
     end
+  end
+
+  def convert_safe_text(text, empty_string = "정보없음")
+    text.presence&.truncate(MAX_ITEM_LIST_TEXT_LENGTH) || empty_string
   end
 end
