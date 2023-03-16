@@ -291,27 +291,27 @@ class KakaoTemplateService
         list: [
           {
             title: '공고명',
-            description: tem_params[:job_posting_title]&.truncate(19) || "정보없음"
+            description: tem_params[:job_posting_title].presence&.truncate(19) || "정보없음"
           },
           {
             title: '요양보호사',
-            description: tem_params[:user_name]&.truncate(19) || "정보없음"
+            description: tem_params[:user_name].presence&.truncate(19) || "정보없음"
           },
           {
             title: '나이',
-            description: tem_params[:age]&.truncate(19) || "정보없음"
+            description: tem_params[:age].presence&.truncate(19) || "정보없음"
           },
           {
             title: '거주지',
-            description: tem_params[:address]&.truncate(19) || "정보없음"
+            description: tem_params[:address].presence&.truncate(19) || "정보없음"
           },
           {
             title: '경력',
-            description: tem_params[:career]&.truncate(19) || "정보없음"
+            description: tem_params[:career].presence&.truncate(19) || "정보없음"
           },
           {
             title: '자기소개',
-            description: tem_params[:self_introduce]&.truncate(19) || "정보없음"
+            description: tem_params[:self_introduce].presence&.truncate(19) || "정보없음"
           },
         ]
       }
