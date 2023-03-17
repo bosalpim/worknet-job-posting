@@ -27,6 +27,10 @@ class KakaoTemplateService
       get_proposal_rejected_data(tem_params)
     when KakaoTemplate::SATISFACTION_SURVEY
       get_satisfaction_survey_data(tem_params)
+    when KakaoTemplate::USER_CALL_REMINDER
+      get_user_call_reminder_data(tem_params)
+    when KakaoTemplate::BUSINESS_CALL_REMINDER
+      get_business_call_reminder_data(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -394,6 +398,20 @@ class KakaoTemplateService
           url_pc: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=satisfaction_survey_follow_up",
         },
       ]
+    }
+  end
+
+  def get_user_call_reminder_data(tem_params)
+    {
+      title: "[케어파트너] 부재중전화 알림",
+      message: "[케어파트너] 부재중전화 알림\n#{tem_params[:user_name]}님, 제안을 보낸 #{tem_params[:business_name]} 에서 걸려온 부재중 전화가 있습니다.\n아래 번호로 센터에 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n공고명: #{tem_params[:job_posting_title]}센터번호: #{tem_params[:business_vn]}",
+    }
+  end
+
+  def get_business_call_reminder_data(tem_params)
+    {
+      title: "[케어파트너] 부재중전화 알림",
+      message: "[케어파트너] 부재중전화 알림\n#{tem_params[:business_name]} 담당자님, 제안을 보낸 요양보호사에게 걸려온 부재중 전화가 있습니다.\n아래 버튼 혹은 링크를 눌러 요양보호사의 번호를 확인하고 직접 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n공고명: #{tem_params[:job_posting_title]}\n링크: #{tem_params[:link]}",
     }
   end
 
