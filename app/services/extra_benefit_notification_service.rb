@@ -31,6 +31,7 @@ class ExtraBenefitNotificationService < PercentUserNotificationService
   def send_notification(user)
     radius = get_radius(user)
     job_postings = JobPosting.init.where(published_at: 2.weeks.ago..).within_radius(radius, user.lat, user.lng)
+    job_postings = get_gender_filtered_job_postings(job_postings, user)
     job_postings = job_postings.where(grade: %w[first second]).or(job_postings.where(scraped_worknet_job_posting_id: nil))
     job_postings_count = job_postings.size
     return nil if job_postings_count.zero?
@@ -66,6 +67,16 @@ class ExtraBenefitNotificationService < PercentUserNotificationService
     else
       1500
     end
+  end
+
+  def get_gender_filtered_job_postings(job_postings, user)
+    result_job_postings = job_postings
+    if user.gender == 'male'
+      result_job_postings = job_postings.where(gender: ['male', nil])
+    elsif user.gender == 'female'
+      result_job_postings = job_postings.where(gender: ['female', nil])
+    end
+    result_job_postings
   end
 
   def build_shorten_url(user)
