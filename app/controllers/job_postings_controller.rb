@@ -22,7 +22,7 @@ class JobPostingsController < ApplicationController
     event = { job_posting_id: params["job_posting_id"] }
     rsp = nil
     rsp = NewSatisfactionSurveyJob.perform_now(:dig, event) if Jets.env.development?
-    rsp = NewSatisfactionSurveyJob.perform_later(:dig, event) unless Jets.env.development?
-    render json: rsp, status: :ok
+    NewSatisfactionSurveyJob.perform_later(:dig, event) unless Jets.env.development?
+    render json: Jets.env.production? ? { success: true } : rsp, status: :ok
   end
 end
