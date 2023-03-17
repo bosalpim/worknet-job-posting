@@ -7,4 +7,6 @@ module KakaoTemplate
   PROPOSAL_ACCEPTED = "proposal_accepted3".freeze
   PROPOSAL_REJECTED = "proposal_refused".freeze
   SATISFACTION_SURVEY = "satisfaction_survey_interview2".freeze
+  USER_CALL_REMINDER = "proposal_call_reminder_user".freeze
+  BUSINESS_CALL_REMINDER = "proposal_call_reminder_biz".freeze
 end
