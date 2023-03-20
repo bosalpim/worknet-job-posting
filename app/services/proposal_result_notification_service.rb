@@ -16,7 +16,7 @@ class ProposalResultNotificationService
 
     response = KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env == "production" ? user.phone_number : '01097912095',
+      phone: Jets.env == "production" ? user.phone_number : '01094659404',
       template_params: {
         business_name: business.name,
         job_posting_title: job_posting.title,
@@ -44,7 +44,7 @@ class ProposalResultNotificationService
 
     KakaoNotificationService.call(
       template_id: KakaoTemplate::PROPOSAL_REJECTED,
-      phone: Jets.env == "production" ? user.phone_number : '01097912095',
+      phone: Jets.env == "production" ? user.phone_number : '01094659404',
       template_params: {
         business_name: business.name,
         job_posting_title: job_posting.title,
