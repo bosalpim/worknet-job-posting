@@ -41,7 +41,7 @@ class ExtraBenefitNotificationService < PercentUserNotificationService
 
     KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env != 'production' ? '01097912095' : user.phone_number,
+      phone: Jets.env != 'production' ? '01094659404' : user.phone_number,
       template_params: {
         distance: I18n.t("activerecord.attributes.user.preferred_distance.#{user.preferred_distance}"),
         job_postings_count: "#{job_postings_count} 건",

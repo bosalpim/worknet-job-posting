@@ -1,37 +1,42 @@
-class NewSatisfactionSurveyService
-  attr_reader :job_posting
+class UserCallFailureAlertService
+  attr_reader :user, :job_posting, :business
 
-  def initialize(job_posting)
+  def initialize(user, job_posting)
+    @user = user
     @job_posting = job_posting
+    @business = build_business(job_posting)
   end
 
-  def self.call(job_posting)
-    new(job_posting).call
+  def self.call(user, job_posting)
+    new(user, job_posting).call
   end
 
   def call
-    business = job_posting.business
-    short_url = ShortUrl.build(
-      "https://business.carepartner.kr/satisfaction_surveys/#{job_posting.public_id}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=satisfaction_survey_follow_up",
-      "https://business.carepartner.kr"
-    )
-
-    template_id = KakaoTemplate::SATISFACTION_SURVEY
+    template_id = KakaoTemplate::BUSINESS_CALL_REMINDER
     response = KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env != 'production' ? '01094659404' : job_posting.manager_phone_number,
+      phone: Jets.env != 'production' ? '01097912095' : job_posting.manager_phone_number,
       template_params: {
+        user_name: user.name,
         business_name: business.name,
         job_posting_title: job_posting.title,
-        job_posting_public_id: job_posting.public_id,
-        link: short_url.url
+        called_at: (Time.current + 9.hour - 1.minute).strftime("%Y-%m-%d %H시%M분 경")
       }
     )
-    save_kakao_notification(response, KakaoNotificationResult::SATISFACTION_SURVEY, job_posting.id, template_id)
+    save_kakao_notification(
+      response,
+      KakaoNotificationResult::USER_CALL_FAILURE_ALERT,
+      job_posting.id,
+      template_id
+    )
     response
   end
 
   private
+
+  def build_business(job_posting)
+    job_posting.business
+  end
 
   def save_kakao_notification(response, send_type, send_id, template_id)
     success_count = 0
