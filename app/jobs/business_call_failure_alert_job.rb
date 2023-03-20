@@ -1,6 +1,6 @@
 class BusinessCallFailureAlertJob < ApplicationJob
   def dig
     proposal = Proposal.find(event[:proposal_id])
-    UserCallFailureAlertService.call(proposal)
+    BusinessCallFailureAlertService.call(proposal)
   end
 end
