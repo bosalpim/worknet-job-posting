@@ -16,7 +16,7 @@ class BusinessCallFailureAlertService
     template_id = KakaoTemplate::USER_CALL_REMINDER
     response = KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env != 'production' ? '01097912095' : user.phone_number,
+      phone: Jets.env != 'production' ? '01094659404' : user.phone_number,
       template_params: {
         user_name: user.name,
         business_name: business.name,
