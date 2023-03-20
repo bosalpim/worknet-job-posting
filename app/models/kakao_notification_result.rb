@@ -8,6 +8,7 @@ class KakaoNotificationResult < ApplicationRecord
   SATISFACTION_SURVEY = "satisfaction_survey".freeze
   USER_CALL_FAILURE_ALERT = "user_calls_failure_alert".freeze
   BUSINESS_CALL_FAILURE_ALERT = "business_calls_failure_alert".freeze
+  NEW_APPLY = "new_apply".freeze
 
   validates :send_type, presence: true
   validates :template_id, presence: true
