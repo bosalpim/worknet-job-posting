@@ -21,7 +21,7 @@ class BusinessCallFailureAlertService
         user_name: user.name,
         business_name: business.name,
         job_posting_title: job_posting.title,
-        business_vn: good_number(proposal.user_vn)
+        business_vn: good_number(job_posting.vn)
       }
     )
     save_kakao_notification(
