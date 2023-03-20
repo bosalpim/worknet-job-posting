@@ -35,10 +35,10 @@ class NewApplyService
 
   private
   def build_short_url(apply)
-    template_id = NEW_APPLY
+    template_id = KakaoTemplate::NEW_APPLY
     short_url = ShortUrl.build(
       "https://business.carepartner.kr/recruitment_management/#{apply.job_posting_id}",
-      "https://business.carepartner.kr/recruitment_management/"
+      "https://business.carepartner.kr"
     )
     short_url.url
   end
