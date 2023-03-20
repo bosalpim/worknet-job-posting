@@ -404,14 +404,14 @@ class KakaoTemplateService
   def get_user_call_reminder_data(tem_params)
     {
       title: "[케어파트너] 부재중전화 알림",
-      message: "[케어파트너] 부재중전화 알림\n#{tem_params[:user_name]}님, 제안을 보낸 #{tem_params[:business_name]} 에서 걸려온 부재중 전화가 있습니다.\n아래 번호로 센터에 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n공고명: #{tem_params[:job_posting_title]}센터번호: #{tem_params[:business_vn]}",
+      message: "[케어파트너] 부재중전화 알림\n#{tem_params[:user_name]}님, 제안을 보낸 #{tem_params[:business_name]}에서 걸려온 부재중 전화가 있습니다.\n아래 번호로 센터에 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n≫ 공고명: #{tem_params[:job_posting_title]}\n☎ 번호: #{tem_params[:business_vn]}\n\n*전화를 받지 않는 경우 문자를 남겨보세요.",
     }
   end
 
   def get_business_call_reminder_data(tem_params)
     {
       title: "[케어파트너] 부재중전화 알림",
-      message: "[케어파트너] 부재중전화 알림\n#{tem_params[:business_name]} 담당자님, 제안을 보낸 요양보호사에게 걸려온 부재중 전화가 있습니다.\n아래 버튼 혹은 링크를 눌러 요양보호사의 번호를 확인하고 직접 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n공고명: #{tem_params[:job_posting_title]}\n링크: #{tem_params[:link]}",
+      message: "[케어파트너] 부재중전화 알림\n#{tem_params[:business_name]} 담당자님, 등록하신 공고를 통해 #{tem_params[:user_name]} 요양보호사에게 걸려온 부재중 전화가 있습니다.\n최근 전화 기록을 확인하여 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n≫ 공고명: #{tem_params[:job_posting_title]}\n≫ 부재중시간: #{tem_params[:called_at]}\n\n*전화를 받지 않는 경우 문자를 남겨보세요.",
     }
   end
 

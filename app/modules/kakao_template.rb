@@ -7,6 +7,6 @@ module KakaoTemplate
   PROPOSAL_ACCEPTED = "proposal_accepted3".freeze
   PROPOSAL_REJECTED = "proposal_refused".freeze
   SATISFACTION_SURVEY = "satisfaction_survey_interview2".freeze
-  USER_CALL_REMINDER = "proposal_call_reminder_user".freeze
-  BUSINESS_CALL_REMINDER = "proposal_call_reminder_biz".freeze
+  USER_CALL_REMINDER = "proposal_call_remind_user1".freeze # 기관이 요양보호사에게 전화했을 때 안받은 경우
+  BUSINESS_CALL_REMINDER = "posting_call_reminder_biz1".freeze # 요보사가 기관에게 전화했을 때 안받은 경우
 end

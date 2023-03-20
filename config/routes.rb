@@ -12,4 +12,10 @@ Jets.application.routes.draw do
       post :new_satisfaction_survey
     end
   end
+  resources :bizcall_callbacks, only: [] do
+    collection do
+      post :user_call_failure_alert
+      post :business_call_failure_alert
+    end
+  end
 end
