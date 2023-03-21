@@ -21,6 +21,7 @@ class NewApplyService
       template_params: {
         business_name: business.name,
         job_posting_title: job_posting.title,
+        job_posting_id: job_posting.public_id,
         short_url: short_url
       }
     )

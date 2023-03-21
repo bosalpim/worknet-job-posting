@@ -425,8 +425,8 @@ class KakaoTemplateService
         {
           name: "전화번호 확인하기",
           type: "WL",
-          url_mobile: tem_params[:short_url],
-          url_pc: tem_params[:short_url],
+          url_mobile: "https://business.carepartner.kr/recruitment_management/#{tem_params[:job_posting_id]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=application_alarm_biz",
+          url_pc: "https://business.carepartner.kr/recruitment_management/#{tem_params[:job_posting_id]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=application_alarm_biz",
         },
       ]
     }
