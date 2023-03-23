@@ -27,6 +27,8 @@ class KakaoTemplateService
       get_proposal_rejected_data(tem_params)
     when KakaoTemplate::SATISFACTION_SURVEY
       get_satisfaction_survey_data(tem_params)
+    when KakaoTemplate::USER_SATISFACTION_SURVEY
+      get_user_satisfaction_survey_data(tem_params)
     when KakaoTemplate::USER_CALL_REMINDER
       get_user_call_reminder_data(tem_params)
     when KakaoTemplate::BUSINESS_CALL_REMINDER
@@ -388,7 +390,7 @@ class KakaoTemplateService
 
   def get_satisfaction_survey_data(tem_params)
     {
-      title: "#{tem_params[:business_name]} 담당자님 제안이 수락되었습니다.",
+      title: "#{tem_params[:business_name]} 담당자님 채용여부는 결정되었나요?",
       message: "안녕하세요 #{tem_params[:business_name]} 담당자님,\n\n요양보호사님의 채용여부는 결정되었나요?\n케어파트너에게 채용경험을 들려주세요.\n(공고명: #{tem_params[:job_posting_title]})\n\n아래 버튼을 눌러 1분 채용결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n(여러 번 참여하면 당첨 확률 상승!)\n#{tem_params[:link]}",
       buttons: [
         {
@@ -396,6 +398,21 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=satisfaction_survey_follow_up",
           url_pc: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=satisfaction_survey_follow_up",
+        },
+      ]
+    }
+  end
+
+  def get_user_satisfaction_survey_data(tem_params)
+    {
+      title: "#{tem_params[:user_name]}님 취직여부는 결정되었나요?",
+      message: "안녕하세요 #{tem_params[:user_name]} 님,\n\n방금 통화하신 기관의 공고에서 일자리를 구하셨나요?\n케어파트너에게 일자리 찾기 경험을 들려주세요.\n(공고명: #{tem_params[:job_posting_title]})\n\n아래 버튼을 눌러 1분 채용결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n(여러 번 참여하면 당첨 확률 상승!)\n#{tem_params[:link]}",
+      buttons: [
+        {
+          name: "설문조사 참여하기",
+          type: "WL",
+          url_mobile: "https://www.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=satisfaction_survey_follow_up",
+          url_pc: "https://www.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=satisfaction_survey_follow_up",
         },
       ]
     }

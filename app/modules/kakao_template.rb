@@ -6,7 +6,8 @@ module KakaoTemplate
   EXTRA_BENEFIT = "extra_benefits_job_message_4".freeze
   PROPOSAL_ACCEPTED = "proposal_accepted3".freeze
   PROPOSAL_REJECTED = "proposal_refused".freeze
-  SATISFACTION_SURVEY = "satisfaction_survey_interview2".freeze
+  SATISFACTION_SURVEY = "satisfaction_survey_interview2".freeze # 기관 채용만족도 조사 알림톡
+  USER_SATISFACTION_SURVEY = "user_satisfaction_survey".freeze # 요양보호사 채용만족도 조사 알림톡
   USER_CALL_REMINDER = "proposal_call_remind_user1".freeze # 기관이 요양보호사에게 전화했을 때 안받은 경우
   BUSINESS_CALL_REMINDER = "posting_call_reminder_biz1".freeze # 요보사가 기관에게 전화했을 때 안받은 경우
 end
