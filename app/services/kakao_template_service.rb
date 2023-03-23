@@ -31,7 +31,7 @@ class KakaoTemplateService
       get_user_call_reminder_data(tem_params)
     when KakaoTemplate::BUSINESS_CALL_REMINDER
       get_business_call_reminder_data(tem_params)
-    when KakaoTemplate::NEW_APPLY
+    when KakaoTemplate::CALL_REQUEST_ALARM
       get_new_apply_data(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
@@ -419,14 +419,14 @@ class KakaoTemplateService
 
   def get_new_apply_data(tem_params)
     {
-      title: "[케어파트너] 지원자 알림",
-      message: "[케어파트너] 지원자 알림\n#{tem_params[:business_name]} 담당자님, 등록하신 공고에 지원한 요양보호사가 있습니다.\n아래 버튼 혹은 링크를 눌러 요양보호사 정보를 확인하고 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n공고명: #{tem_params[:job_posting_title]}\n링크: #{tem_params[:short_url]}",
+      title: "[케어파트너] 전화요청 알림",
+      message: "[케어파트너] 전화요청 알림\n#{tem_params[:business_name]} 담당자님, 등록하신 공고에 전화를 요청한 요양보호사가 있습니다.\n아래 버튼 혹은 링크를 눌러 요양보호사 정보를 확인하고 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n공고명: #{tem_params[:job_posting_title]}\n링크: #{tem_params[:short_url]}",
       buttons: [
         {
           name: "전화번호 확인하기",
           type: "WL",
-          url_mobile: "https://business.carepartner.kr/recruitment_management/#{tem_params[:job_posting_id]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=application_alarm_biz",
-          url_pc: "https://business.carepartner.kr/recruitment_management/#{tem_params[:job_posting_id]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=application_alarm_biz",
+          url_mobile: "https://business.carepartner.kr/employment_management/applies/#{tem_params[:apply_id]}?auth_token=#{tem_params[:auth_token]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_request_alarm",
+          url_pc: "https://business.carepartner.kr/employment_management/applies/#{tem_params[:apply_id]}?auth_token=#{tem_params[:auth_token]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_request_alarm",
         },
       ]
     }

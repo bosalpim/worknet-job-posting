@@ -13,7 +13,7 @@ class NewApplyService
 
   def call
     # 임시 url 지원 페이지 생성되면 교체
-    template_id = KakaoTemplate::NEW_APPLY
+    template_id = KakaoTemplate::CALL_REQUEST_ALARM
     short_url = build_short_url(apply)
     response = KakaoNotificationService.call(
       template_id: template_id,
@@ -22,12 +22,14 @@ class NewApplyService
         business_name: business.name,
         job_posting_title: job_posting.title,
         job_posting_id: job_posting.public_id,
+        apply_id: apply.id,
+        auth_token: apply.auth_token,
         short_url: short_url
       }
     )
     save_kakao_notification(
       response,
-      KakaoNotificationResult::NEW_APPLY,
+      KakaoNotificationResult::CALL_REQUEST_ALARM,
       apply.user_id,
       template_id
     )
@@ -36,9 +38,9 @@ class NewApplyService
 
   private
   def build_short_url(apply)
-    template_id = KakaoTemplate::NEW_APPLY
+    template_id = KakaoTemplate::CALL_REQUEST_ALARM
     short_url = ShortUrl.build(
-      "https://business.carepartner.kr/recruitment_management/#{apply.job_posting_id}",
+      "https://business.carepartner.kr/employment_management/apply/#{apply.id}?auth_token=#{apply.auth_token}",
       "https://business.carepartner.kr"
     )
     short_url.url
