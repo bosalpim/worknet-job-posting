@@ -10,6 +10,7 @@ Jets.application.routes.draw do
     member do
       post :new_notification
       post :new_satisfaction_survey
+      post :new_user_satisfaction_survey
     end
   end
   resources :bizcall_callbacks, only: [] do

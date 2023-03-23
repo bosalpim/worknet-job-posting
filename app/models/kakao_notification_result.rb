@@ -6,6 +6,7 @@ class KakaoNotificationResult < ApplicationRecord
   PROPOSAL_ACCEPTED = "proposal_accepted".freeze
   PROPOSAL_REJECTED = "proposal_refused".freeze
   SATISFACTION_SURVEY = "satisfaction_survey".freeze
+  USER_SATISFACTION_SURVEY = "user_satisfaction_survey".freeze
   USER_CALL_FAILURE_ALERT = "user_calls_failure_alert".freeze
   BUSINESS_CALL_FAILURE_ALERT = "business_calls_failure_alert".freeze
 
@@ -22,6 +23,7 @@ class KakaoNotificationResult < ApplicationRecord
     PROPOSAL_ACCEPTED => "proposal_accepted",
     PROPOSAL_REJECTED => "proposal_refused",
     SATISFACTION_SURVEY => SATISFACTION_SURVEY,
+    USER_SATISFACTION_SURVEY => USER_SATISFACTION_SURVEY,
     USER_CALL_FAILURE_ALERT => USER_CALL_FAILURE_ALERT,
     BUSINESS_CALL_FAILURE_ALERT => BUSINESS_CALL_FAILURE_ALERT
   }

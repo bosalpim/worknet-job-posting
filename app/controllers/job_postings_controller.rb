@@ -25,4 +25,12 @@ class JobPostingsController < ApplicationController
     NewSatisfactionSurveyJob.perform_later(:dig, event) unless Jets.env.development?
     render json: Jets.env.production? ? { success: true } : rsp, status: :ok
   end
+
+  def new_user_satisfaction_survey
+    event = { job_posting_id: params["job_posting_id"], user_id: params["user_id"] }
+    rsp = nil
+    rsp = NewUserSatisfactionSurveyJob.perform_now(:dig, event) if Jets.env.development?
+    NewUserSatisfactionSurveyJob.perform_later(:dig, event) unless Jets.env.development?
+    render json: Jets.env.production? ? { success: true } : rsp, status: :ok
+  end
 end
