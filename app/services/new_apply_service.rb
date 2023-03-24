@@ -40,7 +40,7 @@ class NewApplyService
   def build_short_url(apply)
     template_id = KakaoTemplate::CALL_REQUEST_ALARM
     short_url = ShortUrl.build(
-      "https://business.carepartner.kr/employment_management/apply/#{apply.id}?auth_token=#{apply.auth_token}",
+      "https://business.carepartner.kr/employment_management/applies/#{apply.id}?auth_token=#{apply.auth_token}",
       "https://business.carepartner.kr"
     )
     short_url.url
