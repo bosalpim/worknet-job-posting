@@ -35,6 +35,8 @@ class KakaoTemplateService
       get_business_call_reminder_data(tem_params)
     when KakaoTemplate::CALL_REQUEST_ALARM
       get_new_apply_data(tem_params)
+    when KakaoTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
+      get_apply_user_call_reminder_data(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -431,6 +433,13 @@ class KakaoTemplateService
     {
       title: "[케어파트너] 부재중전화 알림",
       message: "[케어파트너] 부재중전화 알림\n#{tem_params[:business_name]} 담당자님, 등록하신 공고를 통해 #{tem_params[:user_name]} 요양보호사에게 걸려온 부재중 전화가 있습니다.\n최근 전화 기록을 확인하여 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n≫ 공고명: #{tem_params[:job_posting_title]}\n≫ 부재중시간: #{tem_params[:called_at]}\n\n*전화를 받지 않는 경우 문자를 남겨보세요.",
+    }
+  end
+
+  def get_apply_user_call_reminder_data(tem_params)
+    {
+      title: "[케어파트너] 부재중전화 알림",
+      message: "[케어파트너] 부재중전화 알림\n#{tem_params[:user_name]}님, 전화상담 신청하신 #{tem_params[:business_name]}에서 걸려온 부재중 전화가 있습니다.\n아래 번호로 센터에 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n≫ 공고명: #{tem_params[:job_posting_title]}\n☎ 번호: #{tem_params[:business_vn]}\n\n*전화를 받지 않는 경우 문자를 남겨보세요.",
     }
   end
 

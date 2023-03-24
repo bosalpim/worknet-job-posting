@@ -1,19 +1,19 @@
-class BusinessCallFailureAlertService
-  attr_reader :proposal, :job_posting, :business, :user
+class BusinessCallApplyUserFailureAlertService
+  attr_reader :apply, :job_posting, :business, :user
 
-  def initialize(proposal)
-    @proposal = proposal
-    @job_posting = build_job_posting(proposal)
-    @business = build_business(proposal)
-    @user = build_user(proposal)
+  def initialize(apply)
+    @apply = apply
+    @job_posting = build_job_posting(apply)
+    @business = build_business(apply)
+    @user = build_user(apply)
   end
 
-  def self.call(proposal)
-    new(proposal).call
+  def self.call(apply)
+    new(apply).call
   end
 
   def call
-    template_id = KakaoTemplate::USER_CALL_REMINDER
+    template_id = KakaoTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
     business_telnumber = job_posting.vn.nil? ? business.tel_number : job_posting.vn
     response = KakaoNotificationService.call(
       template_id: template_id,
@@ -27,8 +27,8 @@ class BusinessCallFailureAlertService
     )
     save_kakao_notification(
       response,
-      KakaoNotificationResult::BUSINESS_CALL_FAILURE_ALERT,
-      proposal.id,
+      KakaoNotificationResult::BUSINESS_CALL_APPLY_USER_FAILURE_ALERT,
+      apply.id,
       template_id
     )
     response
@@ -36,16 +36,16 @@ class BusinessCallFailureAlertService
 
   private
 
-  def build_job_posting(proposal)
-    JobPosting.find_by(public_id: proposal.job_posting_id)
+  def build_job_posting(apply)
+    JobPosting.find_by(public_id: apply.job_posting_id)
   end
 
-  def build_business(proposal)
-    proposal.business
+  def build_business(apply)
+    apply.business
   end
 
-  def build_user(proposal)
-    proposal.user
+  def build_user(apply)
+    apply.user
   end
 
   def save_kakao_notification(response, send_type, send_id, template_id)

@@ -12,4 +12,11 @@ class BizcallCallbacksController < ApplicationController
     BusinessCallFailureAlertJob.perform_later(:dig, event) unless Jets.env.development?
     render json: Jets.env != 'production' ? rsp : { success: true }, status: :ok
   end
+
+  def business_call_apply_user_failure_alert
+    event = { apply_id: params[:apply_id] }
+    rsp = BusinessCallApplyUserFailureAlertJob.perform_now(:dig, event) if Jets.env.development?
+    BusinessCallApplyUserFailureAlertJob.perform_later(:dig, event) unless Jets.env.development?
+    render json: Jets.env != 'production' ? rsp : { success: true }, status: :ok
+  end
 end
