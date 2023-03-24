@@ -53,7 +53,7 @@ class NewJobNotificationService
             .where(
               'has_certification = true OR expected_acquisition in (?)',
               %w[2022/05 2022/08 2022/11],
-            )
+            ).limit(1)
       end
     end
 
@@ -88,7 +88,7 @@ class NewJobNotificationService
   def send_notification(user)
     KakaoNotificationService.call(
       template_id: homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY,
-      phone: Jets.env == "production" ? user.phone_number : '01094659404',
+      phone: Jets.env == "production" ? user.phone_number : '01097912095',
       template_params: {
         title: homecare_yes ? "[#{translate_type('job_posting_customer', job_posting_customer, :grade) || '등급없음'}/#{calculate_korean_age(job_posting_customer&.age) || '미상의연'}세/#{translate_type('job_posting_customer', job_posting_customer, :gender) || '성별미상'}] #{work_type_ko}" : "[#{work_type_ko}] 요양보호사 구인",
         work_type_ko: work_type_ko,
