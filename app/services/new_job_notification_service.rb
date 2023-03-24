@@ -22,7 +22,7 @@ class NewJobNotificationService
     @work_type_ko = translate_type('job_posting', @job_posting, :work_type)
     @job_posting_customer = @job_posting.job_posting_customer
     @homecare_yes = %w[commute resident bath_help].include?(@job_posting.work_type)
-    @origin_url = "https://#{homecare_yes ? "www." : ""}carepartner.kr/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{homecare_yes ? "new_job_homecare" : "new_job_facility"}"
+    @origin_url = "https://www.carepartner.kr/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_homecare_short"
     @shorten_url = build_shorten_url(@origin_url)
   end
 
@@ -88,7 +88,7 @@ class NewJobNotificationService
   def send_notification(user)
     KakaoNotificationService.call(
       template_id: homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY,
-      phone: Jets.env == "production" ? user.phone_number : '01097912095',
+      phone: Jets.env == "production" ? user.phone_number : '01094659404',
       template_params: {
         title: homecare_yes ? "[#{translate_type('job_posting_customer', job_posting_customer, :grade) || '등급없음'}/#{calculate_korean_age(job_posting_customer&.age) || '미상의연'}세/#{translate_type('job_posting_customer', job_posting_customer, :gender) || '성별미상'}] #{work_type_ko}" : "[#{work_type_ko}] 요양보호사 구인",
         work_type_ko: work_type_ko,
