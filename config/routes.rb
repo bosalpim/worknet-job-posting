@@ -17,6 +17,12 @@ Jets.application.routes.draw do
     collection do
       post :user_call_failure_alert
       post :business_call_failure_alert
+      post :business_call_apply_user_failure_alert
+    end
+  end
+  resources :applies, only: [] do
+    member do
+      post :new_notification
     end
   end
 end
