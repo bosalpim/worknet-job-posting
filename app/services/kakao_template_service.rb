@@ -331,20 +331,20 @@ class KakaoTemplateService
   def get_satisfaction_survey_data(tem_params)
     {
       title: "#{tem_params[:business_name]} 담당자님 채용여부는 결정되었나요?",
-      message: "안녕하세요 #{tem_params[:business_name]} 담당자님,\n\n요양보호사님의 채용여부는 결정되었나요?\n케어파트너에게 채용경험을 들려주세요.\n(공고명: #{tem_params[:job_posting_title]})\n\n아래 버튼을 눌러 1분 채용결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n(여러 번 참여하면 당첨 확률 상승!)\n#{tem_params[:link]}",
+      message: "안녕하세요, #{tem_params[:business_name]} 담당자님\n조금 전 요양보호사와의 통화는 어떠셨나요?\n≫ 공고명: #{tem_params[:job_posting_title]}\n\n아래 버튼을 눌러 1분 채용결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n여러 번 참여하면 당첨 확률 상승!\n#{tem_params[:link]}",
       buttons: [
         {
           name: "설문조사 참여하기",
           type: "WL",
-          url_mobile: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=satisfaction_survey_follow_up",
-          url_pc: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=satisfaction_survey_follow_up",
+          url_mobile: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=business_satisfaction_survey",
+          url_pc: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=business_satisfaction_survey",
         },
       ]
     }
   end
 
   def get_user_satisfaction_survey_data(tem_params)
-    {
+    return {
       message: "안녕하세요, #{tem_params[:user_name]} 님\n방금 통화하신 공고의 일자리를 구하셨나요?\n≫ 공고명: #{tem_params[:job_posting_title]}\n\n아래 버튼을 눌러 1분 취업결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n여러 번 참여하면 당첨 확률 상승!\n#{tem_params[:link]}\n\n※설문 미참여시 취업지원금 대상에서 제외됩니다",
       buttons: [
         {
