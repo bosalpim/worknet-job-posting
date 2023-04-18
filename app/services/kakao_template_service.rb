@@ -90,122 +90,58 @@ class KakaoTemplateService
   end
 
   def get_visit_job_posting_data(tem_params)
-    items = {
-      itemHighlight: {
-        title: tem_params[:title],
-        description: '요양보호사 신규 일자리'
-      },
-      item: {
-        list: [
-          {
-            title: '근무지',
-            description: convert_safe_text(tem_params[:address])
-          },
-          {
-            title: '근무요일',
-            description: convert_safe_text(tem_params[:days_text])
-          },
-          {
-            title: '근무시간',
-            description: convert_safe_text(tem_params[:hours_text])
-          },
-          {
-            title: '임금조건',
-            description: convert_safe_text(tem_params[:pay_text])
-          },
-          {
-            title: '어르신 식사',
-            description: convert_safe_text(tem_params[:meal_assistances])
-          },
-          {
-            title: '어르신 배변',
-            description: convert_safe_text(tem_params[:excretion_assistances])
-          },
-          {
-            title: '어르신 거동',
-            description: convert_safe_text(tem_params[:movement_assistances])
-          },
-          {
-            title: '필요 서비스',
-            description: convert_safe_text(tem_params[:housework_assistances])
-          }
-        ]
-      }
-    }
-    {
-      title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 일자리 추천드려요\n\n본 공고에 취업하시면\n케어파트너가 5만원의 취업축하수당도 드려요!\n\n아래 링크 또는 버튼을 클릭하여, 상세 근무내용을 확인해보세요!\ncarepartner.kr#{tem_params[:path]}",
-      img_url: "https://mud-kage.kakao.com/dn/jHTgl/btrXQglg6yP/UMX1XIptljvShTiNz0w9y0/img_l.jpg",
-      items: items,
+    daysAndHours = "≫ 근무시간: #{convert_safe_text(tem_params[:days_text])} #{convert_safe_text(tem_params[:hours_text])}"
+    address = "≫ 근무지: #{convert_safe_text(tem_params[:address])}"
+    pay = "≫ 시급: #{convert_safe_text(tem_params[:pay_text])}"
+    customer_info = "≫ 어르신 정보: #{convert_safe_text(tem_params[:customer_grade])}/#{convert_safe_text(tem_params[:customer_age])}세/#{convert_safe_text(tem_params[:customer_gender])}"
+    call = "전화: ☎#{convert_safe_text(tem_params[:business_vn])}"
+    bottomText = "아래 버튼 또는 링크를 클릭해서 자세한 내용 확인하고 지원해보세요!\ncarepartner.kr#{tem_params[:path]}\n\n#{call}"
+    settingAlarmLink = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_homecare_hotdeal"
+
+    return {
+      title: tem_params[:title],
+      message: "[케어파트너] 취업지원금 받는 신규일자리 알림\n1시간 내에 전화하면 케어파트너에서 최대 5만원의 취업지원금 지급!\n#{call}\n\n#{daysAndHours}\n#{address}\n#{pay}\n#{customer_info}\n\n#{bottomText}",
       buttons: [
         {
           name: "채용공고 확인하기",
           type: "WL",
           url_mobile: tem_params[:origin_url],
+          url_pc: tem_params[:origin_url],
         },
         {
           name: "알림 설정",
           type: "WL",
-          url_mobile: "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_homecare"
+          url_mobile: settingAlarmLink,
+          url_pc: settingAlarmLink
         }
       ]
     }
   end
 
   def get_facility_job_posting_data(tem_params)
-    items = {
-      itemHighlight: {
-        title: tem_params[:title],
-        description: '요양보호사 신규 일자리'
-      },
-      item: {
-        list: [
-          {
-            title: '근무지',
-            description: convert_safe_text(tem_params[:address])
-          },
-          {
-            title: '근무요일',
-            description: convert_safe_text(tem_params[:days_text])
-          },
-          {
-            title: '근무유형',
-            description: convert_safe_text(tem_params[:work_type_ko])
-          },
-          {
-            title: '근무시간',
-            description: convert_safe_text(tem_params[:hours_text])
-          },
-          {
-            title: '임금조건',
-            description: convert_safe_text(tem_params[:pay_text])
-          },
-          {
-            title: '복리후생',
-            description: convert_safe_text(tem_params[:welfare])
-          },
-          {
-            title: '기관명',
-            description: convert_safe_text(tem_params[:business_name])
-          },
-        ]
-      }
-    }
-    {
-      title: "가까운 거리에 새로운 채용공고가 올라왔어요!",
-      message: "안녕하세요 #{tem_params[:user_name]} 선생님!\n요청하신 지역의 #{tem_params[:distance]} 거리의 일자리 추천드려요\n\n본 공고에 취업하시면\n케어파트너가 5만원의 취업축하수당도 드려요!\n\n아래 링크 또는 버튼을 클릭하여, 상세 근무내용을 확인해보세요!\ncarepartner.kr/#{tem_params[:path]}",
-      img_url: "https://mud-kage.kakao.com/dn/8UKsq/btrXVlZQ7yu/Hg3LIdkh90YhDtM7gzjPk1/img_l.jpg",
-      items: items,
+    daysAndHours = "≫ 근무시간: #{convert_safe_text(tem_params[:days_text])} #{convert_safe_text(tem_params[:hours_text])}"
+    address = "≫ 근무지: #{convert_safe_text(tem_params[:address])}"
+    workType = "≫ 근무유형: #{tem_params[:work_type_ko]}"
+    pay = "≫ 시급: #{tem_params[:pay_text]}"
+    call = "전화: ☎#{tem_params[:business_vn]}"
+    bottomText = "아래 버튼 또는 링크를 클릭해서 자세한 내용 확인하고 지원해보세요!\ncarepartner.kr#{tem_params[:path]}\n\n#{call}"
+    settingAlarmLink = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_facility_hotdeal"
+
+    return {
+      title: tem_params[:title],
+      message: "[케어파트너] 취업지원금 받는 신규일자리 알림\n1시간 내에 전화하면 케어파트너에서 최대 5만원의 취업지원금 지급!\n#{call}\n\n#{daysAndHours}\n#{address}\n#{workType}\n#{pay}\n\n#{bottomText}",
       buttons: [
         {
           name: "채용공고 확인하기",
           type: "WL",
           url_mobile: tem_params[:origin_url],
+          url_pc: tem_params[:origin_url],
         },
         {
           name: "알림 설정",
           type: "WL",
-          url_mobile: "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_facility"
+          url_mobile: settingAlarmLink,
+          url_pc: settingAlarmLink
         }
       ]
     }
