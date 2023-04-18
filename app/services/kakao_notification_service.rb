@@ -52,7 +52,7 @@ class KakaoNotificationService < KakaoTemplateService
 
   def get_final_request_params(tem_params)
     template_data = get_template_data(template_id, tem_params)
-    request_params = get_default_request_params(template_data)
+    request_params = get_default_request_params(template_id, template_data)
     if (items = template_data[:items])
       request_params[:items] = items
     end
@@ -69,9 +69,9 @@ class KakaoNotificationService < KakaoTemplateService
     request_params
   end
 
-  def get_default_request_params(template_data)
+  def get_default_request_params(template_id, template_data)
     message, img_url, title = template_data.values_at(:message, :img_url, :title)
-    {
+    data = {
       message_type: message_type,
       phn:          phone.to_s.gsub(/[^0-9]/, ""),
       profile:      profile,
@@ -84,6 +84,10 @@ class KakaoNotificationService < KakaoTemplateService
       img_url:      img_url,
       reserveDt:    reserve_dt
     }
+    if template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY
+      data[:title] = title
+    end
+    return data
   end
 
   def headers
