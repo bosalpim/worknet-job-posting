@@ -18,7 +18,7 @@ class KakaoTemplateService
     when KakaoTemplate::NEW_JOB_POSTING_FACILITY
       get_facility_job_posting_data(tem_params)
     when KakaoTemplate::PERSONALIZED
-      get_personalized_data(tem_params)
+      get_personalized_data_by_json(tem_params)
     when KakaoTemplate::EXTRA_BENEFIT
       get_extra_benefit_data_by_json(tem_params)
     when KakaoTemplate::PROPOSAL_ACCEPTED
@@ -180,6 +180,49 @@ class KakaoTemplateService
           name: "케어파트너 바로가기",
           type: "WL",
           url_mobile: tem_params[:original_url],
+        },
+        {
+          name: "알림 설정",
+          type: "WL",
+          url_mobile: "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=personalized_job"
+        }
+      ]
+    }
+  end
+
+  def get_personalized_data_by_json(tem_params)
+    items = {
+      itemHighlight: {
+        title: "#{tem_params["distance"]} 내 일자리 #{tem_params["job_postings_count"]} 건 추천",
+        description: '맞춤 일자리 추천'
+      },
+      item: {
+        list: [
+          {
+            title: '방문요양구인',
+            description: convert_safe_text(tem_params["visit_job_postings_count"], "0 건")
+          },
+          {
+            title: '입주요양구인',
+            description: convert_safe_text(tem_params["resident_job_postings_count"], "0 건")
+          },
+          {
+            title: '시설요양구인',
+            description: convert_safe_text(tem_params["facility_job_postings_count"], "0 건")
+          },
+        ]
+      }
+    }
+    {
+      title: "케어파트너 맞춤 일자리 알림",
+      message: "안녕하세요 #{tem_params["user_name"]} 선생님!\n\n설정하신 #{tem_params["distance"]} 내 #{tem_params["job_postings_count"]}건의 맞춤 일자리가 요양보호사님을 찾고 있어요.\n\n아래 링크를 클릭하여, 원하는 조건에 맞는 일자리를 확인해보세요!\ncarepartner.kr#{tem_params["path"]}",
+      img_url: "https://mud-kage.kakao.com/dn/gNExl/btrX3r6mcbV/vpgICckvJ0EuF1JNdOVB7k/img_l.jpg",
+      items: items,
+      buttons: [
+        {
+          name: "케어파트너 바로가기",
+          type: "WL",
+          url_mobile: tem_params["original_url"],
         },
         {
           name: "알림 설정",
