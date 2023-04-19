@@ -1,0 +1,2 @@
+class ScheduledMessage < ApplicationRecord
+end
