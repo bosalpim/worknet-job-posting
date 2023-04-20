@@ -15,7 +15,9 @@ class CreateExtraBenefitNotificationMessageService < CreateScheduledMessageServi
   end
 
   def test_call
-    data = create_message(User.last)
+    data = create_message(User.where(phone_number: '01094659404').first!)
+    return if data.nil?
+
     message = ScheduledMessage.create!(
       template_id: @template_id,
       send_type: @send_type,

@@ -1,8 +1,8 @@
 class CreatePersonalNotificationMessageService < CreateScheduledMessageService
   def initialize
     super(
-      KakaoTemplate::EXTRA_BENEFIT,
-      KakaoNotificationResult::EXTRA_BENEFIT
+      KakaoTemplate::PERSONALIZED,
+      KakaoNotificationResult::PERSONALIZED
     )
   end
 
@@ -15,7 +15,9 @@ class CreatePersonalNotificationMessageService < CreateScheduledMessageService
   end
 
   def test_call
-    data = create_message(User.last)
+    data = create_message(User.where(phone_number: '01094659404').first!)
+    return if data.nil?
+
     message = ScheduledMessage.create!(
       template_id: @template_id,
       send_type: @send_type,
@@ -23,6 +25,7 @@ class CreatePersonalNotificationMessageService < CreateScheduledMessageService
       phone_number: data.dig(:phone_number),
       scheduled_date: data.dig(:scheduled_date)
     )
+
     KakaoNotificationService.call(
       template_id: message.template_id,
       phone: Jets.env != 'production' ? '01094659404' : message.phone_number,
