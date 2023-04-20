@@ -11,12 +11,13 @@ class SendCreatedScheduledMessageService
     fail_count = 0
     fail_reasons = []
 
-    messages = ScheduledMessage.where(created_at: 2.days.ago..).where(template_id: template_id)
-    counts = calculate_sent_and_message_count(messages.size, should_send_percent, sent_percent)
+    total_count = ScheduledMessageCount.where(created_at: 1.days.ago..).where(template_id: template_id).first!.total_count
+    counts = calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
     message_count = counts.dig(:message_count)
     sent_count = counts.dig(:sent_count)
+    messages = ScheduledMessage.where(scheduled_date: 1.days.ago..).where(template_id: template_id).offset(sent_count).limit(message_count)
 
-    messages.offset(sent_count).limit(message_count).find_each(batch_size: BATCH_SIZE) do |message|
+    messages.find_each(batch_size: BATCH_SIZE) do |message|
       begin
         response = KakaoNotificationService.call(
           template_id: message.template_id,
