@@ -6,6 +6,8 @@ class SendCreatedScheduledMessageService
   end
 
   def call(template_id, send_type, should_send_percent, sent_percent)
+    return if Jets.env != "production"
+
     success_count = 0
     tms_success_count = 0
     fail_count = 0

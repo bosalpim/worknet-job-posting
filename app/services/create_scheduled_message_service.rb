@@ -8,6 +8,8 @@ class CreateScheduledMessageService
   end
 
   def save_call
+    return if Jets.env != "production"
+    
     users = User.active.receive_notifications.where(has_certification: true).order(:created_at)
     users.find_each(batch_size: BATCH_SIZE) do |user|
       begin
