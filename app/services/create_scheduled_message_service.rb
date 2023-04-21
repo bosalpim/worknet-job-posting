@@ -8,7 +8,6 @@ class CreateScheduledMessageService
   end
 
   def save_call
-    # user를 찾되 batch로 돌려서 나눠서 찾는다.
     users = User.active.receive_notifications.where(has_certification: true).order(:created_at)
     users.find_each(batch_size: BATCH_SIZE) do |user|
       begin
@@ -24,6 +23,12 @@ class CreateScheduledMessageService
         Jets.logger.info e.message
       end
     end
+
+    total_count = ScheduledMessage.where(template_id: @template_id).where(scheduled_date: 1.days.ago..).size
+    ScheduledMessageCount.create!(
+      template_id: @template_id,
+      total_count: total_count
+    )
   end
 
   def get_radius(user)

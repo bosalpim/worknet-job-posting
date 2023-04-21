@@ -1,16 +1,21 @@
 class SendCreatedScheduledMessageService
   BATCH_SIZE = 100.freeze
 
-  def self.call(template_id, send_type)
-    new.call(template_id, send_type)
+  def self.call(template_id, send_type, should_send_percent, sent_percent)
+    new.call(template_id, send_type, should_send_percent, sent_percent)
   end
 
-  def call(template_id, send_type)
-    messages = ScheduledMessage.where(scheduled_time: 1.days.ago).where(template_id: template_id)
+  def call(template_id, send_type, should_send_percent, sent_percent)
     success_count = 0
     tms_success_count = 0
     fail_count = 0
     fail_reasons = []
+
+    total_count = ScheduledMessageCount.where(created_at: 1.days.ago..).where(template_id: template_id).first!.total_count
+    counts = calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
+    message_count = counts.dig(:message_count)
+    sent_count = counts.dig(:sent_count)
+    messages = ScheduledMessage.where(scheduled_date: 1.days.ago..).where(template_id: template_id).offset(sent_count).limit(message_count)
 
     messages.find_each(batch_size: BATCH_SIZE) do |message|
       begin
@@ -47,5 +52,20 @@ class SendCreatedScheduledMessageService
       fail_count: fail_count,
       fail_reasons: fail_reasons.uniq.join(", ")
     )
+  end
+
+  private
+
+  def calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
+    message_count = (total_count * should_send_percent).ceil
+    sent_count = (total_count * sent_percent).ceil
+
+    next_send_count = (total_count * (should_send_percent + sent_percent)).ceil
+    message_count -= 1 if message_count + sent_count > next_send_count
+
+    return {
+      message_count: message_count,
+      sent_count: sent_count
+    }
   end
 end
