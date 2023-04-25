@@ -1,6 +1,6 @@
 module KakaoTemplate
   PROPOSAL = "proposal_response".freeze
-  NEW_JOB_POSTING_VISIT = "new_job_visit(hot_deal)".freeze
+  NEW_JOB_POSTING_VISIT = "new_job_visit(recent)".freeze
   NEW_JOB_POSTING_FACILITY = "new_job_facility(recent_edit)".freeze
   PERSONALIZED = "personalized_job_message_edit3".freeze # done
   EXTRA_BENEFIT = "extra_benefits_job_message_4".freeze

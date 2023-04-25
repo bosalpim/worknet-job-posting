@@ -85,7 +85,7 @@ class NewJobNotificationService
   attr_reader :job_posting, :work_type_ko, :job_posting_customer, :homecare_yes
 
   def send_notification(user)
-    origin_url = "https://www.carepartner.kr/jobs/recently_published?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{homecare_yes ? "new_job_homecare_hotdeal" : "new_job_facility_recent"}&lat=#{user.lat}&lng=#{user.lng}"
+    origin_url = "https://www.carepartner.kr/jobs/recently_published?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{homecare_yes ? "new_job_homecare_recent" : "new_job_facility_recent"}&lat=#{user.lat}&lng=#{user.lng}"
     shorten_url = build_shorten_url(origin_url)
 
     KakaoNotificationService.call(
