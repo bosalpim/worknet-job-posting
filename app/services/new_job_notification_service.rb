@@ -22,7 +22,7 @@ class NewJobNotificationService
     @work_type_ko = translate_type('job_posting', @job_posting, :work_type)
     @job_posting_customer = @job_posting.job_posting_customer
     @homecare_yes = %w[commute resident bath_help].include?(@job_posting.work_type)
-    @origin_url = "https://#{homecare_yes ? "www." : ""}carepartner.kr/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{homecare_yes ? "new_job_homecare_hotdeal" : "new_job_facility_hotdeal"}"
+    @origin_url = "https://www.carepartner.kr/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{homecare_yes ? "new_job_homecare_hotdeal" : "new_job_facility_hotdeal"}"
     @shorten_url = build_shorten_url(@origin_url)
   end
 
