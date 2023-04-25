@@ -121,24 +121,30 @@ class KakaoTemplateService
   def get_facility_job_posting_data(tem_params)
     daysAndHours = "≫ 근무시간: #{convert_safe_text(tem_params[:days_text])} #{convert_safe_text(tem_params[:hours_text])}"
     address = "≫ 근무지: #{convert_safe_text(tem_params[:address])}"
-    workType = "≫ 근무유형: #{tem_params[:work_type_ko]}"
-    pay = "≫ 시급: #{tem_params[:pay_text]}"
-    call = "전화: ☎#{tem_params[:business_vn]}"
+    pay = "≫ 시급: #{convert_safe_text(tem_params[:pay_text])}"
+    customer_info = "≫ 어르신 정보: #{convert_safe_text(tem_params[:customer_grade])}/#{convert_safe_text(tem_params[:customer_age])}세/#{convert_safe_text(tem_params[:customer_gender])}"
+    call = "전화: ☎#{convert_safe_text(tem_params[:business_vn])}"
     bottomText = "아래 버튼 또는 링크를 클릭해서 자세한 내용 확인하고 지원해보세요!\ncarepartner.kr#{tem_params[:path]}\n\n#{call}"
-    settingAlarmLink = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_facility_hotdeal"
+    settingAlarmLink = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_facility_recent"
 
     return {
       title: tem_params[:title],
-      message: "[케어파트너] 취업지원금 받는 신규일자리 알림\n1시간 내에 전화하면 케어파트너에서 최대 5만원의 취업지원금 지급!\n#{call}\n\n#{daysAndHours}\n#{address}\n#{workType}\n#{pay}\n\n#{bottomText}",
+      message: "[케어파트너] 취업지원금 받는 신규일자리 알림\n#{call}\n\n1시간 내에 전화하면 케어파트너에서 최대 5만원의 취업지원금 지급!\n\n#{daysAndHours}\n#{address}\n#{pay}\n#{customer_info}\n\n#{bottomText}",
       buttons: [
         {
-          name: "채용공고 확인하기",
+          name: "일자리 확인하기",
           type: "WL",
           url_mobile: tem_params[:origin_url],
           url_pc: tem_params[:origin_url],
         },
         {
-          name: "알림 설정",
+          name: "전화하기",
+          type: "AL",
+          scheme_ios: "tel://#{convert_safe_text(tem_params[:business_vn])}",
+          scheme_android: "tel://#{convert_safe_text(tem_params[:business_vn])}",
+        },
+        {
+          name: "알림설정",
           type: "WL",
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
