@@ -20,7 +20,7 @@ class CreateScheduledMessageService
           content: data.dig(:jsonb),
           phone_number: data.dig(:phone_number),
           scheduled_date: data.dig(:scheduled_date)
-        ) unless data.nil?
+        )
       rescue => e
         Jets.logger.info e.message
       end
