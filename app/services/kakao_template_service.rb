@@ -18,7 +18,7 @@ class KakaoTemplateService
     when KakaoTemplate::NEW_JOB_POSTING_FACILITY
       get_facility_job_posting_data(tem_params)
     when KakaoTemplate::PERSONALIZED
-      get_personalized_data(tem_params)
+      get_personalized_data_by_json(tem_params)
     when KakaoTemplate::EXTRA_BENEFIT
       get_extra_benefit_data_by_json(tem_params)
     when KakaoTemplate::PROPOSAL_ACCEPTED

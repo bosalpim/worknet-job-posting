@@ -42,7 +42,7 @@ class CreatePersonalNotificationMessageService < CreateScheduledMessageService
     job_postings = JobPosting.init.where(published_at: 2.weeks.ago..).within_radius(radius, user.lat, user.lng)
     job_postings = get_gender_filtered_job_postings(job_postings, user)
     job_postings_count = job_postings.size
-    return if job_postings_count.zero?
+    return nil if job_postings_count.zero?
     visit_job_postings_count = job_postings.where(work_type: %w[commute bath_help]).size
     resident_job_postings_count = job_postings.where(work_type: %w[resident]).size
     facility_job_postings_count = job_postings.where(work_type: %w[day_care sanatorium hospital facility]).size
