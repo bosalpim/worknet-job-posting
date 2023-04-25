@@ -22,8 +22,6 @@ class NewJobNotificationService
     @work_type_ko = translate_type('job_posting', @job_posting, :work_type)
     @job_posting_customer = @job_posting.job_posting_customer
     @homecare_yes = %w[commute resident bath_help].include?(@job_posting.work_type)
-    @origin_url = "https://www.carepartner.kr/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{homecare_yes ? "new_job_homecare_hotdeal" : "new_job_facility_recent"}"
-    @shorten_url = build_shorten_url(@origin_url)
   end
 
   def call
@@ -84,9 +82,12 @@ class NewJobNotificationService
 
   private
 
-  attr_reader :job_posting, :work_type_ko, :job_posting_customer, :homecare_yes, :origin_url, :shorten_url
+  attr_reader :job_posting, :work_type_ko, :job_posting_customer, :homecare_yes
 
   def send_notification(user)
+    origin_url = "https://www.carepartner.kr/jobs/recently_published?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{homecare_yes ? "new_job_homecare_hotdeal" : "new_job_facility_recent"}&lat=#{user.lat}&lng=#{user.lng}"
+    shorten_url = build_shorten_url(origin_url)
+
     KakaoNotificationService.call(
       template_id: homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY,
       phone: Jets.env == "production" ? user.phone_number : '01094659404',

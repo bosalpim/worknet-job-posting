@@ -92,7 +92,7 @@ class KakaoTemplateService
   def get_visit_job_posting_data(tem_params)
     daysAndHours = "≫ 근무시간: #{convert_safe_text(tem_params[:days_text])} #{convert_safe_text(tem_params[:hours_text])}"
     address = "≫ 근무지: #{convert_safe_text(tem_params[:address])}"
-    pay = "≫ 시급: #{convert_safe_text(tem_params[:pay_text])}"
+    pay = "≫ 급여: #{convert_safe_text(tem_params[:pay_text])}"
     customer_info = "≫ 어르신 정보: #{convert_safe_text(tem_params[:customer_grade])}/#{convert_safe_text(tem_params[:customer_age])}세/#{convert_safe_text(tem_params[:customer_gender])}"
     call = "전화: ☎#{convert_safe_text(tem_params[:business_vn])}"
     bottomText = "아래 버튼 또는 링크를 클릭해서 자세한 내용 확인하고 지원해보세요!\ncarepartner.kr#{tem_params[:path]}\n\n#{call}"
@@ -121,7 +121,7 @@ class KakaoTemplateService
   def get_facility_job_posting_data(tem_params)
     daysAndHours = "≫ 근무시간: #{convert_safe_text(tem_params[:days_text])} #{convert_safe_text(tem_params[:hours_text])}"
     address = "≫ 근무지: #{convert_safe_text(tem_params[:address])}"
-    pay = "≫ 시급: #{convert_safe_text(tem_params[:pay_text])}"
+    pay = "≫ 급여: #{convert_safe_text(tem_params[:pay_text])}"
     customer_info = "≫ 어르신 정보: #{convert_safe_text(tem_params[:customer_grade])}/#{convert_safe_text(tem_params[:customer_age])}세/#{convert_safe_text(tem_params[:customer_gender])}"
     call = "전화: ☎#{convert_safe_text(tem_params[:business_vn])}"
     bottomText = "아래 버튼 또는 링크를 클릭해서 자세한 내용 확인하고 지원해보세요!\ncarepartner.kr#{tem_params[:path]}\n\n#{call}"
