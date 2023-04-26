@@ -38,11 +38,12 @@ class User < ApplicationRecord
     sleep: 'sleep'
   }
 
-  scope :receive_notifications, -> { where(notification_enabled: true) }
-  scope :receive_new_job_notifications, -> {
-    where(notification_enabled: true)
+  scope :receive_notifications, -> {
+    where(has_certification: true)
+      .where(notification_enabled: true)
       .where('job_search_status < ?', 2)
-}
+      .active
+  }
 
   validates :address, presence: true, if: -> { self.status == 'active' }
   validates :preferred_distance,

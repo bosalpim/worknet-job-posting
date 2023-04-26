@@ -33,7 +33,7 @@ class NewJobNotificationService
       if job_posting.lat.present? && job_posting.lng.present?
         users +=
           User
-            .receive_new_job_notifications
+            .receive_notifications
             .select(
               "users.*, earth_distance(ll_to_earth(lat, lng), ll_to_earth(#{job_posting.lat}, #{job_posting.lng})) AS distance",
               )
