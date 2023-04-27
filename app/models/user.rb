@@ -26,7 +26,9 @@ class User < ApplicationRecord
 
   enum job_search_status: {
     actively: 0,
-    negative: 1
+    commonly: 1,
+    off: 2,
+    working: 3,
   }
 
   enum reception_status: {
@@ -36,7 +38,12 @@ class User < ApplicationRecord
     sleep: 'sleep'
   }
 
-  scope :receive_notifications, -> { where(notification_enabled: true) }
+  scope :receive_notifications, -> {
+    where(has_certification: true)
+      .where(notification_enabled: true)
+      .where('job_search_status < ?', 2)
+      .active
+  }
 
   validates :address, presence: true, if: -> { self.status == 'active' }
   validates :preferred_distance,
