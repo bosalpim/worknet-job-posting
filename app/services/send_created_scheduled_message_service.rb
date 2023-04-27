@@ -1,5 +1,5 @@
 class SendCreatedScheduledMessageService
-  BATCH_SIZE = 100.freeze
+  BATCH_SIZE = 1_500.freeze
 
   def self.call(template_id, send_type, should_send_percent, sent_percent)
     new.call(template_id, send_type, should_send_percent, sent_percent)
