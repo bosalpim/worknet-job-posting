@@ -11,6 +11,7 @@ class KakaoNotificationResult < ApplicationRecord
   BUSINESS_CALL_FAILURE_ALERT = "business_calls_failure_alert".freeze
   BUSINESS_CALL_APPLY_USER_FAILURE_ALERT = "business_call_apply_user_failure_alert".freeze
   CALL_REQUEST_ALARM = "call_request_alarm".freeze
+  NEWS_PAPER = 'news_paper'.freeze
 
   validates :send_type, presence: true
   validates :template_id, presence: true
