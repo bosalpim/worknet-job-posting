@@ -6,6 +6,11 @@ class SendNewsPaperService
   end
 
   def call
+    if Jets.env != "production"
+      Jets.logger.info 'Trigger Send News Paper On Staging'
+      return
+    end
+
     case job_search_status
     when User::job_search_statuses.dig(:actively)
       users = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_actively.csv', job_search_status)
