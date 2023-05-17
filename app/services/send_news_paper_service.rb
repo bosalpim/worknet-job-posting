@@ -8,10 +8,10 @@ class SendNewsPaperService
   def call
     case job_search_status
     when User::job_search_statuses.dig(:actively)
-      users = find_target_user_by_csv('news_paper_target/job_search_status_actively')
+      users = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_actively.csv', job_search_status)
       send_message(users, KakaoTemplate::JOB_ALARM_ACTIVELY)
     when User::job_search_statuses.dig(:commonly)
-      users = find_target_user_by_csv('news_paper_target/job_search_status_commonly')
+      users = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_commonly', job_search_status)
       send_message(users, KakaoTemplate::JOB_ALARM_COMMON)
     when User::job_search_statuses.dig(:off)
       users = User.off
@@ -27,17 +27,6 @@ class SendNewsPaperService
   end
 
   private
-  def find_target_user_by_csv(filename)
-    f = File.open(filename,'r')
-    data = f.read
-    user_list = data.split("\r\n",1002).drop(1)
-    user_list.delete_at(user_list.length - 1)
-    users = User.find(user_list)
-                .where(job_search_status: job_search_status)
-                .where(has_certification: true)
-                .where(notification_enabled: true)
-    users
-  end
 
   def send_message(users, template_id)
     success_count = 0

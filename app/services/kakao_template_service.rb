@@ -1,6 +1,4 @@
 class KakaoTemplateService
-  include GetDate
-
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
 
   attr_reader :template_id
@@ -498,7 +496,7 @@ class KakaoTemplateService
   end
 
   def get_job_alarm_actively
-    today = get_today
+    today = NewsPaper::get_today
     settingAlarmLink = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
     link = "https://www.carepartner.kr/newspaper?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
     {
@@ -522,7 +520,7 @@ class KakaoTemplateService
   end
 
   def get_job_alarm_commonly
-    today = get_today
+    today = NewsPaper::get_today
     settingAlarmLink = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
     link = "https://www.carepartner.kr/newspaper?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
     {
