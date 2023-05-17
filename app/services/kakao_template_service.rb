@@ -513,7 +513,7 @@ class KakaoTemplateService
           name: "알림 설정",
           type: "WL",
           url_mobile: settingAlarmLink,
-          url_p정c: settingAlarmLink
+          url_pc: settingAlarmLink
         }
       ]
     }
@@ -525,7 +525,7 @@ class KakaoTemplateService
     link = "https://www.carepartner.kr/newspaper?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
     {
       title: "[케어파트너] 일자리 신문",
-      message: "#{today} 일자리 신문이 도착했어요.\n\n오늘의 일자리부터 날씨, 명언까지!\n\n케어파트너 일자리 신문과 함께 하루를 시작해보세요.\n\n👇'신문 확인하기' 버튼 클릭👇",
+      message: "#{today} 일자리 신문이 도착했어요.\n\n최근 일자리부터 날씨, 명언까지!\n\n케어파트너 일자리 신문과 함께 하루를 시작해보세요.\n\n👇'신문 확인하기' 버튼 클릭👇",
       buttons: [
         {
           name: "신문 확인하기",
@@ -537,7 +537,7 @@ class KakaoTemplateService
           name: "더 자주 받아볼래요",
           type: "WL",
           url_mobile: settingAlarmLink,
-          url_p정c: settingAlarmLink
+          url_pc: settingAlarmLink
         }
       ]
     }
@@ -560,7 +560,7 @@ class KakaoTemplateService
           name: "더 자주 일자리 받아볼래요",
           type: "WL",
           url_mobile: settingAlarmLink,
-          url_p정c: settingAlarmLink
+          url_pc: settingAlarmLink
         }
       ]
     }
@@ -582,7 +582,7 @@ class KakaoTemplateService
           name: "더 자주 일자리 받아볼래요",
           type: "WL",
           url_mobile: settingAlarmLink,
-          url_p정c: settingAlarmLink
+          url_pc: settingAlarmLink
         }
       ]
     }
