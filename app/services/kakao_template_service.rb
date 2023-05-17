@@ -126,7 +126,7 @@ class KakaoTemplateService
           name: "알림 설정",
           type: "WL",
           url_mobile: settingAlarmLink,
-          url_p정c: settingAlarmLink
+          url_pc: settingAlarmLink
         }
       ]
     }
