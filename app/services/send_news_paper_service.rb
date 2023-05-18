@@ -16,7 +16,7 @@ class SendNewsPaperService
       users = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_actively.csv', job_search_status)
       send_message(users, KakaoTemplate::JOB_ALARM_ACTIVELY)
     when User::job_search_statuses.dig(:commonly)
-      users = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_commonly', job_search_status)
+      users = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_commonly.csv', job_search_status)
       send_message(users, KakaoTemplate::JOB_ALARM_COMMON)
     when User::job_search_statuses.dig(:off)
       users = User.off
