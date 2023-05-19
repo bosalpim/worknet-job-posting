@@ -9,8 +9,11 @@ class CreateScheduledMessageService
 
   def save_call
     return if Jets.env != "production"
-    
-    users = User.receive_notifications.order(:created_at)
+
+    actively_news_paper_target = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_actively.csv', User::job_search_statuses.dig(:actively))
+    commonly_news_paper_target = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_commonly.csv', User::job_search_statuses.dig(:commonly))
+    users = User.receive_notifications.order(:created_at).where.not(id: actively_news_paper_target.pluck(:id)).where.not(id: commonly_news_paper_target.pluck(:id))
+
     users.find_each(batch_size: BATCH_SIZE) do |user|
       begin
         data = yield(user)
