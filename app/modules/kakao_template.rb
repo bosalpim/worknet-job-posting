@@ -12,4 +12,8 @@ module KakaoTemplate
   BUSINESS_CALL_REMINDER = "posting_call_reminder_biz1".freeze # 요보사가 기관에게 전화했을 때 안받은 경우
   CALL_REQUEST_ALARM = "call_request_alarm".freeze # 요양보호사가 기관에 지원했을 때, 기관에게 지원 안내를 하는 알림톡입니다.
   BUSINESS_CALL_APPLY_USER_REMINDER = "call_request_remind".freeze # 요양보호사가 기관 일자리 상담 전화를 안받은 경우
+  JOB_ALARM_ACTIVELY = 'job_alarm(actively)'.freeze # 적극구직 요양보호사에게 매일 전달되는 신문
+  JOB_ALARM_COMMON = 'job_alarm(common)'.freeze # 구직중 요양보호사에게 월,목 전달되는 신문
+  JOB_ALARM_OFF = 'job_alarm(off)'.freeze # 구직의사 없음 요양보호사에게 매달 첫번째 월요일 오후 12시에 전달되는 신문
+  JOB_ALARM_WORKING = 'job_alarm(working)'.freeze # 일하는 중인 요양보호사에게 매달 첫째주,셋째주 월요일 오후 12시에 전달되는 신문
 end
