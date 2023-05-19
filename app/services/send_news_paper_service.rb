@@ -1,11 +1,9 @@
 class SendNewsPaperService
-  attr_reader :job_search_status
-
-  def initialize(job_search_status)
-    @job_search_status = job_search_status
+  def self.call(job_search_status)
+    new.call(job_search_status)
   end
 
-  def call
+  def call(job_search_status)
     if Jets.env != "production"
       Jets.logger.info 'Trigger Send News Paper On Staging'
       return
