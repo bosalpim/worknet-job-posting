@@ -1,5 +1,4 @@
 class SendNewsPaperJob < ApplicationJob
-
   cron "30 1 ? * MON-FRI *"
   def send_to_actively
     SendNewsPaperService.call(User::job_search_statuses.dig(:actively))
