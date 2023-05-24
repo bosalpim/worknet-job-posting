@@ -12,6 +12,8 @@ class KakaoNotificationResult < ApplicationRecord
   BUSINESS_CALL_APPLY_USER_FAILURE_ALERT = "business_call_apply_user_failure_alert".freeze
   CALL_REQUEST_ALARM = "call_request_alarm".freeze
   NEWS_PAPER = 'news_paper'.freeze
+  GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze
+
 
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -31,6 +33,7 @@ class KakaoNotificationResult < ApplicationRecord
     BUSINESS_CALL_FAILURE_ALERT => BUSINESS_CALL_FAILURE_ALERT,
     CALL_REQUEST_ALARM => CALL_REQUEST_ALARM,
     BUSINESS_CALL_APPLY_USER_FAILURE_ALERT => BUSINESS_CALL_APPLY_USER_FAILURE_ALERT,
-    NEWS_PAPER => NEWS_PAPER
+    NEWS_PAPER => NEWS_PAPER,
+    GAMIFICATION_MISSION_COMPLETE => GAMIFICATION_MISSION_COMPLETE
   }
 end
