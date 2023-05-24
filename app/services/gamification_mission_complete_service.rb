@@ -10,7 +10,7 @@ class GamificationMissionCompleteService
     template_id = KakaoTemplate::GAMIFICATION_MISSION_COMPLETE
     response = KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env == "production" ? user.phone_number : '01094659404',
+      phone: Jets.env == "production" ? user.phone_number : '01025179362',
       message_type: "AI",
       template_params: {}
     )
