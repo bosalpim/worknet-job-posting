@@ -25,4 +25,5 @@ Jets.application.routes.draw do
       post :new_notification
     end
   end
+  post '/gamification/misson_complete', to: 'gamification#missionComplete'
 end

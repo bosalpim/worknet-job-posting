@@ -45,6 +45,8 @@ class KakaoTemplateService
       get_job_alarm_off
     when KakaoTemplate::JOB_ALARM_WORKING
       get_job_alarm_working
+    when KakaoTemplate::GAMIFICATION_MISSION_COMPLETE
+      get_gamification_mission_complete
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -583,6 +585,22 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
+        }
+      ]
+    }
+  end
+
+  def get_gamification_mission_complete
+    link = "https://www.carepartner.kr/me/growth_game?proposal=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=plant_mission_complete"
+    {
+      title: "[미션달성] 식물에 물을 주세요 🌱",
+      message: "[미션달성] 식물에 물을 주세요 🌱\n\n미션을 달성했어요!\n\n아래 버튼을 클릭하면 식물에 물을 줄 수 있어요 👇",
+      buttons: [
+        {
+          name: "식물에 물주기",
+          type: "WL",
+          url_mobile: link,
+          url_pc: link,
         }
       ]
     }
