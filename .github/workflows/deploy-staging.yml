@@ -35,6 +35,7 @@ jobs:
           echo "NAVER_SEARCH_API_KEY=$NAVER_SEARCH_API_KEY" >> .env.staging
           echo "KAKAO_REST_API_KEY=$KAKAO_REST_API_KEY" >> .env.staging
           echo "KAKAO_BIZMSG_PROFILE=$KAKAO_BIZMSG_PROFILE" >> .env.staging
+          echo "AMPLITUDE_STAGING=$AMPLITUDE_STAGING" >> .env.staging
         env:
           DB_HOST_STAGING: ${{ secrets.DB_HOST_STAGING }}
           DB_PASSWORD_STAGING: ${{ secrets.DB_PASSWORD_STAGING }}
@@ -47,6 +48,7 @@ jobs:
           NAVER_SEARCH_API_KEY: ${{ secrets.NAVER_SEARCH_API_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           KAKAO_BIZMSG_PROFILE: ${{ secrets.KAKAO_BIZMSG_PROFILE }}
+          AMPLITUDE_STAGING: ${{ secrets.AMPLITUDE_STAGING }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1

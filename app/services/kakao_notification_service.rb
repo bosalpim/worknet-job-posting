@@ -1,18 +1,19 @@
 class KakaoNotificationService < KakaoTemplateService
   DEFAULT_RESERVE_AT = "00000000000000".freeze # send right now
 
-  attr_reader :template_id, :base_url, :user_id, :profile, :sender_number, :phone, :message_type, :reserve_dt
+  attr_reader :template_id, :base_url, :user_id, :profile, :sender_number, :phone, :message_type, :reserve_dt, :template_params
 
   def self.call(template_id:, phone:, message_type: "AT", reserve_dt: nil, template_params:)
     new(
       template_id: template_id,
       phone: phone,
       message_type: message_type,
-      reserve_dt: reserve_dt
-    ).call(**template_params)
+      reserve_dt: reserve_dt,
+      template_params: template_params
+    ).call
   end
 
-  def initialize(template_id:, phone:, message_type:, reserve_dt:)
+  def initialize(template_id:, phone:, message_type:, reserve_dt:, template_params:)
     super(template_id)
     @base_url = "https://alimtalk-api.bizmsg.kr/v2/sender/send"
     @user_id = "bosalpim21"
@@ -21,9 +22,10 @@ class KakaoNotificationService < KakaoTemplateService
     @phone = phone
     @message_type = message_type
     @reserve_dt = get_reserve_dt(reserve_dt)
+    @template_params = template_params
   end
 
-  def call(**template_params)
+  def call
     request_params = get_final_request_params(template_params)
     begin
       return send_request(request_params)
@@ -47,6 +49,7 @@ class KakaoNotificationService < KakaoTemplateService
     ).parsed_response
     response = response.class == Array ? response.first : response
     Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}" if Jets.env != 'production'
+    send_log(response)
     response
   end
 
@@ -111,6 +114,24 @@ class KakaoNotificationService < KakaoTemplateService
       korean_time.strftime("%Y%m%d") + "080000"
     else
       DEFAULT_RESERVE_AT
+    end
+  end
+
+  def send_log(response)
+    logging_data = KakaoNotificationLoggingHelper.get_logging_data(template_id, template_params, phone)
+    response_code = response.dig("code")
+    response_message = response.dig("message")
+    if response_code == "success"
+      if response_message == "K000"
+        logging_data["properties"]["type"] = KakaoNotificationLoggingHelper::NOTIFICATION_TYPE_KAKAO
+      elsif response_message == "R000"
+        logging_data["properties"]["type"] = KakaoNotificationLoggingHelper::NOTIFICATION_TYPE_RESERVED
+      else
+        logging_data["properties"]["type"] = KakaoNotificationLoggingHelper::NOTIFICATION_TYPE_TEXT_MESSAGE
+      end
+      AmplitudeService.instance.log(logging_data["event_name"], logging_data["properties"], logging_data["target_public_id"])
+    else
+      return
     end
   end
 end
