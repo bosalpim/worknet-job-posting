@@ -10,12 +10,6 @@ class SendNewsPaperService
     end
 
     case job_search_status
-    when User::job_search_statuses.dig(:actively)
-      users = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_actively.csv', job_search_status)
-      send_message(users, KakaoTemplate::JOB_ALARM_ACTIVELY)
-    when User::job_search_statuses.dig(:commonly)
-      users = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_commonly.csv', job_search_status)
-      send_message(users, KakaoTemplate::JOB_ALARM_COMMON)
     when User::job_search_statuses.dig(:off)
       users = User.off
                   .where(has_certification: true)
@@ -26,6 +20,9 @@ class SendNewsPaperService
                   .where(has_certification: true)
                   .where(notification_enabled: true)
       send_message(users, KakaoTemplate::JOB_ALARM_WORKING)
+    else
+      # active/common은 lambda에 redis를 적용하기 전까지 새벽에 생성하고 아침에는 나눠서 전송하도록 합니다.
+      return
     end
   end
 
