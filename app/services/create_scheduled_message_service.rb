@@ -9,10 +9,7 @@ class CreateScheduledMessageService
 
   def save_call
     return if Jets.env != "production"
-
-    actively_news_paper_target = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_actively.csv', User::job_search_statuses.dig(:actively))
-    commonly_news_paper_target = NewsPaper::find_target_user_by_csv('news_paper_target/job_search_status_commonly.csv', User::job_search_statuses.dig(:commonly))
-    users = User.receive_notifications.order(:created_at).where.not(id: actively_news_paper_target.pluck(:id)).where.not(id: commonly_news_paper_target.pluck(:id))
+    users = find_users
 
     users.find_each(batch_size: BATCH_SIZE) do |user|
       begin
@@ -36,28 +33,14 @@ class CreateScheduledMessageService
     )
   end
 
-  def get_radius(user)
-    case user.preferred_distance
-    when 'by_walk15'
-      900
-    when 'by_walk30'
-      1800
-    when 'by_km_3'
-      3000
-    when 'by_km_5'
-      5000
-    else
-      900
-    end
-  end
+  private
 
-  def get_gender_filtered_job_postings(job_postings, user)
-    result_job_postings = job_postings
-    if user.gender == 'male'
-      result_job_postings = job_postings.where(gender: ['male', nil])
-    elsif user.gender == 'female'
-      result_job_postings = job_postings.where(gender: ['female', nil])
+  def find_users
+    case template_id
+    when KakaoTemplate::JOB_ALARM_ACTIVELY
+      return User.receive_notifications.order(:created_at)
+    else
+      return nil
     end
-    result_job_postings
   end
 end

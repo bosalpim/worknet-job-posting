@@ -1,13 +1,13 @@
 class CreateScheduledMessageJob < ApplicationJob
   # "From 12:00 on Monday in Korean Time"
 
-  cron "0 17 ? * SUN *"
+  cron "0 20 ? * SUN *"
   def create_personal_notification_message
-    CreatePersonalNotificationMessageService.call
+    CreateNewsPaperActivelyCommonMessageService.call
   end
 
-  cron "0 17 ? * WED *"
+  cron "0 20 ? * WED *"
   def create_extra_benefit_notification_message
-    CreateExtraBenefitNotificationMessageService.call
+    CreateNewsPaperActivelyCommonMessageService.call
   end
 end
