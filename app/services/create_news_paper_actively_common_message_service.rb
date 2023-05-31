@@ -34,6 +34,10 @@ class CreateNewsPaperActivelyCommonMessageService < CreateScheduledMessageServic
     )
   end
 
+  def call
+    save_call { |user| create_message(user) }
+  end
+
   def create_message(user)
     phone_number = user.phone_number
     jsonb = {}.to_json
