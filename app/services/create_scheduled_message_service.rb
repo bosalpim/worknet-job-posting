@@ -8,7 +8,7 @@ class CreateScheduledMessageService
   end
 
   def save_call
-    # return if Jets.env != "production"
+    return if Jets.env != "production"
     users = find_users
 
     users.find_each(batch_size: BATCH_SIZE) do |user|
