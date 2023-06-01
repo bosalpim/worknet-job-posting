@@ -119,6 +119,8 @@ class KakaoNotificationService < KakaoTemplateService
 
   def send_log(response)
     logging_data = KakaoNotificationLoggingHelper.get_logging_data(template_id, template_params, phone)
+    return if logging_data.nil?
+
     response_code = response.dig("code")
     response_message = response.dig("message")
     if response_code == "success"
