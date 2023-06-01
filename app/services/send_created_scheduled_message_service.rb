@@ -1,6 +1,4 @@
 class SendCreatedScheduledMessageService
-  BATCH_SIZE = 1_500.freeze
-
   def self.call(template_id, send_type, should_send_percent, sent_percent)
     new.call(template_id, send_type, should_send_percent, sent_percent)
   end
@@ -19,7 +17,7 @@ class SendCreatedScheduledMessageService
     sent_count = counts.dig(:sent_count)
     messages = ScheduledMessage.where(scheduled_date: 1.days.ago..).where(template_id: template_id).offset(sent_count).limit(message_count)
 
-    messages.find_each(batch_size: BATCH_SIZE) do |message|
+    messages.find_each do |message|
       # 예약 생성된 메세지가 발송다시 대상자가 발송조건에서 벗어난 경우 처리
       if User.where(phone_number: message.phone_number).where(has_certification: true).where(notification_enabled: true).where('job_search_status < ?', 2).length == 0
         fail_count += 1
