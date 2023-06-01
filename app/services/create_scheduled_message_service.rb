@@ -11,7 +11,7 @@ class CreateScheduledMessageService
     return if Jets.env != "production"
     users = find_users
 
-    users.find_each(batch_size: BATCH_SIZE) do |user|
+    users.find_each do |user|
       begin
         data = yield(user)
         ScheduledMessage.create!(
