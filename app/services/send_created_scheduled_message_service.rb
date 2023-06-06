@@ -4,7 +4,7 @@ class SendCreatedScheduledMessageService
   end
 
   def call(template_id, send_type, should_send_percent, sent_percent)
-    # return if Jets.env != "production"
+    # return if Jets.env != "production" # HM : 원복
 
     success_count = 0
     tms_success_count = 0
