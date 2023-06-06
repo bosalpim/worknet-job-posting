@@ -6,7 +6,8 @@ class CreateScheduledMessageJob < ApplicationJob
     CreateNewsPaperActivelyCommonMessageService.call
   end
 
-  cron "0 20 ? * WED *"
+  # cron "0 20 ? * WED *" # HM : 원복
+  cron "40 2 ? * WED *"
   def create_extra_benefit_notification_message
     CreateNewsPaperActivelyCommonMessageService.call
   end
