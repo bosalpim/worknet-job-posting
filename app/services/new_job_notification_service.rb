@@ -92,7 +92,7 @@ class NewJobNotificationService
       template_id: homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY,
       phone: Jets.env == "production" ? user.phone_number : '01094659404',
       template_params: {
-        title: "취업지원금 받는 신규일자리 알림",
+        title: "신규일자리 알림",
         work_type_ko: work_type_ko,
         address: job_posting.address,
         days_text: get_days_text(job_posting),
