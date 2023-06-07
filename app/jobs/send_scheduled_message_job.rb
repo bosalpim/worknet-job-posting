@@ -53,53 +53,53 @@ class SendScheduledMessageJob < ApplicationJob
 
   # --------------------------------------------------------------------
 
-  cron "30 9 ? * TUE *" # HM : 원복
+  cron "2 1 ? * MON *"
   def send_news_paper_monday_message_0
     SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0)
   end
 
-  cron "35 9 ? * TUE *" # HM : 원복
+  cron "12 1 ? * MON *"
   def send_news_paper_monday_message_1
     SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.1)
   end
 
-  cron "40 9 ? * TUE *" # HM : 원복
+  cron "22 1 ? * MON *"
   def send_news_paper_monday_message_2
     SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.2)
   end
 
-  cron "45 9 ? * TUE *" # HM : 원복
+  cron "32 1 ? * MON *"
   def send_news_paper_monday_message_3
     SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.3)
   end
 
-  cron "50 9 ? * TUE *" # HM : 원복
+  cron "42 1 ? * MON *"
   def send_news_paper_monday_message_4
     SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.4)
   end
 
-  # cron "52 1 ? * MON *"
-  # def send_news_paper_monday_message_5
-  #   SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.5)
-  # end
-  #
-  # cron "2 2 ? * MON *"
-  # def send_news_paper_monday_message_6
-  #   SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.6)
-  # end
-  #
-  # cron "12 2 ? * MON *"
-  # def send_news_paper_monday_message_7
-  #   SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.7)
-  # end
-  #
-  # cron "22 2 ? * MON *"
-  # def send_news_paper_monday_message_8
-  #   SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.8)
-  # end
-  #
-  # cron "32 2 ? * MON *"
-  # def send_news_paper_monday_message_9
-  #   SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.9)
-  # end
+  cron "52 1 ? * MON *"
+  def send_news_paper_monday_message_5
+    SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.5)
+  end
+
+  cron "2 2 ? * MON *"
+  def send_news_paper_monday_message_6
+    SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.6)
+  end
+
+  cron "12 2 ? * MON *"
+  def send_news_paper_monday_message_7
+    SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.7)
+  end
+
+  cron "22 2 ? * MON *"
+  def send_news_paper_monday_message_8
+    SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.8)
+  end
+
+  cron "32 2 ? * MON *"
+  def send_news_paper_monday_message_9
+    SendCreatedScheduledMessageService.call(KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.9)
+  end
 end
