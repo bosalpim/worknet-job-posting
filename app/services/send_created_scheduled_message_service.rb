@@ -15,53 +15,67 @@ class SendCreatedScheduledMessageService
     counts = calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
     message_count = counts.dig(:message_count)
     sent_count = counts.dig(:sent_count)
+
     Jets.logger.info "Calculate Result > message_count : #{message_count}, sent_count: #{sent_count}"
-    messages = ScheduledMessage.where(scheduled_date: 1.days.ago..).where(template_id: template_id).offset(sent_count).limit(message_count)
+
+    messages = ScheduledMessage.where(scheduled_date: 1.days.ago..).where(template_id: template_id).where(is_send: false).limit(message_count)
+
     Jets.logger.info "Read Message Count > #{messages.length}"
 
-    messages.find_each do |message|
+    try_redundant_send_count = 0
+    messages.find_each(batch_size: message_count) do |message|
+      if should_send(message)
+        begin
+          response = KakaoNotificationService.call(
+            template_id: message.template_id,
+            message_type: template_id == KakaoTemplate::JOB_ALARM_ACTIVELY ? 'AI' : 'AT',
+            phone: Jets.env != 'production' ? '01094659404' : message.phone_number,
+            template_params: JSON.parse(message.content)
+          )
 
-      # 예약 생성된 메세지가 발송다시 대상자가 발송조건에서 벗어난 경우 처리
-      # if User.where(phone_number: message.phone_number).where(has_certification: true).where(notification_enabled: true).where('job_search_status < ?', 2).length == 0
-      #   fail_count += 1
-      #   fail_reasons.push("전송 당시 알림톡 허용 대상에서 변경됨")
-      # else
-      #   begin
-      #     response = KakaoNotificationService.call(
-      #       template_id: message.template_id,
-      #       message_type: template_id == KakaoTemplate::JOB_ALARM_ACTIVELY ? 'AI' : 'AT',
-      #       phone: Jets.env != 'production' ? '01094659404' : message.phone_number,
-      #       template_params: JSON.parse(message.content)
-      #     )
-      #
-      #     if response.dig("code") == "success"
-      #       if response.dig("message") == "K000"
-      #         success_count += 1
-      #       else
-      #         tms_success_count += 1
-      #       end
-      #     else
-      #       fail_count += 1
-      #     end
-      #     fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
-      #
-      #   rescue => e
-      #     fail_count += 1
-      #     fail_reasons.push(e.message)
-      #     Jets.logger.info e.message
-      #   end
-      # end
+          if response.dig("code") == "success"
+            if response.dig("message") == "K000"
+              success_count += 1
+            else
+              tms_success_count += 1
+            end
+          else
+            fail_count += 1
+          end
+
+          fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
+        rescue => e
+          fail_count += 1
+          fail_reasons.push(e.message)
+          Jets.logger.info e.message
+        end
+      else
+        try_redundant_send_count += 1
+        Jets.logger.info("중복 전송 시도 #{message.id}")
+      end
+
+      message.update!(is_send: true)
     end
 
-    # KakaoNotificationResult.create!(
-    #   send_type: send_type,
-    #   send_id: "#{should_send_percent * 100}%",
-    #   template_id: template_id,
-    #   success_count: success_count,
-    #   tms_success_count: tms_success_count,
-    #   fail_count: fail_count,
-    #   fail_reasons: fail_reasons.uniq.join(", ")
-    # )
+    Jets.logger.info("전송 개수 : #{ScheduledMessage.where(is_send: true).length}, 미전송 개수 : #{ScheduledMessage.where(is_send: false).length}")
+
+    KakaoNotificationResult.create!(
+      send_type: send_type,
+      send_id: "#{(should_send_percent + sent_percent) * 100}%",
+      template_id: template_id,
+      success_count: success_count,
+      tms_success_count: tms_success_count,
+      fail_count: fail_count,
+      fail_reasons: fail_reasons.uniq.join(", ")
+    )
+  end
+
+  def should_send(message)
+    if User.where(phone_number: message.phone_number).where(has_certification: true).where(notification_enabled: true).where('job_search_status < ?', 2).length == 0
+      return false
+    end
+
+    return message.is_send == false
   end
 
   def calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
