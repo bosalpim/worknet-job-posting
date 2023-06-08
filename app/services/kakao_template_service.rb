@@ -107,10 +107,11 @@ class KakaoTemplateService
     call = "전화: ☎#{convert_safe_text(tem_params[:business_vn])}"
     bottomText = "아래 버튼 또는 링크를 클릭해서 자세한 내용 확인하고 지원해보세요!\ncarepartner.kr#{tem_params[:path]}\n\n#{call}"
     settingAlarmLink = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_homecare_recent"
+    settingAlarmPositionLink = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_homecare_recent2"
 
     return {
       title: tem_params[:title],
-      message: "[케어파트너] 취업지원금 받는 신규일자리 알림\n#{call}\n\n1시간 내에 전화하면 케어파트너에서 최대 5만원의 취업지원금 지급!\n\n#{daysAndHours}\n#{address}\n#{pay}\n#{customer_info}\n\n#{bottomText}",
+      message: "[케어파트너] 신규일자리 알림\n#{call}\n\n#{daysAndHours}\n#{address}\n#{pay}\n#{customer_info}\n\n#{bottomText}",
       buttons: [
         {
           name: "일자리 확인하기",
@@ -129,6 +130,12 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
+        },
+        {
+          name: "알림 지역 설정",
+          type: "WL",
+          url_mobile: settingAlarmPositionLink,
+          url_pc: settingAlarmPositionLink
         }
       ]
     }
@@ -142,10 +149,11 @@ class KakaoTemplateService
     call = "전화: ☎#{convert_safe_text(tem_params[:business_vn])}"
     bottomText = "아래 버튼 또는 링크를 클릭해서 자세한 내용 확인하고 지원해보세요!\ncarepartner.kr#{tem_params[:path]}\n\n#{call}"
     settingAlarmLink = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_facility_recent"
+    settingAlarmPositionLink = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_facility_recent2"
 
     return {
       title: tem_params[:title],
-      message: "[케어파트너] 취업지원금 받는 신규일자리 알림\n#{call}\n\n1시간 내에 전화하면 케어파트너에서 최대 5만원의 취업지원금 지급!\n\n#{daysAndHours}\n#{address}\n#{pay}\n#{customer_info}\n\n#{bottomText}",
+      message: "[케어파트너] 신규일자리 알림\n#{call}\n\n#{daysAndHours}\n#{address}\n#{pay}\n#{customer_info}\n\n#{bottomText}",
       buttons: [
         {
           name: "일자리 확인하기",
@@ -164,6 +172,12 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
+        },
+        {
+          name: "알림 지역 설정",
+          type: "WL",
+          url_mobile: settingAlarmPositionLink,
+          url_pc: settingAlarmPositionLink
         }
       ]
     }
