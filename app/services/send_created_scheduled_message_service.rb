@@ -18,11 +18,11 @@ class SendCreatedScheduledMessageService
 
     Jets.logger.info "Calculate Result > message_count : #{message_count}, sent_count: #{sent_count}"
 
-    messages = ScheduledMessage.where(scheduled_date: 1.days.ago..).where(template_id: template_id).offset(sent_count).limit(message_count)
+    messages = ScheduledMessage.where(scheduled_date: 1.days.ago..).where(template_id: template_id).where(is_send: false).limit(message_count)
+    messages.update_all(is_send: true)
 
     Jets.logger.info "Read Message Count > #{messages.length}"
 
-    try_redundant_send_count = 0
     messages.find_each(batch_size: message_count) do |message|
       if should_send(message)
         begin
@@ -50,11 +50,8 @@ class SendCreatedScheduledMessageService
           Jets.logger.info e.message
         end
       else
-        try_redundant_send_count += 1
-        Jets.logger.info("중복 전송 시도 #{message.id}")
+        Jets.logger.info("메세지 전송 당시 상태 변화 #{message.id}")
       end
-
-      message.update!(is_send: true)
     end
 
     Jets.logger.info("전송 개수 : #{ScheduledMessage.where(is_send: true).length}, 미전송 개수 : #{ScheduledMessage.where(is_send: false).length}")
@@ -73,9 +70,9 @@ class SendCreatedScheduledMessageService
   def should_send(message)
     if User.where(phone_number: message.phone_number).where(has_certification: true).where(notification_enabled: true).where('job_search_status < ?', 2).length == 0
       return false
+    else
+      return true
     end
-
-    return message.is_send == false
   end
 
   def calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
