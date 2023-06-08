@@ -45,7 +45,8 @@ class KakaoNotificationService < KakaoTemplateService
     response = HTTParty.post(
       base_url,
       body: JSON.dump([request_params]),
-      headers: headers
+      headers: headers,
+      timeout: 10
     ).parsed_response
     response = response.class == Array ? response.first : response
     Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}" if Jets.env != 'production'
