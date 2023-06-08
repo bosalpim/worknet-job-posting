@@ -20,46 +20,33 @@ class SendCreatedScheduledMessageService
 
     messages = ScheduledMessage.where(scheduled_date: 9.days.ago..).where(template_id: template_id).where(is_send: false).limit(message_count)
     messages.update_all(is_send: true)
+    messages = messages.filter do | message | message.sendable end
 
     Jets.logger.info "Read Message Count > #{messages.length}"
 
-    messages.each_slice(20) do |batch|
-      results = []
-      batch.each do |message|
-        threads = []
-        threads << Thread.new do
-          begin
-            next if check_sendable(message) == false
-            response = KakaoNotificationService.call(
-              template_id: message.template_id,
-              # message_type: template_id == KakaoTemplate::JOB_ALARM_ACTIVELY ? 'AI' : 'AT',
-              message_type: 'AT',
-              phone: Jets.env != 'production' ? '01094659404' : message.phone_number,
-              template_params: JSON.parse(message.content)
-            )
+    results = batch_send_message(messages)
 
-            results.push( { status: 'success', response: response })
-          rescue Net::ReadTimeout
-            time_out_messages.push(message)
-          rescue HTTParty::Error => e
-            results.push({ status: 'fail' , response: "#{e.message}"})
-          end
-        end
-        threads.each(&:join)
-      end
+    parsed_results = process_results(results.dig(:results))
+    success_count += parsed_results.dig(:success_count)
+    fail_count += parsed_results.dig(:fail_count)
+    tms_success_count += parsed_results.dig(:tms_success_count)
+    fail_reasons.concat(parsed_results.dig(:fail_reasons))
 
-      parsed_results = process_results(results)
-      success_count += parsed_results.dig(:success_count)
-      fail_count += parsed_results.dig(:fail_count)
-      tms_success_count += parsed_results.dig(:tms_success_count)
-      fail_reasons.concat(parsed_results.dig(:fail_reasons))
+    Jets.logger.info("알림톡 > 전송 성공 개수 : #{success_count}, 문자 전송 개수 : #{tms_success_count}, 실패 개수 : #{fail_count}")
+
+    # 타임아웃 메세지 처리
+    timeout_messages = results.dig(:time_out_messages)
+    if timeout_messages.length > 0
+      timeout_send_results = batch_send_message(timeout_messages)
+      timeout_parsed_results = process_results(timeout_send_results.dig(:results))
+      success_count += timeout_parsed_results.dig(:success_count)
+      fail_count += timeout_parsed_results.dig(:fail_count)
+      tms_success_count += timeout_parsed_results.dig(:tms_success_count)
+      fail_reasons.concat(timeout_parsed_results.dig(:fail_reasons))
+
+      Jets.logger.info("타임아웃 평균 시간 : #{results.dig(:time_out_average)}, 타임아웃 개수 : #{timeout_messages.length}")
+      Jets.logger.info("타임아웃 알림톡 > 전송 성공 개수 : #{success_count}, 문자 전송 개수 : #{tms_success_count}, 실패 개수 : #{fail_count}")
     end
-
-    if time_out_messages.length > 0
-    end
-
-    Jets.logger.info("전송 개수 : #{ScheduledMessage.where(is_send: true).length}, 미전송 개수 : #{ScheduledMessage.where(is_send: false).length}")
-    Jets.logger.info("알림톡 전송 개수 : #{success_count}, 문자 전송 개수 : #{tms_success_count}, 실패 개수 : #{fail_count}")
 
     KakaoNotificationResult.create!(
       send_type: send_type,
@@ -70,6 +57,48 @@ class SendCreatedScheduledMessageService
       fail_count: fail_count,
       fail_reasons: fail_reasons.uniq.join(", ")
     )
+  end
+
+  def batch_send_message(messages)
+    results = []
+    time_out_messages = []
+    time_out_total = 0
+
+    messages.each_slice(10) do |batch|
+      threads = []
+      batch.each do |message|
+        threads << Thread.new do
+          start_time = Time.now
+          begin
+            template_params = JSON.parse(message.content)
+            response = KakaoNotificationService.call(
+              template_id: message.template_id,
+              # message_type: template_id == KakaoTemplate::JOB_ALARM_ACTIVELY ? 'AI' : 'AT',
+              message_type: 'AT',
+              phone: Jets.env != 'production' ? '01094659404' : message.phone_number,
+              template_params: template_params
+            )
+
+            results.push( { status: 'success', response: response })
+            KakaoNotificationLoggingHelper.send_log(response, message.template_id, template_params, message.phone_number)
+          rescue Net::ReadTimeout
+            end_time = Time.now
+            time_out_total += (start_time - end_time)
+            time_out_messages.push(message)
+          rescue HTTParty::Error => e
+            results.push({ status: 'fail' , response: "#{e.message}"})
+          end
+        end
+      end
+
+      threads.each(&:join)
+    end
+
+    return {
+      results: results,
+      time_out_messages: time_out_messages,
+      time_out_average: time_out_messages.length > 0 ? time_out_total / time_out_messages.length : 0
+    }
   end
 
   def process_results(results)
@@ -99,15 +128,8 @@ class SendCreatedScheduledMessageService
         end
       end
     end
-    
-  end
 
-  def check_sendable(message)
-    if User.where(phone_number: message.phone_number).where(has_certification: true).where(notification_enabled: true).where('job_search_status < ?', 2).length == 0
-      return false
-    else
-      return message.is_send == false
-    end
+    return { success_count: success_count, tms_success_count: tms_success_count, fail_count: fail_count, fail_reasons: fail_reasons }
   end
 
   def calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
