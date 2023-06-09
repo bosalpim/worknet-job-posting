@@ -75,7 +75,7 @@ class SendCreatedScheduledMessageService
             template_params = JSON.parse(message.content)
             response = KakaoNotificationService.call(
               template_id: message.template_id,
-              message_type: template_id == KakaoTemplate::JOB_ALARM_ACTIVELY ? 'AI' : 'AT',
+              message_type: message.template_id == KakaoTemplate::JOB_ALARM_ACTIVELY ? 'AI' : 'AT',
               phone: Jets.env != 'production' ? '01094659404' : message.phone_number,
               template_params: template_params
             )
