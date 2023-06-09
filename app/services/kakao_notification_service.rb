@@ -45,11 +45,11 @@ class KakaoNotificationService < KakaoTemplateService
     response = HTTParty.post(
       base_url,
       body: JSON.dump([request_params]),
-      headers: headers
+      headers: headers,
+      timeout: 10
     ).parsed_response
     response = response.class == Array ? response.first : response
     Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}" if Jets.env != 'production'
-    send_log(response)
     response
   end
 
@@ -114,26 +114,6 @@ class KakaoNotificationService < KakaoTemplateService
       korean_time.strftime("%Y%m%d") + "080000"
     else
       DEFAULT_RESERVE_AT
-    end
-  end
-
-  def send_log(response)
-    logging_data = KakaoNotificationLoggingHelper.get_logging_data(template_id, template_params, phone)
-    return if logging_data.nil?
-
-    response_code = response.dig("code")
-    response_message = response.dig("message")
-    if response_code == "success"
-      if response_message == "K000"
-        logging_data["properties"]["type"] = KakaoNotificationLoggingHelper::NOTIFICATION_TYPE_KAKAO
-      elsif response_message == "R000"
-        logging_data["properties"]["type"] = KakaoNotificationLoggingHelper::NOTIFICATION_TYPE_RESERVED
-      else
-        logging_data["properties"]["type"] = KakaoNotificationLoggingHelper::NOTIFICATION_TYPE_TEXT_MESSAGE
-      end
-      AmplitudeService.instance.log(logging_data["event_name"], logging_data["properties"], logging_data["target_public_id"])
-    else
-      return
     end
   end
 end

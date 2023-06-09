@@ -67,4 +67,24 @@ module KakaoNotificationLoggingHelper
       }
     }
   end
+
+  def self.send_log(response, template_id, template_params, phone)
+    logging_data = get_logging_data(template_id, template_params, phone)
+    return if logging_data.nil?
+
+    response_code = response.dig("code")
+    response_message = response.dig("message")
+    if response_code == "success"
+      if response_message == "K000"
+        logging_data["properties"]["type"] = KakaoNotificationLoggingHelper::NOTIFICATION_TYPE_KAKAO
+      elsif response_message == "R000"
+        logging_data["properties"]["type"] = KakaoNotificationLoggingHelper::NOTIFICATION_TYPE_RESERVED
+      else
+        logging_data["properties"]["type"] = KakaoNotificationLoggingHelper::NOTIFICATION_TYPE_TEXT_MESSAGE
+      end
+      AmplitudeService.instance.log(logging_data["event_name"], logging_data["properties"], logging_data["target_public_id"])
+    else
+      return
+    end
+  end
 end
