@@ -4,14 +4,14 @@ class SendCreatedScheduledMessageService
   end
 
   def call(template_id, send_type, should_send_percent, sent_percent)
-    # return if Jets.env != "production"
+    return if Jets.env != "production"
 
     success_count = 0
     tms_success_count = 0
     fail_count = 0
     fail_reasons = []
 
-    message_created_time = 6
+    message_created_time = 1
 
     total_count = ScheduledMessageCount.where(created_at: message_created_time.days.ago..).where(template_id: template_id).first!.total_count
     counts = calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
