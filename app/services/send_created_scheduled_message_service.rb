@@ -18,7 +18,7 @@ class SendCreatedScheduledMessageService
 
     Jets.logger.info "Calculate Result > message_count : #{message_count}, sent_count: #{sent_count}"
 
-    messages = ScheduledMessage.where(scheduled_date: 1.days.ago..).where(template_id: template_id).where(is_send: false).limit(message_count)
+    messages = ScheduledMessage.where(scheduled_date: 1.days.ago..).where(template_id: template_id).order(:scheduled_date).offset(sent_count).limit(message_count)
     messages.update_all(is_send: true)
     messages = messages.filter do | message | message.sendable end
 
