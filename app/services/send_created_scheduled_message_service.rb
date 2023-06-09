@@ -21,6 +21,7 @@ class SendCreatedScheduledMessageService
     Jets.logger.info "Calculate Result > message_count : #{message_count}, sent_count: #{sent_count}"
 
     messages = ScheduledMessage.where(scheduled_date: message_created_time.days.ago..).where(template_id: template_id).order(:scheduled_date).offset(sent_count).limit(message_count)
+    messages.update_all(is_send: true)
     messages = messages.filter do | message | message.sendable end
 
     Jets.logger.info "Read Message Count > #{messages.length}"
@@ -79,7 +80,6 @@ class SendCreatedScheduledMessageService
               template_params: template_params
             )
 
-            message.update!(is_send: true)
             results.push( { status: 'success', response: response })
             KakaoNotificationLoggingHelper.send_log(response, message.template_id, template_params, message.phone_number)
           rescue Net::ReadTimeout
