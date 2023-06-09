@@ -4,21 +4,23 @@ class SendCreatedScheduledMessageService
   end
 
   def call(template_id, send_type, should_send_percent, sent_percent)
-    return if Jets.env != "production"
+    # return if Jets.env != "production"
 
     success_count = 0
     tms_success_count = 0
     fail_count = 0
     fail_reasons = []
 
-    total_count = ScheduledMessageCount.where(created_at: 1.days.ago..).where(template_id: template_id).first!.total_count
+    message_created_time = 5
+
+    total_count = ScheduledMessageCount.where(created_at: message_created_time.days.ago..).where(template_id: template_id).first!.total_count
     counts = calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
     message_count = counts.dig(:message_count)
     sent_count = counts.dig(:sent_count)
 
     Jets.logger.info "Calculate Result > message_count : #{message_count}, sent_count: #{sent_count}"
 
-    messages = ScheduledMessage.where(scheduled_date: 1.days.ago..).where(template_id: template_id).order(:scheduled_date).offset(sent_count).limit(message_count)
+    messages = ScheduledMessage.where(scheduled_date: message_created_time.days.ago..).where(template_id: template_id).order(:scheduled_date).offset(sent_count).limit(message_count)
     messages.update_all(is_send: true)
     messages = messages.filter do | message | message.sendable end
 
@@ -73,8 +75,7 @@ class SendCreatedScheduledMessageService
             template_params = JSON.parse(message.content)
             response = KakaoNotificationService.call(
               template_id: message.template_id,
-              # message_type: template_id == KakaoTemplate::JOB_ALARM_ACTIVELY ? 'AI' : 'AT',
-              message_type: 'AT',
+              message_type: template_id == KakaoTemplate::JOB_ALARM_ACTIVELY ? 'AI' : 'AT',
               phone: Jets.env != 'production' ? '01094659404' : message.phone_number,
               template_params: template_params
             )
