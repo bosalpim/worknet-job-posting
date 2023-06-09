@@ -11,7 +11,7 @@ class SendCreatedScheduledMessageService
     fail_count = 0
     fail_reasons = []
 
-    message_created_time = 5
+    message_created_time = 6
 
     total_count = ScheduledMessageCount.where(created_at: message_created_time.days.ago..).where(template_id: template_id).first!.total_count
     counts = calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
@@ -68,6 +68,7 @@ class SendCreatedScheduledMessageService
 
     messages.each_slice(10) do |batch|
       threads = []
+      batch_results = []
       batch.each do |message|
         threads << Thread.new do
           start_time = Time.now
@@ -80,19 +81,25 @@ class SendCreatedScheduledMessageService
               template_params: template_params
             )
 
-            results.push( { status: 'success', response: response })
-            KakaoNotificationLoggingHelper.send_log(response, message.template_id, template_params, message.phone_number)
+            batch_results.push( { status: 'success', response: {}, message: message })
           rescue Net::ReadTimeout
             end_time = Time.now
             time_out_total += (start_time - end_time)
             time_out_messages.push(message)
           rescue HTTParty::Error => e
-            results.push({ status: 'fail' , response: "#{e.message}"})
+            batch_results.push({ status: 'fail' , response: "#{e.message}"})
           end
         end
       end
 
       threads.each(&:join)
+      results.concat(batch_results)
+      batch_results.each do |batch_result|
+        if batch_result.dig(:status) == 'success'
+          message = batch_result.dig(:message)
+          KakaoNotificationLoggingHelper.send_log(batch_result.dig(:response), message.template_id, template_params, message.phone_number)
+        end
+      end
     end
 
     return {
