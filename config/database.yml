@@ -24,7 +24,7 @@ staging:
   adapter: postgresql
   # Configure additional properties here.
   # [END cloud_sql_mysql_activerecord_create_socket]
-  pool: 5
+  pool: 10
   timeout: 5000
   database: backend_production
   username: rails_user
@@ -35,7 +35,7 @@ production:
   adapter: postgresql
   # Configure additional properties here.
   # [END cloud_sql_mysql_activerecord_create_socket]
-  pool: 5
+  pool: 10
   timeout: 5000
   database: backend_production
   username: rails_user
