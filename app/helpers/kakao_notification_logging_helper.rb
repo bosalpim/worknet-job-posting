@@ -18,9 +18,9 @@ module KakaoNotificationLoggingHelper
     when KakaoTemplate::PROPOSAL
       return nil
     when KakaoTemplate::NEW_JOB_POSTING_VISIT
-      return self.get_new_job_posting_visit_logging_data(tem_params, phone)
+      return self.get_new_job_posting_logging_data(tem_params, phone, template_id)
     when KakaoTemplate::NEW_JOB_POSTING_FACILITY
-      return self.get_new_job_posting_facility_logging_data(tem_params, phone)
+      return self.get_new_job_posting_logging_data(tem_params, phone, template_id)
     when KakaoTemplate::PERSONALIZED
       return nil
     when KakaoTemplate::EXTRA_BENEFIT
@@ -69,9 +69,11 @@ module KakaoNotificationLoggingHelper
     }
   end
 
-  def self.get_new_job_posting_visit_logging_data(template_params, phone)
+  def self.get_new_job_posting_logging_data(template_params, phone, template_id)
     target_public_id = User.find_by(phone_number: phone).public_id
     job_posting_public_id = template_params.dig(:job_posting_public_id)
+    job_posting_title = template_params.dig(:job_posting_title)
+    business_name = template_params.dig(:business_name)
 
     return {
       "target_public_id" => target_public_id,
@@ -79,25 +81,10 @@ module KakaoNotificationLoggingHelper
       "properties" => {
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_USER,
-        "template" => KakaoTemplate::NEW_JOB_POSTING_VISIT,
+        "template" => template_id,
         "job_posting_public_id" => job_posting_public_id,
-        "send_at" => Time.current + (9 * 60 * 60)
-      }
-    }
-  end
-
-  def self.get_new_job_posting_facility_logging_data(template_params, phone)
-    target_public_id = User.find_by(phone_number: phone).public_id
-    job_posting_public_id = template_params.dig(:job_posting_public_id)
-
-    return {
-      "target_public_id" => target_public_id,
-      "event_name" => NOTIFICATION_EVENT_NAME,
-      "properties" => {
-        "sender_type" => SENDER_TYPE_CAREPARTNER,
-        "receiver_type" => RECEIVER_TYPE_USER,
-        "template" => KakaoTemplate::NEW_JOB_POSTING_FACILITY,
-        "job_posting_public_id" => job_posting_public_id,
+        "job_posting_title" => job_posting_title,
+        "business_name" => business_name,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }

@@ -113,7 +113,8 @@ class NewJobNotificationService
       distance: user.simple_distance_from_ko(job_posting),
       origin_url: origin_url,
       path: shorten_url.sub("https://carepartner.kr", ""),
-      job_posting_public_id: job_posting.public_id
+      job_posting_public_id: job_posting.public_id,
+      job_posting_title: job_posting.title
     }
 
     response = KakaoNotificationService.call(
