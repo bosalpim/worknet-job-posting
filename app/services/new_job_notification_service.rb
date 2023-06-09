@@ -22,10 +22,13 @@ class NewJobNotificationService
     @work_type_ko = translate_type('job_posting', @job_posting, :work_type)
     @job_posting_customer = @job_posting.job_posting_customer
     @homecare_yes = %w[commute resident bath_help].include?(@job_posting.work_type)
+    @template_id = @homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY
   end
 
   def call
     users = []
+    business = Business.find job_posting.business_id
+
     User.preferred_distances.each do |key, value|
       prefer_work_type =
         job_posting.work_type == 'hospital' ? 'etc' : job_posting.work_type
@@ -62,13 +65,19 @@ class NewJobNotificationService
 
     users.each do |user|
       response = send_notification(user)
-      response.dig("code") == "success" ? success_count += 1 : fail_count += 1
-      fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
+      success = response.dig("code") == "success"
+
+      if success
+        success_count += 1
+      else
+        fail_count += 1
+        fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
+      end
     end
 
     KakaoNotificationResult.create!(
       send_type: "new_job_posting",
-      template_id: homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY,
+      template_id: template_id,
       success_count: success_count,
       fail_count: fail_count,
       fail_reasons: fail_reasons.uniq.join(", ")
@@ -82,35 +91,38 @@ class NewJobNotificationService
 
   private
 
-  attr_reader :job_posting, :work_type_ko, :job_posting_customer, :homecare_yes
+  attr_reader :job_posting, :work_type_ko, :job_posting_customer, :homecare_yes, :template_id
 
   def send_notification(user)
     origin_url = "https://www.carepartner.kr/jobs/recently_published?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@homecare_yes ? "new_job_homecare_recent" : "new_job_facility_recent"}&lat=#{user.lat}&lng=#{user.lng}"
     shorten_url = build_shorten_url(origin_url)
+    template_params = {
+      title: "신규일자리 알림",
+      work_type_ko: work_type_ko,
+      address: job_posting.address,
+      days_text: get_days_text(job_posting),
+      hours_text: get_hours_text(job_posting),
+      customer_grade: translate_type('job_posting_customer', job_posting_customer, :grade) || '등급없음',
+      customer_age: calculate_korean_age(job_posting_customer&.age) || '미상의연',
+      customer_gender: translate_type('job_posting_customer', job_posting_customer, :gender) || '성별미상',
+      business_vn: job_posting.vn,
+      pay_text: get_pay_text(job_posting),
+      welfare: get_welfare_text(job_posting),
+      business_name: job_posting.business.name,
+      user_name: user.name,
+      distance: user.simple_distance_from_ko(job_posting),
+      origin_url: origin_url,
+      path: shorten_url.sub("https://carepartner.kr", ""),
+      job_posting_public_id: job_posting.public_id
+    }
 
-    KakaoNotificationService.call(
-      template_id: homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY,
-      phone: Jets.env == "production" ? user.phone_number : '01094659404',
-      template_params: {
-        title: "신규일자리 알림",
-        work_type_ko: work_type_ko,
-        address: job_posting.address,
-        days_text: get_days_text(job_posting),
-        hours_text: get_hours_text(job_posting),
-        customer_grade: translate_type('job_posting_customer', job_posting_customer, :grade) || '등급없음',
-        customer_age: calculate_korean_age(job_posting_customer&.age) || '미상의연',
-        customer_gender: translate_type('job_posting_customer', job_posting_customer, :gender) || '성별미상',
-        business_vn: job_posting.vn,
-        pay_text: get_pay_text(job_posting),
-        welfare: get_welfare_text(job_posting),
-        business_name: job_posting.business.name,
-        user_name: user.name,
-        distance: user.simple_distance_from_ko(job_posting),
-        origin_url: origin_url,
-        path: shorten_url.sub("https://carepartner.kr", ""),
-        job_posting_public_id: job_posting.public_id
-      }
+    response = KakaoNotificationService.call(
+      template_id: template_id,
+      phone: Jets.env == "production" ? user.phone_number : '01037863607',
+      template_params: template_params
     )
+
+    KakaoNotificationLoggingHelper.send_log(response, template_id, template_params, user.phone_number)
   end
 
   def build_shorten_url(origin_url)

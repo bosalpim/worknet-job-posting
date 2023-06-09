@@ -12,14 +12,15 @@ module KakaoNotificationLoggingHelper
   NOTIFICATION_TYPE_RESERVED = 'kakao_notification_reserved'
   NOTIFICATION_TYPE_APP_PUSH = 'app_push'
   NOTIFICATION_TYPE_TEXT_MESSAGE = 'text_message'
+
   def self.get_logging_data(template_id, tem_params, phone)
     case template_id
     when KakaoTemplate::PROPOSAL
       return nil
     when KakaoTemplate::NEW_JOB_POSTING_VISIT
-      return nil
+      return self.get_new_job_posting_visit_logging_data(tem_params, phone)
     when KakaoTemplate::NEW_JOB_POSTING_FACILITY
-      return nil
+      return self.get_new_job_posting_facility_logging_data(tem_params, phone)
     when KakaoTemplate::PERSONALIZED
       return nil
     when KakaoTemplate::EXTRA_BENEFIT
@@ -68,6 +69,40 @@ module KakaoNotificationLoggingHelper
     }
   end
 
+  def self.get_new_job_posting_visit_logging_data(template_params, phone)
+    target_public_id = User.find_by(phone_number: phone).public_id
+    job_posting_public_id = template_params.dig(:job_posting_public_id)
+
+    return {
+      "target_public_id" => target_public_id,
+      "event_name" => NOTIFICATION_EVENT_NAME,
+      "properties" => {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "template" => KakaoTemplate::NEW_JOB_POSTING_VISIT,
+        "job_posting_public_id" => job_posting_public_id,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
+
+  def self.get_new_job_posting_facility_logging_data(template_params, phone)
+    target_public_id = User.find_by(phone_number: phone).public_id
+    job_posting_public_id = template_params.dig(:job_posting_public_id)
+
+    return {
+      "target_public_id" => target_public_id,
+      "event_name" => NOTIFICATION_EVENT_NAME,
+      "properties" => {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "template" => KakaoTemplate::NEW_JOB_POSTING_FACILITY,
+        "job_posting_public_id" => job_posting_public_id,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
+
   def self.send_log(response, template_id, template_params, phone)
     logging_data = get_logging_data(template_id, template_params, phone)
     return if logging_data.nil?
@@ -87,4 +122,6 @@ module KakaoNotificationLoggingHelper
       return
     end
   end
+  
+
 end
