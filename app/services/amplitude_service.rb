@@ -19,9 +19,6 @@ class AmplitudeService
       }
     }.to_json
 
-    p 'cc'
-    p body
-    p 'dd'
     response = HTTParty.post(
       @end_point,
       body: body,
