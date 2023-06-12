@@ -124,6 +124,8 @@ class NewJobNotificationService
     )
 
     KakaoNotificationLoggingHelper.send_log(response, template_id, template_params, user.phone_number)
+
+    return response
   end
 
   def build_shorten_url(origin_url)
