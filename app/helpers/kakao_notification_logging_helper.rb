@@ -42,9 +42,9 @@ module KakaoNotificationLoggingHelper
 
     case template_id
       when KakaoTemplate::NEW_JOB_POSTING_VISIT
-        return self.get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
+        return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
       when KakaoTemplate::NEW_JOB_POSTING_FACILITY
-        return self.get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
+        return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
       when KakaoTemplate::JOB_ALARM_ACTIVELY
         return get_news_paper_logging_data(template_id, target_public_id)
       when KakaoTemplate::JOB_ALARM_OFF
