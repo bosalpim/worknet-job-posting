@@ -26,6 +26,7 @@ class CreateNewsPaperActivelyCommonMessageService < CreateScheduledMessageServic
       phone_number: data.dig(:phone_number),
       scheduled_date: data.dig(:scheduled_date)
     )
+
     KakaoNotificationService.call(
       template_id: message.template_id,
       message_type: "AI",
@@ -40,7 +41,7 @@ class CreateNewsPaperActivelyCommonMessageService < CreateScheduledMessageServic
 
   def create_message(user)
     phone_number = user.phone_number
-    jsonb = {}.to_json
+    jsonb = { lat: user.lat, lng: user.lng }.to_json
 
     return {
       phone_number: phone_number,
