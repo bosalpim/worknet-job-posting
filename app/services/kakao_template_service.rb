@@ -1,5 +1,7 @@
 class KakaoTemplateService
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
+  SETTING_ALARM_LINK = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign="
+  ALARM_POSITION_LINK = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign="
 
   attr_reader :template_id
 
@@ -38,13 +40,13 @@ class KakaoTemplateService
     when KakaoTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
       get_apply_user_call_reminder_data(tem_params)
     when KakaoTemplate::JOB_ALARM_ACTIVELY
-      get_job_alarm_actively
+      get_job_alarm_actively(tem_params)
     when KakaoTemplate::JOB_ALARM_COMMON
-      get_job_alarm_commonly
+      get_job_alarm_commonly(tem_params)
     when KakaoTemplate::JOB_ALARM_OFF
-      get_job_alarm_off
+      get_job_alarm_off(tem_params)
     when KakaoTemplate::JOB_ALARM_WORKING
-      get_job_alarm_working
+      get_job_alarm_working(tem_params)
     when KakaoTemplate::GAMIFICATION_MISSION_COMPLETE
       get_gamification_mission_complete
     else
@@ -511,10 +513,11 @@ class KakaoTemplateService
     }
   end
 
-  def get_job_alarm_actively
+  def get_job_alarm_actively(tem_params)
     today = NewsPaper::get_today
-    settingAlarmLink = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
-    link = "https://www.carepartner.kr/newspaper?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
+    settingAlarmLink = "#{SETTING_ALARM_LINK}#{template_id}"
+    alarmPositionLink = "#{ALARM_POSITION_LINK}#{template_id}"
+    link = "https://www.carepartner.kr/newspaper?lat=#{tem_params["lat"]}&lng=#{tem_params["lng"]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
     {
       title: "[케어파트너] 일자리 신문",
       message: "#{today} 일자리 신문이 도착했어요.\n\n오늘의 일자리부터 날씨, 명언까지!\n\n케어파트너 일자리 신문과 함께 하루를 시작해보세요.\n\n👇'신문 확인하기' 버튼 클릭👇",
@@ -530,15 +533,22 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
-        }
+        },
+        # {
+        #   name: "알림 지역 설정",
+        #   type: "WL",
+        #   url_mobile: alarmPositionLink,
+        #   url_pc: alarmPositionLink
+        # }
       ]
     }
   end
 
-  def get_job_alarm_commonly
+  def get_job_alarm_commonly(tem_params)
     today = NewsPaper::get_today
-    settingAlarmLink = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
-    link = "https://www.carepartner.kr/newspaper?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
+    settingAlarmLink = "#{SETTING_ALARM_LINK}#{template_id}"
+    alarmPositionLink = "#{ALARM_POSITION_LINK}#{template_id}"
+    link = "https://www.carepartner.kr/newspaper?lat=#{tem_params["lat"]}&lng=#{tem_params["lng"]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
     {
       title: "[케어파트너] 일자리 신문",
       message: "#{today} 일자리 신문이 도착했어요.\n\n최근 일자리부터 날씨, 명언까지!\n\n케어파트너 일자리 신문과 함께 하루를 시작해보세요.\n\n👇'신문 확인하기' 버튼 클릭👇",
@@ -554,14 +564,21 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
-        }
+        },
+        # {
+        #   name: "알림 지역 설정",
+        #   type: "WL",
+        #   url_mobile: alarmPositionLink,
+        #   url_pc: alarmPositionLink
+        # }
       ]
     }
   end
 
-  def get_job_alarm_off
-    settingAlarmLink = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
-    link = "https://www.carepartner.kr/newspaper?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
+  def get_job_alarm_off(tem_params)
+    settingAlarmLink = "#{SETTING_ALARM_LINK}#{template_id}"
+    alarmPositionLink = "#{ALARM_POSITION_LINK}#{template_id}"
+    link = "https://www.carepartner.kr/newspaper?lat=#{tem_params[:lat]}&lng=#{tem_params[:lng]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
     {
       title: "[케어파트너] 일자리 신문",
       message: "현재 일자리를 찾고 있지 않으시더라도, 좋은 공고가 있어 선생님께 소개드려요 ^^\n\n가벼운 마음으로 케어파트너 최근 일자리 살펴보세요 ~!\n\n👇'일자리 둘러보기' 버튼 클릭👇",
@@ -577,13 +594,20 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
+        },
+        {
+          name: "알림 지역 설정",
+          type: "WL",
+          url_mobile: alarmPositionLink,
+          url_pc: alarmPositionLink
         }
       ]
     }
   end
-  def get_job_alarm_working
-    settingAlarmLink = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
-    link = "https://www.carepartner.kr/newspaper?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
+  def get_job_alarm_working(tem_params)
+    settingAlarmLink = "#{SETTING_ALARM_LINK}#{template_id}"
+    alarmPositionLink = "#{ALARM_POSITION_LINK}#{template_id}"
+    link = "https://www.carepartner.kr/newspaper?lat=#{tem_params[:lat]}&lng=#{tem_params[:lng]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=#{template_id}"
     {
       title: "[케어파트너] 일자리 신문",
       message: "현재 일자리가 만족스럽지 않으신가요?\n추가 일자리를 구하고 싶으신가요?\n\n케어파트너에서 더 좋은 일자리들을 소개해드릴게요!\n\n👇'일자리 둘러보기' 버튼 클릭👇",
@@ -599,6 +623,12 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
+        },
+        {
+          name: "알림 지역 설정",
+          type: "WL",
+          url_mobile: alarmPositionLink,
+          url_pc: alarmPositionLink
         }
       ]
     }
