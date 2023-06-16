@@ -9,6 +9,10 @@ module KakaoNotificationLoggingHelper
     target_public_id = tem_params.dig(:target_public_id)
     target_public_id = tem_params.dig("target_public_id") if target_public_id.nil?
 
+    if target_public_id.nil?
+      return nil
+    end
+
     return {
       "target_public_id" => target_public_id,
       "event_name" => NOTIFICATION_EVENT_NAME,
