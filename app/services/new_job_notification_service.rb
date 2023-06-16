@@ -114,18 +114,15 @@ class NewJobNotificationService
       origin_url: origin_url,
       path: shorten_url.sub("https://carepartner.kr", ""),
       job_posting_public_id: job_posting.public_id,
-      job_posting_title: job_posting.title
+      job_posting_title: job_posting.title,
+      target_public_id: user.public_id
     }
 
-    response = KakaoNotificationService.call(
+    KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env == "production" ? user.phone_number : '01037863607',
+      phone: Jets.env == "production" ? user.phone_number : '01094659404',
       template_params: template_params
     )
-
-    KakaoNotificationLoggingHelper.send_log(response, template_id, template_params, user.phone_number)
-
-    return response
   end
 
   def build_shorten_url(origin_url)

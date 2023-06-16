@@ -49,6 +49,9 @@ class KakaoNotificationService < KakaoTemplateService
       timeout: 10
     ).parsed_response
     response = response.class == Array ? response.first : response
+    Thread.new do
+      KakaoNotificationLoggingHelper.send_log(response, template_id, template_params)
+    end
     Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}" if Jets.env != 'production'
     response
   end
