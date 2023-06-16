@@ -41,7 +41,7 @@ class CreateNewsPaperActivelyCommonMessageService < CreateScheduledMessageServic
 
   def create_message(user)
     phone_number = user.phone_number
-    jsonb = { lat: user.lat, lng: user.lng }.to_json
+    jsonb = { lat: user.lat, lng: user.lng, target_public_id: user.public_id }.to_json
 
     return {
       phone_number: phone_number,

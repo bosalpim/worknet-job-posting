@@ -80,7 +80,6 @@ class SendCreatedScheduledMessageService
               phone: Jets.env != 'production' ? '01094659404' : message.phone_number,
               template_params: template_params
             )
-
             batch_results.push( { status: 'success', response: response, message: message })
           rescue Net::ReadTimeout
             end_time = Time.now
@@ -94,13 +93,6 @@ class SendCreatedScheduledMessageService
 
       threads.each(&:join)
       results.concat(batch_results)
-      batch_results.each do |batch_result|
-        if batch_result.dig(:status) == 'success'
-          message = batch_result.dig(:message)
-          template_params = JSON.parse(message.content)
-          KakaoNotificationLoggingHelper.send_log(batch_result.dig(:response), message.template_id, template_params, message.phone_number)
-        end
-      end
     end
 
     return {
