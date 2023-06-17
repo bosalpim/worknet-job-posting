@@ -6,17 +6,10 @@ class AmplitudeService
     @api_key = Jets.env.production? ? ENV['AMPLITUDE_PRODUCTION'] : ENV['AMPLITUDE_STAGING']
   end
 
-  # target_public_id : 기관 또는 유저의 public_id
-  # event_name : 이벤트 이름
-  # event_properties : 이벤트 프로퍼티
-  def log(event_name, event_properties, target_public_id)
+  def log_array(array = [{user_id: nil, event_type: nil, event_properties: nil}])
     body = {
       "api_key" => @api_key,
-      "events" => {
-        "user_id" => target_public_id,
-        "event_type" => event_name,
-        "event_properties" => event_properties
-      }
+      "events" => array
     }.to_json
 
     response = HTTParty.post(

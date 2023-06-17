@@ -23,9 +23,9 @@ module KakaoNotificationLoggingHelper
     end
 
     return {
-      "target_public_id" => target_public_id,
-      "event_name" => NOTIFICATION_EVENT_NAME2,
-      "properties" => {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME2,
+      "event_properties" => {
         "template" => template_id,
         "template_params" => tem_params
       }
@@ -61,9 +61,9 @@ module KakaoNotificationLoggingHelper
     business_name = template_params.dig(:business_name)
 
     return {
-      "target_public_id" => target_public_id,
-      "event_name" => NOTIFICATION_EVENT_NAME,
-      "properties" => {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_USER,
         "template" => template_id,
@@ -77,9 +77,9 @@ module KakaoNotificationLoggingHelper
 
   def self.get_news_paper_logging_data(template_id, target_public_id)
     return {
-      "target_public_id" => target_public_id,
-      "event_name" => NOTIFICATION_EVENT_NAME,
-      "properties" => {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_USER,
         "template" => template_id,
@@ -96,20 +96,20 @@ module KakaoNotificationLoggingHelper
 
     response_code = response.dig("code")
     response_message = response.dig("message")
+
     if response_code == "success"
       if response_message == "K000"
-        logging_data["properties"]["type"] = NOTIFICATION_TYPE_KAKAO
-        logging_data2["properties"]["type"] = NOTIFICATION_TYPE_KAKAO
+        logging_data["event_properties"]["type"] = NOTIFICATION_TYPE_KAKAO
+        logging_data2["event_properties"]["type"] = NOTIFICATION_TYPE_KAKAO
       elsif response_message == "R000"
-        logging_data["properties"]["type"] = NOTIFICATION_TYPE_RESERVED
-        logging_data2["properties"]["type"] = NOTIFICATION_TYPE_RESERVED
+        logging_data["event_properties"]["type"] = NOTIFICATION_TYPE_RESERVED
+        logging_data2["event_properties"]["type"] = NOTIFICATION_TYPE_RESERVED
       else
-        logging_data["properties"]["type"] = NOTIFICATION_TYPE_TEXT_MESSAGE
-        logging_data2["properties"]["type"] = NOTIFICATION_TYPE_TEXT_MESSAGE
+        logging_data["event_properties"]["type"] = NOTIFICATION_TYPE_TEXT_MESSAGE
+        logging_data2["event_properties"]["type"] = NOTIFICATION_TYPE_TEXT_MESSAGE
       end
 
-      AmplitudeService.instance.log(logging_data["event_name"], logging_data["properties"], logging_data["target_public_id"])
-      AmplitudeService.instance.log(logging_data2["event_name"], logging_data2["properties"], logging_data2["target_public_id"])
+      AmplitudeService.instance.log_array([logging_data, logging_data2])
     else
       return
     end
