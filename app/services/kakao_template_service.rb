@@ -49,6 +49,8 @@ class KakaoTemplateService
       get_job_alarm_working(tem_params)
     when KakaoTemplate::GAMIFICATION_MISSION_COMPLETE
       get_gamification_mission_complete
+    when KakaoTemplate::CONTRACT_AGENCY_ALARM
+      get_contract_agency_alarm(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -642,6 +644,22 @@ class KakaoTemplateService
       buttons: [
         {
           name: "식물에 물주기",
+          type: "WL",
+          url_mobile: link,
+          url_pc: link,
+        }
+      ]
+    }
+  end
+
+  def get_contract_agency_alarm(tem_params)
+    link = "https://business.carepartner.kr/contracts/agency/#{tem_params[:business_id]}?temp=aaa&utm_source=message&utm_medium=arlimtalk&utm_campaign=contract_agency_alarm"
+    {
+      title: "[무료] 근로계약서 대신 작성해드려요",
+      message: "[무료] 근로계약서 대신 작성해드려요\n\n케어파트너에 게재한 공고 중 채용을 확정한 공고가 있나요?\n\n24시간 내에 기관과 요양보호사에게 각 1부씩 완성된 근로계약서를 보내드려요\n\n노무사에게 검토받은 근로계약서 혹은 직접 사용중인 근로계약서 중 선택할 수 있어요\n\n👇 아래 버튼을 눌러 근로계약서 대행 서비스를 신청해 보세요! 👇",
+      buttons: [
+        {
+          name: "근로계약서 대행 신청",
           type: "WL",
           url_mobile: link,
           url_pc: link,

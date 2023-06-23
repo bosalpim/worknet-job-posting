@@ -88,7 +88,7 @@ class KakaoNotificationService < KakaoTemplateService
       img_url:      img_url,
       reserveDt:    reserve_dt
     }
-    if template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY
+    if template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM
       data[:title] = title
     end
     return data

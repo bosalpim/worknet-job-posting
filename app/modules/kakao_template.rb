@@ -17,4 +17,5 @@ module KakaoTemplate
   JOB_ALARM_OFF = 'job_alarm(off)_2'.freeze # 구직의사 없음 요양보호사에게 매달 첫번째 월요일 오후 12시에 전달되는 신문
   JOB_ALARM_WORKING = 'job_alarm(working)_2'.freeze # 일하는 중인 요양보호사에게 매달 첫째주,셋째주 월요일 오후 12시에 전달되는 신문
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze # 식물키우기 미션달성 메세지 발송
+  CONTRACT_AGENCY_ALARM = 'Contract_agency_alarm'.freeze # 기관 근로 계약서 작성 대행 알림톡
 end
