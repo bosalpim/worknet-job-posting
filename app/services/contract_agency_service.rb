@@ -20,18 +20,22 @@ class ContractAgencyService
                      .distinct(:manager_phone_number)
                      .pluck(:business_id, :manager_phone_number)
 
+    send_data = data_array.map do |element|
+      { business_id: element[0], manager_phone_number: element[1] }
+    end
+
     # 서비스 콜
-    result = batch_send_message(data_array)
+    result = batch_send_message(send_data)
     Jets.logger.info result
     result
   end
 
-  def batch_send_message(data_array)
+  def batch_send_message(send_data)
     results = []
     time_out_messages = []
     time_out_total = 0
 
-    data_array.each_slice(10) do |batch|
+    send_data.each_slice(10) do |batch|
       threads = []
       batch_results = []
       batch.each do |data|
@@ -41,8 +45,8 @@ class ContractAgencyService
             response = KakaoNotificationService.call(
               template_id: KakaoTemplate::CONTRACT_AGENCY_ALARM,
               message_type: 'AT',
-              phone: Jets.env != 'production' ? '01094659404' : data[0],
-              template_params: { business_id: data[1] }
+              phone: Jets.env != 'production' ? '01094659404' : data.dig(:manager_phone_number),
+              template_params: { business_id: data.dig(:business_id) }
             )
             batch_results.push( { status: 'success', response: response, message: data })
           rescue Net::ReadTimeout
