@@ -89,6 +89,9 @@ class GetWorknetJobService
     address = job_info.dig("basicAddr")
     detail_address = job_info.dig("detailAddr")
 
+    employment_type_code = job_info.dig("empTpCd")
+    employment_type = employment_type_code == 10 || employment_type_code == 11 ? "정규직" : "계약직"
+
     full_address = address
 
     coords = NaverApi.coords_from_address(address)
@@ -123,6 +126,7 @@ class GetWorknetJobService
           work_start_time: work_start_time,
           work_end_time: work_end_time,
           address: full_address,
+          employment_type: employment_type,
           pay_text: pay_text,
           pay_type: get_pay_type(job_posting_info.dig("salTpCd")),
           working_hours_type: working_hours_type,
@@ -308,7 +312,8 @@ class GetWorknetJobService
         work_type: worknet_job_info.dig("jobs_code"),
         pay_type: worknet_job_info.dig("pay_type"),
         working_hours_type: worknet_job_info.dig("working_hours_type"),
-        region: worknet_job_info.dig("region")
+        region: worknet_job_info.dig("region"),
+        employment_type: worknet_job_info.dig("employment_type")
       },
     )
     search_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" &&  search_api_service.present?
