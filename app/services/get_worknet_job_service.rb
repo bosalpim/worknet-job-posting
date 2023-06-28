@@ -90,7 +90,7 @@ class GetWorknetJobService
     detail_address = job_info.dig("detailAddr")
 
     employment_type_code = job_info.dig("empTpCd")
-    employment_type = employment_type_code == 10 || employment_type_code == 11 ? "정규직" : "계약직"
+    employment_type = employment_type_code == '10' || employment_type_code == '11' ? "정규직" : "계약직"
 
     career_type = job_info.dig("career")
     applying_options = if career_type == "경력"
