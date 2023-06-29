@@ -94,7 +94,7 @@ class GetWorknetJobService
 
     career_type = job_info.dig("career")
     applying_options = if career_type == "경력"
-                         ["veterant"]
+                         ["veterant_required"]
                        else
                          career_type == "신입" ? ["newbie"] : []
                        end
