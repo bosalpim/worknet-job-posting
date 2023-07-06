@@ -120,7 +120,7 @@ class NewJobNotificationService
 
     KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env == "production" ? user.phone_number : '01094659404',
+      phone: Jets.env == "production" ? user.phone_number : '01037863607',
       template_params: template_params
     )
   end
