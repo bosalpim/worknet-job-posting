@@ -1,4 +1,4 @@
-class ContractAgencyService
+class ContractAgencyServiceEdit2
 #   4일전, 3일전 내역
   def initialize(days)
     @days = days
@@ -24,6 +24,7 @@ class ContractAgencyService
       { business_id: element[0], manager_phone_number: element[1] }
     end
 
+
     # 서비스 콜
     result = batch_send_message(send_data)
     Jets.logger.info result
@@ -43,7 +44,7 @@ class ContractAgencyService
           start_time = Time.now
           begin
             response = KakaoNotificationService.call(
-              template_id: KakaoTemplate::CONTRACT_AGENCY_ALARM,
+              template_id: KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2,
               message_type: 'AT',
               phone: Jets.env != 'production' ? '01037863607' : data.dig(:manager_phone_number),
               template_params: { business_id: data.dig(:business_id) }
