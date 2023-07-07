@@ -51,6 +51,8 @@ class KakaoTemplateService
       get_gamification_mission_complete
     when KakaoTemplate::CONTRACT_AGENCY_ALARM
       get_contract_agency_alarm(tem_params)
+    when KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2
+      get_contract_agency_alarm_edit2(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -660,6 +662,28 @@ class KakaoTemplateService
       buttons: [
         {
           name: "근로계약서 대행 신청",
+          type: "WL",
+          url_mobile: link,
+          url_pc: link,
+        }
+      ]
+    }
+  end
+
+  def get_contract_agency_alarm_edit2(tem_params)
+    link = "https://business.carepartner.kr/contracts/agency/#{tem_params[:business_id]}?temp=aaa&utm_source=message&utm_medium=arlimtalk&utm_campaign=contract_agency_alarm(edit2)"
+    {
+      title: "비대면으로 근로계약서 서명받으세요",
+      message: "[비대면으로 근로계약서 서명받으세요]
+
+근로계약서에 서명 받아야 하는데, 요양보호사와 다시 만나기 번거로우신가요?
+케어파트너가 대신 받아드릴게요.
+직접 만나지 않아도 24시간이면 요양보호사 서명까지 완료된 근로계약서를 받아볼 수 있어요!
+
+👇 아래 버튼을 눌러 근로계약서 서명 받기👇",
+      buttons: [
+        {
+          name: "근로계약서 서명 신청",
           type: "WL",
           url_mobile: link,
           url_pc: link,
