@@ -538,12 +538,12 @@ class KakaoTemplateService
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
         },
-        {
-          name: "알림 지역 설정",
-          type: "WL",
-          url_mobile: alarmPositionLink,
-          url_pc: alarmPositionLink
-        }
+        # {
+        #   name: "알림 지역 설정",
+        #   type: "WL",
+        #   url_mobile: alarmPositionLink,
+        #   url_pc: alarmPositionLink
+        # }
       ]
     }
   end
@@ -569,12 +569,12 @@ class KakaoTemplateService
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
         },
-        {
-          name: "알림 지역 설정",
-          type: "WL",
-          url_mobile: alarmPositionLink,
-          url_pc: alarmPositionLink
-        }
+        # {
+        #   name: "알림 지역 설정",
+        #   type: "WL",
+        #   url_mobile: alarmPositionLink,
+        #   url_pc: alarmPositionLink
+        # }
       ]
     }
   end
