@@ -22,7 +22,9 @@ class SendCreatedScheduledMessageService
 
     messages = ScheduledMessage.where(scheduled_date: message_created_time.days.ago..).where(template_id: template_id).order(:scheduled_date).offset(sent_count).limit(message_count)
     messages.update_all(is_send: true)
-    messages = messages.filter do | message | message.sendable end
+    messages = messages.filter do |message|
+      message.sendable
+    end
 
     Jets.logger.info "Read Message Count > #{messages.length}"
 
@@ -80,13 +82,13 @@ class SendCreatedScheduledMessageService
               phone: Jets.env != 'production' ? '01037863607' : message.phone_number,
               template_params: template_params
             )
-            batch_results.push( { status: 'success', response: response, message: message })
+            batch_results.push({ status: 'success', response: response, message: message })
           rescue Net::ReadTimeout
             end_time = Time.now
             time_out_total += (start_time - end_time)
             time_out_messages.push(message)
           rescue HTTParty::Error => e
-            batch_results.push({ status: 'fail' , response: "#{e.message}"})
+            batch_results.push({ status: 'fail', response: "#{e.message}" })
           end
         end
       end
