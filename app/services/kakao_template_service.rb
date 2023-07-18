@@ -53,6 +53,8 @@ class KakaoTemplateService
       get_contract_agency_alarm(tem_params)
     when KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2
       get_contract_agency_alarm_edit2(tem_params)
+    when KakaoTemplate::CAREER_CERTIFICATION
+      get_career_certification_alarm(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -538,12 +540,12 @@ class KakaoTemplateService
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
         },
-        # {
-        #   name: "알림 지역 설정",
-        #   type: "WL",
-        #   url_mobile: alarmPositionLink,
-        #   url_pc: alarmPositionLink
-        # }
+      # {
+      #   name: "알림 지역 설정",
+      #   type: "WL",
+      #   url_mobile: alarmPositionLink,
+      #   url_pc: alarmPositionLink
+      # }
       ]
     }
   end
@@ -569,12 +571,12 @@ class KakaoTemplateService
           url_mobile: settingAlarmLink,
           url_pc: settingAlarmLink
         },
-        # {
-        #   name: "알림 지역 설정",
-        #   type: "WL",
-        #   url_mobile: alarmPositionLink,
-        #   url_pc: alarmPositionLink
-        # }
+      # {
+      #   name: "알림 지역 설정",
+      #   type: "WL",
+      #   url_mobile: alarmPositionLink,
+      #   url_pc: alarmPositionLink
+      # }
       ]
     }
   end
@@ -608,6 +610,7 @@ class KakaoTemplateService
       ]
     }
   end
+
   def get_job_alarm_working(tem_params)
     settingAlarmLink = "#{SETTING_ALARM_LINK}#{template_id}"
     alarmPositionLink = "#{ALARM_POSITION_LINK}#{template_id}"
@@ -692,11 +695,38 @@ class KakaoTemplateService
     }
   end
 
+  def get_career_certification_alarm(tem_params)
+    {
+      title: "[케어파트너] 경력인증 안내",
+      message: "전화하셨던 공고의 일자리를 구하셨나요?
+
+≫공고
+#{tem_params[:job_posting_title]}
+
+≫기관
+#{tem_params[:center_name]}
+
+≫ 경력자 인증이 궁금해요
+케어파트너를 통한 취업 성공을 요양기관이 신뢰할 수 있도록 인증해 주는 제도예요
+
+≫ 경력자 인증을 받으면 뭐가 좋나요?
+다른 일자리를 구할 때 요양기관이 내 이력서를 보고 연락할 확률이 높아져요",
+      buttons: [
+        {
+          name: '경력자 인증받기',
+          type: 'WL',
+          url_mobile: tem_params[:link],
+          url_pc: tem_params[:link],
+        }
+      ]
+    }
+  end
+
   def good_number(phone_number)
     if phone_number&.length == 12
       phone_number&.scan(/.{4}/)&.join('-')
     else
-      phone_number&.slice(0, 3) + "-" +  phone_number&.slice(3..)&.scan(/.{4}/)&.join('-') rescue nil
+      phone_number&.slice(0, 3) + "-" + phone_number&.slice(3..)&.scan(/.{4}/)&.join('-') rescue nil
     end
   end
 

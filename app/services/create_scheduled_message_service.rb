@@ -2,6 +2,7 @@ class CreateScheduledMessageService
   attr_reader :template_id, :send_type
 
   BATCH_SIZE = 1_500.freeze
+
   def initialize(template_id, send_type)
     @template_id = template_id
     @send_type = send_type
