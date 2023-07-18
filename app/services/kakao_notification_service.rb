@@ -77,16 +77,16 @@ class KakaoNotificationService < KakaoTemplateService
     message, img_url, title = template_data.values_at(:message, :img_url, :title)
     data = {
       message_type: message_type,
-      phn:          phone.to_s.gsub(/[^0-9]/, ""),
-      profile:      profile,
-      tmplId:       template_id,
-      msg:          message,
-      smsKind:      message&.bytesize&.to_i > 90 ? "L" : "S",
-      msgSms:       message,
-      smsSender:    sender_number,
-      smsLmsTit:    title,
-      img_url:      img_url,
-      reserveDt:    reserve_dt
+      phn: phone.to_s.gsub(/[^0-9]/, ""),
+      profile: profile,
+      tmplId: template_id,
+      msg: message,
+      smsKind: message&.bytesize&.to_i > 90 ? "L" : "S",
+      msgSms: message,
+      smsSender: sender_number,
+      smsLmsTit: title,
+      img_url: img_url,
+      reserveDt: reserve_dt
     }
     if template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2
       data[:title] = title
