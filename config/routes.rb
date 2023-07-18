@@ -20,6 +20,11 @@ Jets.application.routes.draw do
       post :business_call_apply_user_failure_alert
     end
   end
+  resources :career_certifications, only: [] do
+    member do
+      post :notify
+    end
+  end
   resources :applies, only: [] do
     member do
       post :new_notification
