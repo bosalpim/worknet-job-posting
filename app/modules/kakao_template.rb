@@ -20,4 +20,5 @@ module KakaoTemplate
   CONTRACT_AGENCY_ALARM = 'Contract_agency_alarm'.freeze # 기관 근로 계약서 작성 대행 알림톡
   CONTRACT_AGENCY_ALARM_EDIT2 = 'Contract_agency_alarm (edit2)'.freeze # 기관 근로 계약서 작성 대행 알림톡
   CAREER_CERTIFICATION = 'career_certification' # 경력 인증 알림톡
+  CLOSE_JOB_POSTING_NOTIFICATION = 'close_job_posting_notification'.freeze # 공고 종료 알림톡
 end
