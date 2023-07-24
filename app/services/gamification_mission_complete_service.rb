@@ -8,7 +8,7 @@ class GamificationMissionCompleteService
 
   def send_mission_complete_message
     template_id = KakaoTemplate::GAMIFICATION_MISSION_COMPLETE
-    response = KakaoNotificationService.call(
+    response = BizmsgService.call(
       template_id: template_id,
       phone: Jets.env == "production" ? user.phone_number : '01025179362',
       message_type: "AI",
