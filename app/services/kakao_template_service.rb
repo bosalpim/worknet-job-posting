@@ -55,6 +55,8 @@ class KakaoTemplateService
       get_contract_agency_alarm_edit2(tem_params)
     when KakaoTemplate::CAREER_CERTIFICATION
       get_career_certification_alarm(tem_params)
+    when KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION
+      get_close_job_posting_notification(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -722,6 +724,29 @@ class KakaoTemplateService
     }
   end
 
+  def get_close_job_posting_notification(tem_params)
+    p tem_params
+    {
+      title: "[케어파트너] 채용종료 안내",
+      message: "'#{tem_params[:title]}' 공고의 채용이 종료되었나요?
+
+공고를 ‘채용종료' 상태로 변경하면 요양보호사에게 즉시 전화할 수 있는 ≪무료 번호 열람권≫을 드려요.
+
+(안내) 공고는 자동으로 종료되지 않아요.
+채용을 종료하지 않으면 요양보호사들이 계속해서 연락할 수 있으니 꼭 채용을 종료해주세요!
+
+👇 공고 채용 종료하기 클릭 👇",
+      buttons: [
+        {
+          name: '공고 채용 종료하기',
+          type: 'WL',
+          url_mobile: tem_params[:link],
+          url_pc: tem_params[:link],
+        }
+      ]
+    }
+  end
+
   def good_number(phone_number)
     if phone_number&.length == 12
       phone_number&.scan(/.{4}/)&.join('-')
@@ -733,4 +758,5 @@ class KakaoTemplateService
   def convert_safe_text(text, empty_string = "정보없음")
     text.presence&.truncate(MAX_ITEM_LIST_TEXT_LENGTH) || empty_string
   end
+
 end
