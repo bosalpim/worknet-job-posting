@@ -52,7 +52,7 @@ class JobPosting::NotifyExpirationDateService
           message = {
             message_type: 'AI',
             template_id: KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION,
-            phone: Jets.env.production? ? (ENV['TEST_PHONE_NUMBER'] or '01037863607') : client.phone_number,
+            phone: Jets.env.production? ? client.phone_number : (ENV['TEST_PHONE_NUMBER'] or '01037863607'),
             template_params: {
               target_public_id: client.public_id,
               job_posting_public_id: job_posting.public_id,
