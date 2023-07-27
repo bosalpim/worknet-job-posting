@@ -15,9 +15,6 @@ class JobPosting::NotifyExpirationDateService
     second_notifiable_range = (@date - 11.days)...(@date - 10.days)
     third_notifiable_range = (@date - 16.days)...(@date - 15.days)
 
-    p first_notifiable_range
-    p second_notifiable_range
-    p third_notifiable_range
     active_job_postings = JobPosting
                             .includes(:business)
                             .active
@@ -34,7 +31,6 @@ class JobPosting::NotifyExpirationDateService
     threads = []
     results = []
 
-    p job_postings.length
     job_postings.find_each do |job_posting|
 
       threads << Thread.new do
@@ -58,6 +54,8 @@ class JobPosting::NotifyExpirationDateService
             template_id: KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION,
             phone: Jets.env.production? ? (ENV['TEST_PHONE_NUMBER'] or '01037863607') : client.phone_number,
             template_params: {
+              target_public_id: client.public_id,
+              job_posting_public_id: job_posting.public_id,
               title: job_posting.title,
               link: link
             }

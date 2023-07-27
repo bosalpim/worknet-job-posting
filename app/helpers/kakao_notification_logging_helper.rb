@@ -41,20 +41,41 @@ module KakaoNotificationLoggingHelper
     end
 
     case template_id
-      when KakaoTemplate::NEW_JOB_POSTING_VISIT
-        return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
-      when KakaoTemplate::NEW_JOB_POSTING_FACILITY
-        return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
-      when KakaoTemplate::JOB_ALARM_ACTIVELY
-        return get_news_paper_logging_data(template_id, target_public_id)
-      when KakaoTemplate::JOB_ALARM_OFF
-        return get_news_paper_logging_data(template_id, target_public_id)
-      when KakaoTemplate::JOB_ALARM_WORKING
-        return get_news_paper_logging_data(template_id, target_public_id)
+    when KakaoTemplate::NEW_JOB_POSTING_VISIT
+      return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
+    when KakaoTemplate::NEW_JOB_POSTING_FACILITY
+      return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
+    when KakaoTemplate::JOB_ALARM_ACTIVELY
+      return get_news_paper_logging_data(template_id, target_public_id)
+    when KakaoTemplate::JOB_ALARM_OFF
+      return get_news_paper_logging_data(template_id, target_public_id)
+    when KakaoTemplate::JOB_ALARM_WORKING
+      return get_news_paper_logging_data(template_id, target_public_id)
+    when KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION
+      return get_close_job_posting_notification_logging_data(tem_params, template_id, target_public_id)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
   end
+
+  def self.get_close_job_posting_notification_logging_data(template_params, template_id, target_public_id)
+    job_posting_public_id = template_params.dig(:job_posting_public_id)
+    title = template_params.dig(:title)
+
+    return {
+      "client_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_BUSINESS,
+        "template" => template_id,
+        "job_posting_public_id" => job_posting_public_id,
+        "job_posting_title" => title,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
+
   def self.get_new_job_posting_logging_data(template_params, template_id, target_public_id)
     job_posting_public_id = template_params.dig(:job_posting_public_id)
     job_posting_title = template_params.dig(:job_posting_title)
@@ -87,6 +108,7 @@ module KakaoNotificationLoggingHelper
       }
     }
   end
+
   def self.send_log(response, template_id, template_params)
     logging_data = get_logging_data(template_id, template_params)
     logging_data2 = get_logging_data2(template_id, template_params)

@@ -725,7 +725,6 @@ class KakaoTemplateService
   end
 
   def get_close_job_posting_notification(tem_params)
-    p tem_params
     {
       title: "[케어파트너] 채용종료 안내",
       message: "'#{tem_params[:title]}' 공고의 채용이 종료되었나요?
