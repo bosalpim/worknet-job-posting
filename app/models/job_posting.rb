@@ -68,8 +68,9 @@ class JobPosting < ApplicationRecord
   ]
 
   APPLYING_METHODS = %w[phone email visiting]
+  DEFAULT_EXPIRATION_DATE = 3.weeks
 
-  enum applying_due_date: { one_week: 'one_week', two_weeks: 'two_weeks' }
+  enum applying_due_date: { one_week: 'one_week', two_weeks: 'two_weeks', three_weeks: 'three_weeks' }
 
   belongs_to :business
   belongs_to :scraped_worknet_job_posting, required: false
@@ -82,7 +83,7 @@ class JobPosting < ApplicationRecord
   scope :resident_work, -> { where(work_type: 'resident') }
   scope :facility_work,
         -> { where(work_type: %w[day_care sanatorium hospital facility]) }
-  scope :active, -> { init.where(published_at: 2.weeks.ago..) }
+  scope :active, -> { init.where(published_at: DEFAULT_EXPIRATION_DATE.ago..) }
 
   before_create :set_work_type
   before_create :set_default_values
