@@ -84,6 +84,7 @@ class JobPosting < ApplicationRecord
   scope :facility_work,
         -> { where(work_type: %w[day_care sanatorium hospital facility]) }
   scope :active, -> { init.where(published_at: DEFAULT_EXPIRATION_DATE.ago..) }
+  scope :not_closed, -> { where('closing_at > ?', DateTime.now).or(where(closing_at: nil)) }
 
   before_create :set_work_type
   before_create :set_default_values
