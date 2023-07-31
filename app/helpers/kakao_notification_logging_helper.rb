@@ -63,7 +63,7 @@ module KakaoNotificationLoggingHelper
     title = template_params.dig(:title)
 
     return {
-      "client_id" => target_public_id,
+      "user_id" => target_public_id,
       "event_type" => NOTIFICATION_EVENT_NAME,
       "event_properties" => {
         "sender_type" => SENDER_TYPE_CAREPARTNER,
