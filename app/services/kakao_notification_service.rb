@@ -28,6 +28,7 @@ class KakaoNotificationService < KakaoTemplateService
   def call
     request_params = get_final_request_params(template_params)
     begin
+      p request_params
       return send_request(request_params)
     rescue => e
       puts e.message
@@ -88,7 +89,7 @@ class KakaoNotificationService < KakaoTemplateService
       img_url: img_url,
       reserveDt: reserve_dt
     }
-    if template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2
+    if template_id == KakaoTemplate::PROPOSAL_RESPONSE_EDIT || KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2
       data[:title] = title
     end
     return data

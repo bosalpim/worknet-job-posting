@@ -27,6 +27,8 @@ class KakaoTemplateService
       get_proposal_accepted_data(tem_params)
     when KakaoTemplate::PROPOSAL_REJECTED
       get_proposal_rejected_data(tem_params)
+    when KakaoTemplate::PROPOSAL_RESPONSE_EDIT
+      get_proposal_response_edit_data(tem_params)
     when KakaoTemplate::SATISFACTION_SURVEY
       get_satisfaction_survey_data(tem_params)
     when KakaoTemplate::USER_SATISFACTION_SURVEY
@@ -105,6 +107,32 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: "https://carepartner.kr/jobs/#{tem_params[:job_posting_public_id]}?proposal=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=job_proposal_response"
         },
+      ]
+    }
+  end
+
+  def get_proposal_response_edit_data(tem_params)
+    return {
+      title: '가까운 거리의 일자리 제안 도착!',
+      message: "[케어파트너] 가까운 거리의 일자리 제안 도착!
+
+#{tem_params[:business_name]}에서 #{tem_params[:user_name]}님에게 일자리 제안을 보냈습니다.
+
+≫ 거리: #{tem_params[:distance]}
+≫ 근무지: #{tem_params[:address]}
+≫ 근무유형: #{tem_params[:work_type_ko]}
+≫ 임금조건: #{tem_params[:pay_text]}
+
+(7일 내 응답하지 않으면 자동 거절됩니다)
+
+센터번호: #{tem_params[:business_vn]}",
+      buttons: [
+        {
+          name: "일자리 제안 확인하기",
+          type: "WL",
+          url_mobile: "https://carepartner.kr/jobs/#{tem_params[:job_posting_public_id]}?proposal=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=job_proposal_response(edit)",
+          url_pc: "https://carepartner.kr/jobs/#{tem_params[:job_posting_public_id]}?proposal=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=job_proposal_response(edit)"
+        }
       ]
     }
   end
