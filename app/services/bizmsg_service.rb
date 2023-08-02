@@ -1,4 +1,4 @@
-class KakaoNotificationService < KakaoTemplateService
+class BizmsgService < KakaoTemplateService
   DEFAULT_RESERVE_AT = "00000000000000".freeze # send right now
 
   attr_reader :template_id, :base_url, :user_id, :profile, :sender_number, :phone, :message_type, :reserve_dt, :template_params
@@ -15,9 +15,10 @@ class KakaoNotificationService < KakaoTemplateService
 
   def initialize(template_id:, phone:, message_type:, reserve_dt:, template_params:)
     super(template_id)
-    @base_url = "https://alimtalk-api.bizmsg.kr/v2/sender/send"
+    profile = ENV['KAKAO_BIZMSG_PROFILE']
+    @base_url = "https://alimtalk-api.sweettracker.net/v2/#{profile}/sendMessage"
     @user_id = "bosalpim21"
-    @profile = ENV['KAKAO_BIZMSG_PROFILE']
+    @profile = profile
     @sender_number = "15885877"
     @phone = phone
     @message_type = message_type
@@ -27,6 +28,7 @@ class KakaoNotificationService < KakaoTemplateService
 
   def call
     request_params = get_final_request_params(template_params)
+
     begin
       return send_request(request_params)
     rescue => e
@@ -48,6 +50,7 @@ class KakaoNotificationService < KakaoTemplateService
       headers: headers,
       timeout: 10
     ).parsed_response
+
     response = response.class == Array ? response.first : response
     KakaoNotificationLoggingHelper.send_log(response, template_id, template_params) rescue nil
     Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}" if Jets.env != 'production'
@@ -73,20 +76,25 @@ class KakaoNotificationService < KakaoTemplateService
     request_params
   end
 
+  def current_time
+    Time.now.strftime("%Y%m%d%H%M%S%L") + Time.now.strftime("%N")[0,3]
+  end
+
   def get_default_request_params(template_id, template_data)
     message, img_url, title = template_data.values_at(:message, :img_url, :title)
     data = {
+      msgid: "WEB#{current_time}",
       message_type: message_type,
-      phn: phone.to_s.gsub(/[^0-9]/, ""),
-      profile: profile,
-      tmplId: template_id,
-      msg: message,
-      smsKind: message&.bytesize&.to_i > 90 ? "L" : "S",
-      msgSms: message,
-      smsSender: sender_number,
-      smsLmsTit: title,
-      img_url: img_url,
-      reserveDt: reserve_dt
+      profile_key: profile,
+      template_code: template_id,
+      receiver_num: phone.to_s.gsub(/[^0-9]/, ""),
+      message: message,
+      reserved_time: reserve_dt,
+      sms_message: message,
+      sms_title: title,
+      sms_kind: message&.bytesize&.to_i > 90 ? "L" : "S",
+      sender_num: sender_number,
+      image_url: img_url,
     }
     if template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2
       data[:title] = title
