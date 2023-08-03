@@ -28,7 +28,6 @@ class KakaoNotificationService < KakaoTemplateService
   def call
     request_params = get_final_request_params(template_params)
     begin
-      p request_params
       return send_request(request_params)
     rescue => e
       puts e.message
