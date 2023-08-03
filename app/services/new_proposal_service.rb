@@ -14,8 +14,9 @@ class NewProposalService
     job_posting = JobPosting.find_by(public_id: proposal.job_posting_id)
 
     KakaoNotificationService.call(
-      template_id: KakaoTemplate::PROPOSAL,
-      phone: Jets.env == "production" ? user.phone_number : '01094659404',
+      template_id: KakaoTemplate::PROPOSAL_RESPONSE_EDIT,
+      message_type: 'AT',
+      phone: Jets.env == "production" ? user.phone_number : ENV['TEST_PHONE_NUMBER'] || '01094659404',
       template_params: {
         user_name: user.name,
         business_name: business.name,
@@ -25,7 +26,7 @@ class NewProposalService
         pay_text: get_pay_text(job_posting),
         business_vn: job_posting.vn,
         job_posting_public_id: job_posting.public_id
-      }
+      },
     )
   end
 
