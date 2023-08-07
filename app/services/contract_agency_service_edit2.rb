@@ -14,12 +14,10 @@ class ContractAgencyServiceEdit2
                         .distinct(:job_posting_id)
                         .pluck(:job_posting_id)
 
-
     data_array = JobPosting.where(id: job_posting_ids)
                      .where.not(manager_phone_number: nil)
                      .distinct(:manager_phone_number)
                      .pluck(:business_id, :manager_phone_number)
-
     send_data = data_array.map do |element|
       { business_id: element[0], manager_phone_number: element[1] }
     end
@@ -28,6 +26,7 @@ class ContractAgencyServiceEdit2
     # 서비스 콜
     result = batch_send_message(send_data)
     Jets.logger.info result
+    save_kakao_notification(result, KakaoNotificationResult::CONTRACT_AGENCY_ALARM , KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2)
     result
   end
 
@@ -43,10 +42,10 @@ class ContractAgencyServiceEdit2
         threads << Thread.new do
           start_time = Time.now
           begin
-            response = KakaoNotificationService.call(
+            response = BizmsgService.call(
               template_id: KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2,
               message_type: 'AT',
-              phone: Jets.env != 'production' ? '01037863607' : data.dig(:manager_phone_number),
+              phone: Jets.env != 'production' ? '01049195808' : data.dig(:manager_phone_number),
               template_params: { business_id: data.dig(:business_id) }
             )
             batch_results.push( { status: 'success', response: response, message: data })
@@ -69,5 +68,22 @@ class ContractAgencyServiceEdit2
       time_out_messages: time_out_messages,
       time_out_average: time_out_messages.length > 0 ? time_out_total / time_out_messages.length : 0
     }
+  end
+
+  def save_kakao_notification(result, send_type, template_id)
+    success_count = result[:results].count { |r| r[:status] == "success" && r[:response]["result"] == "Y" && r[:response]["code"] == "K000" }
+    tms_success_count = result[:results].count { |r| r[:status] == "success" && r[:response]["result"] == "Y" && r[:response]["code"] != "K000" }
+    fail_reason = result[:results].find { |r| r[:response]["result"] != "Y" }&.dig(:response, "error") || "Not Found"
+    fail_count = result[:results].count { |r| r[:response]["result"] != "Y" }
+
+    KakaoNotificationResult.create!(
+      send_type: send_type,
+      send_id: nil,
+      template_id: template_id,
+      success_count: success_count,
+      tms_success_count: tms_success_count,
+      fail_count: fail_count,
+      fail_reasons: fail_reason
+    )
   end
 end
