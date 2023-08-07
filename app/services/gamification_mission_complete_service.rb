@@ -10,7 +10,7 @@ class GamificationMissionCompleteService
     template_id = KakaoTemplate::GAMIFICATION_MISSION_COMPLETE
     response = BizmsgService.call(
       template_id: template_id,
-      phone: Jets.env == "production" ? user.phone_number : '01025179362',
+      phone: Jets.env == "production" ? user.phone_number : '01049195808',
       message_type: "AI",
       template_params: {}
     )
@@ -28,15 +28,15 @@ class GamificationMissionCompleteService
     fail_count = 0
     fail_reason = ""
 
-    if response.dig("code") == "success"
-      if response.dig("message") == "K000"
+    if response.dig("result") == "Y"
+      if response.dig("code") == "K000"
         success_count += 1
       else
         tms_success_count += 1
       end
     else
       fail_count += 1
-      fail_reason = response.dig("originMessage")
+      fail_reason = response.dig("error")
     end
 
     KakaoNotificationResult.create!(
