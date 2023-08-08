@@ -59,6 +59,8 @@ class KakaoTemplateService
       get_career_certification_alarm(tem_params)
     when KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION
       get_close_job_posting_notification(tem_params)
+    when KakaoTemplate::CANDIDATE_RECOMMENDATION
+      get_candidate_recommendation(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -766,6 +768,30 @@ class KakaoTemplateService
       buttons: [
         {
           name: '공고 채용 종료하기',
+          type: 'WL',
+          url_mobile: tem_params[:link],
+          url_pc: tem_params[:link],
+        }
+      ]
+    }
+  end
+
+  def get_candidate_recommendation(tem_params)
+    {
+      title: '근무 가능 요일이 딱 맞는 요양보호사를 찾았어요!',
+      message: "근무 가능 요일이 딱 맞는 요양보호사를 찾았어요!
+
+공고 : #{tem_params[:job_posting_title]}
+
+■ 기본 정보 : #{tem_params[:username]}/#{tem_params[:gender]}/#{tem_params[:age]}세
+■ 구직 상태 : #{tem_params[:job_search_status]}
+■ 이력서 제출 : #{tem_params[:resume_published_at]}
+■ 경력 기간 : #{tem_params[:career]}
+
+아래 버튼을 눌러 자세한 정보를 확인하고, 전화하거나 일자리를 제안해 보세요!",
+      buttons: [
+        {
+          name: '맞춤 요양보호사 확인',
           type: 'WL',
           url_mobile: tem_params[:link],
           url_pc: tem_params[:link],
