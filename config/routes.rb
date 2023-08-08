@@ -12,6 +12,9 @@ Jets.application.routes.draw do
       post :new_satisfaction_survey
       post :new_user_satisfaction_survey
     end
+    collection do
+      post :notify_matched_user
+    end
   end
   resources :bizcall_callbacks, only: [] do
     collection do

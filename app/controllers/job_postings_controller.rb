@@ -33,4 +33,15 @@ class JobPostingsController < ApplicationController
     NewUserSatisfactionSurveyJob.perform_later(:dig, event) unless Jets.env.development?
     render json: Jets.env.production? ? { success: true } : rsp, status: :ok
   end
+
+  def notify_matched_user
+    event = {
+      messages: params["messages"] || []
+    }
+    rsp = nil
+    rsp = NotifyMatchedUserJob.perform_now(:process, event)
+
+    render json: Jets.env.production? ? { success: true } : rsp, status: :ok
+  end
+
 end
