@@ -53,6 +53,8 @@ module KakaoNotificationLoggingHelper
       return get_news_paper_logging_data(template_id, target_public_id)
     when KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION
       return get_close_job_posting_notification_logging_data(tem_params, template_id, target_public_id)
+    when KakaoTemplate::CANDIDATE_RECOMMENDATION
+      return get_candidate_recommendation_logging_data(template_id, target_public_id)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -109,6 +111,19 @@ module KakaoNotificationLoggingHelper
     }
   end
 
+  def self.get_candidate_recommendation_logging_data(template_id, target_public_id)
+    return {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_BUSINESS,
+        "template" => template_id,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
+
   def self.send_log(response, template_id, template_params)
     logging_data = get_logging_data(template_id, template_params)
     logging_data2 = get_logging_data2(template_id, template_params)
@@ -136,4 +151,5 @@ module KakaoNotificationLoggingHelper
       return
     end
   end
+
 end
