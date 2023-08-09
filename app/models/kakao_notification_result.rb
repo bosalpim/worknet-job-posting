@@ -14,7 +14,8 @@ class KakaoNotificationResult < ApplicationRecord
   NEWS_PAPER = 'news_paper'.freeze
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze
   CONTRACT_AGENCY_ALARM = 'Contract_agency_alarm'.freeze # 기관 근로 계약서 작성 대행 알림톡
-  CAREER_CERTIFICATION = 'career_certification'
+  CAREER_CERTIFICATION = 'career_certification'.freeze
+  NOTIFY_MATCHED_USER = 'notify_matched_user'.freeze
 
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -37,6 +38,7 @@ class KakaoNotificationResult < ApplicationRecord
     NEWS_PAPER => NEWS_PAPER,
     GAMIFICATION_MISSION_COMPLETE => GAMIFICATION_MISSION_COMPLETE,
     CONTRACT_AGENCY_ALARM => CONTRACT_AGENCY_ALARM,
-    CAREER_CERTIFICATION => CAREER_CERTIFICATION
+    CAREER_CERTIFICATION => CAREER_CERTIFICATION,
+    NOTIFY_MATCHED_USER => NOTIFY_MATCHED_USER
   }
 end
