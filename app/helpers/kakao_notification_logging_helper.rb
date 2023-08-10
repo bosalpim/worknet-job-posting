@@ -119,7 +119,7 @@ module KakaoNotificationLoggingHelper
         "centerName" => tem_params[:center_name],
         "jobPostingId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:job_posting_title],
-        "employeeId" => tem_params[:employee_id],
+        "employee_id" => tem_params[:employee_id],
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
         "template" => template_id,
