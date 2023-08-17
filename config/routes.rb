@@ -33,10 +33,6 @@ Jets.application.routes.draw do
       post :new_notification
     end
   end
-  resources :point_histories do
-    collection do
-      post :add_point_changed_active_user
-    end
-  end
+  post '/point_histories/add_point_changed_active_user', to: 'point_histories#add_point_changed_active_user'
   post '/gamification/misson_complete', to: 'gamification#missionComplete'
 end
