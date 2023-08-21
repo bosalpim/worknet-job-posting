@@ -14,14 +14,17 @@ class BusinessCallFailureAlertService
 
   def call
     template_id = KakaoTemplate::USER_CALL_REMINDER
+
     business_telnumber = job_posting.vn.nil? ? business.tel_number : job_posting.vn
     response = KakaoNotificationService.call(
       template_id: template_id,
       phone: Jets.env != 'production' ? '01094659404' : user.phone_number,
       template_params: {
+        target_public_id: user.public_id,
         user_name: user.name,
         business_name: business.name,
         job_posting_title: job_posting.title,
+        job_posting_public_id: job_posting.public_id,
         business_vn: good_number(business_telnumber)
       }
     )
@@ -80,7 +83,7 @@ class BusinessCallFailureAlertService
     if phone_number&.length == 12
       phone_number&.scan(/.{4}/)&.join('-')
     else
-      phone_number&.slice(0, 3) + "-" +  phone_number&.slice(3..)&.scan(/.{4}/)&.join('-') rescue nil
+      phone_number&.slice(0, 3) + "-" + phone_number&.slice(3..)&.scan(/.{4}/)&.join('-') rescue nil
     end
   end
 end

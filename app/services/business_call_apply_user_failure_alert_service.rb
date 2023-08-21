@@ -1,11 +1,13 @@
 class BusinessCallApplyUserFailureAlertService
-  attr_reader :apply, :job_posting, :business, :user
+  attr_reader :apply, :job_posting, :business, :user, :client
 
   def initialize(apply)
     @apply = apply
     @job_posting = build_job_posting(apply)
     @business = build_business(apply)
+    @client = build_client(job_posting)
     @user = build_user(apply)
+
   end
 
   def self.call(apply)
@@ -19,9 +21,12 @@ class BusinessCallApplyUserFailureAlertService
       template_id: template_id,
       phone: Jets.env != 'production' ? '01094659404' : user.phone_number,
       template_params: {
+        target_public_id: client.public_id,
         user_name: user.name,
+        employee_id: user.public_id,
         business_name: business.name,
         job_posting_title: job_posting.title,
+        job_posting_public_id: job_posting.public_id,
         business_vn: good_number(business_telnumber)
       }
     )
@@ -42,6 +47,10 @@ class BusinessCallApplyUserFailureAlertService
 
   def build_business(apply)
     apply.business
+  end
+
+  def build_client(job_posting)
+    job_posting.client
   end
 
   def build_user(apply)
@@ -80,7 +89,7 @@ class BusinessCallApplyUserFailureAlertService
     if phone_number&.length == 12
       phone_number&.scan(/.{4}/)&.join('-')
     else
-      phone_number&.slice(0, 3) + "-" +  phone_number&.slice(3..)&.scan(/.{4}/)&.join('-') rescue nil
+      phone_number&.slice(0, 3) + "-" + phone_number&.slice(3..)&.scan(/.{4}/)&.join('-') rescue nil
     end
   end
 end
