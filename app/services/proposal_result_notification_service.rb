@@ -18,8 +18,11 @@ class ProposalResultNotificationService
       template_id: template_id,
       phone: Jets.env == "production" ? user.phone_number : '01094659404',
       template_params: {
+        target_public_id: user.public_id,
+        employee_id: user.public_id,
         business_name: business.name,
         job_posting_title: job_posting.title,
+        job_posting_public_id: job_posting.public_id,
         user_name: user.name,
         age: user.birth_year ? "#{calculate_korean_age(user.birth_year)}세" : "정보없음",
         address: user.address,
