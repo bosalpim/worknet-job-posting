@@ -55,6 +55,24 @@ module KakaoNotificationLoggingHelper
       return get_close_job_posting_notification_logging_data(tem_params, template_id, target_public_id)
     when KakaoTemplate::CANDIDATE_RECOMMENDATION
       return get_candidate_recommendation_logging_data(template_id, tem_params)
+    when KakaoTemplate::USER_CALL_REMINDER
+      # 기관이 요보사한테 전화했는데 부재중일 경우
+      return get_user_call_reminder_logging_data(template_id, tem_params)
+    when KakaoTemplate::BUSINESS_CALL_REMINDER
+      # 요보사가 기관한테 전화했는데 부재중일 경우
+      return get_business_call_reminder_logging_data(template_id, tem_params)
+    when KakaoTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
+      # 기관에게 전화신청한 요보사가 기관의 전화를 안 받았을 경우
+      return get_business_call_apply_user_reminder(template_id, tem_params)
+    when KakaoTemplate::CALL_REQUEST_ALARM
+      # 요보사가 기관한테 전화신청했을 경우
+      return get_call_request_alarm_logging_data(template_id, tem_params)
+    when KakaoTemplate::PROPOSAL_RESPONSE_EDIT
+      # 기관이 요보사에게 일자리 제안을 보냈을 경우
+      return get_proposal_response_edit_logging_data(template_id, tem_params)
+    when KakaoTemplate::PROPOSAL_ACCEPTED
+      # 요보사가 일자리 제안을 수락했을 경우
+      return get_proposal_accepted_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -124,6 +142,86 @@ module KakaoNotificationLoggingHelper
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
         "template" => template_id,
         "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
+
+  def self.get_user_call_reminder_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "jobPostingId" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:job_posting_title],
+      }
+    }
+  end
+
+  def self.get_business_call_reminder_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "jobPostingId" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:job_posting_title],
+        "centerName" => tem_params[:business_name],
+      }
+    }
+  end
+
+  def self.get_business_call_apply_user_reminder(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "jobPostingId" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:job_posting_title],
+        "employee_id" => tem_params[:employee_id],
+        "centerName" => tem_params[:business_name]
+      }
+    }
+  end
+
+  def self.get_call_request_alarm_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "jobPostingId" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:job_posting_title],
+        "employee_id" => tem_params[:employee_id],
+        "centerName" => tem_params[:business_name]
+      }
+    }
+  end
+
+  def self.get_proposal_response_edit_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "jobPostingId" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:job_posting_title],
+        "centerName" => tem_params[:business_name]
+      }
+    }
+  end
+
+  def self.get_proposal_accepted_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "jobPostingId" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:job_posting_title],
+        "employee_id" => tem_params[:employee_id],
+        "centerName" => tem_params[:business_name]
       }
     }
   end
