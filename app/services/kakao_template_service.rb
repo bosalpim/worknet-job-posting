@@ -61,6 +61,8 @@ class KakaoTemplateService
       get_close_job_posting_notification(tem_params)
     when KakaoTemplate::CANDIDATE_RECOMMENDATION
       get_candidate_recommendation(tem_params)
+    when KakaoTemplate::SIGNUP_COMPLETE_GUIDE
+      get_signup_complete_guide
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -795,6 +797,51 @@ class KakaoTemplateService
           type: 'WL',
           url_mobile: tem_params[:link],
           url_pc: tem_params[:link],
+        }
+      ]
+    }
+  end
+
+  def get_signup_complete_guide
+    find_work_link = "https://carepartner.kr/?utm_source=message&utm_medium=arlimtalk&utm_campaign=sign_up_complete_guide"
+    help_work_link = "https://link.carepartner.kr/3QO0QRH"
+    frequently_question_link = "https://link.carepartner.kr/3YBnG0E"
+    alarm_setting = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign=sign_up_complete_guide_user_edit"
+
+    {
+      title: "[케어파트너] 가입 완료 안내",
+      message: "환영합니다 선생님 :)
+케어파트너 회원 가입이 완료되었어요.
+
+선생님 댁 근처 요양일자리를 카카오톡 및 문자로 보내드릴게요.
+
+≫ 한가지 더! 원하는 조건의 요양 일자리를 케어파트너에서 직접 찾아보고 지원하실 수도 있어요.
+
+아래 버튼이나 링크를 눌러 궁금한 점을 지금 바로 해결해보세요👇",
+      buttons: [
+        {
+          name: '일자리 찾아보기',
+          type: 'WL',
+          url_mobile: find_work_link,
+          url_pc: find_work_link
+        },
+        {
+          name: '취업 도움받기',
+          type: 'WL',
+          url_mobile: help_work_link,
+          url_pc: help_work_link
+        },
+        {
+          name: '자주 묻는 질문',
+          type: 'WL',
+          url_mobile: frequently_question_link,
+          url_pc: frequently_question_link
+        },
+        {
+          name: '알림 설정',
+          type: 'WL',
+          url_mobile: alarm_setting,
+          url_pc: alarm_setting
         }
       ]
     }
