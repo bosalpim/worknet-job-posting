@@ -63,6 +63,8 @@ class KakaoTemplateService
       get_candidate_recommendation(tem_params)
     when KakaoTemplate::SIGNUP_COMPLETE_GUIDE
       get_signup_complete_guide
+    when KakaoTemplate::HIGH_SALARY_JOB
+      get_high_salary_job(tem_params)
     else
       # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
     end
@@ -842,6 +844,36 @@ class KakaoTemplateService
           type: 'WL',
           url_mobile: alarm_setting,
           url_pc: alarm_setting
+        }
+      ]
+    }
+  end
+
+  def get_high_salary_job(tem_params)
+    link1 = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=high-salary-job-2"
+    link2 = "https://pf.kakao.com/_xjwfcb/chat"
+
+    {
+      title: "[케어파트너] Draft 자격증 소지자 1일차",
+      message: "#{tem_params[:name]} 선생님! 급여 높은 일자리 또는 원하시는 조건에 일자리를 찾고 계신가요?
+
+전국 최대 규모 요양 일자리 서비스 케어파트너에서는 급여 높은 일자리를 쉽고 간편하게 확인해 보실 수 있습니다.
+
+지금 바로 케어파트너에 접속하여 축하 포인트도 받으시고 급여 높은 일자리 알림도 무료로 받아보세요!
+
+아래 버튼을 눌러 이용이 어려우신 부분에 대해 문의해 주시면 케어파트너 전문 상담사가 친절하게 알려드릴게요.",
+      buttons: [
+        {
+          name: '높은 급여 일자리 알림받기',
+          type: 'WL',
+          url_mobile: link1,
+          url_pc: link1
+        },
+        {
+          name: '케어파트너 문의하기',
+          type: 'WL',
+          url_mobile: link2,
+          url_pc: link2
         }
       ]
     }

@@ -17,6 +17,7 @@ class KakaoNotificationResult < ApplicationRecord
   CAREER_CERTIFICATION = 'career_certification'.freeze
   NOTIFY_MATCHED_USER = 'notify_matched_user'.freeze
   SIGNUP_COMPLETE_GUIDE = 'sign_up_complete_guide'.freeze
+  HIGH_SALARY_JOB = 'high-salary-job-2'.freeze
 
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -41,6 +42,7 @@ class KakaoNotificationResult < ApplicationRecord
     CONTRACT_AGENCY_ALARM => CONTRACT_AGENCY_ALARM,
     CAREER_CERTIFICATION => CAREER_CERTIFICATION,
     NOTIFY_MATCHED_USER => NOTIFY_MATCHED_USER,
-    SIGNUP_COMPLETE_GUIDE => SIGNUP_COMPLETE_GUIDE
+    SIGNUP_COMPLETE_GUIDE => SIGNUP_COMPLETE_GUIDE,
+    HIGH_SALARY_JOB => HIGH_SALARY_JOB
   }
 end

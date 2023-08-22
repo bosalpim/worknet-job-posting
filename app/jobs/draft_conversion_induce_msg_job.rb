@@ -1,0 +1,16 @@
+class DraftConversionInduceMsgJob < ApplicationJob
+  cron "0 7 * * * *"
+  def first_day_except_address
+    DraftConversionMessageService.call(KakaoTemplate::HIGH_SALARY_JOB)
+  end
+
+  cron "0 7 * * * *"
+  def first_day_only_address
+    
+  end
+
+  cron "0 7 * * * *"
+  def second_day_except_address
+
+  end
+end
