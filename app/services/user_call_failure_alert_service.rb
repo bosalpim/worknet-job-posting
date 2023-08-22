@@ -5,7 +5,8 @@ class UserCallFailureAlertService
     @user = user
     @job_posting = job_posting
     @business = build_business(job_posting)
-    @client = build_client(job_posting)
+    @client = build_client(business)
+    p client
   end
 
   def self.call(user, job_posting)
@@ -42,8 +43,8 @@ class UserCallFailureAlertService
     job_posting.business
   end
 
-  def build_client(job_posting)
-    job_posting.client
+  def build_client(business)
+    business.clients.first
   end
 
   def save_kakao_notification(response, send_type, send_id, template_id)

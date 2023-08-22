@@ -1,12 +1,12 @@
 class NewApplyService
   attr_reader :apply, :job_posting, :business, :client, :user
 
-  def initialize(apply = Apply.first)
+  def initialize(apply)
     @apply = apply
     @user = apply.user
     @job_posting = build_job_posting(apply)
     @business = build_business(apply)
-    @client = build_client(job_posting)
+    @client = build_client(business)
   end
 
   def self.call(apply)
@@ -58,6 +58,10 @@ class NewApplyService
 
   def build_business(apply)
     apply.business
+  end
+
+  def build_client(business)
+    business.clients.first
   end
 
   def save_kakao_notification(response, send_type, send_id, template_id)

@@ -5,7 +5,7 @@ class BusinessCallApplyUserFailureAlertService
     @apply = apply
     @job_posting = build_job_posting(apply)
     @business = build_business(apply)
-    @client = build_client(job_posting)
+    @client = build_client(business)
     @user = build_user(apply)
 
   end
@@ -49,8 +49,8 @@ class BusinessCallApplyUserFailureAlertService
     apply.business
   end
 
-  def build_client(job_posting)
-    job_posting.client
+  def build_client(business)
+    business.clients.first
   end
 
   def build_user(apply)
