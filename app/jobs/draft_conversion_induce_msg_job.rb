@@ -6,7 +6,7 @@ class DraftConversionInduceMsgJob < ApplicationJob
 
   cron "0 7 * * * *"
   def first_day_only_address
-    
+
   end
 
   cron "0 7 * * * *"

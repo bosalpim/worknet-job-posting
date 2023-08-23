@@ -23,8 +23,10 @@ class DraftConversionMessageService
     case @template_id
     when KakaoTemplate::HIGH_SALARY_JOB
       return User.where(status: 'draft')
-          .where.not(draft_status: 'address')
-          .where("created_at >= ?", 1.day.ago)
+                 .where(has_certification: true)
+                 .where(notification_enabled: true) # 이 값을 언제 받는지 ? 광고성임을 알려주어야 하는지
+                 .where.not(draft_status: 'address')
+                 .where("created_at >= ?", 1.day.ago)
     else
       return []
     end
