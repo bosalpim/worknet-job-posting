@@ -20,18 +20,27 @@ class DraftConversionMessageService
 
   private
   def find_target_user
-    base_users = User.where("created_at >= ?", 1.day.ago)
-                     .where.not(marketing_agree: nil)
-                     .where(notification_enabled: true)
-                     .where(status: 'draft')
-
     case @template_id
     when KakaoTemplate::HIGH_SALARY_JOB
-      return base_users.where(has_certification: true)
+      return User.where("created_at >= ?", 1.day.ago)
+                 .where.not(marketing_agree: nil)
+                 .where(notification_enabled: true)
+                 .where(status: 'draft')
+                 .where(has_certification: true)
                  .where.not(draft_status: 'address')
     when KakaoTemplate::ENTER_LOCATION
-      return base_users.where(has_certification: true)
+      return User.where("created_at >= ?", 1.day.ago)
+                 .where.not(marketing_agree: nil)
+                 .where(notification_enabled: true)
+                 .where(status: 'draft')
+                 .where(has_certification: true)
                  .where(draft_status: 'address')
+    when KakaoTemplate::WELL_FITTED_JOB
+      return User.where(created_at: (2.days.ago..1.day.ago))
+                 .where.not(marketing_agree: nil)
+                 .where(notification_enabled: true)
+                 .where(status: 'draft')
+                 .where(has_certification: true)
     else
       return []
     end
@@ -76,6 +85,8 @@ class DraftConversionMessageService
       KakaoNotificationResult::HIGH_SALARY_JOB
     when KakaoTemplate::ENTER_LOCATION
       KakaoNotificationResult::ENTER_LOCATION
+    when KakaoTemplate::WELL_FITTED_JOB
+      KakaoNotificationResult::WELL_FITTED_JOB
     else
       ""
     end

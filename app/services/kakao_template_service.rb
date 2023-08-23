@@ -67,6 +67,8 @@ class KakaoTemplateService
       get_high_salary_job(tem_params)
     when KakaoTemplate::ENTER_LOCATION
       get_enter_location(tem_params)
+    when KakaoTemplate::WELL_FITTED_JOB
+      get_well_fitted_job(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -895,6 +897,34 @@ class KakaoTemplateService
       buttons: [
         {
           name: '주소 정보 입력하기',
+          type: 'WL',
+          url_mobile: link1,
+          url_pc: link1
+        },
+        {
+          name: '케어파트너 문의하기',
+          type: 'WL',
+          url_mobile: link2,
+          url_pc: link2
+        }
+      ]
+    }
+  end
+
+  def get_well_fitted_job(tem_params)
+    link1 = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=well-fitted-job"
+    link2 = "https://pf.kakao.com/_xjwfcb/chat"
+
+    {
+      title: "[케어파트너] Draft 자격증 소지자 1일차 주소입력 이탈",
+      message: "#{tem_params[:name]} 선생님, 케어파트너에서 매일 매일 선생님께서 찾고계시던 일자리 정보를 보내드립니다.
+
+지금 바로 케어파트너에 접속하여 축하 포인트도 받으시고, 원하는 조건에 맞는 맞춤 일자리 알림을 통해 더 나은 일자리에 취업을 성공해보세요.
+
+아래 버튼을 눌러 주소 입력 방법에 대해 문의해 주시면 케어파트너 전문 상담사가 친절하게 알려드릴게요",
+      buttons: [
+        {
+          name: '포인트&일자리 알림 받기',
           type: 'WL',
           url_mobile: link1,
           url_pc: link1
