@@ -4,15 +4,19 @@ class ActiveUserServiceGuideService
   end
 
   def call(user_id)
-    @user = User.find_by(id: user_id)
-    send_signup_complete_guide
+    @user = User.find_by(id: user_id, notification_enabled: true)
+    if @user.present?
+      send_signup_complete_guide
+    else
+      { success: true }
+    end
   end
 
   def send_signup_complete_guide
     template_id = KakaoTemplate::SIGNUP_COMPLETE_GUIDE
     response = BizmsgService.call(
       template_id: template_id,
-      phone: Jets.env == "production" ? @user.phone_number : '01094659404',
+      phone: Jets.env == "development" ? '01094659404' : @user.phone_number,
       message_type: "AI",
       template_params: {}
     )
