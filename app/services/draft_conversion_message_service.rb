@@ -4,7 +4,7 @@ class DraftConversionMessageService
   end
 
   def call(template_id)
-    # return if Jets.env != "production"
+    return if Jets.env != "production"
 
     @template_id = template_id
 
