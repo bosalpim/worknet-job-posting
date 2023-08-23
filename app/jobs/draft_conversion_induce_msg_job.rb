@@ -13,4 +13,9 @@ class DraftConversionInduceMsgJob < ApplicationJob
   def second_day_except_address
     DraftConversionMessageService.call(KakaoTemplate::WELL_FITTED_JOB)
   end
+
+  cron "0 7 * * * *"
+  def check_certification
+    DraftConversionMessageService.call(KakaoTemplate::CERTIFICATION_UPDATE)
+  end
 end
