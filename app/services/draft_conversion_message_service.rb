@@ -4,7 +4,7 @@ class DraftConversionMessageService
   end
 
   def call(template_id)
-    # return if Jets.env != "production"
+    return if Jets.env != "production"
 
     @template_id = template_id
 
@@ -41,6 +41,27 @@ class DraftConversionMessageService
                  .where(notification_enabled: true)
                  .where(status: 'draft')
                  .where(has_certification: true)
+    when KakaoTemplate::CERTIFICATION_UPDATE
+      users = User.where(has_certification: false)
+                  .where.not(expected_acquisition: nil)
+                  .where.not(marketing_agree: nil)
+                  .where(notification_enabled: true)
+                  .where(status: 'active')
+
+      filtered_users = users.filter do |user|
+        user_expect_acqusition_date = Date.parse(user.expected_acquisition) rescue nil
+        today = Date.today
+        three_days_ago = today - 3
+        seven_days_ago = today - 7
+
+        if three_days_ago == user_expect_acqusition_date || seven_days_ago == user_expect_acqusition_date
+          user
+        else
+          nil
+        end
+      end
+
+      return filtered_users
     else
       return []
     end
@@ -87,6 +108,8 @@ class DraftConversionMessageService
       KakaoNotificationResult::ENTER_LOCATION
     when KakaoTemplate::WELL_FITTED_JOB
       KakaoNotificationResult::WELL_FITTED_JOB
+    when KakaoTemplate::CERTIFICATION_UPDATE
+      KakaoNotificationResult::CERTIFICATION_UPDATE
     else
       ""
     end
