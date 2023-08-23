@@ -65,8 +65,10 @@ class KakaoTemplateService
       get_signup_complete_guide
     when KakaoTemplate::HIGH_SALARY_JOB
       get_high_salary_job(tem_params)
+    when KakaoTemplate::ENTER_LOCATION
+      get_enter_location(tem_params)
     else
-      # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
+      Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
   end
 
@@ -865,6 +867,34 @@ class KakaoTemplateService
       buttons: [
         {
           name: '높은 급여 일자리 알림받기',
+          type: 'WL',
+          url_mobile: link1,
+          url_pc: link1
+        },
+        {
+          name: '케어파트너 문의하기',
+          type: 'WL',
+          url_mobile: link2,
+          url_pc: link2
+        }
+      ]
+    }
+  end
+
+  def get_enter_location(tem_params)
+    link1 = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=enter-location"
+    link2 = "https://pf.kakao.com/_xjwfcb/chat"
+
+    {
+      title: "[케어파트너] Draft 자격증 소지자 1일차 주소입력 이탈",
+      message: "#{tem_params[:name]} 선생님의 주소가 입력되지 않았어요.
+
+주소를 입력해 주시면 선생님께서 원하시는 조건에 맞는 일자리와 시급 높은 요양 일자리 정보를 무료로 알려드려요.
+
+아래 버튼을 눌러 주소 입력 방법에 대해 문의해 주시면 케어파트너 상담사가 친절하게 알려드릴게요.",
+      buttons: [
+        {
+          name: '주소 정보 입력하기',
           type: 'WL',
           url_mobile: link1,
           url_pc: link1

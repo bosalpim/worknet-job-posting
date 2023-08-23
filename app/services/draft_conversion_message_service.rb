@@ -4,7 +4,7 @@ class DraftConversionMessageService
   end
 
   def call(template_id)
-    return if Jets.env != "production"
+    # return if Jets.env != "production"
 
     @template_id = template_id
 
@@ -20,13 +20,18 @@ class DraftConversionMessageService
 
   private
   def find_target_user
+    base_users = User.where("created_at >= ?", 1.day.ago)
+                     .where.not(marketing_agree: nil)
+                     .where(notification_enabled: true)
+                     .where(status: 'draft')
+
     case @template_id
     when KakaoTemplate::HIGH_SALARY_JOB
-      return User.where(status: 'draft')
-                 .where(has_certification: true)
-                 .where(notification_enabled: true) # 이 값을 언제 받는지 ? 광고성임을 알려주어야 하는지
+      return base_users.where(has_certification: true)
                  .where.not(draft_status: 'address')
-                 .where("created_at >= ?", 1.day.ago)
+    when KakaoTemplate::ENTER_LOCATION
+      return base_users.where(has_certification: true)
+                 .where(draft_status: 'address')
     else
       return []
     end
@@ -69,6 +74,8 @@ class DraftConversionMessageService
     case @template_id
     when KakaoTemplate::HIGH_SALARY_JOB
       KakaoNotificationResult::HIGH_SALARY_JOB
+    when KakaoTemplate::ENTER_LOCATION
+      KakaoNotificationResult::ENTER_LOCATION
     else
       ""
     end
@@ -106,7 +113,7 @@ class DraftConversionMessageService
     KakaoNotificationResult.create!(
       send_type: get_send_type,
       send_id: "#{current_date.year}/#{current_date.month}/#{current_date.day}#{@template_id}",
-      template_id: KakaoTemplate::HIGH_SALARY_JOB,
+      template_id: @template_id,
       success_count: success_count,
       tms_success_count: tms_success_count,
       fail_count: fail_count,
