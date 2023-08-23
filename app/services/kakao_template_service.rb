@@ -65,8 +65,14 @@ class KakaoTemplateService
       get_signup_complete_guide
     when KakaoTemplate::HIGH_SALARY_JOB
       get_high_salary_job(tem_params)
+    when KakaoTemplate::ENTER_LOCATION
+      get_enter_location(tem_params)
+    when KakaoTemplate::WELL_FITTED_JOB
+      get_well_fitted_job(tem_params)
+    when KakaoTemplate::CERTIFICATION_UPDATE
+      get_certification_update(tem_params)
     else
-      # Sentry.capture_message("존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}")
+      Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
   end
 
@@ -874,6 +880,89 @@ class KakaoTemplateService
           type: 'WL',
           url_mobile: link2,
           url_pc: link2
+        }
+      ]
+    }
+  end
+
+  def get_enter_location(tem_params)
+    link1 = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=enter-location"
+    link2 = "https://pf.kakao.com/_xjwfcb/chat"
+
+    {
+      title: "[케어파트너] Draft 자격증 소지자 1일차 주소입력 이탈",
+      message: "#{tem_params[:name]} 선생님의 주소가 입력되지 않았어요.
+
+주소를 입력해 주시면 선생님께서 원하시는 조건에 맞는 일자리와 시급 높은 요양 일자리 정보를 무료로 알려드려요.
+
+아래 버튼을 눌러 주소 입력 방법에 대해 문의해 주시면 케어파트너 상담사가 친절하게 알려드릴게요.",
+      buttons: [
+        {
+          name: '주소 정보 입력하기',
+          type: 'WL',
+          url_mobile: link1,
+          url_pc: link1
+        },
+        {
+          name: '케어파트너 문의하기',
+          type: 'WL',
+          url_mobile: link2,
+          url_pc: link2
+        }
+      ]
+    }
+  end
+
+  def get_well_fitted_job(tem_params)
+    link1 = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=well-fitted-job"
+    link2 = "https://pf.kakao.com/_xjwfcb/chat"
+
+    {
+      title: "[케어파트너] Draft 자격증 소지자 2일차",
+      message: "#{tem_params[:name]} 선생님, 케어파트너에서 매일 매일 선생님께서 찾고계시던 일자리 정보를 보내드립니다.
+
+지금 바로 케어파트너에 접속하여 축하 포인트도 받으시고, 원하는 조건에 맞는 맞춤 일자리 알림을 통해 더 나은 일자리에 취업을 성공해보세요.
+
+아래 버튼을 눌러 주소 입력 방법에 대해 문의해 주시면 케어파트너 전문 상담사가 친절하게 알려드릴게요",
+      buttons: [
+        {
+          name: '포인트&일자리 알림 받기',
+          type: 'WL',
+          url_mobile: link1,
+          url_pc: link1
+        },
+        {
+          name: '케어파트너 문의하기',
+          type: 'WL',
+          url_mobile: link2,
+          url_pc: link2
+        }
+      ]
+    }
+  end
+
+  def get_certification_update(tem_params)
+    link1 = "https://www.carepartner.kr/beginner/chatbot?utm_source=message&utm_medium=arlimtalk&utm_campaign=certification-update"
+
+    {
+      title: "[케어파트너] 미소지자 소지자 전환 알림톡",
+      message: "#{tem_params[:name]} 선생님 케어파트너와 함께 준비하신 자격증 시험에 좋은 결과가 있으셨나요?
+
+그동안 요양보호사 시험을 준비하시고 시험 보시느라 고생 많으셨어요. #{tem_params[:name]} 선생님의 새로운 도전을 항상 응원해요.
+
+케어파트너에서는 요양보호사로 첫 발걸음을 내딛는 선생님께 도움드릴 수 있는 다양한 서비스를 제공하고 있어요.
+
+1. 집 근처 초보 요양 일자리 추천
+2. 급여 높은 요양 일자리 추천
+3. 초보 요양보호사가 꼭 알아야 할 정보
+
+아래 버튼을 누르시고 다양한 정보와 혜택 받아가세요.",
+      buttons: [
+        {
+          name: '네, 합격했어요!',
+          type: 'WL',
+          url_mobile: link1,
+          url_pc: link1
         }
       ]
     }

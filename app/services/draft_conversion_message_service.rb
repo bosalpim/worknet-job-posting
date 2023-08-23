@@ -22,11 +22,46 @@ class DraftConversionMessageService
   def find_target_user
     case @template_id
     when KakaoTemplate::HIGH_SALARY_JOB
-      return User.where(status: 'draft')
+      return User.where("created_at >= ?", 1.day.ago)
+                 .where.not(marketing_agree: nil)
+                 .where(notification_enabled: true)
+                 .where(status: 'draft')
                  .where(has_certification: true)
-                 .where(notification_enabled: true) # 이 값을 언제 받는지 ? 광고성임을 알려주어야 하는지
                  .where.not(draft_status: 'address')
-                 .where("created_at >= ?", 1.day.ago)
+    when KakaoTemplate::ENTER_LOCATION
+      return User.where("created_at >= ?", 1.day.ago)
+                 .where.not(marketing_agree: nil)
+                 .where(notification_enabled: true)
+                 .where(status: 'draft')
+                 .where(has_certification: true)
+                 .where(draft_status: 'address')
+    when KakaoTemplate::WELL_FITTED_JOB
+      return User.where(created_at: (2.days.ago..1.day.ago))
+                 .where.not(marketing_agree: nil)
+                 .where(notification_enabled: true)
+                 .where(status: 'draft')
+                 .where(has_certification: true)
+    when KakaoTemplate::CERTIFICATION_UPDATE
+      users = User.where(has_certification: false)
+                  .where.not(expected_acquisition: nil)
+                  .where.not(marketing_agree: nil)
+                  .where(notification_enabled: true)
+                  .where(status: 'active')
+
+      filtered_users = users.filter do |user|
+        user_expect_acqusition_date = Date.parse(user.expected_acquisition) rescue nil
+        today = Date.today
+        three_days_ago = today - 3
+        seven_days_ago = today - 7
+
+        if three_days_ago == user_expect_acqusition_date || seven_days_ago == user_expect_acqusition_date
+          user
+        else
+          nil
+        end
+      end
+
+      return filtered_users
     else
       return []
     end
@@ -69,6 +104,12 @@ class DraftConversionMessageService
     case @template_id
     when KakaoTemplate::HIGH_SALARY_JOB
       KakaoNotificationResult::HIGH_SALARY_JOB
+    when KakaoTemplate::ENTER_LOCATION
+      KakaoNotificationResult::ENTER_LOCATION
+    when KakaoTemplate::WELL_FITTED_JOB
+      KakaoNotificationResult::WELL_FITTED_JOB
+    when KakaoTemplate::CERTIFICATION_UPDATE
+      KakaoNotificationResult::CERTIFICATION_UPDATE
     else
       ""
     end
@@ -106,7 +147,7 @@ class DraftConversionMessageService
     KakaoNotificationResult.create!(
       send_type: get_send_type,
       send_id: "#{current_date.year}/#{current_date.month}/#{current_date.day}#{@template_id}",
-      template_id: KakaoTemplate::HIGH_SALARY_JOB,
+      template_id: @template_id,
       success_count: success_count,
       tms_success_count: tms_success_count,
       fail_count: fail_count,
