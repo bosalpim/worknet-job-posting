@@ -78,9 +78,9 @@ class DraftConversionMessageService
           begin
             rsp = BizmsgService.call(
               template_id: @template_id,
-              phone: Jets.env == "production" ? user.phone_number : '01094659404',
+              phone: user.phone_number,
               message_type: "AI",
-              template_params: { name: user.name }
+              template_params: { name: user.name, target_public_id: user.public_id }
             )
 
             results.push({ status: 'success', response: rsp, user: user })

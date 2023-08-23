@@ -18,7 +18,7 @@ class ActiveUserServiceGuideService
       template_id: template_id,
       phone: Jets.env == "development" ? '01094659404' : @user.phone_number,
       message_type: "AI",
-      template_params: {}
+      template_params: { target_public_id: @user.public_id }
     )
 
     send_type = KakaoNotificationResult::SIGNUP_COMPLETE_GUIDE
