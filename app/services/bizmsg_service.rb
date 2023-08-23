@@ -52,7 +52,7 @@ class BizmsgService < KakaoTemplateService
     ).parsed_response
 
     response = response.class == Array ? response.first : response
-    KakaoNotificationLoggingHelper.send_log(response, template_id, template_params) rescue nil
+    KakaoNotificationLoggingHelper.send_log_for_bizmsg(response, template_id, template_params) rescue nil
     Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}" if Jets.env != 'production'
     response
   end

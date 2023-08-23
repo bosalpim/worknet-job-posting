@@ -73,6 +73,16 @@ module KakaoNotificationLoggingHelper
     when KakaoTemplate::PROPOSAL_ACCEPTED
       # 요보사가 일자리 제안을 수락했을 경우
       return get_proposal_accepted_logging_data(template_id, tem_params)
+    when KakaoTemplate::HIGH_SALARY_JOB
+      return get_draft_conversion_msg_logging_data(template_id, tem_params)
+    when KakaoTemplate::WELL_FITTED_JOB
+      return get_draft_conversion_msg_logging_data(template_id, tem_params)
+    when KakaoTemplate::ENTER_LOCATION
+      return get_draft_conversion_msg_logging_data(template_id, tem_params)
+    when KakaoTemplate::CERTIFICATION_UPDATE
+      return get_draft_conversion_msg_logging_data(template_id, tem_params)
+    when KakaoTemplate::SIGNUP_COMPLETE_GUIDE
+      return get_draft_conversion_msg_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -224,6 +234,38 @@ module KakaoNotificationLoggingHelper
         "centerName" => tem_params[:business_name]
       }
     }
+  end
+
+  def self.get_draft_conversion_msg_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id
+      }
+    }
+  end
+
+  def self.send_log_for_bizmsg(response, template_id, template_params)
+    logging_data = get_logging_data(template_id, template_params)
+    return if logging_data.nil?
+
+    result = response.dig("result")
+    code = response.dig("code")
+
+    if result == "Y"
+      if code == "K000"
+        logging_data["event_properties"]["type"] = NOTIFICATION_TYPE_KAKAO
+      elsif code == "R000"
+        logging_data["event_properties"]["type"] = NOTIFICATION_TYPE_RESERVED
+      else
+        logging_data["event_properties"]["type"] = NOTIFICATION_TYPE_TEXT_MESSAGE
+      end
+
+      AmplitudeService.instance.log_array([logging_data])
+    else
+      return
+    end
   end
 
   def self.send_log(response, template_id, template_params)
