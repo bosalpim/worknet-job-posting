@@ -22,21 +22,27 @@ class DraftConversionMessageService
   def find_target_user
     case @template_id
     when KakaoTemplate::HIGH_SALARY_JOB
-      return User.where("created_at >= ?", 1.day.ago)
+      start_time = Time.now.beginning_of_day # 오늘 날짜 00시
+      end_time = 1.day.ago.beginning_of_day  # 어제 날짜 00시
+      return User.where(created_at: end_time..start_time)
                  .where.not(marketing_agree: nil)
                  .where(notification_enabled: true)
                  .where(status: 'draft')
                  .where(has_certification: true)
                  .where.not(draft_status: 'address')
     when KakaoTemplate::ENTER_LOCATION
-      return User.where("created_at >= ?", 1.day.ago)
+      start_time = Time.now.beginning_of_day # 오늘 날짜 00시
+      end_time = 1.day.ago.beginning_of_day  # 어제 날짜 00시
+      return User.where(created_at: end_time..start_time)
                  .where.not(marketing_agree: nil)
                  .where(notification_enabled: true)
                  .where(status: 'draft')
                  .where(has_certification: true)
                  .where(draft_status: 'address')
     when KakaoTemplate::WELL_FITTED_JOB
-      return User.where(created_at: (2.days.ago..1.day.ago))
+      start_time = 1.day.ago.beginning_of_day# 1일전 날짜 00시
+      end_time = 2.day.ago.beginning_of_day  # 2일전 날짜 00시
+      return User.where(created_at: (end_time..start_time))
                  .where.not(marketing_agree: nil)
                  .where(notification_enabled: true)
                  .where(status: 'draft')
