@@ -42,7 +42,7 @@ class ActiveUserServiceGuideService
       end
     else
       fail_count += 1
-      fail_reason = response.dig("error")
+      fail_reason = "userid: #{@user.public_id}, error: #{response.dig("error")}"
     end
 
     KakaoNotificationResult.create!(
