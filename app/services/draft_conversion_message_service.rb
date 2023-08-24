@@ -128,16 +128,17 @@ class DraftConversionMessageService
 
       if status == 'fail'
         fail_count += 1
-        fail_reasons.push("userid : #{user.id} #{response}")
+        fail_reasons.push("userid : #{user.public_id} #{response}")
       else
         if response.dig("result") == "Y"
           if response.dig("code") == "K000"
             success_count += 1
           else
-            fail_reasons.push("userid : #{user.id} #{response.dig("error")}")
+            fail_reasons.push("userid : #{user.public_id}, error: #{response.dig("error")}")
             tms_success_count += 1
           end
         else
+          fail_reasons.push("userid : #{user.public_id}, error: #{response.dig("error")}")
           fail_count += 1
         end
       end
