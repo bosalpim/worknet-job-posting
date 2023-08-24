@@ -1,15 +1,19 @@
 class NotifyCommentService
   def self.call(params)
-    call(params)
+    self.new(params).call
   end
 
-  def call(params)
+  def initialize(params)
     @params = params
     @user_public_id = params[:public_id]
     @user_id = params[:id]
     @phone = params[:phone]
     @post_title = params[:post_title]
     @post_id = params[:post_id]
+  end
+
+  def call
+    send_notify_comment
   end
 
   def send_notify_comment

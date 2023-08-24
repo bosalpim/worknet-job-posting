@@ -14,6 +14,6 @@ class UsersController < ApplicationController
   end
 
   def notify_comment_params
-    params.permit(:id, :phone, :post_title, :post_id, :public_id)
+    params.permit(:user_id, :phone, :post_title, :post_id, :public_id)
   end
 end

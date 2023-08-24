@@ -972,10 +972,11 @@ class KakaoTemplateService
 
   def get_post_comment(tem_params)
     host = Jets.env == 'production' ? 'carepartner' : 'dev-carepartner'
+    title = "'#{tem_params[:post_title]}' 게시글"
     link = "https://www.#{host}.kr/community/question_answer/#{tem_params[:post_id]}?utm_source=message&utm_medium=arlimtalk&utm_campaign=post-comment"
     {
       title: "[케어파트너] 게시글 답변",
-      message: "작성하신 #{tem_params[:post_title]}에 답변이 달렸어요.
+      message: "작성하신 #{title}에 답변이 달렸어요.
 
 아래 버튼을 통해 답변을 확인해보세요.",
       buttons: [
