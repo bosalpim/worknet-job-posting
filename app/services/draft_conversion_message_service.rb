@@ -134,7 +134,7 @@ class DraftConversionMessageService
           if response.dig("code") == "K000"
             success_count += 1
           else
-            fail_reasons.push("userid : #{user.public_id}, error #{response.dig("error")}")
+            fail_reasons.push("userid : #{user.public_id}, error: #{response.dig("error")}")
             tms_success_count += 1
           end
         else
