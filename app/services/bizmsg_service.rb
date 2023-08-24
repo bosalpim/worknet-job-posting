@@ -77,7 +77,7 @@ class BizmsgService < KakaoTemplateService
   end
 
   def current_time
-    Time.now.strftime("%Y%m%d%H%M%S%L") + Time.now.strftime("%N")[0,3]
+    "#{Time.now.strftime("%y%m%d%H%M%S")}_#{SecureRandom.uuid.gsub('-', '')[0, 7]}"
   end
 
   def get_default_request_params(template_id, template_data)
