@@ -21,6 +21,7 @@ class KakaoNotificationResult < ApplicationRecord
   ENTER_LOCATION = 'enter-location'.freeze
   WELL_FITTED_JOB = 'well-fitted-job'.freeze
   CERTIFICATION_UPDATE = 'certification-update'.freeze
+  POST_COMMENT = 'post-comment'.freeze # 게시글 답변 알림톡
 
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -49,6 +50,7 @@ class KakaoNotificationResult < ApplicationRecord
     HIGH_SALARY_JOB => HIGH_SALARY_JOB,
     ENTER_LOCATION => ENTER_LOCATION,
     WELL_FITTED_JOB => WELL_FITTED_JOB,
-    CERTIFICATION_UPDATE => CERTIFICATION_UPDATE
+    CERTIFICATION_UPDATE => CERTIFICATION_UPDATE,
+    POST_COMMENT => POST_COMMENT
   }
 end

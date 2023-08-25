@@ -34,6 +34,9 @@ Jets.application.routes.draw do
     end
   end
   resources :users, only: [] do
+    member do
+      post :notify_comment
+    end
     collection do
       post :active_service_guide
     end

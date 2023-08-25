@@ -4,4 +4,16 @@ class UsersController < ApplicationController
     ActiveUserServiceGuideJob.perform_later(:dig, event)
     render json: { success: true }, status: :ok
   end
+
+  def notify_comment
+    NotifyCommentService.call notify_comment_params
+
+    render json: {
+      success: true
+    }, status: :ok
+  end
+
+  def notify_comment_params
+    params.permit(:user_id, :phone, :post_title, :post_id, :public_id)
+  end
 end

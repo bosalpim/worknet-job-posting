@@ -71,6 +71,8 @@ class KakaoTemplateService
       get_well_fitted_job(tem_params)
     when KakaoTemplate::CERTIFICATION_UPDATE
       get_certification_update(tem_params)
+    when KakaoTemplate::POST_COMMENT
+      get_post_comment(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -963,6 +965,26 @@ class KakaoTemplateService
           type: 'WL',
           url_mobile: link1,
           url_pc: link1
+        }
+      ]
+    }
+  end
+
+  def get_post_comment(tem_params)
+    host = Jets.env == 'production' ? 'carepartner' : 'dev-carepartner'
+    title = "'#{tem_params[:post_title]}' 게시글"
+    link = "https://www.#{host}.kr/community/question_answer/#{tem_params[:post_id]}?utm_source=message&utm_medium=arlimtalk&utm_campaign=post-comment"
+    {
+      title: "[케어파트너] 게시글 답변",
+      message: "작성하신 #{title}에 답변이 달렸어요.
+
+아래 버튼을 통해 답변을 확인해보세요.",
+      buttons: [
+        {
+          name: '답변 보기',
+          type: 'WL',
+          url_mobile: link,
+          url_pc: link
         }
       ]
     }
