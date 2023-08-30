@@ -1,6 +1,6 @@
 class PointHistoriesJob < ApplicationJob
-  CHSEOK_THANKS = 'chuseok_thanks'
-  TARGET_INVITE_TYPE = ['point_invite_friend' ,'chuseok_invite', CHSEOK_THANKS]
+  CHUSEOK_THANKS = 'chuseok_thanks'
+  TARGET_INVITE_TYPE = ['point_invite_friend' , 'chuseok_invite', CHUSEOK_THANKS]
   def dig
     update_point_invite_history(event)
   end
@@ -19,7 +19,7 @@ class PointHistoriesJob < ApplicationJob
         target_code = InviteCode.find_by(id: history.invite_code_id)
         if TARGET_INVITE_TYPE.include?(target_code.invite_type)
           target_history = history
-          is_chuseok_thanks = target_code.invite_type == CHSEOK_THANKS
+          is_chuseok_thanks = target_code.invite_type == CHUSEOK_THANKS
         end
       end
     end
@@ -38,7 +38,7 @@ class PointHistoriesJob < ApplicationJob
           PointHistory.create!(point_item_id: item.id, user_id: user_id)
           # 감사카드 유저면 박카스 선물
           if is_chuseok_thanks
-            GiftVoucherReward.create!(user_id: user_id, reward_type: CHSEOK_THANKS)
+            GiftVoucherReward.create!(user_id: user_id, reward_type: CHUSEOK_THANKS)
           end
         end
       end

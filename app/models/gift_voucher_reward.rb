@@ -4,6 +4,6 @@ class GiftVoucherReward < ApplicationRecord
   enum reward_type: {
     invite: 'invite',
     yobosaday_bacchus: "yobosaday_bacchus",
-    chuseok_thanks: PointHistoriesJob::CHSEOK_THANKS
+    chuseok_thanks: PointHistoriesJob::CHUSEOK_THANKS
   }
 end
