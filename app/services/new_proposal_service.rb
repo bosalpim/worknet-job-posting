@@ -24,7 +24,7 @@ class NewProposalService
         address: job_posting.address,
         work_type_ko: translate_type('job_posting', job_posting, :work_type),
         pay_text: get_pay_text(job_posting),
-        business_vn: job_posting.vn,
+        business_vn: proposal.receive_vn,
         job_posting_title: job_posting.title,
         job_posting_public_id: job_posting.public_id,
         target_public_id: user.public_id,
