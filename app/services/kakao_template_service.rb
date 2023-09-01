@@ -990,6 +990,87 @@ class KakaoTemplateService
     }
   end
 
+  def call_interview_proposal(tem_params)
+    tel_link = tem_params[:tel_link]
+    business_name = tem_params[:business_name]
+    accept_link = tem_params[:accept_link]
+    deny_link = tem_params[:deny_link]
+    customer_info = tem_params[:customer_info]
+    work_schedule = tem_params[:work_schedule]
+    location_info = tem_params[:location_info]
+
+    {
+      message: "#{business_name}에서 전화면접을 제안했어요.
+
+■ 어르신 정보
+#{customer_info}
+■ 근무 시간
+#{work_schedule}
+■ 근무 장소
+#{location_info}
+
+✅ 공고가 조건에 맞다면?
+아래 버튼을 눌러 제안을 수락하거나 문의해 보세요!
+
+❌ 공고가 조건에 맞지 않다면?
+거절 버튼을 눌러 기관에 의사를 전달해주세요!
+
+(3일 내 응답하지 않으면 자동 거절됩니다)",
+      buttons: [
+        {
+          type: 'WL',
+          name: '✅ 제안 수락',
+          url_mobile: accept_link,
+          url_pc: accept_link
+        },
+        {
+          type: 'WL',
+          name: '❌ 제안 거절',
+          url_mobile: deny_link,
+          url_pc: deny_link
+        },
+        {
+          type: 'AL',
+          name: '📞 문의 전화하기',
+          scheme_ios: tel_link,
+          scheme_android: tel_link
+        },
+
+      ]
+    }
+  end
+
+  def accept_call_interview(tem_params)
+    tel_link = tem_params[:tem_link]
+    job_posting_title = tem_params[:job_posting_title]
+    user_info = tem_params[:user_info]
+    accepted_at = tem_params[:accepted_date]
+    address = tem_params[:address]
+
+    {
+      message: "#{user_name} 요양보호사가 전화면접 제안을 수락했어요!
+
+공고 : #{job_posting_title}
+
+■ 기본 정보 : #{user_info}
+■ 수락 날짜 : #{accepted_at}
+■ 거주 주소 : #{address}
+
+아래 전화하기 버튼을 눌러 전화면접을 진행해보세요!
+
+(3일 내 응답하지 않으면 더 이상 전화할 수 없어요)",
+      buttons: [
+        {
+          type: 'AL',
+          name: '전화하기',
+          schema_ios: tel_link,
+          schema_android: tel_link
+        }
+      ]
+
+    }
+  end
+
   def good_number(phone_number)
     if phone_number&.length == 12
       phone_number&.scan(/.{4}/)&.join('-')

@@ -5,6 +5,16 @@ class ProposalsController < ApplicationController
     render json: rsp, status: :ok
   end
 
+  def call_interview_notification
+    rsp = ProposalNotificationService.new(params).call
+    render json: rsp, status: :ok
+  end
+
+  def call_interview_accepted
+    rsp = CallInterviewAcceptedService.new(params).call
+    render json: rsp, status: :ok
+  end
+
   def accepted
     event = { proposal_id: params["proposal_id"] }
     rsp = ProposalResultNotificationJob.perform_now(:accepted, event)

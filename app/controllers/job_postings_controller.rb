@@ -18,6 +18,12 @@ class JobPostingsController < ApplicationController
     }, status: :ok
   end
 
+  def call_interview_proposal
+    event = { proposal_id: params["proposal_id"] }
+    rsp = nil
+    rsp = SendCallInterviewProposal
+  end
+
   def new_satisfaction_survey
     event = { job_posting_id: params["job_posting_id"] }
     rsp = nil

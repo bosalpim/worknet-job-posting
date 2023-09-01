@@ -22,6 +22,8 @@ class KakaoNotificationResult < ApplicationRecord
   WELL_FITTED_JOB = 'well-fitted-job'.freeze
   CERTIFICATION_UPDATE = 'certification-update'.freeze
   POST_COMMENT = 'post-comment'.freeze # 게시글 답변 알림톡
+  CALL_INTERVIEW_PROPOSAL = 'call_interview_proposal'.freeze
+  CALL_INTERVIEW_ACCEPTED = 'call_interview_accepted'.freeze
 
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -51,6 +53,8 @@ class KakaoNotificationResult < ApplicationRecord
     ENTER_LOCATION => ENTER_LOCATION,
     WELL_FITTED_JOB => WELL_FITTED_JOB,
     CERTIFICATION_UPDATE => CERTIFICATION_UPDATE,
-    POST_COMMENT => POST_COMMENT
+    POST_COMMENT => POST_COMMENT,
+    CALL_INTERVIEW_PROPOSAL => CALL_INTERVIEW_PROPOSAL,
+    CALL_INTERVIEW_ACCEPTED => CALL_INTERVIEW_ACCEPTED
   }
 end
