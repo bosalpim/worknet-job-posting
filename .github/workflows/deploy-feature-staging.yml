@@ -1,4 +1,4 @@
-name: Staging Deploy To AWS Lambda
+name: Feature Staging Deploy To AWS Lambda
 
 on:
   push:
