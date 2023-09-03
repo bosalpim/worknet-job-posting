@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-class Proposals::ProposalAcceptedService
+class Proposal::AcceptedService
   def initialize(params)
-    @template_id = KakaoTemplate::CALL_INTERVIEW_ACCEPTED,
-      @client_id = params["client_id"]
+    p params
+    @template_id = KakaoTemplate::CALL_INTERVIEW_ACCEPTED
+    @business_id = params["business_id"]
     @job_posting_id = params["job_posting_id"]
     @phone_number = params["phone_number"]
     @tel_link = params["tel_link"]
@@ -16,6 +17,7 @@ class Proposals::ProposalAcceptedService
   def call
     response = KakaoNotificationService.call(
       template_id: @template_id,
+      message_type: "AI",
       phone: @phone_number,
       template_params: {
         tel_link: @tel_link,
@@ -34,7 +36,7 @@ class Proposals::ProposalAcceptedService
     code = response.dig("code")
     message = response.dig("message")
 
-    if code == 'success' and message = 'K000'
+    if code == 'success' && message == 'K000'
       success_count = 1
     elsif code == 'success'
       tms_success_count = 1
@@ -43,14 +45,19 @@ class Proposals::ProposalAcceptedService
     end
     fail_reason = response.dig('originMessage') if code != 'success'
 
-    KakaoNotificationResult.create!(
+    KakaoNotificationResult.create(
       template_id: @template_id,
-      send_type: KakaoNotificationResult::CALL_INTERVIEW_PROPOSAL,
+      send_type: KakaoNotificationResult::CALL_INTERVIEW_ACCEPTED,
       send_id: @client_id,
       success_count: success_count,
       tms_success_count: tms_success_count,
       fail_count: fail_count,
       fail_reasons: fail_reason
     )
+
+    {
+      code: code,
+      response: message
+    }
   end
 end

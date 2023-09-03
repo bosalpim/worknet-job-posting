@@ -73,6 +73,10 @@ class KakaoTemplateService
       get_certification_update(tem_params)
     when KakaoTemplate::POST_COMMENT
       get_post_comment(tem_params)
+    when KakaoTemplate::CALL_INTERVIEW_PROPOSAL
+      get_call_interview_proposal(tem_params)
+    when KakaoTemplate::CALL_INTERVIEW_ACCEPTED
+      get_call_interview_accepted(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -990,7 +994,7 @@ class KakaoTemplateService
     }
   end
 
-  def call_interview_proposal(tem_params)
+  def get_call_interview_proposal(tem_params)
     tel_link = tem_params[:tel_link]
     business_name = tem_params[:business_name]
     accept_link = tem_params[:accept_link]
@@ -1000,6 +1004,7 @@ class KakaoTemplateService
     location_info = tem_params[:location_info]
 
     {
+      title: "#{business_name}에서 전화면접을 제안했어요.",
       message: "#{business_name}에서 전화면접을 제안했어요.
 
 ■ 어르신 정보
@@ -1018,8 +1023,14 @@ class KakaoTemplateService
 (3일 내 응답하지 않으면 자동 거절됩니다)",
       buttons: [
         {
+          type: 'AL',
+          name: '📞 제안 수락 (전화)',
+          scheme_ios: tel_link,
+          scheme_android: tel_link
+        },
+        {
           type: 'WL',
-          name: '✅ 제안 수락',
+          name: '💬 제안 수락 (메세지)',
           url_mobile: accept_link,
           url_pc: accept_link
         },
@@ -1029,31 +1040,26 @@ class KakaoTemplateService
           url_mobile: deny_link,
           url_pc: deny_link
         },
-        {
-          type: 'AL',
-          name: '📞 문의 전화하기',
-          scheme_ios: tel_link,
-          scheme_android: tel_link
-        },
-
       ]
     }
   end
 
-  def accept_call_interview(tem_params)
-    tel_link = tem_params[:tem_link]
+  def get_call_interview_accepted(tem_params)
+    tel_link = tem_params[:tel_link]
     job_posting_title = tem_params[:job_posting_title]
+    user_name = tem_params[:user_name]
     user_info = tem_params[:user_info]
-    accepted_at = tem_params[:accepted_date]
+    accepted_at = tem_params[:accepted_at]
     address = tem_params[:address]
 
-    {
+    data = {
+      title: "#{user_name} 요양보호사가 전화면접 제안을 수락했어요!",
       message: "#{user_name} 요양보호사가 전화면접 제안을 수락했어요!
 
 공고 : #{job_posting_title}
 
 ■ 기본 정보 : #{user_info}
-■ 수락 날짜 : #{accepted_at}
+■ 수락 날짜 : #{DateTime.parse(accepted_at).strftime("%Y-%m-%d")}
 ■ 거주 주소 : #{address}
 
 아래 전화하기 버튼을 눌러 전화면접을 진행해보세요!
@@ -1063,12 +1069,13 @@ class KakaoTemplateService
         {
           type: 'AL',
           name: '전화하기',
-          schema_ios: tel_link,
-          schema_android: tel_link
+          scheme_ios: tel_link,
+          scheme_android: tel_link
         }
       ]
-
     }
+    p data
+    data
   end
 
   def good_number(phone_number)

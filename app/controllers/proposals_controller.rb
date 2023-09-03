@@ -5,13 +5,13 @@ class ProposalsController < ApplicationController
     render json: rsp, status: :ok
   end
 
-  def call_interview_notification
-    rsp = ProposalNotificationService.new(params).call
+  def new_v2
+    rsp = Proposal::NewService.new(params).call
     render json: rsp, status: :ok
   end
 
-  def call_interview_accepted
-    rsp = CallInterviewAcceptedService.new(params).call
+  def accepted_v2
+    rsp = Proposal::AcceptedService.new(params).call
     render json: rsp, status: :ok
   end
 

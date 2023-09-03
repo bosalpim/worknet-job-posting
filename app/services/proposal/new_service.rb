@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Proposals::NewProposalService
+class Proposal::NewService
   def initialize(params)
     @phone_number = params['phone_number']
     @business_name = params['business_name']
@@ -15,7 +15,7 @@ class Proposals::NewProposalService
   def call
     KakaoNotificationService.call(
       template_id: KakaoTemplate::CALL_INTERVIEW_PROPOSAL,
-      message_type: "AT",
+      message_type: "AI",
       phone: @phone_number,
       template_params: {
         business_name: @business_name,
