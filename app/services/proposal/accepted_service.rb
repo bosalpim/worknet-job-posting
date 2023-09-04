@@ -2,13 +2,15 @@
 
 class Proposal::AcceptedService
   def initialize(params)
-    p params
     @template_id = KakaoTemplate::CALL_INTERVIEW_ACCEPTED
+    @target_public_id = params['target_public_id']
     @business_id = params["business_id"]
+    @business_name = params["business_name"]
     @job_posting_id = params["job_posting_id"]
+    @job_posting_title = params["job_posting_title"]
+    @employee_id = params["employee_id"]
     @phone_number = params["phone_number"]
     @tel_link = params["tel_link"]
-    @job_posting_title = params["job_posting_title"]
     @user_info = params["user_info"]
     @accepted_at = params["accepted_at"]
     @address = params["address"]
@@ -20,8 +22,12 @@ class Proposal::AcceptedService
       message_type: "AI",
       phone: @phone_number,
       template_params: {
-        tel_link: @tel_link,
+        target_public_id: @target_public_id,
+        employee_id: @employee_id,
+        job_posting_id: @job_posting_id,
         job_posting_title: @job_posting_title,
+        business_name: @business_name,
+        tel_link: @tel_link,
         user_info: @user_info,
         accepted_at: @accepted_at,
         address: @address
@@ -48,7 +54,7 @@ class Proposal::AcceptedService
     KakaoNotificationResult.create(
       template_id: @template_id,
       send_type: KakaoNotificationResult::CALL_INTERVIEW_ACCEPTED,
-      send_id: @client_id,
+      send_id: @target_public_id,
       success_count: success_count,
       tms_success_count: tms_success_count,
       fail_count: fail_count,
