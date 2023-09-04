@@ -15,7 +15,13 @@ class BusinessCallFailureAlertService
   def call
     template_id = KakaoTemplate::USER_CALL_REMINDER
 
-    business_telnumber = job_posting.vn.nil? ? business.tel_number : job_posting.vn
+    business_telnumber = if proposal.receive_vn.present?
+                           proposal.receive_vn
+                         elsif job_posting.vn.present?
+                           job_posting.vn
+                         else
+                           business.tel_number
+                         end
     response = KakaoNotificationService.call(
       template_id: template_id,
       phone: Jets.env != 'production' ? '01094659404' : user.phone_number,
