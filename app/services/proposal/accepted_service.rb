@@ -12,6 +12,7 @@ class Proposal::AcceptedService
     @phone_number = params["phone_number"]
     @tel_link = params["tel_link"]
     @user_info = params["user_info"]
+    @user_name = params["user_name"]
     @accepted_at = params["accepted_at"]
     @address = params["address"]
   end
@@ -28,6 +29,7 @@ class Proposal::AcceptedService
         job_posting_title: @job_posting_title,
         business_name: @business_name,
         tel_link: @tel_link,
+        user_name: @user_name,
         user_info: @user_info,
         accepted_at: @accepted_at,
         address: @address
