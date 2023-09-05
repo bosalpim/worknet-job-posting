@@ -1,9 +1,9 @@
-name: Feature Staging Deploy To AWS Lambda
+name: Staging Deploy To AWS Lambda
 
 on:
   push:
     branches:
-      - staging-feature
+      - ^staging.+
 
 jobs:
   deploy:
