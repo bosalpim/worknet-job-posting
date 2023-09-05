@@ -4,6 +4,9 @@ Jets.application.routes.draw do
       post :new_notification
       post :accepted
       post :rejected
+      post :new_v2
+      post :accepted_v2
+
     end
   end
   resources :job_postings, only: :create do
