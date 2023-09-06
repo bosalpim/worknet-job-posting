@@ -1,4 +1,6 @@
 class PointHistoriesJob < ApplicationJob
+  CHUSEOK_THANKS = 'chuseok_thanks'
+  TARGET_INVITE_TYPE = ['point_invite_friend' , 'chuseok_invite', CHUSEOK_THANKS]
   def dig
     update_point_invite_history(event)
   end
@@ -9,13 +11,15 @@ class PointHistoriesJob < ApplicationJob
     user_id = User.find_by(id: event[:user_id]).id
     histories = InvitedHistory.where(user_id: user_id).order(created_at: 'desc')
     target_history = nil
+    is_chuseok_thanks = false
     target_code = nil
 
     if histories.length > 0
       histories.find_each do |history|
         target_code = InviteCode.find_by(id: history.invite_code_id)
-        if target_code.invite_type == 'point_invite_friend'
+        if TARGET_INVITE_TYPE.include?(target_code.invite_type)
           target_history = history
+          is_chuseok_thanks = target_code.invite_type == CHUSEOK_THANKS
         end
       end
     end
@@ -32,6 +36,10 @@ class PointHistoriesJob < ApplicationJob
           item = PointItem.find_by(item_type: 'invite')
           PointHistory.create!(point_item_id: item.id, user_id: target_code.user_id)
           PointHistory.create!(point_item_id: item.id, user_id: user_id)
+          # 감사카드 유저면 박카스 선물
+          if is_chuseok_thanks
+            GiftVoucherReward.create!(user_id: user_id, reward_type: CHUSEOK_THANKS)
+          end
         end
       end
     rescue
