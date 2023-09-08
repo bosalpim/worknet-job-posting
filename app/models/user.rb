@@ -41,7 +41,8 @@ class User < ApplicationRecord
   scope :receive_notifications, -> {
     where(has_certification: true)
       .where(notification_enabled: true)
-      .where('job_search_status < ?', 2)
+      .where(job_notification_enabled: true)
+      # .where('job_search_status < ?', 2)
       .active
   }
 
