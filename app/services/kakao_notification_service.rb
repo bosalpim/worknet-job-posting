@@ -6,7 +6,7 @@ class KakaoNotificationService < KakaoTemplateService
   def self.call(template_id:, phone:, message_type: "AT", reserve_dt: nil, template_params:)
     new(
       template_id: template_id,
-      phone: Jets.env == 'production' ? phone : '01037863607',
+      phone: phone,
       message_type: message_type,
       reserve_dt: reserve_dt,
       template_params: template_params
@@ -19,7 +19,13 @@ class KakaoNotificationService < KakaoTemplateService
     @user_id = "bosalpim21"
     @profile = ENV['KAKAO_BIZMSG_PROFILE']
     @sender_number = "15885877"
-    @phone = phone
+    @phone = if Jets.env == 'production'
+               phone
+             elsif PHONE_NUMBER_WHITELIST.respond_to?(:include?) && PHONE_NUMBER_WHITELIST.include?(phone)
+               phone
+             else
+               TEST_PHONE_NUMBER
+             end
     @message_type = message_type
     @reserve_dt = get_reserve_dt(reserve_dt)
     @template_params = template_params

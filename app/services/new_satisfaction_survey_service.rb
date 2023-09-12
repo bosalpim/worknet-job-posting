@@ -19,7 +19,7 @@ class NewSatisfactionSurveyService
     template_id = KakaoTemplate::SATISFACTION_SURVEY
     response = KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env != 'production' ? '01094659404' : job_posting.manager_phone_number,
+      phone: job_posting.manager_phone_number,
       template_params: {
         business_name: business.name,
         job_posting_title: job_posting.title,

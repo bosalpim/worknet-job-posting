@@ -16,7 +16,7 @@ class NewProposalService
     KakaoNotificationService.call(
       template_id: KakaoTemplate::PROPOSAL_RESPONSE_EDIT,
       message_type: 'AT',
-      phone: Jets.env == "production" ? user.phone_number : ENV['TEST_PHONE_NUMBER'] || '01094659404',
+      phone: user.phone_number,
       template_params: {
         user_name: user.name,
         business_name: business.name,

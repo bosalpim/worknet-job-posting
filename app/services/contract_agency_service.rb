@@ -1,11 +1,13 @@
 class ContractAgencyService
-#   4일전, 3일전 내역
+  #   4일전, 3일전 내역
   def initialize(days)
     @days = days
   end
+
   def self.call(days)
     new(days).call
   end
+
   def call
     job_posting_ids = JobPostingsConnect
                         .where(created_at: 4.days.ago...)
@@ -14,11 +16,10 @@ class ContractAgencyService
                         .distinct(:job_posting_id)
                         .pluck(:job_posting_id)
 
-
     data_array = JobPosting.where(id: job_posting_ids)
-                     .where.not(manager_phone_number: nil)
-                     .distinct(:manager_phone_number)
-                     .pluck(:business_id, :manager_phone_number)
+                           .where.not(manager_phone_number: nil)
+                           .distinct(:manager_phone_number)
+                           .pluck(:business_id, :manager_phone_number)
 
     send_data = data_array.map do |element|
       { business_id: element[0], manager_phone_number: element[1] }
@@ -45,16 +46,16 @@ class ContractAgencyService
             response = KakaoNotificationService.call(
               template_id: KakaoTemplate::CONTRACT_AGENCY_ALARM,
               message_type: 'AT',
-              phone: Jets.env != 'production' ? '01037863607' : data.dig(:manager_phone_number),
+              phone: data.dig(:manager_phone_number),
               template_params: { business_id: data.dig(:business_id) }
             )
-            batch_results.push( { status: 'success', response: response, message: data })
+            batch_results.push({ status: 'success', response: response, message: data })
           rescue Net::ReadTimeout
             end_time = Time.now
             time_out_total += (start_time - end_time)
             time_out_messages.push(message)
           rescue HTTParty::Error => e
-            batch_results.push({ status: 'fail' , response: "#{e.message}"})
+            batch_results.push({ status: 'fail', response: "#{e.message}" })
           end
         end
       end
