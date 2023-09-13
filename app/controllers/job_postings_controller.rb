@@ -50,4 +50,11 @@ class JobPostingsController < ApplicationController
     render json: Jets.env.production? ? { success: true } : rsp, status: :ok
   end
 
+  def new_saved_job_posting_user
+    event = params
+    rsp = nil
+    rsp = NotifyJobPostingSavedUserService.call(event)
+
+    render json: Jets.env.production? ? { success: true } : rsp, status: :ok
+  end
 end
