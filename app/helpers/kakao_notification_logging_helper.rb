@@ -87,6 +87,8 @@ module KakaoNotificationLoggingHelper
       return get_call_interview_proposal_logging_data(template_id, tem_params)
     when KakaoTemplate::CALL_INTERVIEW_ACCEPTED
       return get_call_interview_accepted_logging_data(template_id, tem_params)
+    when KakaoTemplate::CALL_SAVED_JOB_CAREGIVER
+      return get_call_saved_job_caregiver(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -273,6 +275,23 @@ module KakaoNotificationLoggingHelper
         "jobPostingId" => tem_params[:job_posting_id],
         "title" => tem_params[:job_posting_title],
         "employee_id" => tem_params[:employee_id]
+      }
+    }
+  end
+
+  def self.get_call_saved_job_caregiver(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "centerName" => tem_params[:business_name],
+        "jobPostingId" => tem_params[:job_posting_id],
+        "title" => tem_params[:job_posting_title],
+        "type_match" => tem_params[:type_match],
+        "gender_match" => tem_params[:gender_match],
+        "day_match" => tem_params[:day_match],
+        "grade_match" => tem_params[:grade_match]
       }
     }
   end
