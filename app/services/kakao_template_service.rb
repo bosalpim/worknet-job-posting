@@ -77,6 +77,8 @@ class KakaoTemplateService
       get_call_interview_proposal(tem_params)
     when KakaoTemplate::CALL_INTERVIEW_ACCEPTED
       get_call_interview_accepted(tem_params)
+    when KakaoTemplate::CALL_SAVED_JOB_CAREGIVER
+      get_call_saved_job_caregiver(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1075,6 +1077,50 @@ class KakaoTemplateService
       ]
     }
     p data
+    data
+  end
+
+  def get_call_saved_job_caregiver(tem_params)
+    host = if Jets.env == 'production'
+             'https://business.carepartner.kr'
+           else
+             'https://staging-business.vercel.app'
+           end
+    url_path = "#{tem_params[:url_path]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_caregiver"
+    shorturl = ShortUrl.build(host + url_path, host)
+
+    job_posting_title = tem_params[:job_posting_title]
+    user_name = tem_params[:user_name]
+    user_info = "#{user_name} / #{tem_params[:user_gender]} / #{tem_params[:user_age]}세"
+    career = tem_params[:user_career]
+    distance = tem_params[:user_distance]
+    address = tem_params[:user_address]
+
+    data = {
+      title: "요양보호사 관심 표시",
+      message: "#{user_name} 요양보호사가 아래 공고에 관심을 표시했어요!
+
+공고 : #{job_posting_title}
+
+■ 기본 정보 : #{user_info}
+■ 근무 경력 : #{career}
+■ 통근 거리 : #{distance}
+■ 거주 주소 : #{address}
+
+아래 전화하기 버튼을 눌러 공고에 관심표시한 요양보호사에게 지금 바로 전화해보세요!",
+      buttons: [
+        {
+          type: 'WL',
+          name: '자세히 확인하기',
+          url_mobile: shorturl.url,
+          url_pc: shorturl.url
+        }
+      ]
+    }
+
+    p "DATADATA : START"
+    p data
+    p "DATADATA : END"
     data
   end
 

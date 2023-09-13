@@ -33,4 +33,5 @@ module KakaoTemplate
   POST_COMMENT = 'post-comment'.freeze # 게시글 답변 알림톡
   CALL_INTERVIEW_PROPOSAL = 'call_interview_proposal'.freeze
   CALL_INTERVIEW_ACCEPTED = 'call_interview_proposal_accept'.freeze
+  CALL_SAVED_JOB_CAREGIVER = 'call_saved_job_caregiver'.freeze # 공고에 관심표시한 요양보호사 기관에게 알림톡
 end

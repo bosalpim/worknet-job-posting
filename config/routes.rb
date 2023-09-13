@@ -17,6 +17,7 @@ Jets.application.routes.draw do
     end
     collection do
       post :notify_matched_user
+      post :new_saved_job_posting_user
     end
   end
   resources :bizcall_callbacks, only: [] do
