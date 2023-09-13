@@ -51,10 +51,10 @@ class JobPostingsController < ApplicationController
   end
 
   def new_saved_job_posting_user
-    event = params
+    event = params.permit!
     rsp = nil
-    rsp = NotifyJobPostingSavedUserService.call(event)
-
+    rsp = NotifyJobPostingSavedUserJob.perform_later(:dig, event) if Jets.env.development?
+    NotifyJobPostingSavedUserJob.perform_later(:dig, event) unless Jets.env.development?
     render json: Jets.env.production? ? { success: true } : rsp, status: :ok
   end
 end
