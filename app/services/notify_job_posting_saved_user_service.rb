@@ -12,7 +12,7 @@ class NotifyJobPostingSavedUserService
     fail_reasons = []
     success_count = 0
     fail_count = 0
-    response = KakaoNotificationService.call(
+    response = BizmsgService.call(
       template_id: @template_id,
       phone: @event["phone"],
       template_params: {
@@ -40,11 +40,13 @@ class NotifyJobPostingSavedUserService
       message_type: "AI"
     )
 
-    if response.dig("code") == "success"
-      success_count += 1
+    if response.dig("result") == "Y"
+      if response.dig("code") == "K000"
+        success_count += 1
+      end
     else
       fail_count += 1
-      fail_reasons.push(response.dig("origin@event")) if response.dig("@event") != "K000"
+      fail_reasons.push("userid: #{@user_public_id}, error: #{response.dig("error")}")
     end
 
     KakaoNotificationResult.create!(
