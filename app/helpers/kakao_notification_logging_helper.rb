@@ -291,6 +291,7 @@ module KakaoNotificationLoggingHelper
         "type_match" => tem_params[:type_match],
         "gender_match" => tem_params[:gender_match],
         "day_match" => tem_params[:day_match],
+        "time_match" => tem_params[:time_match],
         "grade_match" => tem_params[:grade_match]
       }
     }
