@@ -1081,11 +1081,13 @@ class KakaoTemplateService
   end
 
   def get_call_saved_job_caregiver(tem_params)
-    host = if Jets.env == 'production'
-             'https://business.carepartner.kr'
-           else
-             'https://staging-business.vercel.app'
-           end
+    host = nil
+    if Jets.env == 'production'
+      host = 'https://business.carepartner.kr'
+    else
+      host = 'https://staging-business.vercel.app'
+    end
+
     url_path = "#{tem_params[:url_path]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_caregiver"
     shorturl = ShortUrl.build(host + url_path, host)
 
@@ -1121,6 +1123,7 @@ class KakaoTemplateService
     p "DATADATA : START"
     p data
     p "DATADATA : END"
+
     data
   end
 
