@@ -1081,15 +1081,8 @@ class KakaoTemplateService
   end
 
   def get_call_saved_job_caregiver(tem_params)
-    host = nil
-    if Jets.env == 'production'
-      host = 'https://business.carepartner.kr'
-    else
-      host = 'https://staging-business.vercel.app'
-    end
-
     url_path = "#{tem_params[:url_path]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_caregiver"
-    shorturl = ShortUrl.build(host + url_path, host)
+    shorturl = ShortUrl.build("https://staging-business.vercel.app" + url_path, "https://staging-business.vercel.app")
 
     job_posting_title = tem_params[:job_posting_title]
     user_name = tem_params[:user_name]
@@ -1119,11 +1112,7 @@ class KakaoTemplateService
         }
       ]
     }
-
-    p "DATADATA : START"
     p data
-    p "DATADATA : END"
-
     data
   end
 
