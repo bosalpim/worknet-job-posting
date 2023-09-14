@@ -19,7 +19,7 @@ class NewApplyService
     short_url = build_short_url(apply)
     response = KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env != 'production' ? '01094659404' : job_posting.manager_phone_number,
+      phone: job_posting.manager_phone_number,
       template_params: {
         target_public_id: client.public_id,
         business_name: business.name,

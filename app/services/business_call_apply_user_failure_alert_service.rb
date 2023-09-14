@@ -19,7 +19,7 @@ class BusinessCallApplyUserFailureAlertService
     business_telnumber = job_posting.vn.nil? ? business.tel_number : job_posting.vn
     response = KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env != 'production' ? '01094659404' : user.phone_number,
+      phone: user.phone_number,
       template_params: {
         target_public_id: client.public_id,
         user_name: user.name,

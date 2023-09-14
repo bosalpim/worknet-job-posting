@@ -30,7 +30,7 @@ class CreateNewsPaperActivelyCommonMessageService < CreateScheduledMessageServic
     KakaoNotificationService.call(
       template_id: message.template_id,
       message_type: "AI",
-      phone: Jets.env != 'production' ? '01094659404' : message.phone_number,
+      phone: message.phone_number,
       template_params: JSON.parse(message.content)
     )
   end
