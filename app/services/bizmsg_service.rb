@@ -20,7 +20,13 @@ class BizmsgService < KakaoTemplateService
     @user_id = "bosalpim21"
     @profile = profile
     @sender_number = "15885877"
-    @phone = phone
+    @phone = if Jets.env == 'production'
+               phone
+             elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(phone)
+               phone
+             else
+               TEST_PHONE_NUMBER
+             end
     @message_type = message_type
     @reserve_dt = get_reserve_dt(reserve_dt)
     @template_params = template_params
@@ -96,7 +102,7 @@ class BizmsgService < KakaoTemplateService
       sender_num: sender_number,
       image_url: img_url,
     }
-    if template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2
+    if template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY
       data[:title] = title
     end
     return data

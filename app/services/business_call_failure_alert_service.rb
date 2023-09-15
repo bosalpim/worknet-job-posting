@@ -24,7 +24,7 @@ class BusinessCallFailureAlertService
                          end
     response = KakaoNotificationService.call(
       template_id: template_id,
-      phone: Jets.env != 'production' ? '01094659404' : user.phone_number,
+      phone: user.phone_number,
       template_params: {
         target_public_id: user.public_id,
         user_name: user.name,

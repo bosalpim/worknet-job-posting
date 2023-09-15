@@ -38,7 +38,7 @@ class SendNewsPaperService
       response = KakaoNotificationService.call(
         template_id: template_id,
         message_type: "AI",
-        phone: Jets.env != 'production' ? '01094659404' : user.phone_number,
+        phone: user.phone_number,
         template_params: { lat: user.lat, lng: user.lng }
       )
 
