@@ -102,7 +102,7 @@ class BizmsgService < KakaoTemplateService
       sender_num: sender_number,
       image_url: img_url,
     }
-    if template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM || template_id == KakaoTemplate::CONTRACT_AGENCY_ALARM_EDIT2
+    if template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY
       data[:title] = title
     end
     return data
