@@ -77,7 +77,6 @@ Jets.application.configure do
   # config.api.endpoint_type = 'PRIVATE' # Default is 'EDGE' https://amzn.to/2r0Iu2L
   # config.api.authorization_type = "AWS_IAM" # default is 'NONE' https://amzn.to/2qZ7zLh
 
-
   # More info: http://rubyonjets.com/docs/routing/custom-domain/
   # config.domain.hosted_zone_name = "example.com"
   # us-west-2 REGIONAL endpoint - takes 2 minutes
@@ -92,4 +91,11 @@ Jets.application.configure do
   # config.logger = Jets::Logger.new($stderr)
 
   config.controllers.default_protect_from_forgery = false
+
+  # 개발, 스테이징 환경 내, 알림톡 송수신 테스트 목적으로 사용하는 번호 화이트리스트
+  # 예시) '["01037863607", "01050502020"]'
+  PHONE_NUMBER_WHITELIST = ENV['PHONE_NUMBER_WHITELIST']
+  PHONE_NUMBER_WHITELIST = PHONE_NUMBER_WHITELIST.present? ? JSON.parse(PHONE_NUMBER_WHITELIST) : []
+  
+  TEST_PHONE_NUMBER = ENV['TEST_PHONE_NUMBER'] || '01037863607'
 end

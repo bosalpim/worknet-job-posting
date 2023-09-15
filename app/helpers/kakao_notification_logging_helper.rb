@@ -41,15 +41,9 @@ module KakaoNotificationLoggingHelper
     end
 
     case template_id
-    when KakaoTemplate::NEW_JOB_POSTING_VISIT
+    when KakaoTemplate::NEW_JOB_POSTING_VISIT, KakaoTemplate::NEW_JOB_VISIT_V2, KakaoTemplate::NEW_JOB_POSTING_FACILITY, KakaoTemplate::NEW_JOB_FACILITY_V2
       return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
-    when KakaoTemplate::NEW_JOB_POSTING_FACILITY
-      return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
-    when KakaoTemplate::JOB_ALARM_ACTIVELY
-      return get_news_paper_logging_data(template_id, target_public_id)
-    when KakaoTemplate::JOB_ALARM_OFF
-      return get_news_paper_logging_data(template_id, target_public_id)
-    when KakaoTemplate::JOB_ALARM_WORKING
+    when KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoTemplate::JOB_ALARM_OFF, KakaoTemplate::JOB_ALARM_WORKING, KakaoTemplate::NEWSPAPER_V2
       return get_news_paper_logging_data(template_id, target_public_id)
     when KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION
       return get_close_job_posting_notification_logging_data(tem_params, template_id, target_public_id)
@@ -89,6 +83,8 @@ module KakaoNotificationLoggingHelper
       return get_call_interview_accepted_logging_data(template_id, tem_params)
     when KakaoTemplate::CALL_SAVED_JOB_CAREGIVER
       return get_call_saved_job_caregiver(template_id, tem_params)
+    when KakaoTemplate::ASK_ACTIVE
+      return get_ask_active_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -113,6 +109,27 @@ module KakaoNotificationLoggingHelper
   end
 
   def self.get_new_job_posting_logging_data(template_params, template_id, target_public_id)
+    target_public_id = template_params.dig(:target_public_id)
+    job_posting_public_id = template_params.dig(:job_posting_public_id)
+    job_posting_title = template_params.dig(:job_posting_title)
+    business_name = template_params.dig(:business_name)
+
+    return {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "template" => template_id,
+        "job_posting_public_id" => job_posting_public_id,
+        "job_posting_title" => job_posting_title,
+        "business_name" => business_name,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
+
+  def self.get_new_job_posting_v2_logging_data(template_params, template_id)
     job_posting_public_id = template_params.dig(:job_posting_public_id)
     job_posting_title = template_params.dig(:job_posting_title)
     business_name = template_params.dig(:business_name)
@@ -145,12 +162,25 @@ module KakaoNotificationLoggingHelper
     }
   end
 
+  def self.get_news_paper_v2_logging_data(template_id, target_public_id)
+    return {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "template" => template_id,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
+
   def self.get_candidate_recommendation_logging_data(template_id, tem_params)
     return {
       "user_id" => tem_params[:target_public_id],
       "event_type" => NOTIFICATION_EVENT_NAME,
       "event_properties" => {
-        "centerName" => tem_params[:center_name],
+        "centerName" => tem_params[:business_name],
         "jobPostingId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:job_posting_title],
         "employee_id" => tem_params[:employee_id],
@@ -293,6 +323,19 @@ module KakaoNotificationLoggingHelper
         "day_match" => tem_params[:day_match],
         "time_match" => tem_params[:time_match],
         "grade_match" => tem_params[:grade_match]
+      }
+    }
+  end
+
+  def self.get_ask_active_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "centerName" => tem_params[:business_name],
+        "jobPostingId" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:title],
       }
     }
   end
