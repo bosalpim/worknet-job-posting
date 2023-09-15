@@ -6,7 +6,13 @@ class NotificationController < ApplicationController
   end
 
   def ask_active_params
-    params.permit(:user_public_id, :business_name, :user_name, :job_posting_public_id, :job_posting_title)
+    params.permit(
+      :url,
+      :user_public_id,
+      :user_name,
+      :user_phone_number,
+      :business_name,
+      :job_posting_public_id,
+      :job_posting_title)
   end
-
 end
