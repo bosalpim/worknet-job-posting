@@ -38,11 +38,9 @@ class User < ApplicationRecord
     sleep: 'sleep'
   }
 
-  scope :receive_notifications, -> {
+  scope :receive_job_notifications, -> {
     where(has_certification: true)
-      .where(notification_enabled: true)
       .where(job_notification_enabled: true)
-      # .where('job_search_status < ?', 2)
       .active
   }
 
