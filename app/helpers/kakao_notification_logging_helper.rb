@@ -141,7 +141,7 @@ module KakaoNotificationLoggingHelper
       }
     }
   end
-  
+
   def self.get_candidate_recommendation_logging_data(template_id, tem_params)
     return {
       "user_id" => tem_params[:target_public_id],
