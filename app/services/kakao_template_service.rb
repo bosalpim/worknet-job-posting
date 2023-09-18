@@ -75,6 +75,14 @@ class KakaoTemplateService
       get_call_interview_accepted(tem_params)
     when KakaoTemplate::CALL_SAVED_JOB_CAREGIVER
       get_call_saved_job_caregiver(tem_params)
+    when KakaoTemplate::ASK_ACTIVE
+      get_ask_active(tem_params)
+    when KakaoTemplate::NEW_JOB_VISIT_V2
+      get_new_job_visit_v2(tem_params)
+    when KakaoTemplate::NEW_JOB_FACILITY_V2
+      get_new_job_facility_v2(tem_params)
+    when KakaoTemplate::NEWSPAPAER_V2
+      get_newspaper_v2(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -581,17 +589,11 @@ class KakaoTemplateService
           url_pc: link,
         },
         {
-          name: "알림 설정",
+          name: "알림 지역 설정",
           type: "WL",
-          url_mobile: settingAlarmLink,
-          url_pc: settingAlarmLink
-        },
-      # {
-      #   name: "알림 지역 설정",
-      #   type: "WL",
-      #   url_mobile: alarmPositionLink,
-      #   url_pc: alarmPositionLink
-      # }
+          url_mobile: alarmPositionLink,
+          url_pc: alarmPositionLink
+        }
       ]
     }
   end
@@ -612,17 +614,11 @@ class KakaoTemplateService
           url_pc: link,
         },
         {
-          name: "더 자주 받아볼래요",
+          name: "알림 지역 설정",
           type: "WL",
-          url_mobile: settingAlarmLink,
-          url_pc: settingAlarmLink
-        },
-      # {
-      #   name: "알림 지역 설정",
-      #   type: "WL",
-      #   url_mobile: alarmPositionLink,
-      #   url_pc: alarmPositionLink
-      # }
+          url_mobile: alarmPositionLink,
+          url_pc: alarmPositionLink
+        }
       ]
     }
   end
@@ -1076,10 +1072,140 @@ class KakaoTemplateService
       ]
     }
 
-    p "DATADATA : START"
-    p data
-    p "DATADATA : END"
     data
+  end
+
+  def get_ask_active(tem_params)
+    {
+      title: '아직 일자리를 찾고 있나요?',
+      message: "#{tem_params[:user_name]} 요양보호사님, 현재 요양일자리를 찾고 있나요?
+
+최근 선생님과 전화한 #{tem_params[:business_name]} 담당자가 #{tem_params[:user_name]} 선생님이 현재 일자리를 찾고 계시지 않다고 응답해 주셨어요.
+
+일자리를 찾고 있지 않다면, 아래 버튼을 눌러주세요.
+
+내주변 요양기관으로부터 취업 제안 전화 또는 문자를 그만받을 수 있어요.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '취업 제안 그만받기',
+          url_mobile: tem_params[:url],
+          url_pc: tem_params[:url]
+        }
+      ]
+    }
+  end
+
+  def get_new_job_visit_v2(tem_params)
+    business_vn = convert_safe_text(tem_params[:business_vn])
+    {
+      title: tem_params[:title],
+      message: "[케어파트너] 신규일자리 알림
+전화: ☎#{tem_params[:business_vn]}
+
+≫ 근무시간: #{tem_params[:days_text]} #{tem_params[:hours_text]}
+≫ 근무지: #{tem_params[:address]} (#{tem_params[:distance]})
+≫ 급여: #{tem_params[:pay_text]}
+≫ 어르신 정보: #{tem_params[:customer_grade]}/#{tem_params[:customer_age]}세/#{tem_params[:customer_gender]}
+
+아래 버튼 또는 링크를 클릭해서 자세한 내용 확인하고 지원해보세요!
+carepartner.kr#{tem_params[:path]}
+
+전화: ☎#{business_vn}",
+      buttons: [
+        {
+          type: 'WL',
+          name: '일자리 확인하기',
+          url_mobile: tem_params[:origin_url],
+          url_pc: tem_params[:origin_url]
+        },
+        {
+          type: 'AL',
+          name: '전화하기',
+          scheme_ios: "tel://#{business_vn}",
+          scheme_android: "tel://#{business_vn}"
+        },
+        {
+          type: 'WL',
+          name: '그만 받을래요',
+          url_mobile: tem_params[:mute_url],
+          url_pc: tem_params[:mute_url]
+        }
+      ]
+    }
+
+  end
+
+  def get_new_job_facility_v2(tem_params)
+    daysAndHours = "≫ 근무시간: #{convert_safe_text(tem_params[:days_text])} #{convert_safe_text(tem_params[:hours_text])}"
+    address = "≫ 근무지: #{convert_safe_text(tem_params[:address])}"
+    pay = "≫ 급여: #{convert_safe_text(tem_params[:pay_text])}"
+    customer_info = "≫ 어르신 정보: #{convert_safe_text(tem_params[:customer_grade])}/#{convert_safe_text(tem_params[:customer_age])}세/#{convert_safe_text(tem_params[:customer_gender])}"
+    business_vn = convert_safe_text(tem_params[:business_vn])
+    postfix_url = tem_params[:postfix_url]
+    origin_url = tem_params[:origin_url]
+    mute_url = tem_params[:mute_url]
+    path = tem_params[:path]
+
+    return {
+      title: tem_params[:title],
+      message: "[케어파트너] 신규일자리 알림
+전화: ☎#{business_vn}\n#{daysAndHours}\n#{address}\n#{pay}\n#{customer_info}
+
+아래 버튼 또는 링크를 클릭해서 자세한 내용 확인하고 지원해보세요!
+
+carepartner.kr#{path}
+
+전화: ☎#{business_vn}",
+      buttons: [
+        {
+          name: "일자리 확인하기",
+          type: "WL",
+          url_mobile: origin_url,
+          url_pc: origin_url,
+        },
+        {
+          name: "전화하기",
+          type: "AL",
+          scheme_ios: "tel://#{business_vn}",
+          scheme_android: "tel://#{business_vn}",
+        },
+        {
+          name: "그만 받을래요",
+          type: "WL",
+          url_mobile: mute_url,
+          url_pc: mute_url
+        }
+      ]
+    }
+  end
+
+  def get_newspaper_v2(tem_params)
+    today = NewsPaper.get_today
+    url = "https://www.carepartner.kr/newspaper?lat=#{tem_params["lat"]}&lng=#{tem_params["lng"]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
+    mute_url = "https://www.carepartner.kr/me/notification/off?type=jobutm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
+    {
+      title: '아직 일자리를 찾고 있나요?',
+      message: "#{today} 일자리 신문이 도착했어요.
+
+케어파트너 일자리 신문과 함께 하루를 시작해보세요.
+
+👇'신문 확인하기' 버튼 클릭👇",
+      buttons: [
+        {
+          type: 'WL',
+          name: '신문 확인하기',
+          url_mobile: url,
+          url_pc: url
+        },
+        {
+          type: 'WL',
+          name: '그만 받을래요',
+          url_mobile: mute_url,
+          url_pc: mute_url,
+        }
+      ]
+    }
   end
 
   def good_number(phone_number)
