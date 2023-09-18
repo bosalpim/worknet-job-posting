@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class JobPosting::CloseExpiredJobPostingsSerivce
+class JobPosting::CloseExpiredJobPostingsService
 
   def self.call(date = DateTime.now)
     new(date).call
