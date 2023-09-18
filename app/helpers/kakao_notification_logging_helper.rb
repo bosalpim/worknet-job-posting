@@ -129,40 +129,7 @@ module KakaoNotificationLoggingHelper
     }
   end
 
-  def self.get_new_job_posting_v2_logging_data(template_params, template_id)
-    job_posting_public_id = template_params.dig(:job_posting_public_id)
-    job_posting_title = template_params.dig(:job_posting_title)
-    business_name = template_params.dig(:business_name)
-
-    return {
-      "user_id" => target_public_id,
-      "event_type" => NOTIFICATION_EVENT_NAME,
-      "event_properties" => {
-        "sender_type" => SENDER_TYPE_CAREPARTNER,
-        "receiver_type" => RECEIVER_TYPE_USER,
-        "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => job_posting_title,
-        "business_name" => business_name,
-        "send_at" => Time.current + (9 * 60 * 60)
-      }
-    }
-  end
-
   def self.get_news_paper_logging_data(template_id, target_public_id)
-    return {
-      "user_id" => target_public_id,
-      "event_type" => NOTIFICATION_EVENT_NAME,
-      "event_properties" => {
-        "sender_type" => SENDER_TYPE_CAREPARTNER,
-        "receiver_type" => RECEIVER_TYPE_USER,
-        "template" => template_id,
-        "send_at" => Time.current + (9 * 60 * 60)
-      }
-    }
-  end
-
-  def self.get_news_paper_v2_logging_data(template_id, target_public_id)
     return {
       "user_id" => target_public_id,
       "event_type" => NOTIFICATION_EVENT_NAME,
