@@ -94,7 +94,6 @@ class KakaoNotificationService < KakaoTemplateService
       img_url: img_url,
       reserveDt: reserve_dt
     }
-
     title_required_templates = [
       KakaoTemplate::PROPOSAL_RESPONSE_EDIT,
       KakaoTemplate::NEW_JOB_POSTING_VISIT,

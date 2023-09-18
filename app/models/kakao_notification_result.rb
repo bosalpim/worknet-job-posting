@@ -13,7 +13,6 @@ class KakaoNotificationResult < ApplicationRecord
   CALL_REQUEST_ALARM = "call_request_alarm".freeze
   NEWS_PAPER = 'news_paper'.freeze
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze
-  CONTRACT_AGENCY_ALARM = 'Contract_agency_alarm'.freeze # 기관 근로 계약서 작성 대행 알림톡
   CAREER_CERTIFICATION = 'career_certification'.freeze
   NOTIFY_MATCHED_USER = 'notify_matched_user'.freeze
   SIGNUP_COMPLETE_GUIDE = 'sign_up_complete_guide'.freeze
@@ -50,7 +49,6 @@ class KakaoNotificationResult < ApplicationRecord
     BUSINESS_CALL_APPLY_USER_FAILURE_ALERT => BUSINESS_CALL_APPLY_USER_FAILURE_ALERT,
     NEWS_PAPER => NEWS_PAPER,
     GAMIFICATION_MISSION_COMPLETE => GAMIFICATION_MISSION_COMPLETE,
-    CONTRACT_AGENCY_ALARM => CONTRACT_AGENCY_ALARM,
     CAREER_CERTIFICATION => CAREER_CERTIFICATION,
     NOTIFY_MATCHED_USER => NOTIFY_MATCHED_USER,
     SIGNUP_COMPLETE_GUIDE => SIGNUP_COMPLETE_GUIDE,
