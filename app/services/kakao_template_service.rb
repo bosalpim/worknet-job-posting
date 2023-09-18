@@ -614,17 +614,11 @@ class KakaoTemplateService
           url_pc: link,
         },
         {
-          name: "더 자주 받아볼래요",
+          name: "알림 지역 설정",
           type: "WL",
-          url_mobile: settingAlarmLink,
-          url_pc: settingAlarmLink
-        },
-      # {
-      #   name: "알림 지역 설정",
-      #   type: "WL",
-      #   url_mobile: alarmPositionLink,
-      #   url_pc: alarmPositionLink
-      # }
+          url_mobile: alarmPositionLink,
+          url_pc: alarmPositionLink
+        }
       ]
     }
   end
