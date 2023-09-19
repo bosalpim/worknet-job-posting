@@ -38,7 +38,7 @@ class CreateScheduledMessageService
 
   def find_users
     case template_id
-    when KakaoTemplate::JOB_ALARM_ACTIVELY
+    when KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoTemplate::NEWSPAPER_V2
       return User.receive_job_notifications.order(:created_at)
     else
       return nil
