@@ -75,6 +75,8 @@ class KakaoTemplateService
       get_call_interview_accepted(tem_params)
     when KakaoTemplate::CALL_SAVED_JOB_CAREGIVER
       get_call_saved_job_caregiver(tem_params)
+    when KakaoTemplate::CALL_SAVED_JOB_POSTING_V2
+      get_call_saved_job_posting_v2(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1082,6 +1084,45 @@ class KakaoTemplateService
     data
   end
 
+  def get_call_saved_job_posting_v2(tem_params)
+    customer_info = tem_params[:customer_info]
+    work_schedule = tem_params[:work_schedule]
+    location_info = tem_params[:location_info]
+    pay_text = tem_params[:pay_text]
+    job_posting_public_id = tem_params[:job_posting_public_id]
+
+    host = if Jets.env == 'production'
+             'https://dev-carepartner.kr'
+           else
+             'https://dev-carepartner.kr'
+           end
+    url = host + "/jobs/#{job_posting_public_id}?&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_posting"
+
+    {
+      title: "요양보호사 관심 표시",
+      message: "관심을 표시한 공고에 전화해보세요!
+
+■ 어르신 정보
+#{customer_info}
+■ 근무 요일
+#{work_schedule}
+■ 근무 장소
+#{location_info}
+■ 급여 정보
+#{pay_text}
+
+자세히 확인하기 버튼을 눌러 공고 담당자와 전화해보세요!",
+      buttons: [
+        {
+          type: 'WL',
+          name: '자세히 확인하기',
+          url_mobile: url,
+          url_pc: url
+        }
+      ]
+    }
+  end
+
   def good_number(phone_number)
     if phone_number&.length == 12
       phone_number&.scan(/.{4}/)&.join('-')
@@ -1093,5 +1134,4 @@ class KakaoTemplateService
   def convert_safe_text(text, empty_string = "정보없음")
     text.presence&.truncate(MAX_ITEM_LIST_TEXT_LENGTH) || empty_string
   end
-
 end

@@ -24,6 +24,7 @@ class KakaoNotificationResult < ApplicationRecord
   CALL_INTERVIEW_PROPOSAL = 'call_interview_proposal'.freeze
   CALL_INTERVIEW_ACCEPTED = 'call_interview_accepted'.freeze
   CALL_SAVED_JOB_CAREGIVER = 'call_saved_job_caregiver'.freeze # 공고에 관심표시한 요양보호사 기관에게 알림톡
+  CALL_SAVED_JOB_POSTING_V2 = 'call_saved_job_posting_v2'.freeze
 
 
   validates :send_type, presence: true
@@ -56,6 +57,7 @@ class KakaoNotificationResult < ApplicationRecord
     POST_COMMENT => POST_COMMENT,
     CALL_INTERVIEW_PROPOSAL => CALL_INTERVIEW_PROPOSAL,
     CALL_INTERVIEW_ACCEPTED => CALL_INTERVIEW_ACCEPTED,
-    CALL_SAVED_JOB_CAREGIVER => CALL_SAVED_JOB_CAREGIVER
+    CALL_SAVED_JOB_CAREGIVER => CALL_SAVED_JOB_CAREGIVER,
+    CALL_SAVED_JOB_POSTING_V2=> CALL_SAVED_JOB_POSTING_V2
   }
 end
