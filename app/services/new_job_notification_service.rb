@@ -22,7 +22,7 @@ class NewJobNotificationService
     @work_type_ko = translate_type('job_posting', @job_posting, :work_type)
     @job_posting_customer = @job_posting.job_posting_customer
     @homecare_yes = %w[commute resident bath_help].include?(@job_posting.work_type)
-    @template_id = @homecare_yes ? KakaoTemplate::NEW_JOB_POSTING_VISIT : KakaoTemplate::NEW_JOB_POSTING_FACILITY
+    @template_id = @homecare_yes ? KakaoTemplate::NEW_JOB_VISIT_V2 : KakaoTemplate::NEW_JOB_FACILITY_V2
   end
 
   def call
@@ -36,7 +36,7 @@ class NewJobNotificationService
       if job_posting.lat.present? && job_posting.lng.present?
         users +=
           User
-            .receive_notifications
+            .receive_job_notifications
             .select(
               "users.*, earth_distance(ll_to_earth(lat, lng), ll_to_earth(#{job_posting.lat}, #{job_posting.lng})) AS distance",
             )
@@ -94,7 +94,11 @@ class NewJobNotificationService
   attr_reader :job_posting, :work_type_ko, :job_posting_customer, :homecare_yes, :template_id
 
   def send_notification(user)
-    origin_url = "https://www.carepartner.kr/jobs/recently_published?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@homecare_yes ? "new_job_homecare_recent" : "new_job_facility_recent"}&lat=#{user.lat}&lng=#{user.lng}"
+    base_url = "https://www.carepartner.kr"
+    view_endpoint = "/jobs/recently_published?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@homecare_yes ? "new_job_visit(23-09-2w)" : "new_job_facility(23-09-2w)"}&lat=#{user.lat}&lng=#{user.lng}"
+    origin_url = "#{base_url}#{view_endpoint}"
+    mute_endpoint = "/me/notification/off?type=job&utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@homecare_yes ? "new_job_visit(23-09-2w)" : "new_job_facility(23-09-2w)"}"
+    mute_url = "#{base_url}#{mute_endpoint}"
     shorten_url = build_shorten_url(origin_url)
     template_params = {
       title: "신규일자리 알림",
@@ -111,6 +115,8 @@ class NewJobNotificationService
       business_name: job_posting.business.name,
       user_name: user.name,
       distance: user.simple_distance_from_ko(job_posting),
+      postfix_url: view_endpoint,
+      mute_url: mute_url,
       origin_url: origin_url,
       path: shorten_url.sub("https://carepartner.kr", ""),
       job_posting_public_id: job_posting.public_id,

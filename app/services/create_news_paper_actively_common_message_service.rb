@@ -2,7 +2,7 @@ class CreateNewsPaperActivelyCommonMessageService < CreateScheduledMessageServic
   def initialize
     super(
       # 적극구직, 구직중 모두 적극구직 중 유저가 받는 신문으로 통일합니다.
-      KakaoTemplate::JOB_ALARM_ACTIVELY,
+      KakaoTemplate::NEWSPAPER_V2,
       KakaoNotificationResult::NEWS_PAPER
     )
   end

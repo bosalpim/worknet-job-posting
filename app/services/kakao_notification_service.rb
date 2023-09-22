@@ -19,7 +19,7 @@ class KakaoNotificationService < KakaoTemplateService
     @user_id = "bosalpim21"
     @profile = ENV['KAKAO_BIZMSG_PROFILE']
     @sender_number = "15885877"
-    @phone = if Jets.env == 'production'
+    @phone = if Jets.env.production?
                phone
              elsif PHONE_NUMBER_WHITELIST.respond_to?(:include?) && PHONE_NUMBER_WHITELIST.include?(phone)
                phone
@@ -94,9 +94,18 @@ class KakaoNotificationService < KakaoTemplateService
       img_url: img_url,
       reserveDt: reserve_dt
     }
-    if template_id == KakaoTemplate::PROPOSAL_RESPONSE_EDIT || template_id == KakaoTemplate::NEW_JOB_POSTING_VISIT || template_id == KakaoTemplate::NEW_JOB_POSTING_FACILITY
+    title_required_templates = [
+      KakaoTemplate::PROPOSAL_RESPONSE_EDIT,
+      KakaoTemplate::NEW_JOB_POSTING_VISIT,
+      KakaoTemplate::NEW_JOB_POSTING_FACILITY,
+      KakaoTemplate::NEW_JOB_VISIT_V2,
+      KakaoTemplate::NEW_JOB_FACILITY_V2
+    ]
+
+    if title_required_templates.include?(template_id)
       data[:title] = title
     end
+
     return data
   end
 
