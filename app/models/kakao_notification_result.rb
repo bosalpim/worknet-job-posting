@@ -1,6 +1,5 @@
 class KakaoNotificationResult < ApplicationRecord
   PROPOSAL = "proposal".freeze
-  NEW_JOB_POSTING = "new_job_posting".freeze
   PERSONALIZED = "personalized_notification".freeze
   EXTRA_BENEFIT = "extra_benefit_notification".freeze
   PROPOSAL_ACCEPTED = "proposal_accepted".freeze
@@ -29,6 +28,9 @@ class KakaoNotificationResult < ApplicationRecord
   NEW_JOB_VISIT_V2 = 'new_job_visit_v2'.freeze
   NEW_JOB_FACILITY_V2 = 'new_job_facility(23-09-2w)'.freeze
   NEWSPAPER_V2 = 'newspaper_v2'.freeze
+
+  # 신규일자리알림
+  NEW_JOB_POSTING = 'new_job_posting'.freeze
 
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -61,10 +63,11 @@ class KakaoNotificationResult < ApplicationRecord
     CALL_INTERVIEW_PROPOSAL => CALL_INTERVIEW_PROPOSAL,
     CALL_INTERVIEW_ACCEPTED => CALL_INTERVIEW_ACCEPTED,
     CALL_SAVED_JOB_CAREGIVER => CALL_SAVED_JOB_CAREGIVER,
-    CALL_SAVED_JOB_POSTING_V2=> CALL_SAVED_JOB_POSTING_V2,
+    CALL_SAVED_JOB_POSTING_V2 => CALL_SAVED_JOB_POSTING_V2,
     NEWSPAPER_V2 => NEWSPAPER_V2,
     NEW_JOB_VISIT_V2 => NEW_JOB_VISIT_V2,
     NEW_JOB_FACILITY_V2 => NEW_JOB_FACILITY_V2,
-    ASK_ACTIVE => ASK_ACTIVE
+    ASK_ACTIVE => ASK_ACTIVE,
+    NEW_JOB_POSTING => NEW_JOB_POSTING
   }
 end
