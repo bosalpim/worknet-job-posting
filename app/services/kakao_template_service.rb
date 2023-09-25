@@ -1085,7 +1085,7 @@ class KakaoTemplateService
     job_posting_public_id = tem_params[:job_posting_public_id]
 
     host = if Jets.env == 'production'
-             'https://dev-carepartner.kr'
+             'https://carepartner.kr'
            else
              'https://dev-carepartner.kr'
            end
