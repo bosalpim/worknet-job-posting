@@ -99,7 +99,8 @@ class KakaoNotificationService < KakaoTemplateService
       KakaoTemplate::NEW_JOB_POSTING_VISIT,
       KakaoTemplate::NEW_JOB_POSTING_FACILITY,
       KakaoTemplate::NEW_JOB_VISIT_V2,
-      KakaoTemplate::NEW_JOB_FACILITY_V2
+      KakaoTemplate::NEW_JOB_FACILITY_V2,
+      KakaoTemplate::NEW_JOB_POSTING
     ]
 
     if title_required_templates.include?(template_id)

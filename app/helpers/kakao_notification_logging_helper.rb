@@ -41,9 +41,9 @@ module KakaoNotificationLoggingHelper
     end
 
     case template_id
-    when KakaoTemplate::NEW_JOB_POSTING_VISIT, KakaoTemplate::NEW_JOB_VISIT_V2, KakaoTemplate::NEW_JOB_POSTING_FACILITY, KakaoTemplate::NEW_JOB_FACILITY_V2
+    when KakaoTemplate::NEW_JOB_POSTING
       return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
-    when KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoTemplate::JOB_ALARM_OFF, KakaoTemplate::JOB_ALARM_WORKING, KakaoTemplate::NEWSPAPER_V2
+    when KakaoTemplate::NEWSPAPER_V2
       return get_news_paper_logging_data(template_id, target_public_id)
     when KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION
       return get_close_job_posting_notification_logging_data(tem_params, template_id, target_public_id)
@@ -113,6 +113,7 @@ module KakaoNotificationLoggingHelper
     job_posting_public_id = template_params.dig(:job_posting_public_id)
     job_posting_title = template_params.dig(:job_posting_title)
     business_name = template_params.dig(:business_name)
+    work_type_ko = template_params.dig(:work_type_ko)
 
     return {
       "user_id" => target_public_id,
@@ -123,6 +124,7 @@ module KakaoNotificationLoggingHelper
         "template" => template_id,
         "job_posting_public_id" => job_posting_public_id,
         "job_posting_title" => job_posting_title,
+        "job_posting_type" => work_type_ko,
         "business_name" => business_name,
         "send_at" => Time.current + (9 * 60 * 60)
       }
