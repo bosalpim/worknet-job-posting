@@ -1,4 +1,5 @@
 class KakaoTemplateService
+  include KakaoTemplate
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
   SETTING_ALARM_LINK = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign="
   ALARM_POSITION_LINK = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign="
@@ -85,6 +86,8 @@ class KakaoTemplateService
       get_new_job_facility_v2(tem_params)
     when KakaoTemplate::NEWSPAPER_V2
       get_newspaper_v2(tem_params)
+    when NEW_JOB_POSTING
+      get_new_job_posting(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1110,7 +1113,7 @@ class KakaoTemplateService
           type: 'WL',
           name: '자세히 확인하기',
           url_mobile: url,
-          url_pc: url   }
+          url_pc: url }
       ]
     }
   end
@@ -1215,6 +1218,35 @@ carepartner.kr#{path}
           type: "WL",
           url_mobile: mute_url,
           url_pc: mute_url
+        }
+      ]
+    }
+  end
+
+  def get_new_job_posting(tem_params)
+    alarm_setting_url = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting"
+
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '🔎 일자리 확인하기',
+          type: 'WL',
+          url_pc: tem_params[:origin_url],
+          url_mobile: tem_params[:origin_url]
+        },
+        {
+          name: '❌ 그만 받을래요',
+          type: 'WL',
+          url_pc: tem_params[:mute_url],
+          url_mobile: tem_params[:mute_url]
+        },
+        {
+          name: '🔔 알림 지역 설정',
+          type: 'WL',
+          url_pc: alarm_setting_url,
+          url_mobile: alarm_setting_url
         }
       ]
     }

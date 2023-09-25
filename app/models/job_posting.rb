@@ -214,4 +214,5 @@ class JobPosting < ApplicationRecord
     # 모집직종이 "운전원"인 경우
     return JobPosting.work_types[:facility] if occupation&.match(/운전원/)
   end
+
 end

@@ -87,4 +87,8 @@ class JobPostingCustomer < ApplicationRecord
       nil
     end
   end
+
+  def korean_summary
+    [korean_grade, korean_age, korean_gender].select { |item| item.present? }.join('/')
+  end
 end
