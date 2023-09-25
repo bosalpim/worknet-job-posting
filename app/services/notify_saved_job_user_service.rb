@@ -15,6 +15,12 @@ class NotifySavedJobUserService
   def call
     make_message
 
+    Jets.logger.info "-------------- MESSAGE START --------------"
+    @messages.each do |message|
+      Jets.logger.info message
+    end
+    Jets.logger.info "-------------- MESSAGE END --------------"
+
     # send
     results = send_message(@messages, KakaoTemplate::CALL_SAVED_JOB_POSTING_V2)
     process_results(results, KakaoTemplate::CALL_SAVED_JOB_POSTING_V2)
