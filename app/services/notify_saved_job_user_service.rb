@@ -41,11 +41,15 @@ class NotifySavedJobUserService
       target_call_records = CallRecord.where("created_at > ?", job_posting.published_at)
       check_connected += target_call_records.where(to_number: user_pn, from_number: client_pn)
       check_connected += target_call_records.where(to_number: client_pn, from_number: user_pn)
-
       next if check_connected.count != 0
 
-      user = saved_job_posting.user
       customer = job_posting.job_posting_customer
+      if customer.nil?
+        Jets.logger.info "수급자 정보 비어있음 : 공고 #{job_posting.public_id}\n"
+        next
+      end
+
+      user = saved_job_posting.user
 
       # 디버깅 로그
       Jets.logger.info "-------------- INFO START --------------\n"
