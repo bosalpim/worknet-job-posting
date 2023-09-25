@@ -47,7 +47,7 @@ class NotifySavedJobUserService
       user = saved_job_posting.user
       # 메시지 데이터 > 어르신 정보
       customer = job_posting.job_posting_customer
-      customer_info = convert_safe_text("#{[customer.korean_grade, customer.korean_age, customer.korean_gender].select { |i| i.present? }.join(' / ')}")
+      customer_info = convert_safe_text("#{[customer&.korean_grade, customer&.korean_age, customer&.korean_gender].select { |i| i.present? }.join(' / ')}")
       # 메시지 데이터 > 근무 요일
       work_schedule = convert_safe_text("#{format_consecutive_dates(job_posting)}")
       # 메시지 데이터 > 근무 장소
