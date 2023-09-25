@@ -43,23 +43,16 @@ class NotifySavedJobUserService
       check_connected += target_call_records.where(to_number: client_pn, from_number: user_pn)
       next if check_connected.count != 0
 
-      customer = job_posting.job_posting_customer
-      if customer.nil?
-        Jets.logger.info "수급자 정보 비어있음 : 공고 #{job_posting.public_id}\n"
-        next
-      end
-
-      user = saved_job_posting.user
-
-      # 디버깅 로그
       Jets.logger.info "-------------- INFO START --------------\n"
+      customer = job_posting.job_posting_customer
+      user = saved_job_posting.user
+      # 디버깅 로그
       Jets.logger.info "공고 : #{job_posting.public_id} #{job_posting.title}\n"
-      Jets.logger.info "수급자 : #{customer.korean_age} #{customer.korean_grade} #{customer.korean_gender}\n"
       Jets.logger.info "요보사 : #{user.id} #{user.phone_number}\n"
       Jets.logger.info "-------------- INFO END --------------\n"
 
       # 메시지 데이터 > 어르신 정보
-      customer_info = convert_safe_text("#{[customer&.korean_grade, customer&.korean_age, customer&.korean_gender].select { |i| i.present? }.join(' / ')}")
+      customer_info = customer.nil? ? '해당없음' : convert_safe_text("#{[customer&.korean_grade, customer&.korean_age, customer&.korean_gender].select { |i| i.present? }.join(' / ')}")
       # 메시지 데이터 > 근무 요일
       work_schedule = convert_safe_text("#{format_consecutive_dates(job_posting)}")
       # 메시지 데이터 > 근무 장소
