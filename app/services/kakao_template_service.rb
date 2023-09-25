@@ -83,7 +83,7 @@ class KakaoTemplateService
       get_new_job_visit_v2(tem_params)
     when KakaoTemplate::NEW_JOB_FACILITY_V2
       get_new_job_facility_v2(tem_params)
-    when KakaoTemplate::NEWSPAPAER_V2
+    when KakaoTemplate::NEWSPAPER_V2
       get_newspaper_v2(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
@@ -1223,7 +1223,7 @@ carepartner.kr#{path}
   def get_newspaper_v2(tem_params)
     today = NewsPaper.get_today
     url = "https://www.carepartner.kr/newspaper?lat=#{tem_params["lat"]}&lng=#{tem_params["lng"]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
-    mute_url = "https://www.carepartner.kr/me/notification/off?type=jobutm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
+    mute_url = "https://www.carepartner.kr/me/notification/off?type=job&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
     {
       title: '아직 일자리를 찾고 있나요?',
       message: "#{today} 일자리 신문이 도착했어요.

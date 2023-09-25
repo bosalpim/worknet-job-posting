@@ -1,6 +1,5 @@
 class SendScheduledMessageJob < ApplicationJob
-  # 목요일 오전 10시 02분부터 10분 간격으로 10번 전송
-
+  # 목요일 오전 10시 32분부터 10분 간격으로 10번 전송
   cron "32 1 ? * THU *"
 
   def send_news_paper_thursday_message_0
@@ -61,8 +60,7 @@ class SendScheduledMessageJob < ApplicationJob
     SendCreatedScheduledMessageService.call(KakaoTemplate::NEWSPAPER_V2, KakaoNotificationResult::NEWS_PAPER, 0.1, 0.9)
   end
 
-  # 월요일 오전 10시 02분부터 10분 간격으로 10번 전송
-  # TODO: 임시로 12시 30분부터 전송으로 수정
+  # 월요일 오전 10시 32분부터 10분 간격으로 10번 전송
   cron "32 1 ? * MON *"
 
   def send_news_paper_monday_message_0
