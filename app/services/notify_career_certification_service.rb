@@ -41,7 +41,7 @@ class NotifyCareerCertificationService
     code = response.dig('code')
     message = response.dig('message')
 
-    if code == 'success' and message == 'K000'
+    if code == 'success' && message == 'K000'
       success_count += 1
     elsif code == 'success'
       tms_success_count += 1
