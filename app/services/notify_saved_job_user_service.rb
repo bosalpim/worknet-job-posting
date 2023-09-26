@@ -46,6 +46,9 @@ class NotifySavedJobUserService
       Jets.logger.info "-------------- INFO START --------------\n"
       customer = job_posting.job_posting_customer
       user = saved_job_posting.user
+
+      next unless user.notification_enabled
+
       # 디버깅 로그
       Jets.logger.info "공고 : #{job_posting.public_id} #{job_posting.title}\n"
       Jets.logger.info "요보사 : #{user.id} #{user.phone_number}\n"
