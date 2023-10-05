@@ -73,6 +73,7 @@ class NotifySavedJobUserService
                       phone_number: user.phone_number,
                       target_public_id: user.public_id,
                       tem_params: {
+                        target_public_id: user.public_id,
                         customer_info: customer_info,
                         work_schedule: work_schedule,
                         location_info: location_info,
