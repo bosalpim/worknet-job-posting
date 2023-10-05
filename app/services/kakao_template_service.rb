@@ -1,19 +1,49 @@
 class KakaoTemplateService
   include KakaoTemplate
+  DEFAULT_RESERVE_AT = "00000000000000".freeze
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
   SETTING_ALARM_LINK = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign="
   ALARM_POSITION_LINK = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign="
 
-  attr_reader :template_id
+  attr_reader :template_id, :message_type
 
-  def initialize(template_id)
+  def initialize(template_id, message_type, phone, reserve_dt)
+    profile = ENV['KAKAO_BIZMSG_PROFILE']
     @template_id = template_id
+    @message_type = message_type
+    @profile = profile
+    @phone = if Jets.env == 'production'
+               phone
+             elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(phone)
+               phone
+             else
+               TEST_PHONE_NUMBER
+             end
+    @reserve_dt = get_reserve_dt(reserve_dt)
+    @sender_number = "15885877"
   end
 
-  private
+  def get_final_request_params(tem_params, is_kakao_notification = false)
+    template_data = get_template_data(tem_params)
+    request_params = get_default_request_params(template_id, template_data, is_kakao_notification)
+    if (items = template_data[:items])
+      request_params[:items] = items
+    end
+    if (buttons = template_data[:buttons])
+      buttons.each_with_index do |btn, index|
+        request_params["button#{index + 1}"] = btn
+      end
+    end
+    if (quick_replies = template_data[:quick_replies])
+      quick_replies.each_with_index do |quick_reply, index|
+        request_params["quickReply#{index + 1}"] = quick_reply
+      end
+    end
+    request_params
+  end
 
-  def get_template_data(template_id, tem_params)
-    case template_id
+  def get_template_data(tem_params)
+    case @template_id
     when KakaoTemplate::PROPOSAL
       get_proposal_data(tem_params)
     when KakaoTemplate::NEW_JOB_POSTING_VISIT
@@ -91,6 +121,78 @@ class KakaoTemplateService
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
+  end
+
+  private
+
+  def get_reserve_dt(reserve_dt)
+    return reserve_dt if reserve_dt
+    american_time = Time.current
+    korean_offset = 9 * 60 * 60 # 9 hours ahead of American time
+    korean_time = american_time + korean_offset
+
+    if korean_time.hour >= 21
+      next_day_time = korean_time + 1.day
+      next_day_time.strftime("%Y%m%d") + "080000"
+    elsif korean_time.hour < 8
+      korean_time.strftime("%Y%m%d") + "080000"
+    else
+      DEFAULT_RESERVE_AT
+    end
+  end
+
+  def current_time
+    "#{Time.now.strftime("%y%m%d%H%M%S")}_#{SecureRandom.uuid.gsub('-', '')[0, 7]}"
+  end
+
+
+  def get_default_request_params(template_id, template_data, is_kakao_notification)
+    message, img_url, title = template_data.values_at(:message, :img_url, :title)
+    data = if is_kakao_notification
+             {
+               message_type: @message_type,
+               phn: @phone.to_s.gsub(/[^0-9]/, ""),
+               profile: @profile,
+               tmplId: template_id,
+               msg: message,
+               smsKind: message&.bytesize&.to_i > 90 ? "L" : "S",
+               msgSms: message,
+               smsSender: @sender_number,
+               smsLmsTit: title,
+               img_url: img_url,
+               reserveDt: @reserve_dt
+             }
+           else
+             {
+               msgid: "WEB#{current_time}",
+               message_type: @message_type,
+               profile_key: @profile,
+               template_code: template_id,
+               receiver_num: @phone.to_s.gsub(/[^0-9]/, ""),
+               message: message,
+               reserved_time: @reserve_dt,
+               sms_message: message,
+               sms_title: title,
+               sms_kind: message&.bytesize&.to_i > 90 ? "L" : "S",
+               sender_num: @sender_number,
+               image_url: img_url,
+             }
+           end
+
+    title_required_templates = [
+      KakaoTemplate::PROPOSAL_RESPONSE_EDIT,
+      KakaoTemplate::NEW_JOB_POSTING_VISIT,
+      KakaoTemplate::NEW_JOB_POSTING_FACILITY,
+      KakaoTemplate::NEW_JOB_VISIT_V2,
+      KakaoTemplate::NEW_JOB_FACILITY_V2,
+      KakaoTemplate::NEW_JOB_POSTING
+    ]
+
+    if title_required_templates.include?(template_id)
+      data[:title] = title
+    end
+
+    data
   end
 
   def get_proposal_data(tem_params)
