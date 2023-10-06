@@ -23,9 +23,9 @@ class KakaoTemplateService
     @sender_number = "15885877"
   end
 
-  def get_final_request_params(tem_params, is_kakao_notification = false)
+  def get_final_request_params(tem_params, is_pre_pay = false)
     template_data = get_template_data(tem_params)
-    request_params = get_default_request_params(template_id, template_data, is_kakao_notification)
+    request_params = get_default_request_params(template_id, template_data, is_pre_pay)
     if (items = template_data[:items])
       request_params[:items] = items
     end
@@ -145,10 +145,9 @@ class KakaoTemplateService
     "#{Time.now.strftime("%y%m%d%H%M%S")}_#{SecureRandom.uuid.gsub('-', '')[0, 7]}"
   end
 
-
-  def get_default_request_params(template_id, template_data, is_kakao_notification)
+  def get_default_request_params(template_id, template_data, is_pre_pay)
     message, img_url, title = template_data.values_at(:message, :img_url, :title)
-    data = if is_kakao_notification
+    data = if is_pre_pay
              {
                message_type: @message_type,
                phn: @phone.to_s.gsub(/[^0-9]/, ""),
