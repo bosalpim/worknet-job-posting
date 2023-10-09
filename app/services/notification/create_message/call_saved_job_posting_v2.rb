@@ -67,8 +67,8 @@ class Notification::CreateMessage::CallSavedJobPostingV2
         center_name: job_posting.business.name,
         job_posting_public_id: job_posting.public_id
       }
-      request_sources.push(send_medium: 'a', message_request_param: params, phone: user.phone_number)
-      return request_sources
+      request_sources.push(send_medium: NotificationServiceJob::BIZM_POST_PAY, message_request_param: params, phone: user.phone_number)
     end
+    request_sources
   end
 end

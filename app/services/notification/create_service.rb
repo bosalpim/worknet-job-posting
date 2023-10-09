@@ -1,6 +1,4 @@
 class Notification::CreateService
-
-
   # @param template_id : 메세지 Template
   # @params params : 각 template에 사용되는 변수
   # @return [{ send_medium: "BizM" OR "AppPush", message_request_param: {}, message_}]

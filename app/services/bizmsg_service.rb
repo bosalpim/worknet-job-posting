@@ -20,7 +20,7 @@ class BizmsgService
     request_params = @template_service.get_final_request_params(@template_params)
 
     begin
-      response = request_post_pay(request_params)
+      response = request_post_pay(request_params, nil)
       log_result(response)
       return response
     rescue => e

@@ -1,7 +1,7 @@
 class Notification::SendService
   include NotificationRequestHelper
   def self.send_messages(template_id, request_sources)
-    new.send_messages(template_id, request_sources)
+    return new.send_messages(template_id, request_sources)
   end
 
   def initialize
@@ -23,7 +23,7 @@ class Notification::SendService
       case send_medium
       when NotificationServiceJob::BIZM_POST_PAY
         request_param = @template_service.get_final_request_params(request_source[:message_request_param], false, request_source[:phone])
-        rsp = send_bizm_post_pay(request_param)
+        rsp = send_bizm_post_pay(request_param, message_request_param[:target_public_id])
       else
         raise "메세지 발송매체(#{send_medium})가 추가되지 않았습니다."
       end
@@ -31,6 +31,7 @@ class Notification::SendService
       amplitude_log(send_medium, template_id, rsp, message_request_param)
       @process_results.push({ send_medium: send_medium, response: rsp })
     end
+
     @process_results
   end
 
@@ -44,7 +45,7 @@ class Notification::SendService
       raise "발송매체(#{send_medium}) amplitude 로깅 처리가 추가되지 않았습니다."
     end
   end
-  def send_bizm_post_pay(request_param)
-    request_post_pay(request_param)
+  def send_bizm_post_pay(request_param, target_public_id)
+    request_post_pay(request_param, target_public_id)
   end
 end
