@@ -11,7 +11,7 @@ class NotificationServiceJob < ApplicationJob
 
   cron "0 4 ? * * *"
   def notify_saved_job_user_1day_ago
-    template_id = KakaoTemplate::CALL_SAVED_JOB_POSTING_V2
+    template_id = MessageTemplate::CALL_SAVED_JOB_POSTING_V2
     # 발송 데이터 생성
     request_sources = Notification::CreateService.create(template_id, nil)
     # 발송 (ps. 메세지 성공/실패에 따른 이벤트로깅은 재발송등 사후 처리의 편의성을 위해 Amplitude 로깅이 함께 수행됩니다.)

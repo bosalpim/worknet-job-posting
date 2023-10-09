@@ -41,51 +41,51 @@ module KakaoNotificationLoggingHelper
     end
 
     case template_id
-    when KakaoTemplate::NEW_JOB_POSTING
+    when MessageTemplate::NEW_JOB_POSTING
       return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
-    when KakaoTemplate::NEWSPAPER_V2
+    when MessageTemplate::NEWSPAPER_V2
       return get_news_paper_logging_data(template_id, target_public_id)
-    when KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION
+    when MessageTemplate::CLOSE_JOB_POSTING_NOTIFICATION
       return get_close_job_posting_notification_logging_data(tem_params, template_id, target_public_id)
-    when KakaoTemplate::CANDIDATE_RECOMMENDATION
+    when MessageTemplate::CANDIDATE_RECOMMENDATION
       return get_candidate_recommendation_logging_data(template_id, tem_params)
-    when KakaoTemplate::USER_CALL_REMINDER
+    when MessageTemplate::USER_CALL_REMINDER
       # 기관이 요보사한테 전화했는데 부재중일 경우
       return get_user_call_reminder_logging_data(template_id, tem_params)
-    when KakaoTemplate::BUSINESS_CALL_REMINDER
+    when MessageTemplate::BUSINESS_CALL_REMINDER
       # 요보사가 기관한테 전화했는데 부재중일 경우
       return get_business_call_reminder_logging_data(template_id, tem_params)
-    when KakaoTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
+    when MessageTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
       # 기관에게 전화신청한 요보사가 기관의 전화를 안 받았을 경우
       return get_business_call_apply_user_reminder(template_id, tem_params)
-    when KakaoTemplate::CALL_REQUEST_ALARM
+    when MessageTemplate::CALL_REQUEST_ALARM
       # 요보사가 기관한테 전화신청했을 경우
       return get_call_request_alarm_logging_data(template_id, tem_params)
-    when KakaoTemplate::PROPOSAL_RESPONSE_EDIT
+    when MessageTemplate::PROPOSAL_RESPONSE_EDIT
       # 기관이 요보사에게 일자리 제안을 보냈을 경우
       return get_proposal_response_edit_logging_data(template_id, tem_params)
-    when KakaoTemplate::PROPOSAL_ACCEPTED
+    when MessageTemplate::PROPOSAL_ACCEPTED
       # 요보사가 일자리 제안을 수락했을 경우
       return get_proposal_accepted_logging_data(template_id, tem_params)
-    when KakaoTemplate::HIGH_SALARY_JOB
+    when MessageTemplate::HIGH_SALARY_JOB
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when KakaoTemplate::WELL_FITTED_JOB
+    when MessageTemplate::WELL_FITTED_JOB
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when KakaoTemplate::ENTER_LOCATION
+    when MessageTemplate::ENTER_LOCATION
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when KakaoTemplate::CERTIFICATION_UPDATE
+    when MessageTemplate::CERTIFICATION_UPDATE
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when KakaoTemplate::SIGNUP_COMPLETE_GUIDE
+    when MessageTemplate::SIGNUP_COMPLETE_GUIDE
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when KakaoTemplate::CALL_INTERVIEW_PROPOSAL
+    when MessageTemplate::CALL_INTERVIEW_PROPOSAL
       return get_call_interview_proposal_logging_data(template_id, tem_params)
-    when KakaoTemplate::CALL_INTERVIEW_ACCEPTED
+    when MessageTemplate::CALL_INTERVIEW_ACCEPTED
       return get_call_interview_accepted_logging_data(template_id, tem_params)
-    when KakaoTemplate::CALL_SAVED_JOB_CAREGIVER
+    when MessageTemplate::CALL_SAVED_JOB_CAREGIVER
       return get_call_saved_job_caregiver(template_id, tem_params)
-    when KakaoTemplate::CALL_SAVED_JOB_POSTING_V2
+    when MessageTemplate::CALL_SAVED_JOB_POSTING_V2
       return get_call_saved_job_caregiver2(template_id, tem_params)
-    when KakaoTemplate::ASK_ACTIVE
+    when MessageTemplate::ASK_ACTIVE
       return get_ask_active_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"

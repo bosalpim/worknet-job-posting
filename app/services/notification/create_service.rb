@@ -4,7 +4,7 @@ class Notification::CreateService
   # @return [{ send_medium: "BizM" OR "AppPush", message_request_param: {}, message_}]
   def self.create(template_id, params)
     case template_id
-    when KakaoTemplate::CALL_SAVED_JOB_POSTING_V2
+    when MessageTemplate::CALL_SAVED_JOB_POSTING_V2
       return Notification::CreateMessage::CallSavedJobPostingV2.create
     else
       return []
