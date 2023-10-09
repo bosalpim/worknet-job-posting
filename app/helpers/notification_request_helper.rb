@@ -9,6 +9,25 @@ module NotificationRequestHelper
     }
   end
 
+  def app_push_headers
+    {
+      Authorization: "key=#{ENV["FCM_APP_PUSH_AUTHORIZATION"]}",
+      "Content-Type" => "application/json",
+      "Accept" => "*/*"
+    }
+  end
+
+  def request_app_push(request_params)
+    response = HTTParty.post(
+      "https://fcm.googleapis.com/fcm/send",
+      body: JSON.dump(request_params),
+      headers: app_push_headers,
+      timeout: 10
+    ).parsed_response
+
+    response.class == Array ? response.first : response
+  end
+
   def request_post_pay(request_params)
     response = HTTParty.post(
       BIZ_MSG_BASE_URL,

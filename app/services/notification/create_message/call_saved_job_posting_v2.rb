@@ -1,37 +1,21 @@
-class NotifySavedJobUserService
+class Notification::CreateMessage::CallSavedJobPostingV2
   include JobMatchHelper
   include ApplicationHelper
   include JobPostingsHelper
-  include ApplicationHelper
-  def self.call(list)
-    new(list).call
+
+  def initialize
+    @list = SearchUserSavedJobPostingsService.call(1)
   end
 
-  def initialize(list)
-    @list = list || []
-    @messages = []
+  def self.create
+    return new.make_message
   end
-
-  def call
-    make_message
-
-    Jets.logger.info "-------------- MESSAGE START --------------\n"
-    @messages.each do |message|
-      Jets.logger.info "#{message}\n"
-    end
-    Jets.logger.info "-------------- MESSAGE END --------------\n"
-
-    # send
-    results = send_message(@messages, KakaoTemplate::CALL_SAVED_JOB_POSTING_V2)
-    process_results(results, KakaoTemplate::CALL_SAVED_JOB_POSTING_V2)
-  end
-
-  private
 
   def make_message
+    request_sources = []
     @list.each do |saved_job_posting|
       job_posting = saved_job_posting.job_posting
-      next if job_posting.is_closed? || job_posting.worknet_job_posting?
+      # next if job_posting.is_closed? || job_posting.worknet_job_posting?
 
       user_pn = saved_job_posting.user.phone_number
       client_pn = saved_job_posting.job_posting.phone_number
@@ -68,26 +52,23 @@ class NotifySavedJobUserService
 
       # 이벤트 로깅 데이터 >
       user = saved_job_posting.user
-
-      @messages.push({
-                      phone_number: user.phone_number,
-                      target_public_id: user.public_id,
-                      tem_params: {
-                        target_public_id: user.public_id,
-                        customer_info: customer_info,
-                        work_schedule: work_schedule,
-                        location_info: location_info,
-                        pay_text: pay_text,
-                        type_match: is_type_match(user.preferred_work_types, job_posting.work_type),
-                        gender_match: is_gender_match(user.preferred_gender, job_posting.gender),
-                        day_match: is_day_match(user.job_search_days, job_posting.working_days),
-                        time_match: is_time_match(work_start_time: job_posting.work_start_time, work_end_time: job_posting.work_end_time, job_search_times: user.job_search_times),
-                        grade_match: is_grade_match(user.preferred_grades, job_posting.grade),
-                        job_posting_title: job_posting.title,
-                        center_name: job_posting.business.name,
-                        job_posting_public_id: job_posting.public_id
-                      }
-                    })
+      params = {
+        target_public_id: user.public_id,
+        customer_info: customer_info,
+        work_schedule: work_schedule,
+        location_info: location_info,
+        pay_text: pay_text,
+        type_match: is_type_match(user.preferred_work_types, job_posting.work_type),
+        gender_match: is_gender_match(user.preferred_gender, job_posting.gender),
+        day_match: is_day_match(user.job_search_days, job_posting.working_days),
+        time_match: is_time_match(work_start_time: job_posting.work_start_time, work_end_time: job_posting.work_end_time, job_search_times: user.job_search_times),
+        grade_match: is_grade_match(user.preferred_grades, job_posting.grade),
+        job_posting_title: job_posting.title,
+        center_name: job_posting.business.name,
+        job_posting_public_id: job_posting.public_id
+      }
+      request_sources.push(send_medium: 'a', message_request_param: params, phone: user.phone_number)
+      return request_sources
     end
   end
 end

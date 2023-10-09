@@ -12,18 +12,14 @@ class KakaoTemplateService
     @template_id = template_id
     @message_type = message_type
     @profile = profile
-    @phone = if Jets.env == 'production'
-               phone
-             elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(phone)
-               phone
-             else
-               TEST_PHONE_NUMBER
-             end
+    set_phone(phone)
     @reserve_dt = get_reserve_dt(reserve_dt)
     @sender_number = "15885877"
   end
 
-  def get_final_request_params(tem_params, is_pre_pay = false)
+  def get_final_request_params(tem_params, is_pre_pay = false, phone = nil)
+    set_phone(phone) unless phone.nil?
+
     template_data = get_template_data(tem_params)
     request_params = get_default_request_params(template_id, template_data, is_pre_pay)
     if (items = template_data[:items])
@@ -124,6 +120,16 @@ class KakaoTemplateService
   end
 
   private
+
+  def set_phone(phone)
+    @phone = if Jets.env == 'production'
+               phone
+             elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(phone)
+               phone
+             else
+               TEST_PHONE_NUMBER
+             end
+  end
 
   def get_reserve_dt(reserve_dt)
     return reserve_dt if reserve_dt
