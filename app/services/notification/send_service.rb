@@ -5,7 +5,7 @@ class Notification::SendService
   end
 
   def initialize
-    @template_service = KakaoTemplateService.new(KakaoTemplate::CALL_SAVED_JOB_POSTING_V2, 'AI', nil, nil)
+    @template_service = KakaoTemplateService.new(MessageTemplate::CALL_SAVED_JOB_POSTING_V2, 'AI', nil, nil)
     @process_results = []
   end
   def send_messages(template_id, request_sources)
