@@ -1,18 +1,15 @@
-class Notification::CreateMessage::CallSavedJobPostingV2
+class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::MessageFactoryClass
   include JobMatchHelper
   include ApplicationHelper
   include JobPostingsHelper
 
   def initialize
+    super(MessageTemplate::CALL_SAVED_JOB_POSTING_V2)
     @list = SearchUserSavedJobPostingsService.call(1)
+    create_message
   end
 
-  def self.create
-    return new.make_message
-  end
-
-  def make_message
-    request_sources = []
+  def create_message
     @list.each do |saved_job_posting|
       job_posting = saved_job_posting.job_posting
       # next if job_posting.is_closed? || job_posting.worknet_job_posting?
@@ -45,30 +42,42 @@ class Notification::CreateMessage::CallSavedJobPostingV2
       # 메시지 데이터 > 근무 장소
       distance = user.distance_from(job_posting)
       location_info = convert_safe_text("#{job_posting.address} (#{get_distance_text({
-                                                                                       distance: distance
-                                                                                     })})")
+                                                                                       distance: distance })})")
       # 메시지 데이터 > 급여 정보
       pay_text = convert_safe_text(get_pay_text(job_posting))
-
-      # 이벤트 로깅 데이터 >
       user = saved_job_posting.user
-      params = {
-        target_public_id: user.public_id,
-        customer_info: customer_info,
-        work_schedule: work_schedule,
-        location_info: location_info,
-        pay_text: pay_text,
-        type_match: is_type_match(user.preferred_work_types, job_posting.work_type),
-        gender_match: is_gender_match(user.preferred_gender, job_posting.gender),
-        day_match: is_day_match(user.job_search_days, job_posting.working_days),
-        time_match: is_time_match(work_start_time: job_posting.work_start_time, work_end_time: job_posting.work_end_time, job_search_times: user.job_search_times),
-        grade_match: is_grade_match(user.preferred_grades, job_posting.grade),
-        job_posting_title: job_posting.title,
-        center_name: job_posting.business.name,
-        job_posting_public_id: job_posting.public_id
-      }
-      request_sources.push(send_medium: NotificationServiceJob::BIZM_POST_PAY, message_request_param: params, phone: user.phone_number)
+
+      # 여기부터 DB로 메세지 매체 관리하는 것을 추가한다.
+      if user.is_sendable_app_push
+        app_push = AppPush.new(
+          @message_template_id,
+          user.push_token.token,
+          MessageTemplate::CALL_SAVED_JOB_POSTING_V2,
+          {
+            body: "저장한 관심일자리에 연락해보세요.",
+            title: "저장한 관심일자리 추천",
+            "link": "carepartner://app/jobs/#{job_posting.public_id}?&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_posting"
+          },
+          user.public_id,
+          )
+        @push_list.push(app_push)
+      else
+        params = {
+          customer_info: customer_info,
+          work_schedule: work_schedule,
+          location_info: location_info,
+          pay_text: pay_text,
+          type_match: is_type_match(user.preferred_work_types, job_posting.work_type),
+          gender_match: is_gender_match(user.preferred_gender, job_posting.gender),
+          day_match: is_day_match(user.job_search_days, job_posting.working_days),
+          time_match: is_time_match(work_start_time: job_posting.work_start_time, work_end_time: job_posting.work_end_time, job_search_times: user.job_search_times),
+          grade_match: is_grade_match(user.preferred_grades, job_posting.grade),
+          job_posting_title: job_posting.title,
+          center_name: job_posting.business.name,
+          job_posting_public_id: job_posting.public_id
+        }
+        @bizm_post_pay_list.push(BizmMessage.new(@message_template_id, user.phone, params, user.public_id))
+      end
     end
-    request_sources
   end
 end

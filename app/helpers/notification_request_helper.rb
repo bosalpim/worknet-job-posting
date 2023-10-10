@@ -16,13 +16,6 @@ module NotificationRequestHelper
       "Accept" => "*/*"
     }
   end
-
-  def app_push_user(users)
-    return users.map do |user|
-      user.push
-    end
-  end
-
   def request_app_push(request_params, target_public_id)
     begin
       response = HTTParty.post(
@@ -32,7 +25,7 @@ module NotificationRequestHelper
         timeout: 10
       ).parsed_response
 
-      response.class == Array ? response.first : response
+      response = response.class == Array ? response.first : response
       success = response[:success]
       if success == 1
         { status: 'success', response: response, target_public_id: target_public_id }
