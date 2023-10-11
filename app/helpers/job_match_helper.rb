@@ -21,10 +21,7 @@ module JobMatchHelper
     start_time = work_start_time.is_a?(String) ? Time.parse(work_start_time) : work_start_time
     end_time = work_end_time.is_a?(String) ? Time.parse(work_end_time) : work_end_time
 
-    start_time -= 9 * 3600
-    end_time -= 9 * 3600
-
-    times_to_check = [
+    [
       MORNING,
       EARLY_AFTERNOON,
       LATE_AFTERNOON,
@@ -47,7 +44,7 @@ module JobMatchHelper
         acc
       end
     end
-                       .any? do |start_hour, end_hour|
+      .any? do |start_hour, end_hour|
       start_time.hour >= start_hour && end_time.hour <= end_hour
     end
   end
