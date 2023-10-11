@@ -21,7 +21,7 @@ class DraftConversionMessageService
   private
   def find_target_user
     case @template_id
-    when KakaoTemplate::HIGH_SALARY_JOB
+    when MessageTemplate::HIGH_SALARY_JOB
       start_time = Time.now.beginning_of_day # 오늘 날짜 00시
       end_time = 1.day.ago.beginning_of_day  # 어제 날짜 00시
       return User.where(created_at: end_time..start_time)
@@ -30,7 +30,7 @@ class DraftConversionMessageService
                  .where(status: 'draft')
                  .where(has_certification: true)
                  .where.not(draft_status: 'address')
-    when KakaoTemplate::ENTER_LOCATION
+    when MessageTemplate::ENTER_LOCATION
       start_time = Time.now.beginning_of_day # 오늘 날짜 00시
       end_time = 1.day.ago.beginning_of_day  # 어제 날짜 00시
       return User.where(created_at: end_time..start_time)
@@ -39,7 +39,7 @@ class DraftConversionMessageService
                  .where(status: 'draft')
                  .where(has_certification: true)
                  .where(draft_status: 'address')
-    when KakaoTemplate::WELL_FITTED_JOB
+    when MessageTemplate::WELL_FITTED_JOB
       start_time = 1.day.ago.beginning_of_day# 1일전 날짜 00시
       end_time = 2.day.ago.beginning_of_day  # 2일전 날짜 00시
       return User.where(created_at: (end_time..start_time))
@@ -47,7 +47,7 @@ class DraftConversionMessageService
                  .where(notification_enabled: true)
                  .where(status: 'draft')
                  .where(has_certification: true)
-    when KakaoTemplate::CERTIFICATION_UPDATE
+    when MessageTemplate::CERTIFICATION_UPDATE
       users = User.where(has_certification: false)
                   .where.not(expected_acquisition: nil)
                   .where.not(marketing_agree: nil)
@@ -108,13 +108,13 @@ class DraftConversionMessageService
 
   def get_send_type
     case @template_id
-    when KakaoTemplate::HIGH_SALARY_JOB
+    when MessageTemplate::HIGH_SALARY_JOB
       KakaoNotificationResult::HIGH_SALARY_JOB
-    when KakaoTemplate::ENTER_LOCATION
+    when MessageTemplate::ENTER_LOCATION
       KakaoNotificationResult::ENTER_LOCATION
-    when KakaoTemplate::WELL_FITTED_JOB
+    when MessageTemplate::WELL_FITTED_JOB
       KakaoNotificationResult::WELL_FITTED_JOB
-    when KakaoTemplate::CERTIFICATION_UPDATE
+    when MessageTemplate::CERTIFICATION_UPDATE
       KakaoNotificationResult::CERTIFICATION_UPDATE
     else
       ""

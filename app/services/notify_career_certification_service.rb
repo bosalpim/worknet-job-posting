@@ -6,7 +6,7 @@ class NotifyCareerCertificationService
   end
 
   def initialize(params)
-    @template_id = KakaoTemplate::CAREER_CERTIFICATION
+    @template_id = MessageTemplate::CAREER_CERTIFICATION
     @link = params.dig(:link)
     @phone = params.dig(:phone)
     @center_name = params.dig(:center_name)

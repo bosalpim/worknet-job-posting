@@ -1,5 +1,5 @@
 class KakaoTemplateService
-  include KakaoTemplate
+  include MessageTemplate
   DEFAULT_RESERVE_AT = "00000000000000".freeze
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
   SETTING_ALARM_LINK = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign="
@@ -12,18 +12,14 @@ class KakaoTemplateService
     @template_id = template_id
     @message_type = message_type
     @profile = profile
-    @phone = if Jets.env == 'production'
-               phone
-             elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(phone)
-               phone
-             else
-               TEST_PHONE_NUMBER
-             end
+    set_phone(phone)
     @reserve_dt = get_reserve_dt(reserve_dt)
     @sender_number = "15885877"
   end
 
-  def get_final_request_params(tem_params, is_pre_pay = false)
+  def get_final_request_params(tem_params, is_pre_pay = false, phone = nil)
+    set_phone(phone) unless phone.nil?
+
     template_data = get_template_data(tem_params)
     request_params = get_default_request_params(template_id, template_data, is_pre_pay)
     if (items = template_data[:items])
@@ -44,77 +40,77 @@ class KakaoTemplateService
 
   def get_template_data(tem_params)
     case @template_id
-    when KakaoTemplate::PROPOSAL
+    when MessageTemplate::PROPOSAL
       get_proposal_data(tem_params)
-    when KakaoTemplate::NEW_JOB_POSTING_VISIT
+    when MessageTemplate::NEW_JOB_POSTING_VISIT
       get_visit_job_posting_data(tem_params)
-    when KakaoTemplate::NEW_JOB_POSTING_FACILITY
+    when MessageTemplate::NEW_JOB_POSTING_FACILITY
       get_facility_job_posting_data(tem_params)
-    when KakaoTemplate::PERSONALIZED
+    when MessageTemplate::PERSONALIZED
       get_personalized_data_by_json(tem_params)
-    when KakaoTemplate::EXTRA_BENEFIT
+    when MessageTemplate::EXTRA_BENEFIT
       get_extra_benefit_data_by_json(tem_params)
-    when KakaoTemplate::PROPOSAL_ACCEPTED
+    when MessageTemplate::PROPOSAL_ACCEPTED
       get_proposal_accepted_data(tem_params)
-    when KakaoTemplate::PROPOSAL_REJECTED
+    when MessageTemplate::PROPOSAL_REJECTED
       get_proposal_rejected_data(tem_params)
-    when KakaoTemplate::PROPOSAL_RESPONSE_EDIT
+    when MessageTemplate::PROPOSAL_RESPONSE_EDIT
       get_proposal_response_edit_data(tem_params)
-    when KakaoTemplate::SATISFACTION_SURVEY
+    when MessageTemplate::SATISFACTION_SURVEY
       get_satisfaction_survey_data(tem_params)
-    when KakaoTemplate::USER_SATISFACTION_SURVEY
+    when MessageTemplate::USER_SATISFACTION_SURVEY
       get_user_satisfaction_survey_data(tem_params)
-    when KakaoTemplate::USER_CALL_REMINDER
+    when MessageTemplate::USER_CALL_REMINDER
       get_user_call_reminder_data(tem_params)
-    when KakaoTemplate::BUSINESS_CALL_REMINDER
+    when MessageTemplate::BUSINESS_CALL_REMINDER
       get_business_call_reminder_data(tem_params)
-    when KakaoTemplate::CALL_REQUEST_ALARM
+    when MessageTemplate::CALL_REQUEST_ALARM
       get_new_apply_data(tem_params)
-    when KakaoTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
+    when MessageTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
       get_apply_user_call_reminder_data(tem_params)
-    when KakaoTemplate::JOB_ALARM_ACTIVELY
+    when MessageTemplate::JOB_ALARM_ACTIVELY
       get_job_alarm_actively(tem_params)
-    when KakaoTemplate::JOB_ALARM_COMMON
+    when MessageTemplate::JOB_ALARM_COMMON
       get_job_alarm_commonly(tem_params)
-    when KakaoTemplate::JOB_ALARM_OFF
+    when MessageTemplate::JOB_ALARM_OFF
       get_job_alarm_off(tem_params)
-    when KakaoTemplate::JOB_ALARM_WORKING
+    when MessageTemplate::JOB_ALARM_WORKING
       get_job_alarm_working(tem_params)
-    when KakaoTemplate::GAMIFICATION_MISSION_COMPLETE
+    when MessageTemplate::GAMIFICATION_MISSION_COMPLETE
       get_gamification_mission_complete
-    when KakaoTemplate::CAREER_CERTIFICATION
+    when MessageTemplate::CAREER_CERTIFICATION
       get_career_certification_alarm(tem_params)
-    when KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION
+    when MessageTemplate::CLOSE_JOB_POSTING_NOTIFICATION
       get_close_job_posting_notification(tem_params)
-    when KakaoTemplate::CANDIDATE_RECOMMENDATION
+    when MessageTemplate::CANDIDATE_RECOMMENDATION
       get_candidate_recommendation(tem_params)
-    when KakaoTemplate::SIGNUP_COMPLETE_GUIDE
+    when MessageTemplate::SIGNUP_COMPLETE_GUIDE
       get_signup_complete_guide
-    when KakaoTemplate::HIGH_SALARY_JOB
+    when MessageTemplate::HIGH_SALARY_JOB
       get_high_salary_job(tem_params)
-    when KakaoTemplate::ENTER_LOCATION
+    when MessageTemplate::ENTER_LOCATION
       get_enter_location(tem_params)
-    when KakaoTemplate::WELL_FITTED_JOB
+    when MessageTemplate::WELL_FITTED_JOB
       get_well_fitted_job(tem_params)
-    when KakaoTemplate::CERTIFICATION_UPDATE
+    when MessageTemplate::CERTIFICATION_UPDATE
       get_certification_update(tem_params)
-    when KakaoTemplate::POST_COMMENT
+    when MessageTemplate::POST_COMMENT
       get_post_comment(tem_params)
-    when KakaoTemplate::CALL_INTERVIEW_PROPOSAL
+    when MessageTemplate::CALL_INTERVIEW_PROPOSAL
       get_call_interview_proposal(tem_params)
-    when KakaoTemplate::CALL_INTERVIEW_ACCEPTED
+    when MessageTemplate::CALL_INTERVIEW_ACCEPTED
       get_call_interview_accepted(tem_params)
-    when KakaoTemplate::CALL_SAVED_JOB_CAREGIVER
+    when MessageTemplate::CALL_SAVED_JOB_CAREGIVER
       get_call_saved_job_caregiver(tem_params)
-    when KakaoTemplate::CALL_SAVED_JOB_POSTING_V2
+    when MessageTemplate::CALL_SAVED_JOB_POSTING_V2
       get_call_saved_job_posting_v2(tem_params)
-    when KakaoTemplate::ASK_ACTIVE
+    when MessageTemplate::ASK_ACTIVE
       get_ask_active(tem_params)
-    when KakaoTemplate::NEW_JOB_VISIT_V2
+    when MessageTemplate::NEW_JOB_VISIT_V2
       get_new_job_visit_v2(tem_params)
-    when KakaoTemplate::NEW_JOB_FACILITY_V2
+    when MessageTemplate::NEW_JOB_FACILITY_V2
       get_new_job_facility_v2(tem_params)
-    when KakaoTemplate::NEWSPAPER_V2
+    when MessageTemplate::NEWSPAPER_V2
       get_newspaper_v2(tem_params)
     when NEW_JOB_POSTING
       get_new_job_posting(tem_params)
@@ -124,6 +120,16 @@ class KakaoTemplateService
   end
 
   private
+
+  def set_phone(phone)
+    @phone = if Jets.env == 'production'
+               phone
+             elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(phone)
+               phone
+             else
+               TEST_PHONE_NUMBER
+             end
+  end
 
   def get_reserve_dt(reserve_dt)
     return reserve_dt if reserve_dt
@@ -179,12 +185,12 @@ class KakaoTemplateService
            end
 
     title_required_templates = [
-      KakaoTemplate::PROPOSAL_RESPONSE_EDIT,
-      KakaoTemplate::NEW_JOB_POSTING_VISIT,
-      KakaoTemplate::NEW_JOB_POSTING_FACILITY,
-      KakaoTemplate::NEW_JOB_VISIT_V2,
-      KakaoTemplate::NEW_JOB_FACILITY_V2,
-      KakaoTemplate::NEW_JOB_POSTING
+      MessageTemplate::PROPOSAL_RESPONSE_EDIT,
+      MessageTemplate::NEW_JOB_POSTING_VISIT,
+      MessageTemplate::NEW_JOB_POSTING_FACILITY,
+      MessageTemplate::NEW_JOB_VISIT_V2,
+      MessageTemplate::NEW_JOB_FACILITY_V2,
+      MessageTemplate::NEW_JOB_POSTING
     ]
 
     if title_required_templates.include?(template_id)
