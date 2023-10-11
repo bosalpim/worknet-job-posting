@@ -114,6 +114,8 @@ class KakaoTemplateService
       get_newspaper_v2(tem_params)
     when NEW_JOB_POSTING
       get_new_job_posting(tem_params)
+    when MessageTemplate::CBT_DRAFT
+      get_cbt_draft(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1383,6 +1385,37 @@ carepartner.kr#{path}
           url_mobile: mute_url,
           url_pc: mute_url,
         }
+      ]
+    }
+  end
+
+  def get_cbt_draft(tem_params)
+    cbt_url = "https://www.carepartner.kr/cbt_landing?utm_source=message&utm_medium=arlimtalk&utm_campaign=CBT-draft"
+    counselor_url = "https://pf.kakao.com/_xjwfcb"
+    {
+      title: "기출문제 풀고 요양보호사 자격증 시험 합격하세요!",
+      message: "#{tem_params[:name]} 선생님 요양보호사 자격증 시험 준비중이신가요?
+
+자격증 시험 합격을 위해 매일 기출문제를 풀어보세요.
+
+하루에 딱 5분으로 요양보호사 자격증 시험 준비를 도와드리겠습니다.
+
+지금 등록하시면 최대 10회분의 모의고사도 무료로 제공해드려요!
+
+아래 ’기출문제 풀기’ 버튼을 눌러 오늘의 기출문제를 바로 풀어보시고 자격증 시험에 합격하세요!",
+      buttons: [
+        {
+          type: 'WL',
+          name: '기출문제 풀기',
+          url_mobile: cbt_url,
+          url_pc: cbt_url
+        },
+        {
+          type: 'WL',
+          name: '케어파트너 문의하기',
+          url_mobile: counselor_url,
+          url_pc: counselor_url
+        },
       ]
     }
   end

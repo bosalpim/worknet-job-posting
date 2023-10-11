@@ -87,6 +87,8 @@ module KakaoNotificationLoggingHelper
       return get_call_saved_job_caregiver2(template_id, tem_params)
     when MessageTemplate::ASK_ACTIVE
       return get_ask_active_logging_data(template_id, tem_params)
+    when MessageTemplate::CBT_DRAFT
+      return get_cbt_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -325,6 +327,17 @@ module KakaoNotificationLoggingHelper
         "centerName" => tem_params[:business_name],
         "jobPostingId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:title],
+      }
+    }
+  end
+
+  def self.get_cbt_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => "CBT Draft Message",
       }
     }
   end
