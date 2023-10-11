@@ -1390,7 +1390,7 @@ carepartner.kr#{path}
   end
 
   def get_cbt_draft(tem_params)
-    cbt_url = "https://www.carepartner.kr/cbt_landing?utm_source=message&utm_medium=arlimtalk&utm_campaign=CBT-draft"
+    cbt_url = "https://cbt.carepartner.kr/delivery?utm_source=message&utm_medium=arlimtalk&utm_campaign=CBT-draft"
     counselor_url = "https://pf.kakao.com/_xjwfcb"
     {
       title: "기출문제 풀고 요양보호사 자격증 시험 합격하세요!",
