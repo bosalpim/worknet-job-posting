@@ -7,6 +7,7 @@ class User < ApplicationRecord
   DEFAULT_LNG = 126.9769233
 
   has_many :proposals, dependent: :nullify
+  has_many :user_push_tokens, dependent: :destroy
 
   enum gender: { male: 'male', female: 'female' }
 
@@ -55,6 +56,14 @@ class User < ApplicationRecord
             },
             if: -> { self.status == 'active' }
   validates :phone_number, presence: true, if: -> { self.status == 'active' }
+
+  def is_sendable_app_push
+    !push_token.nil?
+  end
+
+  def push_token
+    self.user_push_tokens.vaild_tokens.first
+  end
 
   def distance_from(object)
     User

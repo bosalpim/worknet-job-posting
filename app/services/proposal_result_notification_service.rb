@@ -11,7 +11,7 @@ class ProposalResultNotificationService
     user = proposal.user
     business = proposal.business
     job_posting = JobPosting.find_by(public_id: proposal.job_posting_id)
-    template_id = KakaoTemplate::PROPOSAL_ACCEPTED
+    template_id = MessageTemplate::PROPOSAL_ACCEPTED
     link = build_short_url(proposal)
 
     response = KakaoNotificationService.call(
@@ -46,7 +46,7 @@ class ProposalResultNotificationService
     job_posting = JobPosting.find_by(public_id: proposal.job_posting_id)
 
     KakaoNotificationService.call(
-      template_id: KakaoTemplate::PROPOSAL_REJECTED,
+      template_id: MessageTemplate::PROPOSAL_REJECTED,
       phone: user.phone_number,
       template_params: {
         business_name: business.name,

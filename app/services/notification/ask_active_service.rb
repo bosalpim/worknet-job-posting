@@ -2,7 +2,7 @@
 
 class Notification::AskActiveService
   def initialize(params)
-    @template_id = KakaoTemplate::ASK_ACTIVE
+    @template_id = MessageTemplate::ASK_ACTIVE
     @phone_number = params["user_phone_number"]
     @user_public_id = params["user_public_id"]
     @user_name = params["user_name"]
@@ -14,7 +14,7 @@ class Notification::AskActiveService
 
   def call
     response = BizmsgService.call(
-      template_id: KakaoTemplate::ASK_ACTIVE,
+      template_id: MessageTemplate::ASK_ACTIVE,
       message_type: "AI",
       phone: @phone_number,
       template_params: {
