@@ -5,7 +5,7 @@ class Notification::FactoryService
   def self.create(template_id, params)
     case template_id
     when MessageTemplate::CALL_SAVED_JOB_POSTING_V2
-      return Notification::CreateMessage::CallSavedJobPostingV2.new
+      return Notification::Factory::CallSavedJobPostingV2.new
     else
       return []
     end

@@ -12,7 +12,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
   def create_message
     @list.each do |saved_job_posting|
       job_posting = saved_job_posting.job_posting
-      # next if job_posting.is_closed? || job_posting.worknet_job_posting?
+      next if job_posting.is_closed? || job_posting.worknet_job_posting?
 
       user_pn = saved_job_posting.user.phone_number
       client_pn = saved_job_posting.job_posting.phone_number
@@ -59,7 +59,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
             "link": "carepartner://app/jobs/#{job_posting.public_id}?&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_posting"
           },
           user.public_id,
-          )
+        )
         @push_list.push(app_push)
       else
         params = {
@@ -76,7 +76,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
           center_name: job_posting.business.name,
           job_posting_public_id: job_posting.public_id
         }
-        @bizm_post_pay_list.push(BizmMessage.new(@message_template_id, user.phone, params, user.public_id))
+        @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, "AI", user.phone_number, params, user.public_id))
       end
     end
   end

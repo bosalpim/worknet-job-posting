@@ -14,10 +14,9 @@ class NotificationServiceJob < ApplicationJob
     # 발송 데이터 생성
     factory = Notification::FactoryService.create(event[:template_id], event[:params])
     # 발송 (ps. 메세지 성공/실패에 따른 이벤트로깅은 재발송등 사후 처리의 편의성을 위해 Amplitude 로깅이 함께 수행됩니다.)
-    factory.send_app_push
-    factory.send_bizm_post_pay
+    factory.send_app_push # 앱 푸쉬
+    factory.send_bizm_post_pay #
 
     # 발송결과 DB 저장 (사후 처리 대상 구분되도록 DB 내역을 생성해야합니다.)
-    Notification::ResultProcessService.process_result(event[:template_id], process_result)
   end
 end

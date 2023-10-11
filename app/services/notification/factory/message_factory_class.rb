@@ -1,4 +1,7 @@
 class Notification::Factory::MessageFactoryClass
+  AppPush = Notification::Factory::SendMedium::AppPush
+  BizmPostPayMessage = Notification::Factory::SendMedium::BizmPostPayMessage
+  BizmPrePayMessage = Notification::Factory::SendMedium::BizmPrePayMessage
   def initialize(message_template_id, message_type = 'AI')
     @push_list = []
     @bizm_post_pay_list = []
@@ -35,7 +38,8 @@ class Notification::Factory::MessageFactoryClass
     end
 
     @bizm_post_pay_list.each do |bizm_message|
-      bizm_message.send_request
+      result = bizm_message.send_request
+      @bizm_post_pay_result.push(result)
     end
   end
 
@@ -56,18 +60,27 @@ class AppPush
 
   # FCM
   def send_request
-    request_app_push({ to: @to, collapse_key: @collapse_key, notification: @notification }, @target_public_id)
-  end
-
-  def amplitude_log()
-
+    begin
+      response = request_app_push({ to: @to, collapse_key: @collapse_key, notification: @notification })
+      success = response["success"]
+      if success == 1
+        return { status: 'success', response: response, target_public_id: @target_public_id }
+      else
+        return { status: 'fail', response: response.to_s, target_public_id: @target_public_id }
+      end
+    rescue Net::ReadTimeout
+      return { status: 'fail', response: "NET::TIMEOUT", target_public_id: @target_public_id }
+    rescue HTTParty::Error => e
+      return { status: 'fail', response: "#{e.message}", target_public_id: @target_public_id }
+    end
   end
 end
 
 class BizmPostPayMessage
   include NotificationRequestHelper
-  def initialize(message_template_id, phone, params, target_public_id)
+  def initialize(message_template_id, message_type = "AT", phone, params, target_public_id)
     @message_template_id = message_template_id
+    params[:target_public_id] = target_public_id
     @params = params
     @target_public_id = target_public_id
     @bizm_template_service = KakaoTemplateService.new(message_template_id, message_type, phone, nil)
@@ -75,11 +88,20 @@ class BizmPostPayMessage
 
   def send_request
     request_params = @bizm_template_service.get_final_request_params(@params, false)
-    request_post_pay(request_params, @target_public_id)
+    begin
+      response = request_post_pay(request_params)
+      response.class == Array ? response.first : response
+      amplitude_log(response)
+      { status: 'success', response: response, target_public_id: @target_public_id }
+    rescue Net::ReadTimeout
+      { status: 'fail', response: "NET::TIMEOUT", target_public_id: @target_public_id }
+    rescue HTTParty::Error => e
+      { status: 'fail', response: "#{e.message}", target_public_id: @target_public_id }
+    end
   end
 
-  def amplitude_log()
-
+  def amplitude_log(response)
+    KakaoNotificationLoggingHelper.send_log_for_bizmsg(response, @message_template_id, @params)
   end
 end
 
@@ -94,10 +116,19 @@ class BizmPrePayMessage
 
   def send_request
     request_params = @bizm_template_service.get_final_request_params(@params, true)
-    request_pre_pay(request_params)
+    begin
+      response = request_pre_pay(request_params)
+      response.class == Array ? response.first : response
+      amplitude_log(response)
+      { status: 'success', response: response, target_public_id: @target_public_id }
+    rescue Net::ReadTimeout
+      { status: 'fail', response: "NET::TIMEOUT", target_public_id: @target_public_id }
+    rescue HTTParty::Error => e
+      { status: 'fail', response: "#{e.message}", target_public_id: @target_public_id }
+    end
   end
 
-  def amplitude_log()
-
+  def amplitude_log(response)
+    KakaoNotificationLoggingHelper.send_log(response, @message_template_id, @params)
   end
 end
