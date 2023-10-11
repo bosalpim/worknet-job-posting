@@ -17,7 +17,7 @@ class NotifyCommentService
   end
 
   def send_notify_comment
-    template_id = KakaoTemplate::POST_COMMENT
+    template_id = MessageTemplate::POST_COMMENT
     response = BizmsgService.call(
       template_id: template_id,
       phone: Jets.env == "development" ? '01094659404' : @phone,

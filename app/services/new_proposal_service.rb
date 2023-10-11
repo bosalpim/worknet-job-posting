@@ -14,7 +14,7 @@ class NewProposalService
     job_posting = JobPosting.find_by(public_id: proposal.job_posting_id)
 
     KakaoNotificationService.call(
-      template_id: KakaoTemplate::PROPOSAL_RESPONSE_EDIT,
+      template_id: MessageTemplate::PROPOSAL_RESPONSE_EDIT,
       message_type: 'AT',
       phone: user.phone_number,
       template_params: {
