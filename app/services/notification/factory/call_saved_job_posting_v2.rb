@@ -48,20 +48,20 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
       user = saved_job_posting.user
 
       # 여기부터 DB로 메세지 매체 관리하는 것을 추가한다.
-      if user.is_sendable_app_push
-        app_push = AppPush.new(
-          @message_template_id,
-          user.push_token.token,
-          MessageTemplate::CALL_SAVED_JOB_POSTING_V2,
-          {
-            body: "저장한 관심일자리에 연락해보세요.",
-            title: "저장한 관심일자리 추천",
-            "link": "carepartner://app/jobs/#{job_posting.public_id}?&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_posting"
-          },
-          user.public_id,
-        )
-        @app_push_list.push(app_push)
-      else
+      # if user.is_sendable_app_push
+      #   app_push = AppPush.new(
+      #     @message_template_id,
+      #     user.push_token.token,
+      #     MessageTemplate::CALL_SAVED_JOB_POSTING_V2,
+      #     {
+      #       body: "저장한 관심일자리에 연락해보세요.",
+      #       title: "저장한 관심일자리 추천",
+      #       "link": "carepartner://app/jobs/#{job_posting.public_id}?&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_posting"
+      #     },
+      #     user.public_id,
+      #   )
+      #   @app_push_list.push(app_push)
+      # else
         params = {
           customer_info: customer_info,
           work_schedule: work_schedule,
@@ -77,7 +77,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
           job_posting_public_id: job_posting.public_id
         }
         @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, "AI", user.phone_number, params, user.public_id))
-      end
+      # end
     end
   end
 end
