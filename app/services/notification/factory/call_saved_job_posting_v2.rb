@@ -60,7 +60,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
           },
           user.public_id,
         )
-        @push_list.push(app_push)
+        @app_push_list.push(app_push)
       else
         params = {
           customer_info: customer_info,

@@ -1,13 +1,15 @@
 class Notification::Factory::MessageFactoryClass
+  include NotificationSaveResultHelper
+
   AppPush = Notification::Factory::SendMedium::AppPush
   BizmPostPayMessage = Notification::Factory::SendMedium::BizmPostPayMessage
   BizmPrePayMessage = Notification::Factory::SendMedium::BizmPrePayMessage
-  def initialize(message_template_id, message_type = 'AI')
-    @push_list = []
+  def initialize(message_template_id)
+    @app_push_list = []
     @bizm_post_pay_list = []
     @bizm_pre_pay_list = []
 
-    @push_result = []
+    @app_push_result = []
     @bizm_post_pay_result = []
     @bizm_pre_pay_result = []
 
@@ -25,21 +27,26 @@ class Notification::Factory::MessageFactoryClass
   end
 
   def save_result
-
+    # app push 결과 처리
+    save_results_app_push(@app_push_result, @message_template_id)
+    save_results_bizm_post_pay(@bizm_post_pay_result, @message_template_id)
+    # pre_pay 결과 처리
   end
 
   private
   def send_app_push
-    push = @push_list.first
-    return if push.nil?
-    unless push.is_a?(AppPush)
+    app_push = @app_push_list.first
+    return if app_push.nil?
+    unless app_push.is_a?(AppPush)
       raise ArgumentError, "@push_list에는 AppPush Class만 주입하여 사용합니다."
     end
 
-    @push_list.each do |app_push|
-      result = app_push.send_request
-      @push_result.push(result)
+    @app_push_list.each do |ap|
+      result = ap.send_request
+      @app_push_result.push(result)
     end
+
+    puts(@app_push_result)
   end
 
   def send_bizm_post_pay
