@@ -5,17 +5,17 @@ class NotificationServiceJob < ApplicationJob
 
   cron "0 4 ? * * *"
   def notify_saved_job_user_1day_ago
-    process({ message_template_id: MessageTemplate::CALL_SAVED_JOB_POSTING_V2 })
+    process({ message_template_id: MessageTemplateName::CALL_SAVED_JOB_POSTING_V2 })
   end
 
   cron "0 7 ? * * *"
   def cbt_draft_until_3day
-    process({ message_template_id: MessageTemplate::CBT_DRAFT })
+    process({ message_template_id: MessageTemplateName::CBT_DRAFT })
   end
 
   cron "0 7 ? * * *"
   def notify_draft_new_user
-    process({ message_template_id: MessageTemplate::CAREPARTNER_PRESENT })
+    process({ message_template_id: MessageTemplateName::CAREPARTNER_PRESENT })
   end
 
   private

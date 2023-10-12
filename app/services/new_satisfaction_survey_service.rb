@@ -16,7 +16,7 @@ class NewSatisfactionSurveyService
       "https://business.carepartner.kr"
     )
 
-    template_id = MessageTemplate::SATISFACTION_SURVEY
+    template_id = MessageTemplateName::SATISFACTION_SURVEY
     response = KakaoNotificationService.call(
       template_id: template_id,
       phone: job_posting.manager_phone_number,
@@ -27,7 +27,7 @@ class NewSatisfactionSurveyService
         link: short_url.url
       }
     )
-    save_kakao_notification(response, KakaoNotificationResult::SATISFACTION_SURVEY, job_posting.id, template_id)
+    save_kakao_notification(response, NotificationResult::SATISFACTION_SURVEY, job_posting.id, template_id)
     response
   end
 
@@ -50,7 +50,7 @@ class NewSatisfactionSurveyService
       fail_reason = response.dig("originMessage")
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

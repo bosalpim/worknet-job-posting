@@ -41,55 +41,55 @@ module KakaoNotificationLoggingHelper
     end
 
     case template_id
-    when MessageTemplate::NEW_JOB_POSTING
+    when MessageTemplateName::NEW_JOB_POSTING
       return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
-    when MessageTemplate::NEWSPAPER_V2
+    when MessageTemplateName::NEWSPAPER_V2
       return get_news_paper_logging_data(template_id, target_public_id)
-    when MessageTemplate::CLOSE_JOB_POSTING_NOTIFICATION
+    when MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION
       return get_close_job_posting_notification_logging_data(tem_params, template_id, target_public_id)
-    when MessageTemplate::CANDIDATE_RECOMMENDATION
+    when MessageTemplateName::CANDIDATE_RECOMMENDATION
       return get_candidate_recommendation_logging_data(template_id, tem_params)
-    when MessageTemplate::USER_CALL_REMINDER
+    when MessageTemplateName::USER_CALL_REMINDER
       # 기관이 요보사한테 전화했는데 부재중일 경우
       return get_user_call_reminder_logging_data(template_id, tem_params)
-    when MessageTemplate::BUSINESS_CALL_REMINDER
+    when MessageTemplateName::BUSINESS_CALL_REMINDER
       # 요보사가 기관한테 전화했는데 부재중일 경우
       return get_business_call_reminder_logging_data(template_id, tem_params)
-    when MessageTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
+    when MessageTemplateName::BUSINESS_CALL_APPLY_USER_REMINDER
       # 기관에게 전화신청한 요보사가 기관의 전화를 안 받았을 경우
       return get_business_call_apply_user_reminder(template_id, tem_params)
-    when MessageTemplate::CALL_REQUEST_ALARM
+    when MessageTemplateName::CALL_REQUEST_ALARM
       # 요보사가 기관한테 전화신청했을 경우
       return get_call_request_alarm_logging_data(template_id, tem_params)
-    when MessageTemplate::PROPOSAL_RESPONSE_EDIT
+    when MessageTemplateName::PROPOSAL_RESPONSE_EDIT
       # 기관이 요보사에게 일자리 제안을 보냈을 경우
       return get_proposal_response_edit_logging_data(template_id, tem_params)
-    when MessageTemplate::PROPOSAL_ACCEPTED
+    when MessageTemplateName::PROPOSAL_ACCEPTED
       # 요보사가 일자리 제안을 수락했을 경우
       return get_proposal_accepted_logging_data(template_id, tem_params)
-    when MessageTemplate::HIGH_SALARY_JOB
+    when MessageTemplateName::HIGH_SALARY_JOB
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when MessageTemplate::WELL_FITTED_JOB
+    when MessageTemplateName::WELL_FITTED_JOB
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when MessageTemplate::ENTER_LOCATION
+    when MessageTemplateName::ENTER_LOCATION
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when MessageTemplate::CERTIFICATION_UPDATE
+    when MessageTemplateName::CERTIFICATION_UPDATE
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when MessageTemplate::SIGNUP_COMPLETE_GUIDE
+    when MessageTemplateName::SIGNUP_COMPLETE_GUIDE
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when MessageTemplate::CALL_INTERVIEW_PROPOSAL
+    when MessageTemplateName::CALL_INTERVIEW_PROPOSAL
       return get_call_interview_proposal_logging_data(template_id, tem_params)
-    when MessageTemplate::CALL_INTERVIEW_ACCEPTED
+    when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
       return get_call_interview_accepted_logging_data(template_id, tem_params)
-    when MessageTemplate::CALL_SAVED_JOB_CAREGIVER
+    when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       return get_call_saved_job_caregiver(template_id, tem_params)
-    when MessageTemplate::CALL_SAVED_JOB_POSTING_V2
+    when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
       return get_call_saved_job_caregiver2(template_id, tem_params)
-    when MessageTemplate::ASK_ACTIVE
+    when MessageTemplateName::ASK_ACTIVE
       return get_ask_active_logging_data(template_id, tem_params)
-    when MessageTemplate::CBT_DRAFT
+    when MessageTemplateName::CBT_DRAFT
       return get_cbt_logging_data(template_id, tem_params)
-    when MessageTemplate::CAREPARTNER_PRESENT
+    when MessageTemplateName::CAREPARTNER_PRESENT
       return carepartner_null_certification_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
