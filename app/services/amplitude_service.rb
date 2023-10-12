@@ -22,7 +22,7 @@ class AmplitudeService
     )
 
     if response.dig("code") != 200
-      Jets.logger.info "user_public_id: #{target_public_id} event: #{body} 로깅 실패"
+      Jets.logger.info "event: #{body} 로깅 실패"
     end
   end
 end
