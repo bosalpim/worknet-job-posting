@@ -12,7 +12,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
   def create_message
     @list.each do |saved_job_posting|
       job_posting = saved_job_posting.job_posting
-      # next if job_posting.is_closed? || job_posting.worknet_job_posting?
+      next if job_posting.is_closed? || job_posting.worknet_job_posting?
 
       user_pn = saved_job_posting.user.phone_number
       client_pn = saved_job_posting.job_posting.phone_number
@@ -56,7 +56,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
       #     {
       #       body: "저장한 관심일자리에 연락해보세요.",
       #       title: "저장한 관심일자리 추천",
-      #       "link": "carepartner://app/jobs/#{job_posting.public_id}?&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_posting"
+      #       "link": "carepartner://app/jobs/#{job_posting.public_id}?&utm_source=message&utm_medium=app_push&utm_campaign=call_saved_job_posting2"
       #     },
       #     user.public_id,
       #   )
