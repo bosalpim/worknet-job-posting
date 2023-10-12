@@ -1423,7 +1423,7 @@ carepartner.kr#{path}
   end
 
   def get_carepartner_draft(tem_params)
-    alarm_setting_url = "https://www.carepartner.kr/me/notification/setting?utm_source=message&utm_medium=arlimtalk&utm_campaign=carepartner_present"
+    alarm_setting_url = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=carepartner_present"
     counselor_url = "https://pf.kakao.com/_xjwfcb"
 
     {
