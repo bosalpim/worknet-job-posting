@@ -7,6 +7,8 @@ class Notification::FactoryService
       return Notification::Factory::CallSavedJobPostingV2.new
     when MessageTemplateName::CBT_DRAFT
       return Notification::Factory::CbtDraft.new
+    when MessageTemplate::CAREPARTNER_PRESENT
+      return Notification::Factory::CarepartnerNewDraft.new
     else
       return []
     end

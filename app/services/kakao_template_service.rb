@@ -116,6 +116,8 @@ class KakaoTemplateService
       get_new_job_posting(tem_params)
     when MessageTemplateName::CBT_DRAFT
       get_cbt_draft(tem_params)
+    when MessageTemplate::CAREPARTNER_PRESENT
+      get_carepartner_draft(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1409,6 +1411,44 @@ carepartner.kr#{path}
           name: '실전 모의고사 풀기',
           url_mobile: cbt_url,
           url_pc: cbt_url
+        },
+        {
+          type: 'WL',
+          name: '케어파트너 문의하기',
+          url_mobile: counselor_url,
+          url_pc: counselor_url
+        },
+      ]
+    }
+  end
+
+  def get_carepartner_draft(tem_params)
+    alarm_setting_url = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=carepartner_present"
+    counselor_url = "https://pf.kakao.com/_xjwfcb"
+
+    {
+      title: "요양보호사 등록하면 혜택이 쏟아져요!",
+      message: "#{tem_params[:name]} 선생님 요양보호사 자격증 갖고 계신가요?
+
+케어파트너에 회원가입 해주셔서 감사합니다.
+
+회원가입 후 추가로 자격증 여부를 알려주시면 감사 포인트와 선생님께서 찾고 계시는 일자리의 알림을 무료로 받아보실 수 있습니다.
+
+<추가 정보 등록 시 혜택>
+1. 높은 월급 일자리 추천
+2. 선생님 맞춤 일자리 알림 평생 무료
+3. 요양보호사 필수 정보 모음
+4. 케어파트너에서 사용 가능한 감사 포인트
+
+혹시 케어파트너를 이용하는 방법이 어려우셨다면, 걱정하지 마세요.
+
+아래 버튼을 눌러 이용이 어려운 부분에 대해 문의 해주시면 케어파트너 전문 상담사가 친절하게 알려드릴게요.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '일자리 무료 알림 신청',
+          url_mobile: alarm_setting_url,
+          url_pc: alarm_setting_url
         },
         {
           type: 'WL',
