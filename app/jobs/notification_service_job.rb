@@ -18,6 +18,11 @@ class NotificationServiceJob < ApplicationJob
     process({ message_template_id: MessageTemplate::CAREPARTNER_PRESENT })
   end
 
+  cron "0 7 ? * 6 *"
+  def notify_3month_draft_user
+    process({ message_template_id: MessageTemplate::ACCUMULATED_DRAFT})
+  end
+
   private
 
   def process(event)
