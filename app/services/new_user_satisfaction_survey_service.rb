@@ -15,7 +15,7 @@ class NewUserSatisfactionSurveyService
       "https://www.carepartner.kr/satisfaction_surveys/#{job_posting.public_id}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=satisfaction_survey_follow_up"
     )
 
-    template_id = MessageTemplate::USER_SATISFACTION_SURVEY
+    template_id = MessageTemplateName::USER_SATISFACTION_SURVEY
     response = KakaoNotificationService.call(
       template_id: template_id,
       phone: user.phone_number,

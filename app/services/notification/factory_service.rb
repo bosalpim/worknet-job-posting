@@ -3,7 +3,7 @@ class Notification::FactoryService
   # @params params : 각 template에 사용되는 변수
   def self.create(template_id, params)
     case template_id
-    when MessageTemplate::CALL_SAVED_JOB_POSTING_V2
+    when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
       return Notification::Factory::CallSavedJobPostingV2.new
     else
       return []

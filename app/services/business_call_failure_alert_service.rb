@@ -13,7 +13,7 @@ class BusinessCallFailureAlertService
   end
 
   def call
-    template_id = MessageTemplate::USER_CALL_REMINDER
+    template_id = MessageTemplateName::USER_CALL_REMINDER
 
     business_telnumber = if proposal.receive_vn.present?
                            proposal.receive_vn

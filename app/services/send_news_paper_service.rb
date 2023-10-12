@@ -14,12 +14,12 @@ class SendNewsPaperService
       users = User.off
                   .where(has_certification: true)
                   .where(notification_enabled: true)
-      send_message(users, MessageTemplate::JOB_ALARM_OFF)
+      send_message(users, MessageTemplateName::JOB_ALARM_OFF)
     when User::job_search_statuses.dig(:working)
       users = User.working
                   .where(has_certification: true)
                   .where(notification_enabled: true)
-      send_message(users, MessageTemplate::JOB_ALARM_WORKING)
+      send_message(users, MessageTemplateName::JOB_ALARM_WORKING)
     else
       # active/common은 lambda에 redis를 적용하기 전까지 새벽에 생성하고 아침에는 나눠서 전송하도록 합니다.
       return

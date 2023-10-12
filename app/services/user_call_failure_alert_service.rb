@@ -14,7 +14,7 @@ class UserCallFailureAlertService
   end
 
   def call
-    template_id = MessageTemplate::BUSINESS_CALL_REMINDER
+    template_id = MessageTemplateName::BUSINESS_CALL_REMINDER
 
     response = KakaoNotificationService.call(
       template_id: template_id,

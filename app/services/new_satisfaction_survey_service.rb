@@ -16,7 +16,7 @@ class NewSatisfactionSurveyService
       "https://business.carepartner.kr"
     )
 
-    template_id = MessageTemplate::SATISFACTION_SURVEY
+    template_id = MessageTemplateName::SATISFACTION_SURVEY
     response = KakaoNotificationService.call(
       template_id: template_id,
       phone: job_posting.manager_phone_number,

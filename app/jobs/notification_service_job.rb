@@ -5,7 +5,7 @@ class NotificationServiceJob < ApplicationJob
 
   cron "0 4 ? * * *"
   def notify_saved_job_user_1day_ago
-    process({ message_template_id: MessageTemplate::CALL_SAVED_JOB_POSTING_V2 })
+    process({ message_template_id: MessageTemplateName::CALL_SAVED_JOB_POSTING_V2 })
   end
 
   private

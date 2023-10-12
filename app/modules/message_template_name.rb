@@ -1,4 +1,4 @@
-module MessageTemplate
+module MessageTemplateName
   PROPOSAL = "proposal_response".freeze
   NEW_JOB_POSTING_VISIT = "new_job_visit(no_hotdeal)".freeze
   NEW_JOB_POSTING_FACILITY = "new_job_facility(no_hotdeal)".freeze

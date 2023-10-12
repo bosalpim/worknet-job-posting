@@ -2,7 +2,7 @@
 
 class Proposal::AcceptedService
   def initialize(params)
-    @template_id = MessageTemplate::CALL_INTERVIEW_ACCEPTED
+    @template_id = MessageTemplateName::CALL_INTERVIEW_ACCEPTED
     @target_public_id = params['target_public_id']
     @business_id = params["business_id"]
     @business_name = params["business_name"]

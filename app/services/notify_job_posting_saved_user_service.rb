@@ -5,7 +5,7 @@ class NotifyJobPostingSavedUserService
 
   def initialize(event)
     @event = event
-    @template_id = MessageTemplate::CALL_SAVED_JOB_CAREGIVER
+    @template_id = MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
   end
 
   def call

@@ -14,7 +14,7 @@ class NotifyMatchedUserService
     success_count = 0
     fail_count = 0
     fail_reasons = []
-    template_id = MessageTemplate::CANDIDATE_RECOMMENDATION
+    template_id = MessageTemplateName::CANDIDATE_RECOMMENDATION
     @messages.each do |message|
       response = KakaoNotificationService.call(
         template_id: template_id,

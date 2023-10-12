@@ -4,7 +4,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
   include JobPostingsHelper
 
   def initialize
-    super(MessageTemplate::CALL_SAVED_JOB_POSTING_V2)
+    super(MessageTemplateName::CALL_SAVED_JOB_POSTING_V2)
     @list = SearchUserSavedJobPostingsService.call(1)
     create_message
   end
@@ -52,7 +52,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
       #   app_push = AppPush.new(
       #     @message_template_id,
       #     user.push_token.token,
-      #     MessageTemplate::CALL_SAVED_JOB_POSTING_V2,
+      #     MessageTemplateName::CALL_SAVED_JOB_POSTING_V2,
       #     {
       #       body: "저장한 관심일자리에 연락해보세요.",
       #       title: "저장한 관심일자리 추천",

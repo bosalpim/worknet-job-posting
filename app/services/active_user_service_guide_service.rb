@@ -13,7 +13,7 @@ class ActiveUserServiceGuideService
   end
 
   def send_signup_complete_guide
-    template_id = MessageTemplate::SIGNUP_COMPLETE_GUIDE
+    template_id = MessageTemplateName::SIGNUP_COMPLETE_GUIDE
     response = BizmsgService.call(
       template_id: template_id,
       phone: Jets.env == "development" ? '01094659404' : @user.phone_number,
