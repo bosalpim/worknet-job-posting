@@ -23,6 +23,11 @@ class NotificationServiceJob < ApplicationJob
     process({ message_template_id: MessageTemplate::ACCUMULATED_DRAFT})
   end
 
+  cron "0 7 ? * 6 *"
+  def cbt_expected_acquisition_user
+    process({ message_template_id: MessageTemplate::ACCUMULATED_PREPARATIVE})
+  end
+
   private
 
   def process(event)
