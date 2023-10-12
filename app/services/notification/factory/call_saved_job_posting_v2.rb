@@ -12,7 +12,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
   def create_message
     @list.each do |saved_job_posting|
       job_posting = saved_job_posting.job_posting
-      # next if job_posting.is_closed? || job_posting.worknet_job_posting?
+      next if job_posting.is_closed? || job_posting.worknet_job_posting?
 
       user_pn = saved_job_posting.user.phone_number
       client_pn = saved_job_posting.job_posting.phone_number
