@@ -70,7 +70,7 @@ module ApplicationHelper
     end
 
     current_date = DateTime.now
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: template_id,
       send_id: "#{current_date.year}/#{current_date.month}/#{current_date.day}#{template_id}",
       template_id: template_id,

@@ -14,6 +14,8 @@ class Notification::Factory::MessageFactoryClass
     @bizm_pre_pay_result = []
 
     @message_template_id = message_template_id
+    target_medium = MessageTemplate.find_by(name: message_template_id).nil? ? 'kakao_arlimtalk' : MessageTemplate.find_by(name: message_template_id).target_medium
+    @target_medium = target_medium
   end
 
   def create_message
@@ -35,43 +37,42 @@ class Notification::Factory::MessageFactoryClass
 
   private
   def send_app_push
-    app_push = @app_push_list.first
-    return if app_push.nil?
-    unless app_push.is_a?(AppPush)
-      raise ArgumentError, "@push_list에는 AppPush Class만 주입하여 사용합니다."
-    end
-
-    @app_push_list.each do |ap|
-      result = ap.send_request
-      @app_push_result.push(result)
-    end
-
-    puts(@app_push_result)
+    return unless check_class_type(@app_push_list) == true
+    send_process(@app_push_list, @app_push_result)
   end
 
   def send_bizm_post_pay
-    message = @bizm_post_pay_list.first
-    return if message.nil?
-    unless message.is_a?(BizmPostPayMessage)
-      raise ArgumentError, "@bizm_post_pay_list에는 BizmPostPayMessage Class만 주입하여 사용합니다."
-    end
-
-    @bizm_post_pay_list.each do |bizm_message|
-      result = bizm_message.send_request
-      @bizm_post_pay_result.push(result)
-    end
+    return unless check_class_type(@bizm_post_pay_list) == true
+    send_process(@bizm_post_pay_list, @bizm_post_pay_result)
   end
 
   def send_bizm_pre_pay
-    message = @bizm_pre_pay_list.first
-    return if message.nil?
-    unless message.is_a?(BizmPrePayMessage)
-      raise ArgumentError, "@bizm_post_pay_list에는 BizmPrePayMessage Class만 주입하여 사용합니다."
-    end
+    return unless check_class_type(@bizm_pre_pay_list) == true
+    send_process(@bizm_pre_pay_list, @bizm_pre_pay_result)
+  end
 
-    @bizm_pre_pay_list.each do |bizm_message|
-      result = bizm_message.send_request
-      @bizm_pre_pay_result.push(result)
+  def check_class_type(message_list)
+    message = message_list.first
+    return nil if message.nil?
+    unless message.is_a?(Notification::Factory::SendMedium::Abstract)
+      raise ArgumentError, "메세지 발송은 SendMedium Class를 상속받아 구현된 Class를 사용해야합니다."
+    end
+    true
+  end
+
+  def send_process(message_list, result_list)
+    Jets.logger.info "#{__method__} called by: #{caller[0][/`(.*)'/, 1]}"
+    message_list.each_slice(10) do |batch|
+      threads = []
+
+      batch.each do |message|
+        threads << Thread.new do ||
+          result = message.send_request
+          result_list.push(result)
+        end
+      end
+
+      threads.each(&:join)
     end
   end
 end
