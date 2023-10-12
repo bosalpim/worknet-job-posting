@@ -8,6 +8,11 @@ class NotificationServiceJob < ApplicationJob
     process({ message_template_id: MessageTemplate::CALL_SAVED_JOB_POSTING_V2 })
   end
 
+  cron "0 7 ? * * *"
+  def cbt_draft_until_3day
+    process({ message_template_id: MessageTemplate::CBT_DRAFT })
+  end
+
   private
 
   def process(event)
