@@ -1,8 +1,8 @@
 class Notification::Factory::CbtDraft < Notification::Factory::MessageFactoryClass
-
+  include RatioChopper
   def initialize
     super(MessageTemplate::CBT_DRAFT)
-    @list = SearchNewCbtDraftUsersService.call(3)
+    @list = RatioChopper.chop_list(SearchNewCbtDraftUsersService.call(3), 30) # Todo 점진적 배포 대상으로, 30% -> 50% -> 100% 대상에게 발송 예정
     create_message
   end
 
