@@ -28,6 +28,7 @@ class KakaoNotificationResult < ApplicationRecord
   NEW_JOB_VISIT_V2 = 'new_job_visit_v2'.freeze
   NEW_JOB_FACILITY_V2 = 'new_job_facility(23-09-2w)'.freeze
   NEWSPAPER_V2 = 'newspaper_v2'.freeze
+  CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
   CAREPARTNER_PRESENT = 'carepartner_present'.freeze
 
   # 신규일자리알림
@@ -70,6 +71,7 @@ class KakaoNotificationResult < ApplicationRecord
     NEW_JOB_FACILITY_V2 => NEW_JOB_FACILITY_V2,
     ASK_ACTIVE => ASK_ACTIVE,
     NEW_JOB_POSTING => NEW_JOB_POSTING,
+    CBT_DRAFT => CBT_DRAFT,
     CAREPARTNER_PRESENT => CAREPARTNER_PRESENT
   }
 end
