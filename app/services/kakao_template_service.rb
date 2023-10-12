@@ -120,6 +120,8 @@ class KakaoTemplateService
       get_carepartner_draft(tem_params)
     when MessageTemplate::ACCUMULATED_DRAFT
       get_accumulated_draft(tem_params)
+    when MessageTemplate::ACCUMULATED_PREPARATIVE
+      get_accumulated_preparative(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1489,6 +1491,41 @@ carepartner.kr#{path}
           name: '케어파트너 문의하기',
           url_mobile: counselor_url,
           url_pc: counselor_url
+        },
+      ]
+    }
+  end
+
+  def get_accumulated_preparative(tem_params)
+    chat_bot_url = "https://www.carepartner.kr/beginner?utm_source=message&utm_medium=arlimtalk&utm_campaign=accumulated_preparative"
+
+    {
+      title: "요양보호사 시험에 합격하셨나요?",
+      message: "#{tem_params[:name]} 선생님 케어파트너와 함께 준비했던 요양보호사 시험은 잘 마무리하셨나요?
+
+요양보호사 시험을 준비하시고 시험 보시느라 고생 많으셨습니다.
+
+합격 여부를 떠나 #{tem_params[:name]} 선생님의 새로운 도전을 항상 응원하고 있습니다.
+
+케어파트너에서는 요양보호사로 첫 발걸음을 내딛는 선생님께 도움 드릴 수 있는 다양한 서비스와 정보를 제공하고 있어요.
+
+1.집 근처 초보 요양 일자리 추천
+2.급여 높은 요양 일자리 추천
+3.초보 요양보호사가 꼭 알아야 할 정보
+
+아래 버튼을 누르시고 다양한 정보와 혜택 받아가세요.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '네 합격했어요',
+          url_mobile: chat_bot_url,
+          url_pc: chat_bot_url
+        },
+        {
+          type: 'WL',
+          name: '아직 합격 못했어요',
+          url_mobile: chat_bot_url,
+          url_pc: chat_bot_url
         },
       ]
     }
