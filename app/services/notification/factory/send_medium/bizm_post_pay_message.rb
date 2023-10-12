@@ -1,4 +1,4 @@
-class Notification::Factory::SendMedium::BizmPostPayMessage
+class Notification::Factory::SendMedium::BizmPostPayMessage < Notification::Factory::SendMedium::Abstract
   include NotificationRequestHelper
   def initialize(message_template_id, message_type = "AT", phone, params, target_public_id)
     @message_template_id = message_template_id
