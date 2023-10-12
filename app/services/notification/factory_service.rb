@@ -5,7 +5,7 @@ class Notification::FactoryService
     case template_id
     when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
       return Notification::Factory::CallSavedJobPostingV2.new
-    when MessageTemplate::CBT_DRAFT
+    when MessageTemplateName::CBT_DRAFT
       return Notification::Factory::CbtDraft.new
     else
       return []

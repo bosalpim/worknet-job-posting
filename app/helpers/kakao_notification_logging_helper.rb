@@ -87,7 +87,7 @@ module KakaoNotificationLoggingHelper
       return get_call_saved_job_caregiver2(template_id, tem_params)
     when MessageTemplateName::ASK_ACTIVE
       return get_ask_active_logging_data(template_id, tem_params)
-    when MessageTemplate::CBT_DRAFT
+    when MessageTemplateName::CBT_DRAFT
       return get_cbt_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"

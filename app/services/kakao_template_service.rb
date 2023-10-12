@@ -112,9 +112,9 @@ class KakaoTemplateService
       get_new_job_facility_v2(tem_params)
     when MessageTemplateName::NEWSPAPER_V2
       get_newspaper_v2(tem_params)
-    when NEW_JOB_POSTING
+    when MessageTemplateName::NEW_JOB_POSTING
       get_new_job_posting(tem_params)
-    when MessageTemplate::CBT_DRAFT
+    when MessageTemplateName::CBT_DRAFT
       get_cbt_draft(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
