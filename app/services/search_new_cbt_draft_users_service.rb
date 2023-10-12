@@ -13,8 +13,6 @@ class SearchNewCbtDraftUsersService
     yesterday = today - 1.day
     target_day = today - @ago_days.day
 
-    puts "ago_days: ", @ago_days
-
     # 00:00:00부터 23:59:59까지의 범위를 계산
     start_of_day = target_day.beginning_of_day
     end_of_day = yesterday.end_of_day
