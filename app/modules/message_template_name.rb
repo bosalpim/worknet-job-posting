@@ -40,4 +40,5 @@ module MessageTemplateName
   NEWSPAPER_V2 = 'newspaper_job_alarm'.freeze
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
+  CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
 end
