@@ -14,6 +14,8 @@ class Notification::Factory::MessageFactoryClass
     @bizm_pre_pay_result = []
 
     @message_template_id = message_template_id
+    target_medium = MessageTemplate.find_by(name: message_template_id).nil? ? 'kakao_arlimtalk' : MessageTemplate.find_by(name: message_template_id).target_medium
+    @target_medium = target_medium
   end
 
   def create_message
@@ -35,21 +37,21 @@ class Notification::Factory::MessageFactoryClass
 
   private
   def send_app_push
-    return unless check_send_medium_type(@app_push_list) == true
+    return unless check_class_type(@app_push_list) == true
     send_process(@app_push_list, @app_push_result)
   end
 
   def send_bizm_post_pay
-    return unless check_send_medium_type(@bizm_post_pay_list) == true
+    return unless check_class_type(@bizm_post_pay_list) == true
     send_process(@bizm_post_pay_list, @bizm_post_pay_result)
   end
 
   def send_bizm_pre_pay
-    return unless check_send_medium_type(@bizm_pre_pay_list) == true
+    return unless check_class_type(@bizm_pre_pay_list) == true
     send_process(@bizm_pre_pay_list, @bizm_pre_pay_result)
   end
 
-  def check_send_medium_type(message_list)
+  def check_class_type(message_list)
     message = message_list.first
     return nil if message.nil?
     unless message.is_a?(Notification::Factory::SendMedium::Abstract)
