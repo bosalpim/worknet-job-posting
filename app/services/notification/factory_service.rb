@@ -10,6 +10,8 @@ class Notification::FactoryService
       return Notification::Factory::CbtDraft.new
     when MessageTemplate::CAREPARTNER_PRESENT
       return Notification::Factory::CarepartnerNewDraft.new
+    when MessageTemplate::ACCUMULATED_DRAFT
+      return Notification::Factory::AccumulatedDraft.new
     else
       return []
     end

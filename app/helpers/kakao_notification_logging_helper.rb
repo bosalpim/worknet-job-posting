@@ -91,6 +91,8 @@ module KakaoNotificationLoggingHelper
       return get_cbt_logging_data(template_id, tem_params)
     when MessageTemplate::CAREPARTNER_PRESENT
       return carepartner_null_certification_logging_data(template_id, tem_params)
+    when MessageTemplate::ACCUMULATED_DRAFT
+      return get_accumulate_draft_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -351,6 +353,17 @@ module KakaoNotificationLoggingHelper
       "event_properties" => {
         "template" => template_id,
         "title" => "Carepartner Draft null Certification Message",
+      }
+    }
+  end
+
+  def self.get_accumulate_draft_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => "Accumulate Draft Message",
       }
     }
   end
