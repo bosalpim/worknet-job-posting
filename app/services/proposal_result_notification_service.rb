@@ -34,7 +34,7 @@ class ProposalResultNotificationService
       }
     )
 
-    send_type = KakaoNotificationResult::PROPOSAL_ACCEPTED
+    send_type = NotificationResult::PROPOSAL_ACCEPTED
     send_id = proposal.id
     save_kakao_notification(response, send_type, send_id, template_id)
     response
@@ -80,7 +80,7 @@ class ProposalResultNotificationService
       fail_reason = response.dig("originMessage")
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

@@ -52,7 +52,7 @@ class SendCreatedScheduledMessageService
       Jets.logger.info("타임아웃 알림톡 > 전송 성공 개수 : #{success_count}, 문자 전송 개수 : #{tms_success_count}, 실패 개수 : #{fail_count}")
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: "#{(should_send_percent + sent_percent) * 100}%",
       template_id: template_id,

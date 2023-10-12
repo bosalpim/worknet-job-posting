@@ -34,7 +34,7 @@ class NewApplyService
     )
     save_kakao_notification(
       response,
-      KakaoNotificationResult::CALL_REQUEST_ALARM,
+      NotificationResult::CALL_REQUEST_ALARM,
       apply.user_id,
       template_id
     )
@@ -81,7 +81,7 @@ class NewApplyService
       fail_reason = response.dig("originMessage")
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

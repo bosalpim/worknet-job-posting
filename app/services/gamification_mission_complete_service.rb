@@ -15,7 +15,7 @@ class GamificationMissionCompleteService
       template_params: {}
     )
 
-    send_type = KakaoNotificationResult::GAMIFICATION_MISSION_COMPLETE
+    send_type = NotificationResult::GAMIFICATION_MISSION_COMPLETE
     send_id = user.id
     save_kakao_notification(response, send_type, send_id, template_id)
     response
@@ -39,7 +39,7 @@ class GamificationMissionCompleteService
       fail_reason = response.dig("error")
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

@@ -76,7 +76,7 @@ class NewJobNotificationService
       end
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: "new_job_posting",
       template_id: template_id,
       success_count: success_count,

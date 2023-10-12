@@ -25,7 +25,7 @@ class NotifyCommentService
       template_params: { target_public_id: @user_public_id, post_id: @post_id, post_title: @post_title }
     )
 
-    send_type = KakaoNotificationResult::POST_COMMENT
+    send_type = NotificationResult::POST_COMMENT
     send_id = @user_id
     save_kakao_notification(response, send_type, send_id, template_id)
     response
@@ -49,7 +49,7 @@ class NotifyCommentService
       fail_reason = "userid: #{@user_public_id}, error: #{response.dig("error")}"
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

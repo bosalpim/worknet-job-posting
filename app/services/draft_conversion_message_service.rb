@@ -109,13 +109,13 @@ class DraftConversionMessageService
   def get_send_type
     case @template_id
     when MessageTemplate::HIGH_SALARY_JOB
-      KakaoNotificationResult::HIGH_SALARY_JOB
+      NotificationResult::HIGH_SALARY_JOB
     when MessageTemplate::ENTER_LOCATION
-      KakaoNotificationResult::ENTER_LOCATION
+      NotificationResult::ENTER_LOCATION
     when MessageTemplate::WELL_FITTED_JOB
-      KakaoNotificationResult::WELL_FITTED_JOB
+      NotificationResult::WELL_FITTED_JOB
     when MessageTemplate::CERTIFICATION_UPDATE
-      KakaoNotificationResult::CERTIFICATION_UPDATE
+      NotificationResult::CERTIFICATION_UPDATE
     else
       ""
     end
@@ -151,7 +151,7 @@ class DraftConversionMessageService
     end
 
     current_date = DateTime.now
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: get_send_type,
       send_id: "#{current_date.year}/#{current_date.month}/#{current_date.day}#{@template_id}",
       template_id: @template_id,

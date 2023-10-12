@@ -26,7 +26,7 @@ class NewUserSatisfactionSurveyService
         link: short_url.url
       }
     )
-    save_kakao_notification(response, KakaoNotificationResult::USER_SATISFACTION_SURVEY, job_posting.id, template_id)
+    save_kakao_notification(response, NotificationResult::USER_SATISFACTION_SURVEY, job_posting.id, template_id)
     response
   end
 
@@ -49,7 +49,7 @@ class NewUserSatisfactionSurveyService
       fail_reason = response.dig("originMessage")
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

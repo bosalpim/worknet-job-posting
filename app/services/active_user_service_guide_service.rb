@@ -21,7 +21,7 @@ class ActiveUserServiceGuideService
       template_params: { target_public_id: @user.public_id }
     )
 
-    send_type = KakaoNotificationResult::SIGNUP_COMPLETE_GUIDE
+    send_type = NotificationResult::SIGNUP_COMPLETE_GUIDE
     send_id = @user.id
     save_kakao_notification(response, send_type, send_id, template_id)
     response
@@ -45,7 +45,7 @@ class ActiveUserServiceGuideService
       fail_reason = "userid: #{@user.public_id}, error: #{response.dig("error")}"
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

@@ -50,8 +50,8 @@ class NotifyCareerCertificationService
       fail_reasons = response.dig("originMessage")
     end
 
-    KakaoNotificationResult.create!({
-                                      send_type: KakaoNotificationResult::CAREER_CERTIFICATION,
+    NotificationResult.create!({
+                                      send_type: NotificationResult::CAREER_CERTIFICATION,
                                       send_id: @job_posting_title,
                                       template_id: @template_id,
                                       success_count: success_count,

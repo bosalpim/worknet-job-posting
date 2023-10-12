@@ -30,7 +30,7 @@ class UserCallFailureAlertService
     )
     save_kakao_notification(
       response,
-      KakaoNotificationResult::USER_CALL_FAILURE_ALERT,
+      NotificationResult::USER_CALL_FAILURE_ALERT,
       job_posting.id,
       template_id
     )
@@ -64,7 +64,7 @@ class UserCallFailureAlertService
       fail_reason = response.dig("originMessage")
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

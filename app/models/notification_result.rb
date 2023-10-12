@@ -1,4 +1,4 @@
-class KakaoNotificationResult < ApplicationRecord
+class NotificationResult < ApplicationRecord
   PROPOSAL = "proposal".freeze
   PERSONALIZED = "personalized_notification".freeze
   EXTRA_BENEFIT = "extra_benefit_notification".freeze
@@ -32,6 +32,7 @@ class KakaoNotificationResult < ApplicationRecord
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
 
+  validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
   validates :template_id, presence: true
   validates :success_count, numericality: { grater_than_or_equal_to: 0 }

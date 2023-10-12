@@ -54,8 +54,8 @@ class SendNewsPaperService
       fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
     end
 
-    KakaoNotificationResult.create!(
-      send_type: KakaoNotificationResult::NEWS_PAPER,
+    NotificationResult.create!(
+      send_type: NotificationResult::NEWS_PAPER,
       template_id: template_id,
       success_count: success_count,
       tms_success_count: tms_success_count,

@@ -31,7 +31,7 @@ module NotificationSaveResultHelper
     end
 
     current_date = DateTime.now
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: template_id,
       send_id: "#{current_date.year}/#{current_date.month}/#{current_date.day}#{template_id}",
       template_id: template_id,
@@ -63,14 +63,15 @@ module NotificationSaveResultHelper
     end
 
     current_date = DateTime.now
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: template_id,
       send_id: "#{current_date.year}/#{current_date.month}/#{current_date.day}/#{template_id}",
       template_id: template_id,
       success_count: success_count,
       tms_success_count: 0,
       fail_count: fail_count,
-      fail_reasons: fail_reasons
+      fail_reasons: fail_reasons,
+      used_medium: 'app_push'
     )
   end
 end

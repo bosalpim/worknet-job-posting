@@ -43,7 +43,7 @@ class NotifyMatchedUserService
         fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
       end
 
-      KakaoNotificationResult.create!(
+      NotificationResult.create!(
         send_type: "notify_matched_user",
         template_id: template_id,
         success_count: success_count,

@@ -53,9 +53,9 @@ class Proposal::AcceptedService
     end
     fail_reason = response.dig('originMessage') if code != 'success'
 
-    KakaoNotificationResult.create(
+    NotificationResult.create(
       template_id: @template_id,
-      send_type: KakaoNotificationResult::CALL_INTERVIEW_ACCEPTED,
+      send_type: NotificationResult::CALL_INTERVIEW_ACCEPTED,
       send_id: @target_public_id,
       success_count: success_count,
       tms_success_count: tms_success_count,

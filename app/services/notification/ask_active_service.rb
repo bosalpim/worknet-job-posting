@@ -28,7 +28,7 @@ class Notification::AskActiveService
       }
     )
 
-    save_kakao_notification(response, KakaoNotificationResult::ASK_ACTIVE, @user_public_id, @template_id)
+    save_kakao_notification(response, NotificationResult::ASK_ACTIVE, @user_public_id, @template_id)
 
     response
   end
@@ -52,7 +52,7 @@ class Notification::AskActiveService
       fail_reason = "userid: #{@user.public_id}, error: #{response.dig("error")}"
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

@@ -49,8 +49,8 @@ class NotifyJobPostingSavedUserService
       fail_reasons.push("userid: #{@user_public_id}, error: #{response.dig("error")}")
     end
 
-    KakaoNotificationResult.create!(
-      send_type: KakaoNotificationResult::CALL_SAVED_JOB_CAREGIVER,
+    NotificationResult.create!(
+      send_type: NotificationResult::CALL_SAVED_JOB_CAREGIVER,
       template_id: @template_id,
       success_count: success_count,
       fail_count: fail_count,
