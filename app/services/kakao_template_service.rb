@@ -118,7 +118,7 @@ class KakaoTemplateService
       get_cbt_draft(tem_params)
     when MessageTemplateName::CAREPARTNER_PRESENT
       get_carepartner_draft(tem_params)
-    when MessageTemplate::ACCUMULATED_DRAFT
+    when MessageTemplateName::ACCUMULATED_DRAFT
       get_accumulated_draft(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"

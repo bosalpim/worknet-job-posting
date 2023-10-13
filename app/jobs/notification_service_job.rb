@@ -20,7 +20,7 @@ class NotificationServiceJob < ApplicationJob
 
   cron "0 7 ? * 6 *"
   def notify_3month_draft_user
-    process({ message_template_id: MessageTemplate::ACCUMULATED_DRAFT})
+    process({ message_template_id: MessageTemplateName::ACCUMULATED_DRAFT})
   end
 
   private
