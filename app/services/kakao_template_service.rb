@@ -118,7 +118,7 @@ class KakaoTemplateService
       get_cbt_draft(tem_params)
     when MessageTemplateName::CAREPARTNER_PRESENT
       get_carepartner_draft(tem_params)
-    when MessageTemplate::ACCUMULATED_DRAFT
+    when MessageTemplateName::ACCUMULATED_DRAFT
       get_accumulated_draft(tem_params)
     when MessageTemplate::ACCUMULATED_PREPARATIVE
       get_accumulated_preparative(tem_params)
