@@ -2,7 +2,7 @@
 
 class Notification::AskActiveService
   def initialize(params)
-    @template_id = MessageTemplate::ASK_ACTIVE
+    @template_id = MessageTemplateName::ASK_ACTIVE
     @phone_number = params["user_phone_number"]
     @user_public_id = params["user_public_id"]
     @user_name = params["user_name"]
@@ -14,7 +14,7 @@ class Notification::AskActiveService
 
   def call
     response = BizmsgService.call(
-      template_id: MessageTemplate::ASK_ACTIVE,
+      template_id: MessageTemplateName::ASK_ACTIVE,
       message_type: "AI",
       phone: @phone_number,
       template_params: {
@@ -28,7 +28,7 @@ class Notification::AskActiveService
       }
     )
 
-    save_kakao_notification(response, KakaoNotificationResult::ASK_ACTIVE, @user_public_id, @template_id)
+    save_kakao_notification(response, NotificationResult::ASK_ACTIVE, @user_public_id, @template_id)
 
     response
   end
@@ -52,7 +52,7 @@ class Notification::AskActiveService
       fail_reason = "userid: #{@user.public_id}, error: #{response.dig("error")}"
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

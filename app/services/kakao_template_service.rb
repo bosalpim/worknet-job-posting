@@ -1,5 +1,5 @@
 class KakaoTemplateService
-  include MessageTemplate
+  include MessageTemplateName
   DEFAULT_RESERVE_AT = "00000000000000".freeze
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
   SETTING_ALARM_LINK = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign="
@@ -40,83 +40,83 @@ class KakaoTemplateService
 
   def get_template_data(tem_params)
     case @template_id
-    when MessageTemplate::PROPOSAL
+    when MessageTemplateName::PROPOSAL
       get_proposal_data(tem_params)
-    when MessageTemplate::NEW_JOB_POSTING_VISIT
+    when MessageTemplateName::NEW_JOB_POSTING_VISIT
       get_visit_job_posting_data(tem_params)
-    when MessageTemplate::NEW_JOB_POSTING_FACILITY
+    when MessageTemplateName::NEW_JOB_POSTING_FACILITY
       get_facility_job_posting_data(tem_params)
-    when MessageTemplate::PERSONALIZED
+    when MessageTemplateName::PERSONALIZED
       get_personalized_data_by_json(tem_params)
-    when MessageTemplate::EXTRA_BENEFIT
+    when MessageTemplateName::EXTRA_BENEFIT
       get_extra_benefit_data_by_json(tem_params)
-    when MessageTemplate::PROPOSAL_ACCEPTED
+    when MessageTemplateName::PROPOSAL_ACCEPTED
       get_proposal_accepted_data(tem_params)
-    when MessageTemplate::PROPOSAL_REJECTED
+    when MessageTemplateName::PROPOSAL_REJECTED
       get_proposal_rejected_data(tem_params)
-    when MessageTemplate::PROPOSAL_RESPONSE_EDIT
+    when MessageTemplateName::PROPOSAL_RESPONSE_EDIT
       get_proposal_response_edit_data(tem_params)
-    when MessageTemplate::SATISFACTION_SURVEY
+    when MessageTemplateName::SATISFACTION_SURVEY
       get_satisfaction_survey_data(tem_params)
-    when MessageTemplate::USER_SATISFACTION_SURVEY
+    when MessageTemplateName::USER_SATISFACTION_SURVEY
       get_user_satisfaction_survey_data(tem_params)
-    when MessageTemplate::USER_CALL_REMINDER
+    when MessageTemplateName::USER_CALL_REMINDER
       get_user_call_reminder_data(tem_params)
-    when MessageTemplate::BUSINESS_CALL_REMINDER
+    when MessageTemplateName::BUSINESS_CALL_REMINDER
       get_business_call_reminder_data(tem_params)
-    when MessageTemplate::CALL_REQUEST_ALARM
+    when MessageTemplateName::CALL_REQUEST_ALARM
       get_new_apply_data(tem_params)
-    when MessageTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
+    when MessageTemplateName::BUSINESS_CALL_APPLY_USER_REMINDER
       get_apply_user_call_reminder_data(tem_params)
-    when MessageTemplate::JOB_ALARM_ACTIVELY
+    when MessageTemplateName::JOB_ALARM_ACTIVELY
       get_job_alarm_actively(tem_params)
-    when MessageTemplate::JOB_ALARM_COMMON
+    when MessageTemplateName::JOB_ALARM_COMMON
       get_job_alarm_commonly(tem_params)
-    when MessageTemplate::JOB_ALARM_OFF
+    when MessageTemplateName::JOB_ALARM_OFF
       get_job_alarm_off(tem_params)
-    when MessageTemplate::JOB_ALARM_WORKING
+    when MessageTemplateName::JOB_ALARM_WORKING
       get_job_alarm_working(tem_params)
-    when MessageTemplate::GAMIFICATION_MISSION_COMPLETE
+    when MessageTemplateName::GAMIFICATION_MISSION_COMPLETE
       get_gamification_mission_complete
-    when MessageTemplate::CAREER_CERTIFICATION
+    when MessageTemplateName::CAREER_CERTIFICATION
       get_career_certification_alarm(tem_params)
-    when MessageTemplate::CLOSE_JOB_POSTING_NOTIFICATION
+    when MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION
       get_close_job_posting_notification(tem_params)
-    when MessageTemplate::CANDIDATE_RECOMMENDATION
+    when MessageTemplateName::CANDIDATE_RECOMMENDATION
       get_candidate_recommendation(tem_params)
-    when MessageTemplate::SIGNUP_COMPLETE_GUIDE
+    when MessageTemplateName::SIGNUP_COMPLETE_GUIDE
       get_signup_complete_guide
-    when MessageTemplate::HIGH_SALARY_JOB
+    when MessageTemplateName::HIGH_SALARY_JOB
       get_high_salary_job(tem_params)
-    when MessageTemplate::ENTER_LOCATION
+    when MessageTemplateName::ENTER_LOCATION
       get_enter_location(tem_params)
-    when MessageTemplate::WELL_FITTED_JOB
+    when MessageTemplateName::WELL_FITTED_JOB
       get_well_fitted_job(tem_params)
-    when MessageTemplate::CERTIFICATION_UPDATE
+    when MessageTemplateName::CERTIFICATION_UPDATE
       get_certification_update(tem_params)
-    when MessageTemplate::POST_COMMENT
+    when MessageTemplateName::POST_COMMENT
       get_post_comment(tem_params)
-    when MessageTemplate::CALL_INTERVIEW_PROPOSAL
+    when MessageTemplateName::CALL_INTERVIEW_PROPOSAL
       get_call_interview_proposal(tem_params)
-    when MessageTemplate::CALL_INTERVIEW_ACCEPTED
+    when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
       get_call_interview_accepted(tem_params)
-    when MessageTemplate::CALL_SAVED_JOB_CAREGIVER
+    when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       get_call_saved_job_caregiver(tem_params)
-    when MessageTemplate::CALL_SAVED_JOB_POSTING_V2
+    when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
       get_call_saved_job_posting_v2(tem_params)
-    when MessageTemplate::ASK_ACTIVE
+    when MessageTemplateName::ASK_ACTIVE
       get_ask_active(tem_params)
-    when MessageTemplate::NEW_JOB_VISIT_V2
+    when MessageTemplateName::NEW_JOB_VISIT_V2
       get_new_job_visit_v2(tem_params)
-    when MessageTemplate::NEW_JOB_FACILITY_V2
+    when MessageTemplateName::NEW_JOB_FACILITY_V2
       get_new_job_facility_v2(tem_params)
-    when MessageTemplate::NEWSPAPER_V2
+    when MessageTemplateName::NEWSPAPER_V2
       get_newspaper_v2(tem_params)
-    when NEW_JOB_POSTING
+    when MessageTemplateName::NEW_JOB_POSTING
       get_new_job_posting(tem_params)
-    when MessageTemplate::CBT_DRAFT
+    when MessageTemplateName::CBT_DRAFT
       get_cbt_draft(tem_params)
-    when MessageTemplate::CAREPARTNER_PRESENT
+    when MessageTemplateName::CAREPARTNER_PRESENT
       get_carepartner_draft(tem_params)
     when MessageTemplate::ACCUMULATED_DRAFT
       get_accumulated_draft(tem_params)
@@ -191,12 +191,12 @@ class KakaoTemplateService
            end
 
     title_required_templates = [
-      MessageTemplate::PROPOSAL_RESPONSE_EDIT,
-      MessageTemplate::NEW_JOB_POSTING_VISIT,
-      MessageTemplate::NEW_JOB_POSTING_FACILITY,
-      MessageTemplate::NEW_JOB_VISIT_V2,
-      MessageTemplate::NEW_JOB_FACILITY_V2,
-      MessageTemplate::NEW_JOB_POSTING
+      MessageTemplateName::PROPOSAL_RESPONSE_EDIT,
+      MessageTemplateName::NEW_JOB_POSTING_VISIT,
+      MessageTemplateName::NEW_JOB_POSTING_FACILITY,
+      MessageTemplateName::NEW_JOB_VISIT_V2,
+      MessageTemplateName::NEW_JOB_FACILITY_V2,
+      MessageTemplateName::NEW_JOB_POSTING
     ]
 
     if title_required_templates.include?(template_id)
