@@ -38,7 +38,7 @@ class CreateScheduledMessageService
 
   def find_users
     case template_id
-    when MessageTemplate::JOB_ALARM_ACTIVELY, MessageTemplate::NEWSPAPER_V2
+    when MessageTemplateName::JOB_ALARM_ACTIVELY, MessageTemplateName::NEWSPAPER_V2
       return User.receive_job_notifications.order(:created_at)
     else
       return nil

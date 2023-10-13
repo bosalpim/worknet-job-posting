@@ -1,7 +1,7 @@
 class NewJobNotificationService
   include Translation
   include JobPostingsHelper
-  include MessageTemplate
+  include MessageTemplateName
 
   DISTANCE_LIST = {
     by_walk15: 900,
@@ -23,7 +23,7 @@ class NewJobNotificationService
     @work_type_ko = translate_type('job_posting', @job_posting, :work_type)
     @job_posting_customer = @job_posting.job_posting_customer
     @homecare_yes = %w[commute resident bath_help].include?(@job_posting.work_type)
-    @template_id = MessageTemplate::NEW_JOB_POSTING
+    @template_id = MessageTemplateName::NEW_JOB_POSTING
   end
 
   def call
@@ -76,7 +76,7 @@ class NewJobNotificationService
       end
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: "new_job_posting",
       template_id: template_id,
       success_count: success_count,

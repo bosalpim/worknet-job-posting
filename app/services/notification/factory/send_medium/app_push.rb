@@ -1,4 +1,4 @@
-class Notification::Factory::SendMedium::AppPush
+class Notification::Factory::SendMedium::AppPush < Notification::Factory::SendMedium::Abstract
   include NotificationRequestHelper
   # FCM
   def initialize(message_template_id, to, collapse_key, notification, target_public_id)

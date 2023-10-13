@@ -15,7 +15,7 @@ class NewApplyService
 
   def call
     # 임시 url 지원 페이지 생성되면 교체
-    template_id = MessageTemplate::CALL_REQUEST_ALARM
+    template_id = MessageTemplateName::CALL_REQUEST_ALARM
     short_url = build_short_url(apply)
     response = KakaoNotificationService.call(
       template_id: template_id,
@@ -34,7 +34,7 @@ class NewApplyService
     )
     save_kakao_notification(
       response,
-      KakaoNotificationResult::CALL_REQUEST_ALARM,
+      NotificationResult::CALL_REQUEST_ALARM,
       apply.user_id,
       template_id
     )
@@ -44,7 +44,7 @@ class NewApplyService
   private
 
   def build_short_url(apply)
-    template_id = MessageTemplate::CALL_REQUEST_ALARM
+    template_id = MessageTemplateName::CALL_REQUEST_ALARM
     short_url = ShortUrl.build(
       "https://business.carepartner.kr/employment_management/applies/#{apply.id}?auth_token=#{apply.auth_token}",
       "https://business.carepartner.kr"
@@ -81,7 +81,7 @@ class NewApplyService
       fail_reason = response.dig("originMessage")
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

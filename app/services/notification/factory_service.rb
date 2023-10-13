@@ -1,14 +1,13 @@
 class Notification::FactoryService
   # @param template_id : 메세지 Template
   # @params params : 각 template에 사용되는 변수
-  # @return [{ send_medium: "BizM" OR "AppPush", message_request_param: {}, message_}]
   def self.create(template_id, params)
     case template_id
-    when MessageTemplate::CALL_SAVED_JOB_POSTING_V2
+    when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
       return Notification::Factory::CallSavedJobPostingV2.new
-    when MessageTemplate::CBT_DRAFT
+    when MessageTemplateName::CBT_DRAFT
       return Notification::Factory::CbtDraft.new
-    when MessageTemplate::CAREPARTNER_PRESENT
+    when MessageTemplateName::CAREPARTNER_PRESENT
       return Notification::Factory::CarepartnerNewDraft.new
     when MessageTemplate::ACCUMULATED_DRAFT
       return Notification::Factory::AccumulatedDraft.new
