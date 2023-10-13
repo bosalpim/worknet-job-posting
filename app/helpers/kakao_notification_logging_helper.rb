@@ -93,7 +93,7 @@ module KakaoNotificationLoggingHelper
       return carepartner_null_certification_logging_data(template_id, tem_params)
     when MessageTemplateName::ACCUMULATED_DRAFT
       return get_accumulate_draft_logging_data(template_id, tem_params)
-    when MessageTemplate::ACCUMULATED_PREPARATIVE
+    when MessageTemplateName::ACCUMULATED_PREPARATIVE
       return get_accumulate_preparative_cbt_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
