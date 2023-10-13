@@ -2,7 +2,8 @@ class Notification::Factory::AccumulatedPreparativeCbt < Notification::Factory::
   include RatioChopper
   def initialize
     super(MessageTemplate::ACCUMULATED_PREPARATIVE)
-    @list = RatioChopper.chop_list(SearchPreparativeCbtUsersService.call(2), 30) # Todo 점진적 배포 대상으로, 30% -> 50% -> 100% 대상에게 발송 예정
+    @list = SearchPreparativeCbtUsersService.call
+    # @list = RatioChopper.chop_list(SearchPreparativeCbtUsersService.call, 30) # Todo 점진적 배포 대상으로, 30% -> 50% -> 100% 대상에게 발송 예정
     create_message
   end
 

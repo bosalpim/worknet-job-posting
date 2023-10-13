@@ -12,7 +12,10 @@ class Notification::FactoryService
       return Notification::Factory::CarepartnerNewDraft.new
     when MessageTemplate::ACCUMULATED_DRAFT
       return Notification::Factory::AccumulatedDraft.new
+    when MessageTemplate::ACCUMULATED_PREPARATIVE
+      return Notification::Factory::AccumulatedPreparativeCbt.new
     else
+      puts "no template found"
       return []
     end
   end
