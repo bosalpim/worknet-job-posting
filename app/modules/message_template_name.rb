@@ -43,4 +43,5 @@ module MessageTemplateName
   CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
   CAREPARTNER_PRESENT = 'carepartner_present'.freeze
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
+  ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
 end
