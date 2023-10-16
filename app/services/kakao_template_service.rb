@@ -118,6 +118,10 @@ class KakaoTemplateService
       get_cbt_draft(tem_params)
     when MessageTemplateName::CAREPARTNER_PRESENT
       get_carepartner_draft(tem_params)
+    when MessageTemplateName::ACCUMULATED_DRAFT
+      get_accumulated_draft(tem_params)
+    when MessageTemplateName::ACCUMULATED_PREPARATIVE
+      get_accumulated_preparative(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1455,6 +1459,73 @@ carepartner.kr#{path}
           name: '케어파트너 문의하기',
           url_mobile: counselor_url,
           url_pc: counselor_url
+        },
+      ]
+    }
+  end
+
+  def get_accumulated_draft(tem_params)
+    job_recommending_url = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=accumulated_draft"
+    counselor_url = "https://pf.kakao.com/_xjwfcb"
+
+    {
+      title: "요양보호사 등록하면 혜택이 쏟아져요!",
+      message: "#{tem_params[:name]} 선생님 급여 높은 일자리를 찾고 계신가요?
+
+전국 최대 규모 요양 일자리 서비스 케어파트너에서는 급여 높은 일자리를 매주 추천해드려요.
+
+지금 바로 케어파트너에 접속하여 축하 포인트도 받으시고 원하는 일자리도 찾아보세요.
+
+혹시 케어파트너를 이용하는 방법이 어려우셨다면, 걱정하지 마세요.
+
+아래 버튼을 눌러 이용이 어려운 부분에 대해 문의 해주시면 케어파트너 전문 상담사가 친절하게 알려드릴게요.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '급여 높은 일자리 추천받기',
+          url_mobile: job_recommending_url,
+          url_pc: job_recommending_url
+        },
+        {
+          type: 'WL',
+          name: '케어파트너 문의하기',
+          url_mobile: counselor_url,
+          url_pc: counselor_url
+        },
+      ]
+    }
+  end
+
+  def get_accumulated_preparative(tem_params)
+    chat_bot_url = "https://www.carepartner.kr/beginner?utm_source=message&utm_medium=arlimtalk&utm_campaign=accumulated_preparative"
+
+    {
+      title: "요양보호사 시험에 합격하셨나요?",
+      message: "#{tem_params[:name]} 선생님 케어파트너와 함께 준비했던 요양보호사 시험은 잘 마무리하셨나요?
+
+요양보호사 시험을 준비하시고 시험 보시느라 고생 많으셨습니다.
+
+합격 여부를 떠나 #{tem_params[:name]} 선생님의 새로운 도전을 항상 응원하고 있습니다.
+
+케어파트너에서는 요양보호사로 첫 발걸음을 내딛는 선생님께 도움 드릴 수 있는 다양한 서비스와 정보를 제공하고 있어요.
+
+1.집 근처 초보 요양 일자리 추천
+2.급여 높은 요양 일자리 추천
+3.초보 요양보호사가 꼭 알아야 할 정보
+
+아래 버튼을 누르시고 다양한 정보와 혜택 받아가세요.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '네 합격했어요',
+          url_mobile: chat_bot_url,
+          url_pc: chat_bot_url
+        },
+        {
+          type: 'WL',
+          name: '아직 합격 못했어요',
+          url_mobile: chat_bot_url,
+          url_pc: chat_bot_url
         },
       ]
     }
