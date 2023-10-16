@@ -15,8 +15,8 @@ class SearchPreparativeCbtUsersService
     one_days_ago = now - 1
 
     # 연도.월과 연도.월.일 형식으로 변환
-    last_month_str = last_month.strftime('%y/%m')
-    month_before_last_str = month_before_last.strftime('%y/%m')
+    last_month_str = last_month.strftime('%Y/%m')
+    month_before_last_str = month_before_last.strftime('%Y/%m')
 
     # 쿼리
     # %y.%m으로 저장된 경우는 이전달, 혹은 이전전달
@@ -26,22 +26,22 @@ class SearchPreparativeCbtUsersService
 
     # 1단계 x 달 쿼리
     users = User.where(
-      'expected_acquisition >= ? AND expected_acquisition <= ? AND (LENGTH(expected_acquisition) = 8 OR LENGTH(expected_acquisition) = 7)',
-      ninety_days_ago.strftime('%y/%m/%d'), one_days_ago.strftime('%y/%m/%d')
+      'expected_acquisition >= ? AND expected_acquisition <= ? AND (LENGTH(expected_acquisition) = 10 OR LENGTH(expected_acquisition) = 9)',
+      ninety_days_ago.strftime('%Y/%m/%d'), one_days_ago.strftime('%Y/%m/%d')
     )
 
     # 2단계 이전 달 쿼리
     # users = User.where(
-    #   '(expected_acquisition IN (?) AND LENGTH(expected_acquisition) = 5) OR (expected_acquisition >= ? AND expected_acquisition <= ? AND (LENGTH(expected_acquisition) = 8 OR LENGTH(expected_acquisition) = 7))',
+    #   '(expected_acquisition IN (?) AND LENGTH(expected_acquisition) = 5) OR (expected_acquisition >= ? AND expected_acquisition <= ? AND (LENGTH(expected_acquisition) = 10 OR LENGTH(expected_acquisition) = 9))',
     #   last_month_str,
-    #   ninety_days_ago.strftime('%y/%m/%d'), one_days_ago.strftime('%y/%m/%d')
+    #   ninety_days_ago.strftime('%Y/%m/%d'), one_days_ago.strftime('%Y/%m/%d')
     # )
 
     # 3단계 이전전달 쿼리
     # users = User.where(
-    #   '(expected_acquisition IN (?, ?) AND LENGTH(expected_acquisition) = 5) OR (expected_acquisition >= ? AND expected_acquisition <= ? AND (LENGTH(expected_acquisition) = 8 OR LENGTH(expected_acquisition) = 7))',
+    #   '(expected_acquisition IN (?, ?) AND LENGTH(expected_acquisition) = 5) OR (expected_acquisition >= ? AND expected_acquisition <= ? AND (LENGTH(expected_acquisition) = 10 OR LENGTH(expected_acquisition) = 9))',
     #   month_before_last_str, last_month_str,
-    #   ninety_days_ago.strftime('%y/%m/%d'), one_days_ago.strftime('%y/%m/%d')
+    #   ninety_days_ago.strftime('%Y/%m/%d'), one_days_ago.strftime('%Y/%m/%d')
     # )
     users.where(has_certification: false, status: 'active')
 
