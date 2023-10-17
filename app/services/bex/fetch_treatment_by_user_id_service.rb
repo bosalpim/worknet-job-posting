@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Bex::FetchTreatmentByUserIdService
+  include Bex
   def initialize(
     experiment_key:,
     user_id:
@@ -13,17 +14,9 @@ class Bex::FetchTreatmentByUserIdService
     response = HTTParty.get(endpoint)
     data = response.parsed_response.dig('data')
 
-    if data.nil?
-      raise StandardError.new("Request failed : #{response}")
-    end
+    treatment = TreatmentMapper.from_hash!(data)
 
-    treatment = Bex::TreatmentMapper.from_hash(data)
-
-    unless treatment.valid?
-      raise StandardError.new("Invalid treatment : #{treatment.errors.full_messages})")
-    end
-
-    treatment
+    return treatment
   rescue StandardError => e
     Jets.logger.error e
   end

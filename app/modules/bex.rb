@@ -13,8 +13,8 @@ module Bex
   end
 
   class TreatmentMapper
-    def self.from_hash(hash = {})
-      Treatment.new(
+    def self.from_hash!(hash = {})
+      treatment = Treatment.new(
         experiment_status: hash.dig("status"),
         unit_id: hash.dig("unit", "id"),
         user_id: hash.dig("unit", "userId"),
@@ -23,6 +23,12 @@ module Bex
         title: hash.dig("unit", "treatment", "title"),
         winner: hash.dig("unit", "treatment", "winner")
       )
+
+      if treatment.invalid?
+        raise "Treatment is invalid #{treatment.inspect}"
+      end
+
+      treatment
     end
   end
 

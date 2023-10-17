@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class NotifyCareerCertificationServiceV2
+  TEMPLATE_TREATMENT_MAP = {
+    'A': MessageTemplateName::CONNECT_RESULT_USER_SURVEY_A,
+    'B': MessageTemplateName::CONNECT_RESULT_USER_SURVEY_B
+  }
+
   def initialize(params)
     @link = params.dig(:link)
     @phone = params.dig(:phone)
@@ -21,9 +26,10 @@ class NotifyCareerCertificationServiceV2
       return
     end
 
-    template_id = treatment.key == 'A' ?
-                    MessageTemplateName::CONNECT_RESULT_USER_SURVEY_A :
-                    MessageTemplateName::CONNECT_RESULT_USER_SURVEY_B
+    template_id = TEMPLATE_TREATMENT_MAP.fetch(
+      treatment.key,
+      MessageTemplateName::CONNECT_RESULT_USER_SURVEY_A
+    )
 
     reserve_dt = (DateTime.now + 3.days).in_time_zone('Seoul').strftime('%Y%m%d%H%M%S')
     
