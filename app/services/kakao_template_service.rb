@@ -13,7 +13,7 @@ class KakaoTemplateService
     @message_type = message_type
     @profile = profile
     set_phone(phone)
-    @reserve_dt = get_reserve_dt(reserve_dt)
+    @reserve_dt = Jets.env.production? ? get_reserve_dt(reserve_dt) : nil
     @sender_number = "15885877"
   end
 
@@ -122,6 +122,10 @@ class KakaoTemplateService
       get_accumulated_draft(tem_params)
     when MessageTemplateName::ACCUMULATED_PREPARATIVE
       get_accumulated_preparative(tem_params)
+    when MessageTemplateName::CONNECT_RESULT_USER_SURVEY_A
+      get_connect_result_user_survey_A(tem_params)
+    when MessageTemplateName::CONNECT_RESULT_USER_SURVEY_B
+      get_connect_result_user_survey_B(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1527,6 +1531,64 @@ carepartner.kr#{path}
           url_mobile: chat_bot_url,
           url_pc: chat_bot_url
         },
+      ]
+    }
+  end
+
+  def get_connect_result_user_survey_A(tem_params)
+    job_posting_title = tem_params[:job_posting_title]
+    job_posting_address = tem_params[:job_posting_address]
+    job_posting_schedule = tem_params[:job_posting_schedule]
+    link = tem_params[:link]
+
+    {
+      title: "#{job_posting_title} 공고에 취업하셨나요?",
+      message: "#{job_posting_title} 공고에 취업하셨나요?
+
+■ 근무 장소
+#{job_posting_address}
+
+■ 근무 요일
+#{job_posting_schedule}
+
+■ 인증 혜택
+취업을 인증하면 백화점상품권(5천원)을 드려요.",
+      buttons: [
+        {
+          type: "WL",
+          name: "취업 인증하고 선물 받기",
+          url_mobile: link,
+          url_pc: link,
+        }
+      ]
+    }
+  end
+
+  def get_connect_result_user_survey_B(tem_params)
+    job_posting_title = tem_params[:job_posting_title]
+    job_posting_address = tem_params[:job_posting_address]
+    job_posting_schedule = tem_params[:job_posting_schedule]
+    link = tem_params[:link]
+
+    {
+      title: "#{job_posting_title} 공고에 취업하셨나요?",
+      message: "#{job_posting_title} 공고에 취업하셨나요?
+
+■ 근무 장소
+#{job_posting_address}
+
+■ 근무 요일
+#{job_posting_schedule}
+
+■ 인증 혜택
+취업 인증하면 매달 급여일에 맞춰 내가 받은 금액이 맞는지 확인해 드려요.",
+      buttons: [
+        {
+          type: "WL",
+          name: "취업 인증후 혜택 받기",
+          url_mobile: link,
+          url_pc: link,
+        }
       ]
     }
   end
