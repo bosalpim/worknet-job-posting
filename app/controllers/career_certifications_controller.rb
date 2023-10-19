@@ -21,7 +21,7 @@ class CareerCertificationsController < ApplicationController
   end
 
   def notify_v2_params
-    params.permit(:phone, :link, :center_name, :job_posting_title, :user_id)
+    params.permit(:phone, :link, :job_posting_id, :user_id)
   end
 
 end

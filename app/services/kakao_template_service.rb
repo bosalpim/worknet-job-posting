@@ -13,7 +13,7 @@ class KakaoTemplateService
     @message_type = message_type
     @profile = profile
     set_phone(phone)
-    @reserve_dt = get_reserve_dt(reserve_dt)
+    @reserve_dt = Jets.env.production? ? get_reserve_dt(reserve_dt) : nil
     @sender_number = "15885877"
   end
 
@@ -1539,7 +1539,7 @@ carepartner.kr#{path}
     job_posting_title = tem_params[:job_posting_title]
     job_posting_address = tem_params[:job_posting_address]
     job_posting_schedule = tem_params[:job_posting_schedule]
-    url = tem_params[:url]
+    link = tem_params[:link]
 
     {
       title: "#{job_posting_title} 공고에 취업하셨나요?",
@@ -1556,9 +1556,9 @@ carepartner.kr#{path}
       buttons: [
         {
           type: "WL",
-          name: "취업 인증후 혜택 받기",
-          url_mobile: url,
-          url_pc: url,
+          name: "취업 인증하고 선물 받기",
+          url_mobile: link,
+          url_pc: link,
         }
       ]
     }
@@ -1568,7 +1568,7 @@ carepartner.kr#{path}
     job_posting_title = tem_params[:job_posting_title]
     job_posting_address = tem_params[:job_posting_address]
     job_posting_schedule = tem_params[:job_posting_schedule]
-    url = tem_params[:url]
+    link = tem_params[:link]
 
     {
       title: "#{job_posting_title} 공고에 취업하셨나요?",
@@ -1585,9 +1585,9 @@ carepartner.kr#{path}
       buttons: [
         {
           type: "WL",
-          name: "취업 인증후 상품권 받기",
-          url_mobile: url,
-          url_pc: url,
+          name: "취업 인증후 혜택 받기",
+          url_mobile: link,
+          url_pc: link,
         }
       ]
     }
