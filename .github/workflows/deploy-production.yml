@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: ['2.7.2']
+        ruby-version: [ '2.7.2' ]
 
     steps:
       - uses: actions/checkout@v3
@@ -37,6 +37,7 @@ jobs:
           echo "KAKAO_BIZMSG_PROFILE=$KAKAO_BIZMSG_PROFILE" >> .env.production
           echo "AMPLITUDE_PRODUCTION=$AMPLITUDE_PRODUCTION" >> .env.production
           echo "FCM_APP_PUSH_AUTHORIZATION=$FCM_APP_PUSH_AUTHORIZATION" >> .env.production
+          echo "BEX_API_URL=$BEX_PRODUCTION_API_URL" >> .env.production
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
           DB_PASSWORD_PRODUCTION: ${{ secrets.DB_PASSWORD_PRODUCTION }}
