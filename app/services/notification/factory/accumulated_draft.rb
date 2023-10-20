@@ -1,4 +1,4 @@
-class Notification::Factory::AccumulatedDraft < Notification::Factory::MessageFactoryClass
+class Notification::Factory::AccumulatedDraft < Notification::Factory::NotificationFactoryClass
   include RatioChopper
   def initialize
     super(MessageTemplateName::ACCUMULATED_DRAFT)

@@ -1,4 +1,4 @@
-class Notification::Factory::CarepartnerNewDraft < Notification::Factory::MessageFactoryClass
+class Notification::Factory::CarepartnerNewDraft < Notification::Factory::NotificationFactoryClass
   include RatioChopper
   def initialize
     super(MessageTemplateName::CAREPARTNER_PRESENT)

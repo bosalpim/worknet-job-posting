@@ -1,4 +1,4 @@
-class Notification::Factory::NewJobNotification < Notification::Factory::MessageFactoryClass
+class Notification::Factory::NewJobNotification < Notification::Factory::NotificationFactoryClass
   include ApplicationHelper
   include TranslationHelper
   include JobPostingsHelper

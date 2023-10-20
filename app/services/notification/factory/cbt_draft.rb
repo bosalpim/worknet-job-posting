@@ -1,4 +1,4 @@
-class Notification::Factory::CbtDraft < Notification::Factory::MessageFactoryClass
+class Notification::Factory::CbtDraft < Notification::Factory::NotificationFactoryClass
   include RatioChopper
   def initialize
     super(MessageTemplateName::CBT_DRAFT)

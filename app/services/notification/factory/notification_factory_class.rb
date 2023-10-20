@@ -1,10 +1,10 @@
-class Notification::Factory::MessageFactoryClass
+class Notification::Factory::NotificationFactoryClass
   include NotificationSaveResultHelper
 
   AppPush = Notification::Factory::SendMedium::AppPush
   BizmPostPayMessage = Notification::Factory::SendMedium::BizmPostPayMessage
   BizmPrePayMessage = Notification::Factory::SendMedium::BizmPrePayMessage
-  
+
   def initialize(message_template_id)
     @app_push_list = []
     @bizm_post_pay_list = []
