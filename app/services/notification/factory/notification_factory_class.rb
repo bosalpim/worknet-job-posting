@@ -32,6 +32,7 @@ class Notification::Factory::NotificationFactoryClass
     # app push 결과 처리
     save_results_app_push(@app_push_result, @message_template_id)
     save_results_bizm_post_pay(@bizm_post_pay_result, @message_template_id)
+    save_results_bizm_pre_pay(@bizm_pre_pay_result, @message_template_id)
     # pre_pay 결과 처리
   end
 
