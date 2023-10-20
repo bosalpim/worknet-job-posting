@@ -53,6 +53,7 @@ jobs:
           KAKAO_BIZMSG_PROFILE: ${{ secrets.KAKAO_BIZMSG_PROFILE }}
           AMPLITUDE_STAGING: ${{ secrets.AMPLITUDE_STAGING }}
           FCM_APP_PUSH_AUTHORIZATION: ${{ secrets.FCM_APP_PUSH_AUTHORIZATION }}
+          BEX_STAGING_API_URL: ${{ secrets.BEX_STAGING_API_URL }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
