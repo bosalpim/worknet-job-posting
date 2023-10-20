@@ -4,6 +4,7 @@ class Notification::Factory::MessageFactoryClass
   AppPush = Notification::Factory::SendMedium::AppPush
   BizmPostPayMessage = Notification::Factory::SendMedium::BizmPostPayMessage
   BizmPrePayMessage = Notification::Factory::SendMedium::BizmPrePayMessage
+  
   def initialize(message_template_id)
     @app_push_list = []
     @bizm_post_pay_list = []
@@ -32,6 +33,7 @@ class Notification::Factory::MessageFactoryClass
     # app push 결과 처리
     save_results_app_push(@app_push_result, @message_template_id)
     save_results_bizm_post_pay(@bizm_post_pay_result, @message_template_id)
+    save_results_bizm_pre_pay(@bizm_pre_pay_result, @message_template_id)
     # pre_pay 결과 처리
   end
 
