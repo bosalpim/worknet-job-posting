@@ -28,7 +28,6 @@ class NewJobNotificationService
 
   def call
     users = []
-    business = Business.find job_posting.business_id
 
     User.preferred_distances.each do |key, value|
       prefer_work_type =
