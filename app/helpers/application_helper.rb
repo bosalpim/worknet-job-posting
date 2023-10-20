@@ -1,6 +1,9 @@
 module ApplicationHelper
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
 
+  def build_shorten_url(origin_url)
+    ShortUrl.build(origin_url).url
+  end
   def convert_safe_text(text, empty_string = "정보없음")
     text.presence&.truncate(MAX_ITEM_LIST_TEXT_LENGTH) || empty_string
   end

@@ -1,4 +1,8 @@
 class Notification::Factory::NewJobNotification < Notification::Factory::NotificationFactoryClass
+  include ApplicationHelper
+  include TranslationHelper
+  include JobPostingsHelper
+
   NewJobPostingUsersService = Notification::SearchUser::NewJobPostingUsersService
   def initialize(job_posting_id)
     super(MessageTemplateName::NEW_JOB_POSTING)
@@ -9,8 +13,33 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
   end
   def create_message
     @list.each do |user|
-      create_bizm_post_pay_message(user)
+      if @target_medium == 'app_push'
+        if user.is_sendable_app_push
+          create_app_push_message(user)
+        else
+          create_bizm_post_pay_message(user)
+        end
+      else
+        create_bizm_post_pay_message(user)
+      end
     end
+  end
+
+  private
+
+  def create_app_push_message(user)
+    app_push = AppPush.new(
+      @message_template_id,
+      user.push_token.token,
+      MessageTemplateName::NEW_JOB_POSTING,
+      {
+        body: '새로운 일자리가 나타났습니다.',
+        title: '신규 일자리 등장',
+        link: 'carepartner://app/jobs/recently_published'
+      },
+      user.public_id,
+      )
+    @app_push_list.push(app_push)
   end
 
   def create_bizm_pre_pay_message
@@ -51,8 +80,6 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
 
     @bizm_pre_pay_list.push(BizmPrePayMessage.new(@message_template_id, 'AT', user.phone_number, params, user.public_id))
   end
-
-  private
 
   def build_visit_message(url, user, job_posting_customer)
     "신규 일자리 알림
