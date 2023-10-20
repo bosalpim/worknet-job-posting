@@ -1,4 +1,11 @@
 class Notification::SearchUser::NewJobPostingUsersService
+  DISTANCE_LIST = {
+    by_walk15: 900,
+    by_walk30: 1800,
+    by_km_3: 3000,
+    by_km_5: 5000,
+  }
+
   def self.call(job_posting)
     new(job_posting).call
   end

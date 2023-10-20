@@ -1,4 +1,8 @@
 class Notification::Factory::NewJobNotification < Notification::Factory::MessageFactoryClass
+  include ApplicationHelper
+  include TranslationHelper
+  include JobPostingsHelper
+
   NewJobPostingUsersService = Notification::SearchUser::NewJobPostingUsersService
   def initialize(job_posting_id)
     super(MessageTemplateName::NEW_JOB_POSTING)
@@ -30,12 +34,13 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Message
       {
         body: '새로운 일자리가 나타났습니다.',
         title: '신규 일자리 등장',
-        link: '/jobs/recently_published'
+        link: 'carepartner://app/jobs/recently_published'
       },
       user.public_id,
     )
     @app_push_list.push(app_push)
   end
+
   def create_bizm_post_pay_message(user)
     base_url = "https://www.carepartner.kr"
     view_endpoint = "/jobs/recently_published?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting&lat=#{user.lat}&lng=#{user.lng}"
@@ -49,7 +54,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Message
 
     params = {
       title: "신규일자리 알림",
-      message: homecare_yes ? build_visit_message(origin_url, user) : build_facility_message(origin_url, user),
+      message: homecare_yes ? build_visit_message(origin_url, user, job_posting_customer) : build_facility_message(origin_url, user),
       work_type_ko: work_type_ko,
       address: @job_posting.address,
       days_text: get_days_text(@job_posting),
@@ -72,6 +77,46 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Message
       target_public_id: user.public_id
     }
 
-    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, 'AT', user.phone_number, params, user.public_id))
+    @bizm_pre_pay_list.push(BizmPrePayMessage.new(@message_template_id, 'AT', user.phone_number, params, user.public_id))
+  end
+
+  private
+
+  def build_visit_message(url, user, job_posting_customer)
+    "신규 일자리 알림
+
+■ 어르신 정보
+#{job_posting_customer.korean_summary}
+■ 근무지
+#{@job_posting.address}
+■ 통근거리
+#{user.simple_distance_from_ko(@job_posting)}
+■ 근무시간
+#{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
+■ 급여
+#{get_pay_text(@job_posting)}
+
+자세한 내용을 확인하고 지원해보세요!
+#{build_shorten_url(url)}"
+  end
+
+  def build_facility_message(url, user)
+    work_type_ko = translate_type('job_posting', @job_posting, :work_type)
+
+    "신규 일자리 알림
+
+■ 근무유형
+#{work_type_ko}
+■ 근무지
+#{@job_posting.address}
+■ 통근거리
+#{user.simple_distance_from_ko(@job_posting)}
+■ 근무시간
+#{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
+■ 급여
+#{get_pay_text(@job_posting)}
+
+자세한 내용을 확인하고 지원해보세요!
+#{build_shorten_url(url)}"
   end
 end

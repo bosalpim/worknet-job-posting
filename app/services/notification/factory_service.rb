@@ -13,6 +13,8 @@ class Notification::FactoryService
       return Notification::Factory::AccumulatedDraft.new
     when MessageTemplateName::ACCUMULATED_PREPARATIVE
       return Notification::Factory::AccumulatedPreparativeCbt.new
+    when MessageTemplateName::NEW_JOB_POSTING(params)
+      return Notification::Factory::NewJobNotification.new(params[:job_posting_id])
     else
       puts "no template found"
       return []
