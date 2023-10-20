@@ -3,7 +3,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
   include TranslationHelper
   include JobPostingsHelper
 
-  NewJobPostingUsersService = Notification::SearchUser::NewJobPostingUsersService
+  NewJobPostingUsersService = Notification::Factory::SearchTarget::NewJobPostingUsersService
   def initialize(job_posting_id)
     super(MessageTemplateName::NEW_JOB_POSTING)
     job_posting = JobPosting.find(job_posting_id)
