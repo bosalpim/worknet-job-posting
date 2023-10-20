@@ -1,4 +1,4 @@
-class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::MessageFactoryClass
+class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::NotificationFactoryClass
   include JobMatchHelper
   include ApplicationHelper
   include JobPostingsHelper

@@ -1,4 +1,4 @@
-class Notification::Factory::AccumulatedPreparativeCbt < Notification::Factory::MessageFactoryClass
+class Notification::Factory::AccumulatedPreparativeCbt < Notification::Factory::NotificationFactoryClass
   include RatioChopper
   def initialize
     super(MessageTemplateName::ACCUMULATED_PREPARATIVE)

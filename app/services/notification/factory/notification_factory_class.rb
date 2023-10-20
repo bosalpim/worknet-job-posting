@@ -1,4 +1,4 @@
-class Notification::Factory::MessageFactoryClass
+class Notification::Factory::NotificationFactoryClass
   include NotificationSaveResultHelper
 
   AppPush = Notification::Factory::SendMedium::AppPush
