@@ -2,7 +2,7 @@
 
 class Proposal::AcceptedService
   def initialize(params)
-    @template_id = KakaoTemplate::CALL_INTERVIEW_ACCEPTED
+    @template_id = MessageTemplateName::CALL_INTERVIEW_ACCEPTED
     @target_public_id = params['target_public_id']
     @business_id = params["business_id"]
     @business_name = params["business_name"]
@@ -53,9 +53,9 @@ class Proposal::AcceptedService
     end
     fail_reason = response.dig('originMessage') if code != 'success'
 
-    KakaoNotificationResult.create(
+    NotificationResult.create(
       template_id: @template_id,
-      send_type: KakaoNotificationResult::CALL_INTERVIEW_ACCEPTED,
+      send_type: NotificationResult::CALL_INTERVIEW_ACCEPTED,
       send_id: @target_public_id,
       success_count: success_count,
       tms_success_count: tms_success_count,

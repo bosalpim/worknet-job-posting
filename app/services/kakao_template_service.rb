@@ -1,91 +1,215 @@
 class KakaoTemplateService
+  include MessageTemplateName
+  DEFAULT_RESERVE_AT = "00000000000000".freeze
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
   SETTING_ALARM_LINK = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign="
   ALARM_POSITION_LINK = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign="
 
-  attr_reader :template_id
+  attr_reader :template_id, :message_type
 
-  def initialize(template_id)
+  def initialize(template_id, message_type, phone, reserve_dt)
+    profile = ENV['KAKAO_BIZMSG_PROFILE']
     @template_id = template_id
+    @message_type = message_type
+    @profile = profile
+    set_phone(phone)
+    @reserve_dt = Jets.env.production? ? get_reserve_dt(reserve_dt) : nil
+    @sender_number = "15885877"
+  end
+
+  def get_final_request_params(tem_params, is_pre_pay = false, phone = nil)
+    set_phone(phone) unless phone.nil?
+
+    template_data = get_template_data(tem_params)
+    request_params = get_default_request_params(template_id, template_data, is_pre_pay)
+    if (items = template_data[:items])
+      request_params[:items] = items
+    end
+    if (buttons = template_data[:buttons])
+      buttons.each_with_index do |btn, index|
+        request_params["button#{index + 1}"] = btn
+      end
+    end
+    if (quick_replies = template_data[:quick_replies])
+      quick_replies.each_with_index do |quick_reply, index|
+        request_params["quickReply#{index + 1}"] = quick_reply
+      end
+    end
+    request_params
+  end
+
+  def get_template_data(tem_params)
+    case @template_id
+    when MessageTemplateName::PROPOSAL
+      get_proposal_data(tem_params)
+    when MessageTemplateName::NEW_JOB_POSTING_VISIT
+      get_visit_job_posting_data(tem_params)
+    when MessageTemplateName::NEW_JOB_POSTING_FACILITY
+      get_facility_job_posting_data(tem_params)
+    when MessageTemplateName::PERSONALIZED
+      get_personalized_data_by_json(tem_params)
+    when MessageTemplateName::EXTRA_BENEFIT
+      get_extra_benefit_data_by_json(tem_params)
+    when MessageTemplateName::PROPOSAL_ACCEPTED
+      get_proposal_accepted_data(tem_params)
+    when MessageTemplateName::PROPOSAL_REJECTED
+      get_proposal_rejected_data(tem_params)
+    when MessageTemplateName::PROPOSAL_RESPONSE_EDIT
+      get_proposal_response_edit_data(tem_params)
+    when MessageTemplateName::SATISFACTION_SURVEY
+      get_satisfaction_survey_data(tem_params)
+    when MessageTemplateName::USER_SATISFACTION_SURVEY
+      get_user_satisfaction_survey_data(tem_params)
+    when MessageTemplateName::USER_CALL_REMINDER
+      get_user_call_reminder_data(tem_params)
+    when MessageTemplateName::BUSINESS_CALL_REMINDER
+      get_business_call_reminder_data(tem_params)
+    when MessageTemplateName::CALL_REQUEST_ALARM
+      get_new_apply_data(tem_params)
+    when MessageTemplateName::BUSINESS_CALL_APPLY_USER_REMINDER
+      get_apply_user_call_reminder_data(tem_params)
+    when MessageTemplateName::JOB_ALARM_ACTIVELY
+      get_job_alarm_actively(tem_params)
+    when MessageTemplateName::JOB_ALARM_COMMON
+      get_job_alarm_commonly(tem_params)
+    when MessageTemplateName::JOB_ALARM_OFF
+      get_job_alarm_off(tem_params)
+    when MessageTemplateName::JOB_ALARM_WORKING
+      get_job_alarm_working(tem_params)
+    when MessageTemplateName::GAMIFICATION_MISSION_COMPLETE
+      get_gamification_mission_complete
+    when MessageTemplateName::CAREER_CERTIFICATION
+      get_career_certification_alarm(tem_params)
+    when MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION
+      get_close_job_posting_notification(tem_params)
+    when MessageTemplateName::CANDIDATE_RECOMMENDATION
+      get_candidate_recommendation(tem_params)
+    when MessageTemplateName::SIGNUP_COMPLETE_GUIDE
+      get_signup_complete_guide
+    when MessageTemplateName::HIGH_SALARY_JOB
+      get_high_salary_job(tem_params)
+    when MessageTemplateName::ENTER_LOCATION
+      get_enter_location(tem_params)
+    when MessageTemplateName::WELL_FITTED_JOB
+      get_well_fitted_job(tem_params)
+    when MessageTemplateName::CERTIFICATION_UPDATE
+      get_certification_update(tem_params)
+    when MessageTemplateName::POST_COMMENT
+      get_post_comment(tem_params)
+    when MessageTemplateName::CALL_INTERVIEW_PROPOSAL
+      get_call_interview_proposal(tem_params)
+    when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
+      get_call_interview_accepted(tem_params)
+    when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
+      get_call_saved_job_caregiver(tem_params)
+    when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
+      get_call_saved_job_posting_v2(tem_params)
+    when MessageTemplateName::ASK_ACTIVE
+      get_ask_active(tem_params)
+    when MessageTemplateName::NEW_JOB_VISIT_V2
+      get_new_job_visit_v2(tem_params)
+    when MessageTemplateName::NEW_JOB_FACILITY_V2
+      get_new_job_facility_v2(tem_params)
+    when MessageTemplateName::NEWSPAPER_V2
+      get_newspaper_v2(tem_params)
+    when MessageTemplateName::NEW_JOB_POSTING
+      get_new_job_posting(tem_params)
+    when MessageTemplateName::CBT_DRAFT
+      get_cbt_draft(tem_params)
+    when MessageTemplateName::CAREPARTNER_PRESENT
+      get_carepartner_draft(tem_params)
+    when MessageTemplateName::ACCUMULATED_DRAFT
+      get_accumulated_draft(tem_params)
+    when MessageTemplateName::ACCUMULATED_PREPARATIVE
+      get_accumulated_preparative(tem_params)
+    when MessageTemplateName::CONNECT_RESULT_USER_SURVEY_A
+      get_connect_result_user_survey_A(tem_params)
+    when MessageTemplateName::CONNECT_RESULT_USER_SURVEY_B
+      get_connect_result_user_survey_B(tem_params)
+    else
+      Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
+    end
   end
 
   private
 
-  def get_template_data(template_id, tem_params)
-    case template_id
-    when KakaoTemplate::PROPOSAL
-      get_proposal_data(tem_params)
-    when KakaoTemplate::NEW_JOB_POSTING_VISIT
-      get_visit_job_posting_data(tem_params)
-    when KakaoTemplate::NEW_JOB_POSTING_FACILITY
-      get_facility_job_posting_data(tem_params)
-    when KakaoTemplate::PERSONALIZED
-      get_personalized_data_by_json(tem_params)
-    when KakaoTemplate::EXTRA_BENEFIT
-      get_extra_benefit_data_by_json(tem_params)
-    when KakaoTemplate::PROPOSAL_ACCEPTED
-      get_proposal_accepted_data(tem_params)
-    when KakaoTemplate::PROPOSAL_REJECTED
-      get_proposal_rejected_data(tem_params)
-    when KakaoTemplate::PROPOSAL_RESPONSE_EDIT
-      get_proposal_response_edit_data(tem_params)
-    when KakaoTemplate::SATISFACTION_SURVEY
-      get_satisfaction_survey_data(tem_params)
-    when KakaoTemplate::USER_SATISFACTION_SURVEY
-      get_user_satisfaction_survey_data(tem_params)
-    when KakaoTemplate::USER_CALL_REMINDER
-      get_user_call_reminder_data(tem_params)
-    when KakaoTemplate::BUSINESS_CALL_REMINDER
-      get_business_call_reminder_data(tem_params)
-    when KakaoTemplate::CALL_REQUEST_ALARM
-      get_new_apply_data(tem_params)
-    when KakaoTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
-      get_apply_user_call_reminder_data(tem_params)
-    when KakaoTemplate::JOB_ALARM_ACTIVELY
-      get_job_alarm_actively(tem_params)
-    when KakaoTemplate::JOB_ALARM_COMMON
-      get_job_alarm_commonly(tem_params)
-    when KakaoTemplate::JOB_ALARM_OFF
-      get_job_alarm_off(tem_params)
-    when KakaoTemplate::JOB_ALARM_WORKING
-      get_job_alarm_working(tem_params)
-    when KakaoTemplate::GAMIFICATION_MISSION_COMPLETE
-      get_gamification_mission_complete
-    when KakaoTemplate::CAREER_CERTIFICATION
-      get_career_certification_alarm(tem_params)
-    when KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION
-      get_close_job_posting_notification(tem_params)
-    when KakaoTemplate::CANDIDATE_RECOMMENDATION
-      get_candidate_recommendation(tem_params)
-    when KakaoTemplate::SIGNUP_COMPLETE_GUIDE
-      get_signup_complete_guide
-    when KakaoTemplate::HIGH_SALARY_JOB
-      get_high_salary_job(tem_params)
-    when KakaoTemplate::ENTER_LOCATION
-      get_enter_location(tem_params)
-    when KakaoTemplate::WELL_FITTED_JOB
-      get_well_fitted_job(tem_params)
-    when KakaoTemplate::CERTIFICATION_UPDATE
-      get_certification_update(tem_params)
-    when KakaoTemplate::POST_COMMENT
-      get_post_comment(tem_params)
-    when KakaoTemplate::CALL_INTERVIEW_PROPOSAL
-      get_call_interview_proposal(tem_params)
-    when KakaoTemplate::CALL_INTERVIEW_ACCEPTED
-      get_call_interview_accepted(tem_params)
-    when KakaoTemplate::CALL_SAVED_JOB_CAREGIVER
-      get_call_saved_job_caregiver(tem_params)
-    when KakaoTemplate::ASK_ACTIVE
-      get_ask_active(tem_params)
-    when KakaoTemplate::NEW_JOB_VISIT_V2
-      get_new_job_visit_v2(tem_params)
-    when KakaoTemplate::NEW_JOB_FACILITY_V2
-      get_new_job_facility_v2(tem_params)
-    when KakaoTemplate::NEWSPAPAER_V2
-      get_newspaper_v2(tem_params)
+  def set_phone(phone)
+    @phone = if Jets.env == 'production'
+               phone
+             elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(phone)
+               phone
+             else
+               TEST_PHONE_NUMBER
+             end
+  end
+
+  def get_reserve_dt(reserve_dt)
+    return reserve_dt if reserve_dt
+    american_time = Time.current
+    korean_offset = 9 * 60 * 60 # 9 hours ahead of American time
+    korean_time = american_time + korean_offset
+
+    if korean_time.hour >= 21
+      next_day_time = korean_time + 1.day
+      next_day_time.strftime("%Y%m%d") + "080000"
+    elsif korean_time.hour < 8
+      korean_time.strftime("%Y%m%d") + "080000"
     else
-      Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
+      DEFAULT_RESERVE_AT
     end
+  end
+
+  def current_time
+    "#{Time.now.strftime("%y%m%d%H%M%S")}_#{SecureRandom.uuid.gsub('-', '')[0, 7]}"
+  end
+
+  def get_default_request_params(template_id, template_data, is_pre_pay)
+    message, img_url, title = template_data.values_at(:message, :img_url, :title)
+    data = if is_pre_pay
+             {
+               message_type: @message_type,
+               phn: @phone.to_s.gsub(/[^0-9]/, ""),
+               profile: @profile,
+               tmplId: template_id,
+               msg: message,
+               smsKind: message&.bytesize&.to_i > 90 ? "L" : "S",
+               msgSms: message,
+               smsSender: @sender_number,
+               smsLmsTit: title,
+               img_url: img_url,
+               reserveDt: @reserve_dt
+             }
+           else
+             {
+               msgid: "WEB#{current_time}",
+               message_type: @message_type,
+               profile_key: @profile,
+               template_code: template_id,
+               receiver_num: @phone.to_s.gsub(/[^0-9]/, ""),
+               message: message,
+               reserved_time: @reserve_dt,
+               sms_message: message,
+               sms_title: title,
+               sms_kind: message&.bytesize&.to_i > 90 ? "L" : "S",
+               sender_num: @sender_number,
+               image_url: img_url,
+             }
+           end
+
+    title_required_templates = [
+      MessageTemplateName::PROPOSAL_RESPONSE_EDIT,
+      MessageTemplateName::NEW_JOB_POSTING_VISIT,
+      MessageTemplateName::NEW_JOB_POSTING_FACILITY,
+      MessageTemplateName::NEW_JOB_VISIT_V2,
+      MessageTemplateName::NEW_JOB_FACILITY_V2,
+      MessageTemplateName::NEW_JOB_POSTING
+    ]
+
+    if title_required_templates.include?(template_id)
+      data[:title] = title
+    end
+
+    data
   end
 
   def get_proposal_data(tem_params)
@@ -1075,6 +1199,44 @@ class KakaoTemplateService
     data
   end
 
+  def get_call_saved_job_posting_v2(tem_params)
+    customer_info = tem_params[:customer_info]
+    work_schedule = tem_params[:work_schedule]
+    location_info = tem_params[:location_info]
+    pay_text = tem_params[:pay_text]
+    job_posting_public_id = tem_params[:job_posting_public_id]
+
+    host = if Jets.env == 'production'
+             'https://carepartner.kr'
+           else
+             'https://dev-carepartner.kr'
+           end
+    url = host + "/jobs/#{job_posting_public_id}?&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_posting"
+
+    {
+      title: "요양보호사 관심 표시",
+      message: "관심을 표시한 공고에 전화해보세요!
+
+■ 어르신 정보
+#{customer_info}
+■ 근무 요일
+#{work_schedule}
+■ 근무 장소
+#{location_info}
+■ 급여 정보
+#{pay_text}
+
+자세히 확인하기 버튼을 눌러 공고 담당자와 전화해보세요!",
+      buttons: [
+        {
+          type: 'WL',
+          name: '자세히 확인하기',
+          url_mobile: url,
+          url_pc: url }
+      ]
+    }
+  end
+
   def get_ask_active(tem_params)
     {
       title: '아직 일자리를 찾고 있나요?',
@@ -1180,10 +1342,39 @@ carepartner.kr#{path}
     }
   end
 
+  def get_new_job_posting(tem_params)
+    alarm_setting_url = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting"
+
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '🔎 일자리 확인하기',
+          type: 'WL',
+          url_pc: tem_params[:origin_url],
+          url_mobile: tem_params[:origin_url]
+        },
+        {
+          name: '❌ 그만 받을래요',
+          type: 'WL',
+          url_pc: tem_params[:mute_url],
+          url_mobile: tem_params[:mute_url]
+        },
+        {
+          name: '🔔 알림 지역 설정',
+          type: 'WL',
+          url_pc: alarm_setting_url,
+          url_mobile: alarm_setting_url
+        }
+      ]
+    }
+  end
+
   def get_newspaper_v2(tem_params)
     today = NewsPaper.get_today
     url = "https://www.carepartner.kr/newspaper?lat=#{tem_params["lat"]}&lng=#{tem_params["lng"]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
-    mute_url = "https://www.carepartner.kr/me/notification/off?type=jobutm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
+    mute_url = "https://www.carepartner.kr/me/notification/off?type=job&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
     {
       title: '아직 일자리를 찾고 있나요?',
       message: "#{today} 일자리 신문이 도착했어요.
@@ -1208,6 +1399,200 @@ carepartner.kr#{path}
     }
   end
 
+  def get_cbt_draft(tem_params)
+    cbt_url = "https://cbt.carepartner.kr/delivery?utm_source=message&utm_medium=arlimtalk&utm_campaign=CBT-draft"
+    counselor_url = "https://pf.kakao.com/_xjwfcb"
+    {
+      title: "실전 모의고사 풀고 요양보호사 자격증 시험 합격하세요!",
+      message: "#{tem_params[:name]} 선생님 요양보호사 자격증 시험 준비중이신가요?
+
+자격증 시험 합격을 위해 매일 실전 모의고사를 풀어보세요.
+
+하루에 딱 5분으로 요양보호사 자격증 시험 준비를 도와드리겠습니다.
+
+지금 등록하시면 최대 10회분의 모의고사도 무료로 제공해드려요!
+
+아래 ’실전 모의고사 풀기’ 버튼을 눌러 오늘의 추천 문제를 풀어보시고 자격증 시험에 합격하세요!",
+      buttons: [
+        {
+          type: 'WL',
+          name: '실전 모의고사 풀기',
+          url_mobile: cbt_url,
+          url_pc: cbt_url
+        },
+        {
+          type: 'WL',
+          name: '케어파트너 문의하기',
+          url_mobile: counselor_url,
+          url_pc: counselor_url
+        },
+      ]
+    }
+  end
+
+  def get_carepartner_draft(tem_params)
+    alarm_setting_url = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=carepartner_present"
+    counselor_url = "https://pf.kakao.com/_xjwfcb"
+
+    {
+      title: "요양보호사 등록하면 혜택이 쏟아져요!",
+      message: "#{tem_params[:name]} 선생님 요양보호사 자격증 갖고 계신가요?
+
+케어파트너에 회원가입 해주셔서 감사합니다.
+
+회원가입 후 추가로 자격증 여부를 알려주시면 감사 포인트와 선생님께서 찾고 계시는 일자리의 알림을 무료로 받아보실 수 있습니다.
+
+<추가 정보 등록 시 혜택>
+1. 높은 월급 일자리 추천
+2. 선생님 맞춤 일자리 알림 평생 무료
+3. 요양보호사 필수 정보 모음
+4. 케어파트너에서 사용 가능한 감사 포인트
+
+혹시 케어파트너를 이용하는 방법이 어려우셨다면, 걱정하지 마세요.
+
+아래 버튼을 눌러 이용이 어려운 부분에 대해 문의 해주시면 케어파트너 전문 상담사가 친절하게 알려드릴게요.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '일자리 무료 알림 신청',
+          url_mobile: alarm_setting_url,
+          url_pc: alarm_setting_url
+        },
+        {
+          type: 'WL',
+          name: '케어파트너 문의하기',
+          url_mobile: counselor_url,
+          url_pc: counselor_url
+        },
+      ]
+    }
+  end
+
+  def get_accumulated_draft(tem_params)
+    job_recommending_url = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=accumulated_draft"
+    counselor_url = "https://pf.kakao.com/_xjwfcb"
+
+    {
+      title: "요양보호사 등록하면 혜택이 쏟아져요!",
+      message: "#{tem_params[:name]} 선생님 급여 높은 일자리를 찾고 계신가요?
+
+전국 최대 규모 요양 일자리 서비스 케어파트너에서는 급여 높은 일자리를 매주 추천해드려요.
+
+지금 바로 케어파트너에 접속하여 축하 포인트도 받으시고 원하는 일자리도 찾아보세요.
+
+혹시 케어파트너를 이용하는 방법이 어려우셨다면, 걱정하지 마세요.
+
+아래 버튼을 눌러 이용이 어려운 부분에 대해 문의 해주시면 케어파트너 전문 상담사가 친절하게 알려드릴게요.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '급여 높은 일자리 추천받기',
+          url_mobile: job_recommending_url,
+          url_pc: job_recommending_url
+        },
+        {
+          type: 'WL',
+          name: '케어파트너 문의하기',
+          url_mobile: counselor_url,
+          url_pc: counselor_url
+        },
+      ]
+    }
+  end
+
+  def get_accumulated_preparative(tem_params)
+    chat_bot_url = "https://www.carepartner.kr/beginner?utm_source=message&utm_medium=arlimtalk&utm_campaign=accumulated_preparative"
+
+    {
+      title: "요양보호사 시험에 합격하셨나요?",
+      message: "#{tem_params[:name]} 선생님 케어파트너와 함께 준비했던 요양보호사 시험은 잘 마무리하셨나요?
+
+요양보호사 시험을 준비하시고 시험 보시느라 고생 많으셨습니다.
+
+합격 여부를 떠나 #{tem_params[:name]} 선생님의 새로운 도전을 항상 응원하고 있습니다.
+
+케어파트너에서는 요양보호사로 첫 발걸음을 내딛는 선생님께 도움 드릴 수 있는 다양한 서비스와 정보를 제공하고 있어요.
+
+1.집 근처 초보 요양 일자리 추천
+2.급여 높은 요양 일자리 추천
+3.초보 요양보호사가 꼭 알아야 할 정보
+
+아래 버튼을 누르시고 다양한 정보와 혜택 받아가세요.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '네 합격했어요',
+          url_mobile: chat_bot_url,
+          url_pc: chat_bot_url
+        },
+        {
+          type: 'WL',
+          name: '아직 합격 못했어요',
+          url_mobile: chat_bot_url,
+          url_pc: chat_bot_url
+        },
+      ]
+    }
+  end
+
+  def get_connect_result_user_survey_A(tem_params)
+    job_posting_title = tem_params[:job_posting_title]
+    job_posting_address = tem_params[:job_posting_address]
+    job_posting_schedule = tem_params[:job_posting_schedule]
+    link = tem_params[:link]
+
+    {
+      title: "#{job_posting_title} 공고에 취업하셨나요?",
+      message: "#{job_posting_title} 공고에 취업하셨나요?
+
+■ 근무 장소
+#{job_posting_address}
+
+■ 근무 요일
+#{job_posting_schedule}
+
+■ 인증 혜택
+취업을 인증하면 백화점상품권(5천원)을 드려요.",
+      buttons: [
+        {
+          type: "WL",
+          name: "취업 인증하고 선물 받기",
+          url_mobile: link,
+          url_pc: link,
+        }
+      ]
+    }
+  end
+
+  def get_connect_result_user_survey_B(tem_params)
+    job_posting_title = tem_params[:job_posting_title]
+    job_posting_address = tem_params[:job_posting_address]
+    job_posting_schedule = tem_params[:job_posting_schedule]
+    link = tem_params[:link]
+
+    {
+      title: "#{job_posting_title} 공고에 취업하셨나요?",
+      message: "#{job_posting_title} 공고에 취업하셨나요?
+
+■ 근무 장소
+#{job_posting_address}
+
+■ 근무 요일
+#{job_posting_schedule}
+
+■ 인증 혜택
+취업 인증하면 매달 급여일에 맞춰 내가 받은 금액이 맞는지 확인해 드려요.",
+      buttons: [
+        {
+          type: "WL",
+          name: "취업 인증후 혜택 받기",
+          url_mobile: link,
+          url_pc: link,
+        }
+      ]
+    }
+  end
+
   def good_number(phone_number)
     if phone_number&.length == 12
       phone_number&.scan(/.{4}/)&.join('-')
@@ -1219,5 +1604,4 @@ carepartner.kr#{path}
   def convert_safe_text(text, empty_string = "정보없음")
     text.presence&.truncate(MAX_ITEM_LIST_TEXT_LENGTH) || empty_string
   end
-
 end

@@ -7,6 +7,7 @@ class User < ApplicationRecord
   DEFAULT_LNG = 126.9769233
 
   has_many :proposals, dependent: :nullify
+  has_many :user_push_tokens, dependent: :destroy
 
   enum gender: { male: 'male', female: 'female' }
 
@@ -38,13 +39,9 @@ class User < ApplicationRecord
     sleep: 'sleep'
   }
 
-  scope :receive_notifications, -> {
-    where(has_certification: true)
-      .where(notification_enabled: true)
-      .where(job_notification_enabled: true)
-      # .where('job_search_status < ?', 2)
-      .active
-  }
+  scope :receive_notifications, -> { where(notification_enabled: true) }
+  scope :receive_job_notifications, -> { where(job_notification_enabled: true).where(has_certification: true).active }
+  scope :receive_proposal_notifications, -> { where(proposal_notification_enabled: true).where(has_certification: true).active }
 
   validates :address, presence: true, if: -> { self.status == 'active' }
   validates :preferred_distance,
@@ -59,6 +56,14 @@ class User < ApplicationRecord
             },
             if: -> { self.status == 'active' }
   validates :phone_number, presence: true, if: -> { self.status == 'active' }
+
+  def is_sendable_app_push
+    !push_token.nil?
+  end
+
+  def push_token
+    self.user_push_tokens.vaild_tokens.first
+  end
 
   def distance_from(object)
     User

@@ -6,7 +6,7 @@ class NotifyCareerCertificationService
   end
 
   def initialize(params)
-    @template_id = KakaoTemplate::CAREER_CERTIFICATION
+    @template_id = MessageTemplateName::CAREER_CERTIFICATION
     @link = params.dig(:link)
     @phone = params.dig(:phone)
     @center_name = params.dig(:center_name)
@@ -41,7 +41,7 @@ class NotifyCareerCertificationService
     code = response.dig('code')
     message = response.dig('message')
 
-    if code == 'success' and message == 'K000'
+    if code == 'success' && message == 'K000'
       success_count += 1
     elsif code == 'success'
       tms_success_count += 1
@@ -50,8 +50,8 @@ class NotifyCareerCertificationService
       fail_reasons = response.dig("originMessage")
     end
 
-    KakaoNotificationResult.create!({
-                                      send_type: KakaoNotificationResult::CAREER_CERTIFICATION,
+    NotificationResult.create!({
+                                      send_type: NotificationResult::CAREER_CERTIFICATION,
                                       send_id: @job_posting_title,
                                       template_id: @template_id,
                                       success_count: success_count,

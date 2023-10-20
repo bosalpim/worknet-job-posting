@@ -1,4 +1,4 @@
-module KakaoTemplate
+module MessageTemplateName
   PROPOSAL = "proposal_response".freeze
   NEW_JOB_POSTING_VISIT = "new_job_visit(no_hotdeal)".freeze
   NEW_JOB_POSTING_FACILITY = "new_job_facility(no_hotdeal)".freeze
@@ -21,6 +21,8 @@ module KakaoTemplate
   JOB_ALARM_WORKING = 'job_alarm(working)'.freeze # 일하는 중인 요양보호사에게 매달 첫째주,셋째주 월요일 오후 12시에 전달되는 신문
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze # 식물키우기 미션달성 메세지 발송
   CAREER_CERTIFICATION = 'career_certification' # 경력 인증 알림톡
+  CONNECT_RESULT_USER_SURVEY_A = 'connect_result_user_survey A' # 취업 인증 (상품권)
+  CONNECT_RESULT_USER_SURVEY_B = 'connect_result_user_survey B' # 취업 인증 (급여확인)
   CLOSE_JOB_POSTING_NOTIFICATION = 'close_job_posting_notification'.freeze # 공고 종료 알림톡
   CANDIDATE_RECOMMENDATION = 'candidate_recommendation'.freeze
   SIGNUP_COMPLETE_GUIDE = 'sign_up_complete_guide'.freeze # 가입(= 추가정보입력) 완료 알림톡
@@ -32,10 +34,16 @@ module KakaoTemplate
   CALL_INTERVIEW_PROPOSAL = 'call_interview_proposal'.freeze
   CALL_INTERVIEW_ACCEPTED = 'call_interview_proposal_accept'.freeze
   CALL_SAVED_JOB_CAREGIVER = 'call_saved_job_caregiver'.freeze # 공고에 관심표시한 요양보호사 기관에게 알림톡
-
+  CALL_SAVED_JOB_POSTING_V2 = 'call_saved_job_posting_v2'.freeze
   # TFT 구직상태 업데이트 시 추가된 템플릿
   ASK_ACTIVE = 'Off_Job_Proposal_Notification'.freeze
   NEW_JOB_VISIT_V2 = 'new_job_visit(23-09-2w)'.freeze
   NEW_JOB_FACILITY_V2 = 'new_job_facility(23-09-2w)'.freeze
   NEWSPAPER_V2 = 'newspaper_job_alarm'.freeze
+  # 신규일자리알림
+  NEW_JOB_POSTING = 'new_job_posting'.freeze
+  CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
+  CAREPARTNER_PRESENT = 'carepartner_present'.freeze
+  ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
+  ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
 end

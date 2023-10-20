@@ -13,7 +13,7 @@ class BusinessCallFailureAlertService
   end
 
   def call
-    template_id = KakaoTemplate::USER_CALL_REMINDER
+    template_id = MessageTemplateName::USER_CALL_REMINDER
 
     business_telnumber = if proposal.receive_vn.present?
                            proposal.receive_vn
@@ -36,7 +36,7 @@ class BusinessCallFailureAlertService
     )
     save_kakao_notification(
       response,
-      KakaoNotificationResult::BUSINESS_CALL_FAILURE_ALERT,
+      NotificationResult::BUSINESS_CALL_FAILURE_ALERT,
       proposal.id,
       template_id
     )
@@ -74,7 +74,7 @@ class BusinessCallFailureAlertService
       fail_reason = response.dig("originMessage")
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

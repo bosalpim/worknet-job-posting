@@ -2,7 +2,7 @@
 
 class Proposal::NewService
   def initialize(params)
-    @template_id = KakaoTemplate::CALL_INTERVIEW_PROPOSAL
+    @template_id = MessageTemplateName::CALL_INTERVIEW_PROPOSAL
     @target_public_id = params['target_public_id']
     @job_posting_id = params['job_posting_id']
     @job_posting_title = params['job_posting_title']
@@ -52,9 +52,9 @@ class Proposal::NewService
     end
 
     fail_reason = response.dig('originMessage') if code != 'success'
-    KakaoNotificationResult.create(
+    NotificationResult.create(
       template_id: @template_id,
-      send_type: KakaoNotificationResult::CALL_INTERVIEW_PROPOSAL,
+      send_type: NotificationResult::CALL_INTERVIEW_PROPOSAL,
       send_id: @target_public_id,
       success_count: success_count,
       tms_success_count: tms_success_count,

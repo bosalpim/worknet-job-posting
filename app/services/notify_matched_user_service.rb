@@ -14,7 +14,7 @@ class NotifyMatchedUserService
     success_count = 0
     fail_count = 0
     fail_reasons = []
-    template_id = KakaoTemplate::CANDIDATE_RECOMMENDATION
+    template_id = MessageTemplateName::CANDIDATE_RECOMMENDATION
     @messages.each do |message|
       response = KakaoNotificationService.call(
         template_id: template_id,
@@ -43,7 +43,7 @@ class NotifyMatchedUserService
         fail_reasons.push(response.dig("originMessage")) if response.dig("message") != "K000"
       end
 
-      KakaoNotificationResult.create!(
+      NotificationResult.create!(
         send_type: "notify_matched_user",
         template_id: template_id,
         success_count: success_count,

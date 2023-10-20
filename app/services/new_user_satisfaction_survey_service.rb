@@ -15,7 +15,7 @@ class NewUserSatisfactionSurveyService
       "https://www.carepartner.kr/satisfaction_surveys/#{job_posting.public_id}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=satisfaction_survey_follow_up"
     )
 
-    template_id = KakaoTemplate::USER_SATISFACTION_SURVEY
+    template_id = MessageTemplateName::USER_SATISFACTION_SURVEY
     response = KakaoNotificationService.call(
       template_id: template_id,
       phone: user.phone_number,
@@ -26,7 +26,7 @@ class NewUserSatisfactionSurveyService
         link: short_url.url
       }
     )
-    save_kakao_notification(response, KakaoNotificationResult::USER_SATISFACTION_SURVEY, job_posting.id, template_id)
+    save_kakao_notification(response, NotificationResult::USER_SATISFACTION_SURVEY, job_posting.id, template_id)
     response
   end
 
@@ -49,7 +49,7 @@ class NewUserSatisfactionSurveyService
       fail_reason = response.dig("originMessage")
     end
 
-    KakaoNotificationResult.create!(
+    NotificationResult.create!(
       send_type: send_type,
       send_id: send_id,
       template_id: template_id,

@@ -1,4 +1,5 @@
 module KakaoNotificationLoggingHelper
+  include MessageTemplateName
   NOTIFICATION_EVENT_NAME = '[Action] Receive Notification'
   NOTIFICATION_EVENT_NAME2 = '[Action] Receive Notification2'
 
@@ -41,50 +42,64 @@ module KakaoNotificationLoggingHelper
     end
 
     case template_id
-    when KakaoTemplate::NEW_JOB_POSTING_VISIT, KakaoTemplate::NEW_JOB_VISIT_V2, KakaoTemplate::NEW_JOB_POSTING_FACILITY, KakaoTemplate::NEW_JOB_FACILITY_V2
+    when MessageTemplateName::NEW_JOB_POSTING
       return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
-    when KakaoTemplate::JOB_ALARM_ACTIVELY, KakaoTemplate::JOB_ALARM_OFF, KakaoTemplate::JOB_ALARM_WORKING, KakaoTemplate::NEWSPAPER_V2
+    when MessageTemplateName::NEWSPAPER_V2
       return get_news_paper_logging_data(template_id, target_public_id)
-    when KakaoTemplate::CLOSE_JOB_POSTING_NOTIFICATION
+    when MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION
       return get_close_job_posting_notification_logging_data(tem_params, template_id, target_public_id)
-    when KakaoTemplate::CANDIDATE_RECOMMENDATION
+    when MessageTemplateName::CANDIDATE_RECOMMENDATION
       return get_candidate_recommendation_logging_data(template_id, tem_params)
-    when KakaoTemplate::USER_CALL_REMINDER
+    when MessageTemplateName::USER_CALL_REMINDER
       # 기관이 요보사한테 전화했는데 부재중일 경우
       return get_user_call_reminder_logging_data(template_id, tem_params)
-    when KakaoTemplate::BUSINESS_CALL_REMINDER
+    when MessageTemplateName::BUSINESS_CALL_REMINDER
       # 요보사가 기관한테 전화했는데 부재중일 경우
       return get_business_call_reminder_logging_data(template_id, tem_params)
-    when KakaoTemplate::BUSINESS_CALL_APPLY_USER_REMINDER
+    when MessageTemplateName::BUSINESS_CALL_APPLY_USER_REMINDER
       # 기관에게 전화신청한 요보사가 기관의 전화를 안 받았을 경우
       return get_business_call_apply_user_reminder(template_id, tem_params)
-    when KakaoTemplate::CALL_REQUEST_ALARM
+    when MessageTemplateName::CALL_REQUEST_ALARM
       # 요보사가 기관한테 전화신청했을 경우
       return get_call_request_alarm_logging_data(template_id, tem_params)
-    when KakaoTemplate::PROPOSAL_RESPONSE_EDIT
+    when MessageTemplateName::PROPOSAL_RESPONSE_EDIT
       # 기관이 요보사에게 일자리 제안을 보냈을 경우
       return get_proposal_response_edit_logging_data(template_id, tem_params)
-    when KakaoTemplate::PROPOSAL_ACCEPTED
+    when MessageTemplateName::PROPOSAL_ACCEPTED
       # 요보사가 일자리 제안을 수락했을 경우
       return get_proposal_accepted_logging_data(template_id, tem_params)
-    when KakaoTemplate::HIGH_SALARY_JOB
+    when MessageTemplateName::HIGH_SALARY_JOB
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when KakaoTemplate::WELL_FITTED_JOB
+    when MessageTemplateName::WELL_FITTED_JOB
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when KakaoTemplate::ENTER_LOCATION
+    when MessageTemplateName::ENTER_LOCATION
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when KakaoTemplate::CERTIFICATION_UPDATE
+    when MessageTemplateName::CERTIFICATION_UPDATE
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when KakaoTemplate::SIGNUP_COMPLETE_GUIDE
+    when MessageTemplateName::SIGNUP_COMPLETE_GUIDE
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when KakaoTemplate::CALL_INTERVIEW_PROPOSAL
+    when MessageTemplateName::CALL_INTERVIEW_PROPOSAL
       return get_call_interview_proposal_logging_data(template_id, tem_params)
-    when KakaoTemplate::CALL_INTERVIEW_ACCEPTED
+    when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
       return get_call_interview_accepted_logging_data(template_id, tem_params)
-    when KakaoTemplate::CALL_SAVED_JOB_CAREGIVER
+    when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       return get_call_saved_job_caregiver(template_id, tem_params)
-    when KakaoTemplate::ASK_ACTIVE
+    when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
+      return get_call_saved_job_caregiver2(template_id, tem_params)
+    when MessageTemplateName::ASK_ACTIVE
       return get_ask_active_logging_data(template_id, tem_params)
+    when MessageTemplateName::CBT_DRAFT
+      return get_cbt_logging_data(template_id, tem_params)
+    when MessageTemplateName::CAREPARTNER_PRESENT
+      return carepartner_null_certification_logging_data(template_id, tem_params)
+    when MessageTemplateName::ACCUMULATED_DRAFT
+      return get_accumulate_draft_logging_data(template_id, tem_params)
+    when MessageTemplateName::ACCUMULATED_PREPARATIVE
+      return get_accumulate_preparative_cbt_logging_data(template_id, tem_params)
+    when CONNECT_RESULT_USER_SURVEY_A, CONNECT_RESULT_USER_SURVEY_B
+      rsp = get_connect_result_user_survey(template_id, tem_params)
+      p rsp
+      return rsp
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -113,6 +128,7 @@ module KakaoNotificationLoggingHelper
     job_posting_public_id = template_params.dig(:job_posting_public_id)
     job_posting_title = template_params.dig(:job_posting_title)
     business_name = template_params.dig(:business_name)
+    work_type_ko = template_params.dig(:work_type_ko)
 
     return {
       "user_id" => target_public_id,
@@ -123,6 +139,7 @@ module KakaoNotificationLoggingHelper
         "template" => template_id,
         "job_posting_public_id" => job_posting_public_id,
         "job_posting_title" => job_posting_title,
+        "job_posting_type" => work_type_ko,
         "business_name" => business_name,
         "send_at" => Time.current + (9 * 60 * 60)
       }
@@ -294,6 +311,24 @@ module KakaoNotificationLoggingHelper
     }
   end
 
+  def self.get_call_saved_job_caregiver2(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "centerName" => tem_params[:center_name],
+        "jobPostingId" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:job_posting_title],
+        "type_match" => tem_params[:type_match],
+        "gender_match" => tem_params[:gender_match],
+        "day_match" => tem_params[:day_match],
+        "time_match" => tem_params[:time_match],
+        "grade_match" => tem_params[:grade_match]
+      }
+    }
+  end
+
   def self.get_ask_active_logging_data(template_id, tem_params)
     return {
       "user_id" => tem_params[:target_public_id],
@@ -303,6 +338,68 @@ module KakaoNotificationLoggingHelper
         "centerName" => tem_params[:business_name],
         "jobPostingId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:title],
+      }
+    }
+  end
+
+  def self.get_cbt_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => "CBT Draft Message",
+      }
+    }
+  end
+
+  def self.carepartner_null_certification_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => "Carepartner Draft null Certification Message",
+      }
+    }
+  end
+
+  def self.get_accumulate_draft_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => "Accumulate Draft Message",
+      }
+    }
+  end
+
+  def self.get_accumulate_preparative_cbt_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => "Accumulate Preparative Cbt Message",
+      }
+    }
+  end
+
+  def self.get_connect_result_user_survey(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => tem_params[:job_posting_title],
+        "jobPostingId" => tem_params[:job_posting_id],
+        "centerName" => tem_params[:center_name],
+        "type_match" => tem_params[:type_match],
+        "gender_match" => tem_params[:gender_match],
+        "day_match" => tem_params[:day_match],
+        "time_match" => tem_params[:time_match],
+        "grade_match" => tem_params[:grade_match],
       }
     }
   end

@@ -51,4 +51,44 @@ class JobPostingCustomer < ApplicationRecord
     crony
     cognitive_stimulation_training
   ]
+
+  def korean_grade
+    if first_grade?
+      '1등급'
+    elsif second_grade?
+      '2등급'
+    elsif third_grade?
+      '3등급'
+    elsif fourth_grade?
+      '4등급'
+    elsif fifth_grade?
+      '5등급(치매교육필수)'
+    elsif sixth_grade?
+      '인지지원등급'
+    else
+      nil
+    end
+  end
+
+  def korean_age
+    if age.present?
+      "#{DateTime.now.in_time_zone('Asia/Seoul').year.to_i - age}세"
+    else
+      nil
+    end
+  end
+
+  def korean_gender
+    if male?
+      '남자'
+    elsif female?
+      '여자'
+    else
+      nil
+    end
+  end
+
+  def korean_summary
+    [korean_grade, korean_age, korean_gender].select { |item| item.present? }.join('/')
+  end
 end
