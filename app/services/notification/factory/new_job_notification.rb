@@ -2,6 +2,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
   include ApplicationHelper
   include TranslationHelper
   include JobPostingsHelper
+  include KakaoNotificationLoggingHelper
 
   NewJobPostingUsersService = Notification::Factory::SearchTarget::NewJobPostingUsersService
   def initialize(job_posting_id)
@@ -17,10 +18,10 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
         if user.is_sendable_app_push
           create_app_push_message(user)
         else
-          create_bizm_post_pay_message(user)
+          create_bizm_pre_pay_message(user)
         end
       else
-        create_bizm_post_pay_message(user)
+        create_bizm_pre_pay_message(user)
       end
     end
   end
@@ -28,21 +29,33 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
   private
 
   def create_app_push_message(user)
+    work_type_ko = translate_type('job_posting', @job_posting, :work_type)
+
     app_push = AppPush.new(
       @message_template_id,
       user.push_token.token,
       MessageTemplateName::NEW_JOB_POSTING,
       {
-        body: '새로운 일자리가 나타났습니다.',
-        title: '신규 일자리 등장',
-        link: 'carepartner://app/jobs/recently_published'
+        body: "#{@job_posting.title}",
+        title: '놓치면 곧 마감되는 신규 일자리가 있어요!',
+        link: "#{DEEP_LINK_SCEHEME}/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=app-push&utm_campaign=new_job_posting",
       },
       user.public_id,
-      )
+      {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "template" => @message_template_id,
+        "job_posting_public_id" => @job_posting.public_id,
+        "job_posting_title" => @job_posting.title,
+        "job_posting_type" => work_type_ko,
+        "business_name" => @job_posting.business.name,
+        "send_at" => Time.current + (9 * 60 * 60),
+        "type" => NOTIFICATION_TYPE_APP_PUSH
+      })
     @app_push_list.push(app_push)
   end
 
-  def create_bizm_pre_pay_message
+  def create_bizm_pre_pay_message(user)
     base_url = "https://www.carepartner.kr"
     view_endpoint = "/jobs/recently_published?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting&lat=#{user.lat}&lng=#{user.lng}"
     origin_url = "#{base_url}#{view_endpoint}"

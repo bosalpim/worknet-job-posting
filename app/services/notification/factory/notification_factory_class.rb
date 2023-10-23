@@ -2,6 +2,7 @@ class Notification::Factory::NotificationFactoryClass
   include NotificationSaveResultHelper
 
   AppPush = Notification::Factory::SendMedium::AppPush
+  DEEP_LINK_SCEHEME = "carepartner://app"
   BizmPostPayMessage = Notification::Factory::SendMedium::BizmPostPayMessage
   BizmPrePayMessage = Notification::Factory::SendMedium::BizmPrePayMessage
   def initialize(message_template_id)
