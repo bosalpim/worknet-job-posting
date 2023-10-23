@@ -26,22 +26,28 @@ class SearchPreparativeCbtUsersService
 
     # 1단계 x 달 쿼리
     users = User.where(
-      'expected_acquisition >= ? AND expected_acquisition <= ? AND (LENGTH(expected_acquisition) = 10 OR LENGTH(expected_acquisition) = 9)',
-      ninety_days_ago.strftime('%Y/%m/%d'), one_days_ago.strftime('%Y/%m/%d')
+      '(
+        expected_acquisition ~ ? AND expected_acquisition::DATE >= ? AND expected_acquisition::DATE <= ?
+        )',
+      '^\\d{4}/\\d{2}/\\d{1,2}$', ninety_days_ago.strftime('%Y/%m/%d'), one_days_ago.strftime('%Y/%m/%d')
     )
 
     # 2단계 이전 달 쿼리
     # users = User.where(
-    #   '(expected_acquisition IN (?) AND LENGTH(expected_acquisition) = 5) OR (expected_acquisition >= ? AND expected_acquisition <= ? AND (LENGTH(expected_acquisition) = 10 OR LENGTH(expected_acquisition) = 9))',
+    #   '(expected_acquisition IN (?) AND LENGTH(expected_acquisition) = 5) OR (
+    #         expected_acquisition ~ ? AND expected_acquisition::DATE >= ? AND expected_acquisition::DATE <= ?
+    #         )',
     #   last_month_str,
-    #   ninety_days_ago.strftime('%Y/%m/%d'), one_days_ago.strftime('%Y/%m/%d')
+    #   '^\\d{4}/\\d{2}/\\d{1,2}$', ninety_days_ago.strftime('%Y/%m/%d'), one_days_ago.strftime('%Y/%m/%d')
     # )
 
     # 3단계 이전전달 쿼리
     # users = User.where(
-    #   '(expected_acquisition IN (?, ?) AND LENGTH(expected_acquisition) = 5) OR (expected_acquisition >= ? AND expected_acquisition <= ? AND (LENGTH(expected_acquisition) = 10 OR LENGTH(expected_acquisition) = 9))',
+    #   '(expected_acquisition IN (?, ?) AND LENGTH(expected_acquisition) = 5) OR (
+    #     #         expected_acquisition ~ ? AND expected_acquisition::DATE >= ? AND expected_acquisition::DATE <= ?
+    #     #         )',
     #   month_before_last_str, last_month_str,
-    #   ninety_days_ago.strftime('%Y/%m/%d'), one_days_ago.strftime('%Y/%m/%d')
+    #   '^\\d{4}/\\d{2}/\\d{1,2}$', ninety_days_ago.strftime('%Y/%m/%d'), one_days_ago.strftime('%Y/%m/%d')
     # )
     users.where(has_certification: false, status: 'active')
 
