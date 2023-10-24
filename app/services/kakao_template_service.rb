@@ -13,7 +13,7 @@ class KakaoTemplateService
     @message_type = message_type
     @profile = profile
     set_phone(phone)
-    @reserve_dt = Jets.env.production? ? get_reserve_dt(reserve_dt) : nil
+    @reserve_dt = get_reserve_dt(reserve_dt)
     @sender_number = "15885877"
   end
 
@@ -144,6 +144,7 @@ class KakaoTemplateService
   end
 
   def get_reserve_dt(reserve_dt)
+    return DEFAULT_RESERVE_AT unless Jets.env.production?
     return reserve_dt if reserve_dt
     american_time = Time.current
     korean_offset = 9 * 60 * 60 # 9 hours ahead of American time
