@@ -1,4 +1,5 @@
 module KakaoNotificationLoggingHelper
+  include MessageTemplateName
   NOTIFICATION_EVENT_NAME = '[Action] Receive Notification'
   NOTIFICATION_EVENT_NAME2 = '[Action] Receive Notification2'
 
@@ -95,6 +96,10 @@ module KakaoNotificationLoggingHelper
       return get_accumulate_draft_logging_data(template_id, tem_params)
     when MessageTemplateName::ACCUMULATED_PREPARATIVE
       return get_accumulate_preparative_cbt_logging_data(template_id, tem_params)
+    when CONNECT_RESULT_USER_SURVEY_A, CONNECT_RESULT_USER_SURVEY_B
+      rsp = get_connect_result_user_survey(template_id, tem_params)
+      p rsp
+      return rsp
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -377,6 +382,24 @@ module KakaoNotificationLoggingHelper
       "event_properties" => {
         "template" => template_id,
         "title" => "Accumulate Preparative Cbt Message",
+      }
+    }
+  end
+
+  def self.get_connect_result_user_survey(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => tem_params[:job_posting_title],
+        "jobPostingId" => tem_params[:job_posting_id],
+        "centerName" => tem_params[:center_name],
+        "type_match" => tem_params[:type_match],
+        "gender_match" => tem_params[:gender_match],
+        "day_match" => tem_params[:day_match],
+        "time_match" => tem_params[:time_match],
+        "grade_match" => tem_params[:grade_match],
       }
     }
   end
