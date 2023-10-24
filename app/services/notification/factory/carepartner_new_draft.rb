@@ -1,8 +1,8 @@
 class Notification::Factory::CarepartnerNewDraft < Notification::Factory::NotificationFactoryClass
-  include RatioChopper
+
   def initialize
     super(MessageTemplateName::CAREPARTNER_PRESENT)
-    @list = RatioChopper.chop_list(SearchNewCarepartnerDraftUsersService.call(1), 50) # Todo 점진적 배포 대상으로, 30%(Done) -> 50% -> 100% 대상에게 발송 예정
+    @list = SearchNewCarepartnerDraftUsersService.call(1)
     create_message
   end
 
