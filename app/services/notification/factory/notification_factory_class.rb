@@ -6,10 +6,15 @@ class Notification::Factory::NotificationFactoryClass
   BizmPostPayMessage = Notification::Factory::SendMedium::BizmPostPayMessage
   BizmPrePayMessage = Notification::Factory::SendMedium::BizmPrePayMessage
   def initialize(message_template_id)
+    # 알림 발송 대상 배열
+    @list = nil
+
+    # 알림 매체별 알림 배열
     @app_push_list = []
     @bizm_post_pay_list = []
     @bizm_pre_pay_list = []
 
+    # 알림 매체별 알림 전송 결과 배열
     @app_push_result = []
     @bizm_post_pay_result = []
     @bizm_pre_pay_result = []
@@ -30,6 +35,7 @@ class Notification::Factory::NotificationFactoryClass
   end
 
   def save_result
+    Jets.logger.info "전체 발송 대상자 : #{@list.nil? ? 0 : @list.count} 명 발송처리 완료"
     # app push 결과 처리
     save_results_app_push(@app_push_result, @message_template_id)
     save_results_bizm_post_pay(@bizm_post_pay_result, @message_template_id)
@@ -64,6 +70,7 @@ class Notification::Factory::NotificationFactoryClass
 
   def send_process(message_list, result_list)
     Jets.logger.info "#{__method__} called by: #{caller[0][/`(.*)'/, 1]}"
+    Jets.logger.info "target_notification_count: #{message_list.count}"
     message_list.each_slice(10) do |batch|
       threads = []
 
