@@ -1,4 +1,42 @@
 module NotificationSaveResultHelper
+  def save_results_bizm_pre_pay(results, template_id)
+    return if results.nil? || results.empty?
+
+    success_count = 0
+    tms_success_count = 0
+    fail_count = 0
+    fail_reasons = []
+
+    results.each do |result|
+      status = result.dig(:status)
+      target_public_id = result.dig(:target_public_id)
+      response = result.dig(:response)
+
+      if status == "success"
+        if response.dig("message") == "K000" || "R000"
+          success_count += 1
+        else
+          tms_success_count += 1
+          fail_reasons.push("target_public_id : #{target_public_id}, error: #{response.dig("error")}")
+        end
+      else
+        fail_count += 1
+        fail_reasons.push("target_public_id : #{target_public_id}, error: #{response.dig("originMessage")}")
+      end
+    end
+
+    current_date = DateTime.now
+    NotificationResult.create!(
+      send_type: template_id,
+      send_id: "#{current_date.year}/#{current_date.month}/#{current_date.day}#{template_id}",
+      template_id: template_id,
+      success_count: success_count,
+      tms_success_count: tms_success_count,
+      fail_count: fail_count,
+      fail_reasons: fail_reasons
+    )
+  end
+
   def save_results_bizm_post_pay(results, template_id)
     return if results.nil? || results.empty?
 

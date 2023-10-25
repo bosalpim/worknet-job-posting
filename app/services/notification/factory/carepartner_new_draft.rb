@@ -1,4 +1,5 @@
-class Notification::Factory::CarepartnerNewDraft < Notification::Factory::MessageFactoryClass
+class Notification::Factory::CarepartnerNewDraft < Notification::Factory::NotificationFactoryClass
+
   def initialize
     super(MessageTemplateName::CAREPARTNER_PRESENT)
     @list = SearchNewCarepartnerDraftUsersService.call(1)
