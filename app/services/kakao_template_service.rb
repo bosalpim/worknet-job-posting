@@ -1083,6 +1083,7 @@ class KakaoTemplateService
     customer_info = tem_params[:customer_info]
     work_schedule = tem_params[:work_schedule]
     location_info = tem_params[:location_info]
+    pay_info = tem_params[:pay_info]
 
     {
       title: "#{business_name}에서 전화면접을 제안했어요.",
@@ -1094,6 +1095,8 @@ class KakaoTemplateService
 #{work_schedule}
 ■ 근무 장소
 #{location_info}
+■ 급여
+#{pay_info}
 
 ✅ 공고가 조건에 맞다면?
 아래 버튼을 눌러 제안을 수락하거나 문의해 보세요!
