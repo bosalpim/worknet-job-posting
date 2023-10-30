@@ -78,6 +78,8 @@ module KakaoNotificationLoggingHelper
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when MessageTemplateName::SIGNUP_COMPLETE_GUIDE
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
+    when MessageTemplateName::SIGNUP_COMPLETE_GUIDE3
+      return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when MessageTemplateName::CALL_INTERVIEW_PROPOSAL
       return get_call_interview_proposal_logging_data(template_id, tem_params)
     when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
