@@ -15,7 +15,6 @@ class ActiveUserServiceGuideService
 
   def send_signup_complete_guide
     template_id = (@treatment_key == 'B') ? MessageTemplateName::SIGNUP_COMPLETE_GUIDE3 : MessageTemplateName::SIGNUP_COMPLETE_GUIDE
-    puts "template_id: ", template_id
     response = BizmsgService.call(
       template_id: template_id,
       phone: Jets.env == "development" ? '01029685055' : @user.phone_number,

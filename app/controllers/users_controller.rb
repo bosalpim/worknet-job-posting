@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   def active_service_guide
-    puts "treatment_key: ", params["treatment_key"]
     event = { user_id: params["user_id"],  treatment_key: params["treatment_key"]}
     ActiveUserServiceGuideJob.perform_later(:dig, event)
     render json: { success: true }, status: :ok
