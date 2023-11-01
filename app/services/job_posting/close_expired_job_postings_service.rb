@@ -13,6 +13,7 @@ class JobPosting::CloseExpiredJobPostingsService
   def call
     job_postings = JobPosting
                      .where(status: 'init')
+                     .with_zero_paid_features
                      .where(scraped_worknet_job_posting_id: nil)
                      .where('closing_at < ?', @date)
                      .update_all(status: 'closed')
