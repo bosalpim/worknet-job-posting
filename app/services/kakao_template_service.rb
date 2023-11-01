@@ -1156,7 +1156,7 @@ class KakaoTemplateService
 (3일 내 응답하지 않으면 자동 거절됩니다)",
       buttons: [
         {
-          type: 'AL',
+          type: 'WL',
           name: '✅ 제안 수락',
           url_mobile: accept_link,
           url_pc: accept_link
@@ -1169,7 +1169,7 @@ class KakaoTemplateService
 
         },
         {
-          type: 'WL',
+          type: 'AL',
           name: '📞 문의 전화하기',
           scheme_ios: tel_link,
           scheme_android: tel_link
