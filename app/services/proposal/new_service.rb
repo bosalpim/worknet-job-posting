@@ -2,7 +2,7 @@
 
 class Proposal::NewService
   def initialize(params)
-    @template_id = MessageTemplateName::CALL_INTERVIEW_PROPOSAL
+    @template_id = MessageTemplateName::CALL_INTERVIEW_PROPOSAL_V2
     @target_public_id = params['target_public_id']
     @job_posting_id = params['job_posting_id']
     @job_posting_title = params['job_posting_title']

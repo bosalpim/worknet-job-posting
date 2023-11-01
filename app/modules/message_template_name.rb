@@ -32,6 +32,7 @@ module MessageTemplateName
   CERTIFICATION_UPDATE = 'certification-update'.freeze # 시험 예정일 3일/7일이 지난 자격증 미취득 유저에게 소지 전환 유도
   POST_COMMENT = 'post-comment'.freeze # 게시글 답변 알림톡
   CALL_INTERVIEW_PROPOSAL = 'call_interview_proposal'.freeze
+  CALL_INTERVIEW_PROPOSAL_V2 = 'call_interview_proposal_v2'.freeze
   CALL_INTERVIEW_ACCEPTED = 'call_interview_proposal_accept'.freeze
   CALL_SAVED_JOB_CAREGIVER = 'call_saved_job_caregiver'.freeze # 공고에 관심표시한 요양보호사 기관에게 알림톡
   CALL_SAVED_JOB_POSTING_V2 = 'call_saved_job_posting_v2'.freeze

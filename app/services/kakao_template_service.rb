@@ -98,6 +98,8 @@ class KakaoTemplateService
       get_post_comment(tem_params)
     when MessageTemplateName::CALL_INTERVIEW_PROPOSAL
       get_call_interview_proposal(tem_params)
+    when MessageTemplateName::CALL_INTERVIEW_PROPOSAL_V2
+      get_call_interview_proposal_v2(tem_params)
     when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
       get_call_interview_accepted(tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
@@ -1075,7 +1077,7 @@ class KakaoTemplateService
     }
   end
 
-  def get_call_interview_proposal(tem_params)
+  def get_call_interview_proposal_v2(tem_params)
     tel_link = tem_params[:tel_link]
     business_name = tem_params[:business_name]
     accept_link = tem_params[:accept_link]
@@ -1097,6 +1099,57 @@ class KakaoTemplateService
 #{location_info}
 ■ 급여
 #{pay_info}
+
+✅ 공고가 조건에 맞다면?
+아래 버튼을 눌러 제안을 수락하거나 문의해 보세요!
+
+❌ 공고가 조건에 맞지 않다면?
+거절 버튼을 눌러 기관에 의사를 전달해주세요!
+
+(3일 내 응답하지 않으면 자동 거절됩니다)",
+      buttons: [
+        {
+          type: 'AL',
+          name: '✅ 제안 수락',
+          url_mobile: accept_link,
+          url_pc: accept_link
+        },
+        {
+          type: 'WL',
+          name: '❌ 제안 거절',
+          url_mobile: deny_link,
+          url_pc: deny_link
+
+        },
+        {
+          type: 'WL',
+          name: '📞 문의 전화하기',
+          scheme_ios: tel_link,
+          scheme_android: tel_link
+        },
+      ]
+    }
+  end
+
+  def get_call_interview_proposal(tem_params)
+    tel_link = tem_params[:tel_link]
+    business_name = tem_params[:business_name]
+    accept_link = tem_params[:accept_link]
+    deny_link = tem_params[:deny_link]
+    customer_info = tem_params[:customer_info]
+    work_schedule = tem_params[:work_schedule]
+    location_info = tem_params[:location_info]
+
+    {
+      title: "#{business_name}에서 전화면접을 제안했어요.",
+      message: "#{business_name}에서 전화면접을 제안했어요.
+
+■ 어르신 정보
+#{customer_info}
+■ 근무 시간
+#{work_schedule}
+■ 근무 장소
+#{location_info}
 
 ✅ 공고가 조건에 맞다면?
 아래 버튼을 눌러 제안을 수락하거나 문의해 보세요!
