@@ -86,6 +86,8 @@ class KakaoTemplateService
       get_candidate_recommendation(tem_params)
     when MessageTemplateName::SIGNUP_COMPLETE_GUIDE
       get_signup_complete_guide
+    when MessageTemplateName::SIGNUP_COMPLETE_GUIDE3
+      get_signup_complete_guide3
     when MessageTemplateName::HIGH_SALARY_JOB
       get_high_salary_job(tem_params)
     when MessageTemplateName::ENTER_LOCATION
@@ -944,6 +946,51 @@ class KakaoTemplateService
     }
   end
 
+  def get_signup_complete_guide3
+    getting_point_link = "https://www.carepartner.kr/me/point/newbie?utm_source=message&utm_medium=arlimtalk&utm_campaign=3000-point-first-invitefriend"
+    find_work_link = "https://carepartner.kr/?utm_source=message&utm_medium=arlimtalk&utm_campaign=sign_up_complete_guide"
+    help_work_link = "https://link.carepartner.kr/3QO0QRH"
+    frequently_question_link = "https://link.carepartner.kr/3YBnG0E"
+
+    {
+      title: "[케어파트너] 가입 완료 안내",
+      message: "환영합니다 선생님 :)
+케어파트너 회원 가입이 완료되었어요.
+
+선생님 댁 근처 요양일자리를 카카오톡 및 문자로 보내드릴게요.
+
+≫ 한가지 더! 원하는 조건의 요양 일자리를 케어파트너에서 직접 찾아보고 지원하실 수도 있어요.
+
+아래 버튼이나 링크를 눌러 궁금한 점을 지금 바로 해결해보세요👇",
+      buttons: [
+        {
+          name: '3천 포인트 받으러 가기',
+          type: 'WL',
+          url_mobile: getting_point_link,
+          url_pc: getting_point_link
+        },
+        {
+          name: '일자리 찾아보기',
+          type: 'WL',
+          url_mobile: find_work_link,
+          url_pc: find_work_link
+        },
+        {
+          name: '취업 도움받기',
+          type: 'WL',
+          url_mobile: help_work_link,
+          url_pc: help_work_link
+        },
+        {
+          name: '자주 묻는 질문',
+          type: 'WL',
+          url_mobile: frequently_question_link,
+          url_pc: frequently_question_link
+        }
+      ]
+    }
+  end
+
   def get_high_salary_job(tem_params)
     link1 = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=high-salary-job-2"
     link2 = "https://pf.kakao.com/_xjwfcb/chat"
@@ -1099,6 +1146,57 @@ class KakaoTemplateService
 #{location_info}
 ■ 급여
 #{pay_info}
+
+✅ 공고가 조건에 맞다면?
+아래 버튼을 눌러 제안을 수락하거나 문의해 보세요!
+
+❌ 공고가 조건에 맞지 않다면?
+거절 버튼을 눌러 기관에 의사를 전달해주세요!
+
+(3일 내 응답하지 않으면 자동 거절됩니다)",
+      buttons: [
+        {
+          type: 'WL',
+          name: '✅ 제안 수락',
+          url_mobile: accept_link,
+          url_pc: accept_link
+        },
+        {
+          type: 'WL',
+          name: '❌ 제안 거절',
+          url_mobile: deny_link,
+          url_pc: deny_link
+
+        },
+        {
+          type: 'AL',
+          name: '📞 문의 전화하기',
+          scheme_ios: tel_link,
+          scheme_android: tel_link
+        },
+      ]
+    }
+  end
+
+  def get_call_interview_proposal(tem_params)
+    tel_link = tem_params[:tel_link]
+    business_name = tem_params[:business_name]
+    accept_link = tem_params[:accept_link]
+    deny_link = tem_params[:deny_link]
+    customer_info = tem_params[:customer_info]
+    work_schedule = tem_params[:work_schedule]
+    location_info = tem_params[:location_info]
+
+    {
+      title: "#{business_name}에서 전화면접을 제안했어요.",
+      message: "#{business_name}에서 전화면접을 제안했어요.
+
+■ 어르신 정보
+#{customer_info}
+■ 근무 시간
+#{work_schedule}
+■ 근무 장소
+#{location_info}
 
 ✅ 공고가 조건에 맞다면?
 아래 버튼을 눌러 제안을 수락하거나 문의해 보세요!
