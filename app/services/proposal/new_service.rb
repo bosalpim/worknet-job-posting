@@ -14,6 +14,7 @@ class Proposal::NewService
     @tel_link = params['tel_link']
     @accept_link = params['accept_link']
     @deny_link = params['deny_link']
+    @pay_info = params['pay_info']
   end
 
   def call
@@ -32,6 +33,7 @@ class Proposal::NewService
         accept_link: @accept_link,
         tel_link: @tel_link,
         deny_link: @deny_link,
+        pay_info: @pay_info
       }
     )
 
