@@ -84,7 +84,7 @@ class JobPosting < ApplicationRecord
   scope :resident_work, -> { where(work_type: 'resident') }
   scope :facility_work,
         -> { where(work_type: %w[day_care sanatorium hospital facility]) }
-  scope :active, -> { init.where("published_at >= ? OR id IN (SELECT DISTINCT job_posting_id FROM paid_job_posting_features)", DEFAULT_EXPIRATION_DATE.ago) }
+  scope :active, -> { init.where(published_at: DEFAULT_EXPIRATION_DATE.ago..) }
   scope :not_closed, -> { where('closing_at > ?', DateTime.now).or(where(closing_at: nil)) }
   scope :free_job_posting, -> {
     where("id NOT IN (SELECT DISTINCT job_posting_id FROM paid_job_posting_features)")
