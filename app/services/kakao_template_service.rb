@@ -1138,8 +1138,8 @@ class KakaoTemplateService
       title: "#{business_name}에서 전화면접을 제안했어요.",
       message: "#{business_name}에서 전화면접을 제안했어요.
 
-■ 어르신 정보
-#{customer_info}
+#{customer_info.nil? ? "" : "■ 어르신 정보
+#{customer_info}"}
 ■ 근무 시간
 #{work_schedule}
 ■ 근무 장소
