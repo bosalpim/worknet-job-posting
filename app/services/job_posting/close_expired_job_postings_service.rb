@@ -14,6 +14,7 @@ class JobPosting::CloseExpiredJobPostingsService
     job_postings = JobPosting
                      .where(status: 'init')
                      .where(scraped_worknet_job_posting_id: nil)
+                     .free_job_posting
                      .where('closing_at < ?', @date)
                      .update_all(status: 'closed')
     job_postings

@@ -77,14 +77,18 @@ class JobPosting < ApplicationRecord
   belongs_to :scrape_yynr_job_posting, required: false
   has_many :care_manager_job_applications
   has_many :care_managers, through: :care_manager_job_applications
+  has_many :paid_job_posting_features, dependent: :destroy
   has_one :job_posting_customer
 
   scope :commute_work, -> { where(work_type: %w[commute bath_help]) }
   scope :resident_work, -> { where(work_type: 'resident') }
   scope :facility_work,
         -> { where(work_type: %w[day_care sanatorium hospital facility]) }
-  scope :active, -> { init.where(published_at: DEFAULT_EXPIRATION_DATE.ago..) }
+  scope :active, -> { init.where("job_postings.published_at >= ? OR job_postings.id IN (SELECT DISTINCT job_posting_id FROM paid_job_posting_features)", DEFAULT_EXPIRATION_DATE.ago) }
   scope :not_closed, -> { where('closing_at > ?', DateTime.now).or(where(closing_at: nil)) }
+  scope :free_job_posting, -> {
+    where("job_postings.id NOT IN (SELECT DISTINCT job_posting_id FROM paid_job_posting_features)")
+  }
 
   before_create :set_work_type
   before_create :set_default_values
