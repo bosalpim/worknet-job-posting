@@ -47,11 +47,11 @@ module JobPostingsHelper
   def get_distance_text(object)
     return nil if object.try(:distance).blank?
 
-    minute = (distance / 50).to_i
+    minute = (distance / 60).to_i
 
-    if distance < 50
-      '도보 0분 ~ 5분'
-    elsif distance < 1500
+    if distance < 60
+      '도보 0분 ~ 3분'
+    elsif distance < 1800
       "도보 #{minute}분 ~ #{minute + 5}분"
     else
       "도보 30분 이상"
