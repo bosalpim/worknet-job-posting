@@ -101,7 +101,7 @@ module KakaoNotificationLoggingHelper
     when CONNECT_RESULT_USER_SURVEY_A, CONNECT_RESULT_USER_SURVEY_B
       return get_connect_result_user_survey(template_id, tem_params)
     when JOB_APPLICATION
-      return get_job_application_logging_data(template_id, tem_params)
+      return get_job_application(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
