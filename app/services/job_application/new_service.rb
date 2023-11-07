@@ -7,7 +7,9 @@ class JobApplication::NewService
   def initialize(
     job_application_public_id:
   )
-    @job_application = JobApplication.find_by(job_application_public_id)
+    @job_application = JobApplication.find_by(
+      public_id: job_application_public_id
+    )
   end
 
   def call
