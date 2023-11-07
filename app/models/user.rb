@@ -99,4 +99,14 @@ class User < ApplicationRecord
       end
     end
   end
+
+  def korean_gender
+    if self.male?
+      '남자'
+    elsif self.female?
+      '여자'
+    else
+      ''
+    end
+  end
 end
