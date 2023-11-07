@@ -47,12 +47,14 @@ module JobPostingsHelper
   def get_distance_text(object)
     return nil if object.try(:distance).blank?
 
-    if object.distance < 60
-      '도보 1분 이내'
-    elsif object.distance < 1800
-      "도보 #{(object.distance / 60).to_i}분 이상"
+    minute = (distance / 50).to_i
+
+    if distance < 50
+      '도보 0분 ~ 5분'
+    elsif distance < 1500
+      "도보 #{minute}분 ~ #{minute + 5}분"
     else
-      '도보 30분 이상'
+      "도보 30분 이상"
     end
   end
 
@@ -112,10 +114,10 @@ module JobPostingsHelper
     if consecutive
       I18n.t(
         "activerecord.attributes.job_posting.working_days.#{sorted.first}",
-        ) + ' ~ ' +
+      ) + ' ~ ' +
         I18n.t(
           "activerecord.attributes.job_posting.working_days.#{sorted.last}",
-          ) + " (주 #{object.working_days.count} 일)"
+        ) + " (주 #{object.working_days.count} 일)"
     else
       translate_type('job_posting', object, :working_days) +
         " (주 #{object.working_days.count} 일)"
