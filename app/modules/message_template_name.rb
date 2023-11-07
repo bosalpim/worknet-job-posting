@@ -26,6 +26,7 @@ module MessageTemplateName
   CLOSE_JOB_POSTING_NOTIFICATION = 'close_job_posting_notification'.freeze # 공고 종료 알림톡
   CANDIDATE_RECOMMENDATION = 'candidate_recommendation'.freeze
   SIGNUP_COMPLETE_GUIDE = 'sign_up_complete_guide'.freeze # 가입(= 추가정보입력) 완료 알림톡
+  SIGNUP_COMPLETE_GUIDE3 = 'sign_up_complete_guide3'.freeze # 가입(= 추가정보입력) 완료 알림톡
   HIGH_SALARY_JOB = 'high-salary-job-2'.freeze # 가입 1일차 draft, 자격증 소지자 (주소입력 제외하고)
   ENTER_LOCATION = 'enter-location'.freeze # 가입 1일차 draft, 자격증 소지자 중 주소입력 단계 이탈자
   WELL_FITTED_JOB = 'well-fitted-job'.freeze # 가입 2일차 draft, 자격증 소지자
@@ -46,4 +47,6 @@ module MessageTemplateName
   CAREPARTNER_PRESENT = 'carepartner_present'.freeze
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
+  # 간편 지원
+  JOB_APPLICATION = 'job_application'.freeze
 end

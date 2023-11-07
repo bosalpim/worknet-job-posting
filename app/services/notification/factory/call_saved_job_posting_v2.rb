@@ -1,4 +1,4 @@
-class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::MessageFactoryClass
+class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::NotificationFactoryClass
   include JobMatchHelper
   include ApplicationHelper
   include JobPostingsHelper
@@ -56,7 +56,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Mess
       {
         body: "저장한 관심일자리에 연락해보세요.",
         title: "저장한 관심일자리 추천",
-        "link": "carepartner://app/jobs/#{job_posting.public_id}?&utm_source=message&utm_medium=app_push&utm_campaign=call_saved_job_posting2"
+        "link": "#{DEEP_LINK_SCEHEME}/jobs/#{job_posting.public_id}?&utm_source=message&utm_medium=app_push&utm_campaign=call_saved_job_posting2"
       },
       user.public_id,
       )

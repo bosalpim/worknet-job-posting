@@ -13,7 +13,7 @@ class KakaoTemplateService
     @message_type = message_type
     @profile = profile
     set_phone(phone)
-    @reserve_dt = Jets.env.production? ? get_reserve_dt(reserve_dt) : nil
+    @reserve_dt = get_reserve_dt(reserve_dt)
     @sender_number = "15885877"
   end
 
@@ -86,6 +86,8 @@ class KakaoTemplateService
       get_candidate_recommendation(tem_params)
     when MessageTemplateName::SIGNUP_COMPLETE_GUIDE
       get_signup_complete_guide
+    when MessageTemplateName::SIGNUP_COMPLETE_GUIDE3
+      get_signup_complete_guide3
     when MessageTemplateName::HIGH_SALARY_JOB
       get_high_salary_job(tem_params)
     when MessageTemplateName::ENTER_LOCATION
@@ -126,6 +128,8 @@ class KakaoTemplateService
       get_connect_result_user_survey_A(tem_params)
     when MessageTemplateName::CONNECT_RESULT_USER_SURVEY_B
       get_connect_result_user_survey_B(tem_params)
+    when MessageTemplateName::JOB_APPLICATION
+      get_job_application(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -144,6 +148,7 @@ class KakaoTemplateService
   end
 
   def get_reserve_dt(reserve_dt)
+    return DEFAULT_RESERVE_AT unless Jets.env.production?
     return reserve_dt if reserve_dt
     american_time = Time.current
     korean_offset = 9 * 60 * 60 # 9 hours ahead of American time
@@ -941,6 +946,51 @@ class KakaoTemplateService
     }
   end
 
+  def get_signup_complete_guide3
+    getting_point_link = "https://www.carepartner.kr/me/point/newbie?utm_source=message&utm_medium=arlimtalk&utm_campaign=3000-point-first-invitefriend"
+    find_work_link = "https://carepartner.kr/?utm_source=message&utm_medium=arlimtalk&utm_campaign=sign_up_complete_guide"
+    help_work_link = "https://link.carepartner.kr/3QO0QRH"
+    frequently_question_link = "https://link.carepartner.kr/3YBnG0E"
+
+    {
+      title: "[케어파트너] 가입 완료 안내",
+      message: "환영합니다 선생님 :)
+케어파트너 회원 가입이 완료되었어요.
+
+선생님 댁 근처 요양일자리를 카카오톡 및 문자로 보내드릴게요.
+
+≫ 한가지 더! 원하는 조건의 요양 일자리를 케어파트너에서 직접 찾아보고 지원하실 수도 있어요.
+
+아래 버튼이나 링크를 눌러 궁금한 점을 지금 바로 해결해보세요👇",
+      buttons: [
+        {
+          name: '3천 포인트 받으러 가기',
+          type: 'WL',
+          url_mobile: getting_point_link,
+          url_pc: getting_point_link
+        },
+        {
+          name: '일자리 찾아보기',
+          type: 'WL',
+          url_mobile: find_work_link,
+          url_pc: find_work_link
+        },
+        {
+          name: '취업 도움받기',
+          type: 'WL',
+          url_mobile: help_work_link,
+          url_pc: help_work_link
+        },
+        {
+          name: '자주 묻는 질문',
+          type: 'WL',
+          url_mobile: frequently_question_link,
+          url_pc: frequently_question_link
+        }
+      ]
+    }
+  end
+
   def get_high_salary_job(tem_params)
     link1 = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=high-salary-job-2"
     link2 = "https://pf.kakao.com/_xjwfcb/chat"
@@ -1082,6 +1132,7 @@ class KakaoTemplateService
     customer_info = tem_params[:customer_info]
     work_schedule = tem_params[:work_schedule]
     location_info = tem_params[:location_info]
+    pay_info = tem_params[:pay_info]
 
     {
       title: "#{business_name}에서 전화면접을 제안했어요.",
@@ -1093,6 +1144,8 @@ class KakaoTemplateService
 #{work_schedule}
 ■ 근무 장소
 #{location_info}
+■ 급여
+#{pay_info}
 
 ✅ 공고가 조건에 맞다면?
 아래 버튼을 눌러 제안을 수락하거나 문의해 보세요!
@@ -1586,6 +1639,36 @@ carepartner.kr#{path}
         {
           type: "WL",
           name: "취업 인증후 혜택 받기",
+          url_mobile: link,
+          url_pc: link,
+        }
+      ]
+    }
+  end
+
+  def get_job_application(tem_params)
+    job_posting_title = tem_params[:job_posting_title]
+    user_info = tem_params[:user_info]
+    user_message = tem_params[:user_message]
+    preferred_call_time = tem_params[:preferred_call_time]
+    link = tem_params[:link]
+    {
+      title: "#{user_info} 요양보호사가 지원했어요.",
+      message: "#{user_info} 요양보호사가 지원했어요.
+
+“#{user_message}”
+
+■ 공고
+#{job_posting_title}
+
+■ 통화 가능한 시간
+#{preferred_call_time}
+
+아래 버튼을 눌러 지원자의 자세한 정보를 확인하고 무료로 전화해 보세요!",
+      buttons: [
+        {
+          type: "WL",
+          name: "지원자 확인하기",
           url_mobile: link,
           url_pc: link,
         }
