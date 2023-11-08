@@ -18,7 +18,7 @@ class JobApplication::NewService
     business = Business.find(job_posting.business_id)
     client = Client.find(job_posting.client_id)
 
-    user_info = [user.name[0] + '**', user.korean_gender, "#{calculate_korean_age(user.birth_year)}세"]
+    user_info = [user.name, user.korean_gender, user.birth_year.present? ? "#{calculate_korean_age(user.birth_year)}세" : nil]
                   .filter { |i| i.present? }
                   .join('/')
 
