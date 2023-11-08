@@ -130,6 +130,8 @@ class KakaoTemplateService
       get_connect_result_user_survey_A(tem_params)
     when MessageTemplateName::CONNECT_RESULT_USER_SURVEY_B
       get_connect_result_user_survey_B(tem_params)
+    when MessageTemplateName::JOB_APPLICATION
+      get_job_application(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1741,6 +1743,36 @@ carepartner.kr#{path}
         {
           type: "WL",
           name: "취업 인증후 혜택 받기",
+          url_mobile: link,
+          url_pc: link,
+        }
+      ]
+    }
+  end
+
+  def get_job_application(tem_params)
+    job_posting_title = tem_params[:job_posting_title]
+    user_info = tem_params[:user_info]
+    user_message = tem_params[:user_message]
+    preferred_call_time = tem_params[:preferred_call_time]
+    link = tem_params[:link]
+    {
+      title: "#{user_info} 요양보호사가 지원했어요.",
+      message: "#{user_info} 요양보호사가 지원했어요.
+
+“#{user_message}”
+
+■ 공고
+#{job_posting_title}
+
+■ 통화 가능한 시간
+#{preferred_call_time}
+
+아래 버튼을 눌러 지원자의 자세한 정보를 확인하고 무료로 전화해 보세요!",
+      buttons: [
+        {
+          type: "WL",
+          name: "지원자 확인하기",
           url_mobile: link,
           url_pc: link,
         }
