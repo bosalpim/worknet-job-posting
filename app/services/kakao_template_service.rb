@@ -1711,6 +1711,7 @@ carepartner.kr#{path}
       title: "#{user_info} 요양보호사가 지원했어요.",
       message: "#{user_info} 요양보호사가 지원했어요.
 
+■ 지원자의 한마디
 “#{user_message}”
 
 ■ 공고
