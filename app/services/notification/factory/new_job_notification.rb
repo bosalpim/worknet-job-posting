@@ -18,10 +18,10 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
         if user.is_sendable_app_push
           create_app_push_message(user)
         else
-          create_bizm_pre_pay_message(user)
+          create_bizm_post_pay_message(user)
         end
       else
-        create_bizm_pre_pay_message(user)
+        create_bizm_post_pay_message(user)
       end
     end
   end
@@ -34,7 +34,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
     app_push = AppPush.new(
       @message_template_id,
       user.push_token.token,
-      MessageTemplateName::NEW_JOB_POSTING,
+      nil,
       {
         body: "#{@job_posting.title}",
         title: '놓치면 곧 마감되는 신규 일자리가 있어요!',
@@ -55,7 +55,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
     @app_push_list.push(app_push)
   end
 
-  def create_bizm_pre_pay_message(user)
+  def create_bizm_post_pay_message(user)
     base_url = "https://www.carepartner.kr"
     view_endpoint = "/jobs/recently_published?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting&lat=#{user.lat}&lng=#{user.lng}"
     origin_url = "#{base_url}#{view_endpoint}"
@@ -91,7 +91,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
       target_public_id: user.public_id
     }
 
-    @bizm_pre_pay_list.push(BizmPrePayMessage.new(@message_template_id, 'AT', user.phone_number, params, user.public_id))
+    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, 'AT', user.phone_number, params, user.public_id))
   end
 
   def build_visit_message(url, user, job_posting_customer)
