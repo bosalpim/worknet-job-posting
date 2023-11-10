@@ -37,6 +37,9 @@ class NotificationResult < ApplicationRecord
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
 
+  # 전화면접 제안 알림
+  PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'.freeze
+
   validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -79,6 +82,7 @@ class NotificationResult < ApplicationRecord
     CBT_DRAFT => CBT_DRAFT,
     CAREPARTNER_PRESENT => CAREPARTNER_PRESENT,
     ACCUMULATED_DRAFT => ACCUMULATED_DRAFT,
-    ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE
+    ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE,
+    PROPOSAL_NOTIFICATION_EXPIRES => PROPOSAL_NOTIFICATION_EXPIRES,
   }
 end

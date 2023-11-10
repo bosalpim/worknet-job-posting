@@ -51,5 +51,5 @@ module MessageTemplateName
   # 간편 지원
   JOB_APPLICATION = 'job_application'.freeze
   # 전화면접 제안 알림 만료일 경고
-  PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'
+  PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'.freeze
 end

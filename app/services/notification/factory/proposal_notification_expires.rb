@@ -1,9 +1,10 @@
 class Notification::Factory::ProposalNotificationExpires < Notification::Factory::NotificationFactoryClass
+  include KakaoNotificationLoggingHelper
 
   def initialize
     super(MessageTemplateName::PROPOSAL_NOTIFICATION_EXPIRES)
-    @users = getTargetUsers
-    create_message if @users.size > 0
+    @list = getTargetUsers
+    create_message if @list.size > 0
   end
 
   private
@@ -14,25 +15,42 @@ class Notification::Factory::ProposalNotificationExpires < Notification::Factory
     date.strftime(format)
   end
 
-  def create_app_push_message(user)
-
-  end
-
-  def create_bizm_post_pay_message(user)
+  def getExpiresInfo(user)
     # 알리 종료 예정 날짜
     expires_date = formatDate(user.proposal_notification_expires_at, '%m월 %d일')
     # 알림 종료 예정 일시
     expires_date_with_time = formatDate(user.proposal_notification_expires_at, '%Y년 %m월 %d일 %p %I:%M').gsub('AM', '오전').gsub('PM', '오후')
-
-    params = {
+    {
       expires_date: expires_date,
       expires_date_with_time: expires_date_with_time
     }
+  end
+  def create_app_push_message(user)
+    expiresInfo = getExpiresInfo(user)
+    app_push = AppPush.new(
+      @message_template_id,
+      user.push_token.token,
+      @message_template_id,
+      {
+        title: "#{expiresInfo[:expires_date]}부터 요양센터로부터 전화면접 제안을 받을 수 없게 돼요.",
+        body: "전화면접 제안 종료 예정시각: #{expiresInfo[:expires_date_with_time]}"
+      },
+      user.public_id,
+      {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "template" => @message_template_id,
+      })
+    @app_push_list.push(app_push)
+  end
+
+  def create_bizm_post_pay_message(user)
+    params = getExpiresInfo(user)
 
     @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, "AI", user.phone_number, params, user.public_id))
   end
   def create_message
-    @users.each do |user|
+    @list.each do |user|
       if @target_medium == 'app_push'
         if user.is_sendable_app_push
           create_app_push_message(user)
