@@ -38,9 +38,10 @@ class Notification::Factory::NotificationFactoryClass
     Jets.logger.info "전체 발송 대상자 : #{@list.nil? ? 0 : @list.count} 명 발송처리 완료"
     # app push 결과 처리
     save_results_app_push(@app_push_result, @message_template_id)
+    # post_pay 결과 처리
     save_results_bizm_post_pay(@bizm_post_pay_result, @message_template_id)
-    save_results_bizm_pre_pay(@bizm_pre_pay_result, @message_template_id)
     # pre_pay 결과 처리
+    save_results_bizm_pre_pay(@bizm_pre_pay_result, @message_template_id)
   end
 
   private
