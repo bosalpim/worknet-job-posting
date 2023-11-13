@@ -15,6 +15,12 @@ class Notification::Factory::SendMedium::AppPush < Notification::Factory::SendMe
     begin
       response = request_app_push({ to: @to, collapse_key: @collapse_key, notification: @notification })
       success = response["success"]
+
+      p '===='
+      p({ to: @to, collapse_key: @collapse_key, notification: @notification })
+      p success
+      p response
+      p '-=------'
       if success == 1
         amplitude_log unless @logging_properties.nil?
         return { status: 'success', response: response, target_public_id: @target_public_id }

@@ -33,7 +33,7 @@ class Notification::Factory::ProposalNotificationExpires < Notification::Factory
       @message_template_id,
       {
         title: "#{expiresInfo[:expires_date]}부터 요양센터로부터 전화면접 제안을 받을 수 없게 돼요.",
-        body: "전화면접 제안 종료 예정시각: #{expiresInfo[:expires_date_with_time]}"
+        body: "전화면접 제안 종료 예정시각: #{expiresInfo[:expires_date_with_time]}",
       },
       user.public_id,
       {

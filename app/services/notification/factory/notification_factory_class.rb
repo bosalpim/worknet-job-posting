@@ -70,10 +70,6 @@ class Notification::Factory::NotificationFactoryClass
   end
 
   def send_process(message_list, result_list)
-
-    p '------------'
-    p message_list
-
     Jets.logger.info "#{__method__} called by: #{caller[0][/`(.*)'/, 1]}"
     Jets.logger.info "target_notification_count: #{message_list.count}"
     message_list.each_slice(10) do |batch|
