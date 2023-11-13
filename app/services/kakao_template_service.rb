@@ -80,6 +80,8 @@ class KakaoTemplateService
       get_gamification_mission_complete
     when MessageTemplateName::CAREER_CERTIFICATION
       get_career_certification_alarm(tem_params)
+    when MessageTemplateName::CAREER_CERTIFICATION_V2
+      get_career_certification_v2_alarm(tem_params)
     when MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION
       get_close_job_posting_notification(tem_params)
     when MessageTemplateName::CANDIDATE_RECOMMENDATION
@@ -849,6 +851,31 @@ class KakaoTemplateService
       buttons: [
         {
           name: '경력자 인증받기',
+          type: 'WL',
+          url_mobile: tem_params[:link],
+          url_pc: tem_params[:link],
+        }
+      ]
+    }
+  end
+
+  def get_career_certification_v2_alarm(tem_params)
+    {
+      title: "취업 성공하셨나요?",
+      message: "≫공고
+#{tem_params[:job_posting_title]}
+
+≫기관
+#{tem_params[:center_name]}
+
+≫ 경력자 인증이 궁금해요
+케어파트너를 통한 취업 성공을 요양기관이 신뢰할 수 있도록 인증해 주는 제도예요
+
+≫ 경력자 인증을 받으면 뭐가 좋나요?
+다른 일자리를 구할 때 요양기관이 내 이력서를 보고 연락할 확률이 높아져요",
+      buttons: [
+        {
+          name: '취업 인증하기',
           type: 'WL',
           url_mobile: tem_params[:link],
           url_pc: tem_params[:link],
@@ -1760,6 +1787,7 @@ carepartner.kr#{path}
       title: "#{user_info} 요양보호사가 지원했어요.",
       message: "#{user_info} 요양보호사가 지원했어요.
 
+■ 지원자의 한마디
 “#{user_message}”
 
 ■ 공고
