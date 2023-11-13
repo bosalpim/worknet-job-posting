@@ -6,7 +6,7 @@ class NotifyCareerCertificationService
   end
 
   def initialize(params)
-    @template_id = MessageTemplateName::CAREER_CERTIFICATION
+    @template_id = MessageTemplateName::CAREER_CERTIFICATION_V2
     @link = params.dig(:link)
     @phone = params.dig(:phone)
     @center_name = params.dig(:center_name)
@@ -51,13 +51,13 @@ class NotifyCareerCertificationService
     end
 
     NotificationResult.create!({
-                                      send_type: NotificationResult::CAREER_CERTIFICATION,
-                                      send_id: @job_posting_title,
-                                      template_id: @template_id,
-                                      success_count: success_count,
-                                      tms_success_count: tms_success_count,
-                                      fail_count: fail_count,
-                                      fail_reasons: fail_reasons
-                                    })
+                                 send_type: NotificationResult::CAREER_CERTIFICATION_V2,
+                                 send_id: @job_posting_title,
+                                 template_id: @template_id,
+                                 success_count: success_count,
+                                 tms_success_count: tms_success_count,
+                                 fail_count: fail_count,
+                                 fail_reasons: fail_reasons
+                               })
   end
 end
