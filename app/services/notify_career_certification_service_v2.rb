@@ -59,7 +59,11 @@ class NotifyCareerCertificationServiceV2
         time_match: is_time_match(work_start_time: @job_posting.work_start_time, work_end_time: @job_posting.work_end_time, job_search_times: @user.job_search_times),
         grade_match: is_grade_match(@user.preferred_grades, @job_posting.grade),
       },
-      reserve_dt: Jets.env == 'production' ? reserve_dt : nil
+      reserve_dt: if PHONE_NUMBER_WHITELIST.include?(@phone)
+                    nil
+                  else
+                    Jets.env == 'production' ? reserve_dt : nil
+                  end
     )
 
     success_count = 0
