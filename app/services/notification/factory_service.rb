@@ -15,6 +15,8 @@ class Notification::FactoryService
       return Notification::Factory::AccumulatedPreparativeCbt.new
     when MessageTemplateName::NEW_JOB_POSTING
       return Notification::Factory::NewJobNotification.new(params[:job_posting_id])
+    when MessageTemplateName::PROPOSAL_NOTIFICATION_EXPIRES
+      return Notification::Factory::ProposalNotificationExpires.new
     else
       puts "no template found"
       return []

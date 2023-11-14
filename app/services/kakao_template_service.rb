@@ -134,6 +134,8 @@ class KakaoTemplateService
       get_connect_result_user_survey_B(tem_params)
     when MessageTemplateName::JOB_APPLICATION
       get_job_application(tem_params)
+    when MessageTemplateName::PROPOSAL_NOTIFICATION_EXPIRES
+      get_proposal_notification_expires(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1805,6 +1807,20 @@ carepartner.kr#{path}
           url_pc: link,
         }
       ]
+    }
+  end
+
+  def get_proposal_notification_expires(tem_params)
+    expires_date = tem_params[:expires_date]
+    expires_date_with_time = tem_params[:expires_date_with_time]
+    {
+      title: "#{expires_date}부터 요양센터로부터 전화면접 제안을 받을 수 없게 돼요.",
+      message: "#{expires_date}부터 요양센터로부터 전화면접 제안을 받을 수 없게 돼요
+
+■ 전화면접 제안 종료 예정시각
+#{expires_date_with_time}
+
+계속해서 면접 제안을 받으려면, 종료 예정시각 이후 케어파트너에서 면접 제안 받기를 눌러주세요."
     }
   end
 
