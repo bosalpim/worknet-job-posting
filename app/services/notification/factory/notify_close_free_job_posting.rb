@@ -19,8 +19,8 @@ class Notification::Factory::NotifyCloseFreeJobPosting < Notification::Factory::
   end
 
   def init_close_1day_ago
-    today_afternoon_4 = DateTime.now.beginning_of_day.change(hour: 16, min: 0, sec: 0)
-    next_day_afternoon_4 = DateTime.now.next_day.beginning_of_day.change(hour: 16, min: 0, sec: 0)
+    today_afternoon_4 = DateTime.now.beginning_of_day.change(hour: 4, min: 0, sec: 0)
+    next_day_afternoon_4 = DateTime.now.next_day.beginning_of_day.change(hour: 4, min: 0, sec: 0)
 
     job_postings = JobPosting
                      .where(status: 'init')
@@ -62,6 +62,7 @@ class Notification::Factory::NotifyCloseFreeJobPosting < Notification::Factory::
       target_public_id: client.public_id
     }
 
-    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, 'AI', client.phone_number, params, client.public_id))
+    reserved_dt = DateTime.now.strftime("%Y%m%d") + "100000"
+    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, client.phone_number, params, client.public_id, 'AI', reserved_dt))
   end
 end

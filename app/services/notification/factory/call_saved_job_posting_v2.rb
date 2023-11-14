@@ -90,6 +90,6 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Noti
       job_posting_public_id: job_posting.public_id
     }
 
-    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, "AI", user.phone_number, params, user.public_id))
+    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, "AI"))
   end
 end

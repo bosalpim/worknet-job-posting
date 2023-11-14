@@ -7,4 +7,9 @@ class CloseExpiredJobPostingsJob < ApplicationJob
   def close_expired_job_postings
     JobPosting::CloseExpiredJobPostingsService.call
   end
+
+  cron "0 19 * * ? *"
+  def notify_close_1day_ago_free_job_postings
+    NotificationServiceJob.perform_later(:notify, { message_template_id: MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO})
+  end
 end

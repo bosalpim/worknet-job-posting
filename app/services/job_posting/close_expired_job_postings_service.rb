@@ -2,11 +2,11 @@
 
 class JobPosting::CloseExpiredJobPostingsService
 
-  def self.call(date = DateTime.now.beginning_of_day.change(hour: 16, min: 0, sec: 0))
+  def self.call(date = DateTime.now.beginning_of_day.change(hour: 4, min: 0, sec: 0))
     new(date).call
   end
 
-  def initialize(date = DateTime.now.beginning_of_day.change(hour: 16, min: 0, sec: 0))
+  def initialize(date = DateTime.now.beginning_of_day.change(hour: 4, min: 0, sec: 0))
     @date = date
   end
 
