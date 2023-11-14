@@ -132,6 +132,10 @@ class KakaoTemplateService
       get_connect_result_user_survey_B(tem_params)
     when MessageTemplateName::JOB_APPLICATION
       get_job_application(tem_params)
+    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
+      get_notify_free_job_posting_close_one_day_ago(tem_params)
+    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
+      get_notify_free_job_posting_close(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1725,6 +1729,49 @@ carepartner.kr#{path}
           name: "지원자 확인하기",
           url_mobile: link,
           url_pc: link,
+        }
+      ]
+    }
+  end
+
+  def get_notify_free_job_posting_close_one_day_ago(tem_params)
+    {
+      title: "무료 공고 종료 1일전 안내",
+      message: "#{tem_params[:title]} 공고가 1일 후 자동종료 됩니다.
+
+공고 게재기간을 연장하시려면
+아래 공고 게재기간 연장하기 버튼을 눌러 번개채용을 신청해 주세요.
+
+≫안내
+번개채용을 신청한 채용공고는 채용이 완료될 때까지 공고 게재기간이 연장됩니다.",
+      buttons: [
+        {
+          type: "WL",
+          name: "공고 게재기간 연장하기",
+          url_mobile: tem_params[:link],
+          url_pc: tem_params[:link],
+        }
+      ]
+    }
+  end
+
+  def get_notify_free_job_posting_close(tem_params)
+    {
+      title: "무료 공고 종료 안내",
+      message: "#{tem_params[:title]} 공고가 자동종료 되었습니다.
+
+공고 게재기간을 연장하시려면
+아래 공고 게재기간 연장하기 버튼을 눌러
+번개채용을 신청해 주세요.
+
+≫안내
+번개채용을 신청한 채용공고는 채용이 완료될 때까지 공고 게재기간이 연장됩니다.",
+      buttons: [
+        {
+          type: "WL",
+          name: "공고 게재기간 연장하기",
+          url_mobile: tem_params[:link],
+          url_pc: tem_params[:link],
         }
       ]
     }

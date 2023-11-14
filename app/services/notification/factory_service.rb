@@ -15,6 +15,10 @@ class Notification::FactoryService
       return Notification::Factory::AccumulatedPreparativeCbt.new
     when MessageTemplateName::NEW_JOB_POSTING
       return Notification::Factory::NewJobNotification.new(params[:job_posting_id])
+    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
+      return Notification::Factory::NotifyCloseFreeJobPosting.call_1day_ago
+    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
+      return Notification::Factory::NotifyCloseFreeJobPosting.call_close(params[:job_postings])
     else
       puts "no template found"
       return []

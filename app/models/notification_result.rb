@@ -37,6 +37,10 @@ class NotificationResult < ApplicationRecord
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
 
+  # 과금 대상 무료공고 종료 관련
+  NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO = 'free_job_posting_close_1dayago'.freeze
+  NOTIFY_FREE_JOB_POSTING_CLOSE = 'free_job_posting_close'.freeze
+
   validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -79,6 +83,8 @@ class NotificationResult < ApplicationRecord
     CBT_DRAFT => CBT_DRAFT,
     CAREPARTNER_PRESENT => CAREPARTNER_PRESENT,
     ACCUMULATED_DRAFT => ACCUMULATED_DRAFT,
-    ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE
+    ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE,
+    NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO => NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO,
+    NOTIFY_FREE_JOB_POSTING_CLOSE => NOTIFY_FREE_JOB_POSTING_CLOSE
   }
 end
