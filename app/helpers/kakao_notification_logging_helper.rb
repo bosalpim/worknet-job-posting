@@ -416,7 +416,7 @@ module KakaoNotificationLoggingHelper
         "template" => template_id,
         "title" => tem_params[:job_posting_title],
         "jobPostingId" => tem_params[:job_posting_public_id],
-        "employeeId" => tem_params[:user_public_id],
+        "employee_id" => tem_params[:user_public_id],
         "centerName" => tem_params[:business_name],
         "type_match" => tem_params[:type_match],
         "gender_match" => tem_params[:gender_match],
