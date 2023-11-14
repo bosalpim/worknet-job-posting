@@ -19,6 +19,8 @@ class Notification::FactoryService
       return Notification::Factory::NotifyCloseFreeJobPosting.call_1day_ago
     when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
       return Notification::Factory::NotifyCloseFreeJobPosting.call_close(params[:job_postings])
+    when MessageTemplateName::PROPOSAL_NOTIFICATION_EXPIRES
+      return Notification::Factory::ProposalNotificationExpires.new
     else
       puts "no template found"
       return []
