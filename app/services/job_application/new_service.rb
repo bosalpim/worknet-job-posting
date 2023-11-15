@@ -22,10 +22,10 @@ class JobApplication::NewService
     user_info = [user.name, user.korean_gender, user.birth_year.present? ? "#{calculate_korean_age(user.birth_year)}세" : nil]
                   .filter { |i| i.present? }
                   .join('/')
-    
+
     # TODO 문자 오픈율 높을 경우, 리팩토링
     arlimtalk_utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
-    textmessage_utm = "utm_source=message&utm_medium=textmessage&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
+    textmessage_utm = "utm_source=textmessage&utm_medium=textmessage&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
     suffix = "/employment_management/job_applications/#{@job_application.public_id}"
 
     link = if Jets.env.production?

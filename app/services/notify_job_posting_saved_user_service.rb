@@ -25,7 +25,7 @@ class NotifyJobPostingSavedUserService
              'http://localhost:3001'
            end
 
-    utm_part = 'utm_source=message&utm_medium=textmessage&utm_campaign=call_saved_job_caregiver'
+    utm_part = 'utm_source=textmessage&utm_medium=textmessage&utm_campaign=call_saved_job_caregiver'
     send_text_message(
       phone_number: phone,
       user_name: @event["user_name"],

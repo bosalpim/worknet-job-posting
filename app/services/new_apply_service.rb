@@ -62,7 +62,7 @@ class NewApplyService
                  "http://localhost:3001"
                end
 
-    utm_part = "utm_source=message&utm_medium=textmessage&utm_campaign=#{template_id}"
+    utm_part = "utm_source=textmessage&utm_medium=textmessage&utm_campaign=#{template_id}"
     short_url = ShortUrl.build(
       base_url + "/employment_management/applies/#{apply.id}?auth_token=#{apply.auth_token}&#{utm_part}",
       base_url
