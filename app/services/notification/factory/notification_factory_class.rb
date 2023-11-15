@@ -46,25 +46,25 @@ class Notification::Factory::NotificationFactoryClass
 
   private
   def send_app_push
-    return unless check_class_type(@app_push_list) == true
+    return unless check_class_type(@app_push_list, AppPush) == true
     send_process(@app_push_list, @app_push_result)
   end
 
   def send_bizm_post_pay
-    return unless check_class_type(@bizm_post_pay_list) == true
+    return unless check_class_type(@bizm_post_pay_list, BizmPostPayMessage) == true
     send_process(@bizm_post_pay_list, @bizm_post_pay_result)
   end
 
   def send_bizm_pre_pay
-    return unless check_class_type(@bizm_pre_pay_list) == true
+    return unless check_class_type(@bizm_pre_pay_list, BizmPrePayMessage) == true
     send_process(@bizm_pre_pay_list, @bizm_pre_pay_result)
   end
 
-  def check_class_type(message_list)
+  def check_class_type(message_list, message_type)
     message = message_list.first
     return nil if message.nil?
-    unless message.is_a?(Notification::Factory::SendMedium::Abstract)
-      raise ArgumentError, "메세지 발송은 SendMedium Class를 상속받아 구현된 Class를 사용해야합니다."
+    unless message.is_a?(message_type)
+      raise ArgumentError, "#{message_type} 전송 타입에 맞는 올바른 배열에 넣으셔야합니다."
     end
     true
   end

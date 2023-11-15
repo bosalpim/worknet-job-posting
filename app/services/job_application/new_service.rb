@@ -50,7 +50,8 @@ class JobApplication::NewService
                                      else
                                        "http://localhost:3001#{suffix}?#{textmessage_utm}"
                                      end, host)
-    Lms.new(
+
+    if Lms.new(
       phone_number: job_posting.manager_phone_number,
       message: "#{user_info}요양보호사가 지원했어요.
 
@@ -66,6 +67,18 @@ class JobApplication::NewService
 아래 링크를 눌러 지원자의 자세한 정보를 확인하고 무료로 전화해 보세요!
 
 #{textmessage_url.url}").send
+      AmplitudeService.instance.log_array([{
+                                             "user_id" => client.public_id,
+                                             "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,
+                                             "event_properties" => {
+                                               type: 'textmessage',
+                                               template: MessageTemplateName::JOB_APPLICATION,
+                                               jobPostingId: job_posting.public_id,
+                                               title: job_posting.title,
+                                               employee_id: user.public_id
+                                             }
+                                           }])
+    end
 
     KakaoNotificationService.call(
       template_id: MessageTemplateName::JOB_APPLICATION,
