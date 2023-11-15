@@ -62,7 +62,7 @@ class NewApplyService
                  "http://localhost:3001"
                end
 
-    utm_part = "utm_source=textmessage&utm_medium=textmessage&utm_campaign=#{template_id}"
+    utm_part = "utm_source=text_message&utm_medium=text_message&utm_campaign=#{template_id}"
     short_url = ShortUrl.build(
       base_url + "/employment_management/applies/#{apply.id}?auth_token=#{apply.auth_token}&#{utm_part}",
       base_url
@@ -93,7 +93,7 @@ class NewApplyService
                                              "user_id" => @client.public_id,
                                              "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,
                                              "event_properties" => {
-                                               type: 'textmessage',
+                                               type: 'text_message',
                                                template: MessageTemplateName::CALL_REQUEST_ALARM,
                                                jobPostingId: @job_posting.public_id,
                                                title: @job_posting.title,
