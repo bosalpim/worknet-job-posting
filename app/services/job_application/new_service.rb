@@ -25,7 +25,7 @@ class JobApplication::NewService
 
     # TODO 문자 오픈율 높을 경우, 리팩토링
     arlimtalk_utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
-    textmessage_utm = "utm_source=textmessage&utm_medium=textmessage&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
+    textmessage_utm = "utm_source=text_message&utm_medium=text_message&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
     suffix = "/employment_management/job_applications/#{@job_application.public_id}"
     host = if Jets.env.production?
              "https://business.carepartner.kr"
@@ -71,7 +71,7 @@ class JobApplication::NewService
                                              "user_id" => client.public_id,
                                              "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,
                                              "event_properties" => {
-                                               type: 'textmessage',
+                                               type: 'text_message',
                                                template: MessageTemplateName::JOB_APPLICATION,
                                                jobPostingId: job_posting.public_id,
                                                title: job_posting.title,

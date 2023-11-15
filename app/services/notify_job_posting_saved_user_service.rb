@@ -25,7 +25,7 @@ class NotifyJobPostingSavedUserService
              'http://localhost:3001'
            end
 
-    utm_part = 'utm_source=textmessage&utm_medium=textmessage&utm_campaign=call_saved_job_caregiver'
+    utm_part = 'utm_source=text_message&utm_medium=text_message&utm_campaign=call_saved_job_caregiver'
     send_text_message(
       phone_number: phone,
       user_name: @event["user_name"],
@@ -117,7 +117,7 @@ class NotifyJobPostingSavedUserService
                                              "user_id" => @event["client_public_id"],
                                              "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,
                                              "event_properties" => {
-                                               type: 'textmessage',
+                                               type: 'text_message',
                                                center_name: @event["center_name"],
                                                jobPostingId: @event["job_posting_public_id"],
                                                title: @event["job_posting_title"],
