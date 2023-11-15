@@ -27,6 +27,13 @@ class JobApplication::NewService
     arlimtalk_utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
     textmessage_utm = "utm_source=textmessage&utm_medium=textmessage&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
     suffix = "/employment_management/job_applications/#{@job_application.public_id}"
+    host = if Jets.env.production?
+             "https://business.carepartner.kr"
+           elsif Jets.env.staging?
+             "https://staging-business.carepartner.kr"
+           else
+             "http://localhost:3001"
+           end
 
     link = if Jets.env.production?
              "https://business.carepartner.kr#{suffix}?#{arlimtalk_utm}"
@@ -42,7 +49,7 @@ class JobApplication::NewService
                                        "https://staging-business.vercel.app#{suffix}?#{textmessage_utm}"
                                      else
                                        "http://localhost:3001#{suffix}?#{textmessage_utm}"
-                                     end)
+                                     end, host)
     Lms.new(
       phone_number: job_posting.manager_phone_number,
       message: "#{user_info}요양보호사가 지원했어요.
