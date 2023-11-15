@@ -17,7 +17,7 @@ class NotifyJobPostingSavedUserService
 
     phone = @event["phone"]
 
-    host = if Jets.env.production? == 'production'
+    host = if Jets.env.production?
              'https://business.carepartner.kr'
            elsif Jets.env.staging?
              'https://staging-business.vercel.app'
