@@ -93,6 +93,7 @@ class NewApplyService
                                              "user_id" => @client.public_id,
                                              "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,
                                              "event_properties" => {
+                                               type: 'textmessage',
                                                template: MessageTemplateName::CALL_REQUEST_ALARM,
                                                jobPostingId: @job_posting.public_id,
                                                title: @job_posting.title,

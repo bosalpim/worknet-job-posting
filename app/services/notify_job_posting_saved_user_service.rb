@@ -117,6 +117,7 @@ class NotifyJobPostingSavedUserService
                                              "user_id" => @event["client_public_id"],
                                              "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,
                                              "event_properties" => {
+                                               type: 'textmessage',
                                                center_name: @event["center_name"],
                                                jobPostingId: @event["job_posting_public_id"],
                                                title: @event["job_posting_title"],

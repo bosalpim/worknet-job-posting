@@ -71,6 +71,7 @@ class JobApplication::NewService
                                              "user_id" => client.public_id,
                                              "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,
                                              "event_properties" => {
+                                               type: 'textmessage',
                                                template: MessageTemplateName::JOB_APPLICATION,
                                                jobPostingId: job_posting.public_id,
                                                title: job_posting.title,
