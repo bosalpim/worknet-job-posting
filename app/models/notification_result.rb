@@ -34,6 +34,7 @@ class NotificationResult < ApplicationRecord
   CAREPARTNER_PRESENT = 'carepartner_present'.freeze
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
+  ROULETTE = 'roulette'.freeze
 
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
@@ -86,5 +87,6 @@ class NotificationResult < ApplicationRecord
     ACCUMULATED_DRAFT => ACCUMULATED_DRAFT,
     ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE,
     PROPOSAL_NOTIFICATION_EXPIRES => PROPOSAL_NOTIFICATION_EXPIRES,
+    ROULETTE => ROULETTE,
   }
 end
