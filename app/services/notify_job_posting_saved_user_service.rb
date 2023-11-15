@@ -97,7 +97,8 @@ class NotifyJobPostingSavedUserService
     address:,
     url:
   )
-    Lms.new(
+    # todo 효과좋으면 리팩토링 필요
+    if Lms.new(
       phone_number: phone_number,
       message: "#{user_name}  요양보호사가 아래 공고에 관심을 표시했어요!
 
@@ -112,5 +113,17 @@ class NotifyJobPostingSavedUserService
 
 주소: #{url}"
     ).send
+      AmplitudeService.instance.log_array([{
+                                             "user_id" => @event["client_public_id"],
+                                             "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,
+                                             "event_properties" => {
+                                               center_name: @event["center_name"],
+                                               jobPostingId: @event["job_posting_public_id"],
+                                               title: @event["job_posting_title"],
+                                               employee_id: @event["user_public_id"],
+                                               template: MessageTemplateName::CALL_SAVED_JOB_CAREGIVER,
+                                             }
+                                           }])
+    end
   end
 end

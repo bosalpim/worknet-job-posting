@@ -76,7 +76,7 @@ class NewApplyService
     job_posting_title:,
     short_url:
   )
-    Lms.new(
+    if Lms.new(
       phone_number: phone_number,
       message: "[케어파트너] 전화요청 알림
 
@@ -89,6 +89,17 @@ class NewApplyService
 공고명: #{job_posting_title}
 링크: #{short_url}"
     ).send
+      AmplitudeService.instance.log_array([{
+                                             "user_id" => @client.public_id,
+                                             "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,
+                                             "event_properties" => {
+                                               template: MessageTemplateName::CALL_REQUEST_ALARM,
+                                               jobPostingId: @job_posting.public_id,
+                                               title: @job_posting.title,
+                                               employee_id: @user.public_id
+                                             }
+                                           }])
+    end
   end
 
   def build_short_url(apply)
