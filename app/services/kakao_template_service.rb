@@ -1817,17 +1817,19 @@ carepartner.kr#{path}
   def get_notify_free_job_posting_close_one_day_ago(tem_params)
     {
       title: "무료 공고 종료 1일전 안내",
-      message: "#{tem_params[:title]} 공고가 1일 후 자동종료 됩니다.
+      message: "#{tem_params[:title]} 공고가 1일 후 자동 종료될 예정입니다.
+아직 채용되지 않았다면 케어파트너 [번개채용] 공고를 통해 요양보호사님을 만나보세요!
 
-공고 게재기간을 연장하시려면
-아래 공고 게재기간 연장하기 버튼을 눌러 번개채용을 신청해 주세요.
+[번개채용] 공고는
+1. 공고를 무제한 연장하실 수 있습니다.
+2. 요양보호사 프로필을 먼저 조회하고, 면접 제안을 할 수 있습니다.
+3. 채용되지 않으면 무료!
 
-≫안내
-번개채용을 신청한 채용공고는 채용이 완료될 때까지 공고 게재기간이 연장됩니다.",
+👇공고 연장하러가기👇",
       buttons: [
         {
           type: "WL",
-          name: "공고 게재기간 연장하기",
+          name: "공고 연장하러 가기!",
           url_mobile: tem_params[:link],
           url_pc: tem_params[:link],
         }
@@ -1838,18 +1840,20 @@ carepartner.kr#{path}
   def get_notify_free_job_posting_close(tem_params)
     {
       title: "무료 공고 종료 안내",
-      message: "#{tem_params[:title]} 공고가 자동종료 되었습니다.
+      message: "#{tem_params[:title]} 공고가 자동 종료되었습니다.
+케어파트너 무료공고를 통해 요양보호사 분과 잘 연결이 되셨을까요?
+아직 채용되지 않았다면 케어파트너 [번개채용] 공고를 통해 요양보호사님을 만나보세요!
 
-공고 게재기간을 연장하시려면
-아래 공고 게재기간 연장하기 버튼을 눌러
-번개채용을 신청해 주세요.
+[번개채용] 공고는
+1. 공고를 무제한 연장하실 수 있습니다.
+2. 요양보호사 프로필을 먼저 조회하고, 면접 제안을 할 수 있습니다.
+3. 채용되지 않으면 무료!
 
-≫안내
-번개채용을 신청한 채용공고는 채용이 완료될 때까지 공고 게재기간이 연장됩니다.",
+👇공고 연장하러가기👇",
       buttons: [
         {
           type: "WL",
-          name: "공고 게재기간 연장하기",
+          name: "공고 연장하러 가기!",
           url_mobile: tem_params[:link],
           url_pc: tem_params[:link],
         }
