@@ -100,6 +100,8 @@ module KakaoNotificationLoggingHelper
       return get_accumulate_preparative_cbt_logging_data(template_id, tem_params)
     when CONNECT_RESULT_USER_SURVEY_A, CONNECT_RESULT_USER_SURVEY_B
       return get_connect_result_user_survey(template_id, tem_params)
+    when MessageTemplateName::ROULETTE
+      return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when JOB_APPLICATION
       return get_job_application(template_id, tem_params)
     when PROPOSAL_NOTIFICATION_EXPIRES

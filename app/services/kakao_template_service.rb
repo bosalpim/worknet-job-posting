@@ -136,6 +136,8 @@ class KakaoTemplateService
       get_job_application(tem_params)
     when MessageTemplateName::PROPOSAL_NOTIFICATION_EXPIRES
       get_proposal_notification_expires(tem_params)
+    when MessageTemplateName::ROULETTE
+      get_roulette_ticket_receive(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1821,6 +1823,31 @@ carepartner.kr#{path}
 #{expires_date_with_time}
 
 계속해서 면접 제안을 받으려면, 종료 예정시각 이후 케어파트너에서 면접 제안 받기를 눌러주세요."
+    }
+  end
+
+  def get_roulette_ticket_receive(tem_params)
+    url = if Jets.env == 'production'
+            "https://www.carepartner.kr/event/roulette?utm_source=message&utm_medium=arlimtalk&utm_campaign=roulette_invite_complete"
+          else
+            "https://dev-carepartner.vercel.app/event/roulette?utm_source=message&utm_medium=arlimtalk&utm_campaign=roulette_invite_complete"
+          end
+
+    {
+      title: "행운 룰렛 이용권을 사용해보세요!",
+      message: "#{tem_params[:name]} 요양보호사 선생님 안녕하세요.
+
+최대 10만원 신세계상품권을 받으실 수 있는 행운 룰렛 이용권 3장이 지급되었습니다.
+
+행운 룰렛 돌리시고 10만원의 주인공이 되어보세요!",
+      buttons: [
+        {
+          type: 'WL',
+          name: '룰렛 이용권 사용하기',
+          url_mobile: url,
+          url_pc: url
+        }
+      ]
     }
   end
 

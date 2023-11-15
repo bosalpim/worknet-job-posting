@@ -5,6 +5,12 @@ class UsersController < ApplicationController
     render json: { success: true }, status: :ok
   end
 
+  def receive_roulette_ticket
+    event = { user_id: params["user_id"] }
+    NotifyReceiveRouletteTicketsJob.perform_later(:dig, event)
+    render json: { success: true }, status: :ok
+  end
+
   def notify_comment
     NotifyCommentService.call notify_comment_params
 
