@@ -1,4 +1,6 @@
 class NewApplyService
+  include Notification
+
   attr_reader :apply, :job_posting, :business, :client, :user
 
   def initialize(apply)
@@ -17,6 +19,7 @@ class NewApplyService
     # 임시 url 지원 페이지 생성되면 교체
     template_id = MessageTemplateName::CALL_REQUEST_ALARM
     short_url = build_short_url(apply)
+
     response = KakaoNotificationService.call(
       template_id: template_id,
       phone: job_posting.manager_phone_number,
@@ -32,6 +35,12 @@ class NewApplyService
         short_url: short_url
       }
     )
+    send_text_message(
+      phone_number: job_posting.manager_phone_number,
+      business_name: business.name,
+      job_posting_title: job_posting.title,
+      short_url: build_mobile_url(apply)
+    )
     save_kakao_notification(
       response,
       NotificationResult::CALL_REQUEST_ALARM,
@@ -42,6 +51,45 @@ class NewApplyService
   end
 
   private
+
+  def build_mobile_url(apply)
+    template_id = MessageTemplateName::CALL_REQUEST_ALARM
+    base_url = if Jets.env.production?
+                 "https://business.carepartner.kr"
+               elsif Jets.env.staging?
+                 "https://staging-business.vercel.app"
+               else
+                 "http://localhost:3001"
+               end
+
+    utm_part = "utm_source=textmessage&utm_medium=textmessage&utm_campaign=#{template_id}"
+    short_url = ShortUrl.build(
+      base_url + "/employment_management/applies/#{apply.id}?auth_token=#{apply.auth_token}&#{utm_part}",
+      base_url
+    )
+    short_url.url
+  end
+
+  def send_text_message(
+    phone_number:,
+    business_name:,
+    job_posting_title:,
+    short_url:
+  )
+    Lms.new(
+      phone_number: phone_number,
+      message: "[케어파트너] 전화요청 알림
+
+#{business_name} 담당자님
+등록하신 공고에 전화를 요청한 요양보호사가 있습니다.
+
+아래 버튼 혹은 링크를 눌러 요양보호사 정보를 확인하고 전화해보세요.
+빠르게 연락할수록 채용확률이 높아집니다.
+
+공고명: #{job_posting_title}
+링크: #{short_url}"
+    ).send
+  end
 
   def build_short_url(apply)
     template_id = MessageTemplateName::CALL_REQUEST_ALARM
