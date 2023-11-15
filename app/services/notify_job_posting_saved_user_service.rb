@@ -1,4 +1,6 @@
 class NotifyJobPostingSavedUserService
+  include Notification
+
   def self.call(event)
     new(event).call
   end
@@ -12,9 +14,33 @@ class NotifyJobPostingSavedUserService
     fail_reasons = []
     success_count = 0
     fail_count = 0
+
+    phone = @event["phone"]
+
+    host = if Jets.env.production? == 'production'
+             'https://business.carepartner.kr'
+           elsif Jets.env.staging?
+             'https://staging-business.vercel.app'
+           else
+             'http://localhost:3001'
+           end
+
+    utm_part = 'utm_source=textmessage&utm_medium=textmessage&utm_campaign=call_saved_job_caregiver'
+    send_text_message(
+      phone_number: phone,
+      user_name: @event["user_name"],
+      user_gender: @event["user_gender"],
+      user_age: @event["user_age"],
+      job_posting_title: @event["job_posting_title"],
+      career: @event["user_career"],
+      distance: @event["user_distance"],
+      address: @event["user_address"],
+      url: ShortUrl.build("#{host}#{@event["url_path"]}&#{utm_part}", host).url
+    )
+
     response = BizmsgService.call(
       template_id: @template_id,
-      phone: @event["phone"],
+      phone: phone,
       template_params: {
         # 센터 정보
         target_public_id: @event["client_public_id"],
@@ -56,5 +82,35 @@ class NotifyJobPostingSavedUserService
       fail_count: fail_count,
       fail_reasons: fail_reasons.uniq.join(",")
     )
+  end
+
+  private
+
+  def send_text_message(
+    phone_number:,
+    user_name:,
+    user_gender:,
+    user_age:,
+    job_posting_title:,
+    career:,
+    distance:,
+    address:,
+    url:
+  )
+    Lms.new(
+      phone_number: phone_number,
+      message: "#{user_name}  요양보호사가 아래 공고에 관심을 표시했어요!
+
+공고 : #{job_posting_title}
+
+■ 기본 정보 : #{user_name} / #{user_gender} / #{user_age}
+■ 근무 경력 : #{career}
+■ 통근 거리 : #{distance}
+■ 거주 주소 : #{address}
+
+아래 주소로 접속해 공고에 관심표시한 요양보호사에게 지금 바로 전화해보세요!
+
+주소: #{url}"
+    ).send
   end
 end
