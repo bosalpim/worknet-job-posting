@@ -2,7 +2,7 @@
 
 class Proposal::NewService
   def initialize(params)
-    @template_id = MessageTemplateName::CALL_INTERVIEW_PROPOSAL
+    @template_id = MessageTemplateName::CALL_INTERVIEW_PROPOSAL_V2
     @target_public_id = params['target_public_id']
     @job_posting_id = params['job_posting_id']
     @job_posting_title = params['job_posting_title']
@@ -14,6 +14,7 @@ class Proposal::NewService
     @tel_link = params['tel_link']
     @accept_link = params['accept_link']
     @deny_link = params['deny_link']
+    @pay_info = params['pay_info']
   end
 
   def call
@@ -32,6 +33,7 @@ class Proposal::NewService
         accept_link: @accept_link,
         tel_link: @tel_link,
         deny_link: @deny_link,
+        pay_info: @pay_info
       }
     )
 

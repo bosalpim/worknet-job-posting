@@ -106,7 +106,7 @@ class User < ApplicationRecord
     elsif self.female?
       '여자'
     else
-      ''
+      nil
     end
   end
 end

@@ -13,7 +13,8 @@ class NotificationResult < ApplicationRecord
   NEWS_PAPER = 'news_paper'.freeze
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze
   CAREER_CERTIFICATION = 'career_certification'.freeze
-  CAREER_CERTIFICATION_V2 = 'job_certification'.freeze
+  CAREER_CERTIFICATION_V2 = 'career_certification_v2'.freeze
+  JOB_CERTIFICATION = 'job_certification'.freeze
   NOTIFY_MATCHED_USER = 'notify_matched_user'.freeze
   SIGNUP_COMPLETE_GUIDE = 'sign_up_complete_guide'.freeze
   HIGH_SALARY_JOB = 'high-salary-job-2'.freeze
@@ -36,6 +37,9 @@ class NotificationResult < ApplicationRecord
 
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
+
+  # 전화면접 제안 알림
+  PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'.freeze
 
   validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
@@ -60,6 +64,7 @@ class NotificationResult < ApplicationRecord
     GAMIFICATION_MISSION_COMPLETE => GAMIFICATION_MISSION_COMPLETE,
     CAREER_CERTIFICATION => CAREER_CERTIFICATION,
     CAREER_CERTIFICATION_V2 => CAREER_CERTIFICATION_V2,
+    JOB_CERTIFICATION => JOB_CERTIFICATION,
     NOTIFY_MATCHED_USER => NOTIFY_MATCHED_USER,
     SIGNUP_COMPLETE_GUIDE => SIGNUP_COMPLETE_GUIDE,
     HIGH_SALARY_JOB => HIGH_SALARY_JOB,
@@ -79,6 +84,7 @@ class NotificationResult < ApplicationRecord
     CBT_DRAFT => CBT_DRAFT,
     CAREPARTNER_PRESENT => CAREPARTNER_PRESENT,
     ACCUMULATED_DRAFT => ACCUMULATED_DRAFT,
-    ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE
+    ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE,
+    PROPOSAL_NOTIFICATION_EXPIRES => PROPOSAL_NOTIFICATION_EXPIRES,
   }
 end

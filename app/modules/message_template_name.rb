@@ -21,6 +21,7 @@ module MessageTemplateName
   JOB_ALARM_WORKING = 'job_alarm(working)'.freeze # 일하는 중인 요양보호사에게 매달 첫째주,셋째주 월요일 오후 12시에 전달되는 신문
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze # 식물키우기 미션달성 메세지 발송
   CAREER_CERTIFICATION = 'career_certification' # 경력 인증 알림톡
+  CAREER_CERTIFICATION_V2 = 'career_certification_v2' # 취업인증 개선 알림톡
   CONNECT_RESULT_USER_SURVEY_A = 'connect_result_user_survey A' # 취업 인증 (상품권)
   CONNECT_RESULT_USER_SURVEY_B = 'connect_result_user_survey B' # 취업 인증 (급여확인)
   CLOSE_JOB_POSTING_NOTIFICATION = 'close_job_posting_notification'.freeze # 공고 종료 알림톡
@@ -33,6 +34,7 @@ module MessageTemplateName
   CERTIFICATION_UPDATE = 'certification-update'.freeze # 시험 예정일 3일/7일이 지난 자격증 미취득 유저에게 소지 전환 유도
   POST_COMMENT = 'post-comment'.freeze # 게시글 답변 알림톡
   CALL_INTERVIEW_PROPOSAL = 'call_interview_proposal'.freeze
+  CALL_INTERVIEW_PROPOSAL_V2 = 'call_interview_proposal_v2'.freeze
   CALL_INTERVIEW_ACCEPTED = 'call_interview_proposal_accept'.freeze
   CALL_SAVED_JOB_CAREGIVER = 'call_saved_job_caregiver'.freeze # 공고에 관심표시한 요양보호사 기관에게 알림톡
   CALL_SAVED_JOB_POSTING_V2 = 'call_saved_job_posting_v2'.freeze
@@ -49,4 +51,6 @@ module MessageTemplateName
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
   # 간편 지원
   JOB_APPLICATION = 'job_application'.freeze
+  # 전화면접 제안 알림 만료일 경고
+  PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'.freeze
 end

@@ -2,7 +2,7 @@ class Notification::Factory::AccumulatedDraft < Notification::Factory::Notificat
   include RatioChopper
   def initialize
     super(MessageTemplateName::ACCUMULATED_DRAFT)
-    @list = SearchAccumulateDraftUsersService.call(0) # Todo 점진적 배포 대상으로, 0 -> 1 -> 2 점차 확대 전송 예정
+    @list = SearchAccumulateDraftUsersService.call(2)
     create_message
   end
 

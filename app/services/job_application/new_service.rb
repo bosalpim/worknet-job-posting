@@ -3,11 +3,14 @@
 class JobApplication::NewService
   include JobPostingsHelper
   include JobMatchHelper
+  include Notification
 
   def initialize(
     job_application_public_id:
   )
-    @job_application = JobApplication.find_by(job_application_public_id)
+    @job_application = JobApplication.find_by(
+      public_id: job_application_public_id
+    )
   end
 
   def call
@@ -16,18 +19,46 @@ class JobApplication::NewService
     business = Business.find(job_posting.business_id)
     client = Client.find(job_posting.client_id)
 
-    user_info = [user.name[0] + '**', user.korean_gender, "#{calculate_korean_age(user.birth_year)}세"]
+    user_info = [user.name, user.korean_gender, user.birth_year.present? ? "#{calculate_korean_age(user.birth_year)}세" : nil]
                   .filter { |i| i.present? }
                   .join('/')
-
+    
+    # TODO 문자 오픈율 높을 경우, 리팩토링
+    arlimtalk_utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
+    textmessage_utm = "utm_source=message&utm_medium=textmessage&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
     suffix = "/employment_management/job_applications/#{@job_application.public_id}"
+
     link = if Jets.env.production?
-             "https://business.carepartner.kr#{suffix}"
+             "https://business.carepartner.kr#{suffix}?#{arlimtalk_utm}"
            elsif Jets.env.staging?
-             "https://staging-business.vercel.app#{suffix}"
+             "https://staging-business.vercel.app#{suffix}?#{arlimtalk_utm}"
            else
-             "https://localhost:3001#{suffix}"
+             "https://staging-business.vercel.app#{suffix}?#{arlimtalk_utm}"
            end
+
+    textmessage_url = ShortUrl.build(if Jets.env.production?
+                                       "https://business.carepartner.kr#{suffix}?#{textmessage_utm}"
+                                     elsif Jets.env.staging?
+                                       "https://staging-business.vercel.app#{suffix}?#{textmessage_utm}"
+                                     else
+                                       "http://localhost:3001#{suffix}?#{textmessage_utm}"
+                                     end)
+    Lms.new(
+      phone_number: job_posting.manager_phone_number,
+      message: "#{user_info}요양보호사가 지원했어요.
+
+■ 지원자의 한마디
+“#{@job_application.user_message}”
+
+■ 공고
+#{job_posting.title}
+
+■ 통화 가능한 시간
+#{@job_application.preferred_call_time}
+
+아래 링크를 눌러 지원자의 자세한 정보를 확인하고 무료로 전화해 보세요!
+
+#{textmessage_url.url}").send
 
     KakaoNotificationService.call(
       template_id: MessageTemplateName::JOB_APPLICATION,

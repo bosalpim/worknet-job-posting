@@ -80,7 +80,7 @@ module KakaoNotificationLoggingHelper
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when MessageTemplateName::SIGNUP_COMPLETE_GUIDE3
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when MessageTemplateName::CALL_INTERVIEW_PROPOSAL
+    when MessageTemplateName::CALL_INTERVIEW_PROPOSAL, CALL_INTERVIEW_PROPOSAL_V2
       return get_call_interview_proposal_logging_data(template_id, tem_params)
     when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
       return get_call_interview_accepted_logging_data(template_id, tem_params)
@@ -102,6 +102,8 @@ module KakaoNotificationLoggingHelper
       return get_connect_result_user_survey(template_id, tem_params)
     when JOB_APPLICATION
       return get_job_application(template_id, tem_params)
+    when PROPOSAL_NOTIFICATION_EXPIRES
+      return get_proposal_notification_expires(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -414,13 +416,23 @@ module KakaoNotificationLoggingHelper
         "template" => template_id,
         "title" => tem_params[:job_posting_title],
         "jobPostingId" => tem_params[:job_posting_public_id],
-        "employeeId" => tem_params[:user_public_id],
+        "employee_id" => tem_params[:user_public_id],
         "centerName" => tem_params[:business_name],
         "type_match" => tem_params[:type_match],
         "gender_match" => tem_params[:gender_match],
         "day_match" => tem_params[:day_match],
         "time_match" => tem_params[:time_match],
         "grade_match" => tem_params[:grade_match],
+      }
+    }
+  end
+
+  def self.get_proposal_notification_expires(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
       }
     }
   end

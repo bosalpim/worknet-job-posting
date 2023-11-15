@@ -30,7 +30,6 @@ Jets.application.routes.draw do
   resources :career_certifications, only: [] do
     member do
       post :notify
-      post :notify_v2
     end
   end
   resources :applies, only: [] do

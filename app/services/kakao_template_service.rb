@@ -80,6 +80,8 @@ class KakaoTemplateService
       get_gamification_mission_complete
     when MessageTemplateName::CAREER_CERTIFICATION
       get_career_certification_alarm(tem_params)
+    when MessageTemplateName::CAREER_CERTIFICATION_V2
+      get_career_certification_v2_alarm(tem_params)
     when MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION
       get_close_job_posting_notification(tem_params)
     when MessageTemplateName::CANDIDATE_RECOMMENDATION
@@ -100,6 +102,8 @@ class KakaoTemplateService
       get_post_comment(tem_params)
     when MessageTemplateName::CALL_INTERVIEW_PROPOSAL
       get_call_interview_proposal(tem_params)
+    when MessageTemplateName::CALL_INTERVIEW_PROPOSAL_V2
+      get_call_interview_proposal_v2(tem_params)
     when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
       get_call_interview_accepted(tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
@@ -130,6 +134,8 @@ class KakaoTemplateService
       get_connect_result_user_survey_B(tem_params)
     when MessageTemplateName::JOB_APPLICATION
       get_job_application(tem_params)
+    when MessageTemplateName::PROPOSAL_NOTIFICATION_EXPIRES
+      get_proposal_notification_expires(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -855,6 +861,31 @@ class KakaoTemplateService
     }
   end
 
+  def get_career_certification_v2_alarm(tem_params)
+    {
+      title: "취업 성공하셨나요?",
+      message: "≫공고
+#{tem_params[:job_posting_title]}
+
+≫기관
+#{tem_params[:center_name]}
+
+≫ 경력자 인증이 궁금해요
+케어파트너를 통한 취업 성공을 요양기관이 신뢰할 수 있도록 인증해 주는 제도예요
+
+≫ 경력자 인증을 받으면 뭐가 좋나요?
+다른 일자리를 구할 때 요양기관이 내 이력서를 보고 연락할 확률이 높아져요",
+      buttons: [
+        {
+          name: '취업 인증하기',
+          type: 'WL',
+          url_mobile: tem_params[:link],
+          url_pc: tem_params[:link],
+        }
+      ]
+    }
+  end
+
   def get_close_job_posting_notification(tem_params)
     {
       title: "[케어파트너] 채용종료 안내",
@@ -1124,7 +1155,7 @@ class KakaoTemplateService
     }
   end
 
-  def get_call_interview_proposal(tem_params)
+  def get_call_interview_proposal_v2(tem_params)
     tel_link = tem_params[:tel_link]
     business_name = tem_params[:business_name]
     accept_link = tem_params[:accept_link]
@@ -1146,6 +1177,108 @@ class KakaoTemplateService
 #{location_info}
 ■ 급여
 #{pay_info}
+
+✅ 공고가 조건에 맞다면?
+아래 버튼을 눌러 제안을 수락하거나 문의해 보세요!
+
+❌ 공고가 조건에 맞지 않다면?
+거절 버튼을 눌러 기관에 의사를 전달해주세요!
+
+(3일 내 응답하지 않으면 자동 거절됩니다)",
+      buttons: [
+        {
+          type: 'WL',
+          name: '✅ 제안 수락',
+          url_mobile: accept_link,
+          url_pc: accept_link
+        },
+        {
+          type: 'WL',
+          name: '❌ 제안 거절',
+          url_mobile: deny_link,
+          url_pc: deny_link
+
+        },
+        {
+          type: 'AL',
+          name: '📞 문의 전화하기',
+          scheme_ios: tel_link,
+          scheme_android: tel_link
+        },
+      ]
+    }
+  end
+
+  def get_call_interview_proposal(tem_params)
+    tel_link = tem_params[:tel_link]
+    business_name = tem_params[:business_name]
+    accept_link = tem_params[:accept_link]
+    deny_link = tem_params[:deny_link]
+    customer_info = tem_params[:customer_info]
+    work_schedule = tem_params[:work_schedule]
+    location_info = tem_params[:location_info]
+
+    {
+      title: "#{business_name}에서 전화면접을 제안했어요.",
+      message: "#{business_name}에서 전화면접을 제안했어요.
+
+■ 어르신 정보
+#{customer_info}
+■ 근무 시간
+#{work_schedule}
+■ 근무 장소
+#{location_info}
+
+✅ 공고가 조건에 맞다면?
+아래 버튼을 눌러 제안을 수락하거나 문의해 보세요!
+
+❌ 공고가 조건에 맞지 않다면?
+거절 버튼을 눌러 기관에 의사를 전달해주세요!
+
+(3일 내 응답하지 않으면 자동 거절됩니다)",
+      buttons: [
+        {
+          type: 'AL',
+          name: '✅ 제안 수락',
+          url_mobile: accept_link,
+          url_pc: accept_link
+        },
+        {
+          type: 'WL',
+          name: '❌ 제안 거절',
+          url_mobile: deny_link,
+          url_pc: deny_link
+
+        },
+        {
+          type: 'WL',
+          name: '📞 문의 전화하기',
+          scheme_ios: tel_link,
+          scheme_android: tel_link
+        },
+      ]
+    }
+  end
+
+  def get_call_interview_proposal(tem_params)
+    tel_link = tem_params[:tel_link]
+    business_name = tem_params[:business_name]
+    accept_link = tem_params[:accept_link]
+    deny_link = tem_params[:deny_link]
+    customer_info = tem_params[:customer_info]
+    work_schedule = tem_params[:work_schedule]
+    location_info = tem_params[:location_info]
+
+    {
+      title: "#{business_name}에서 전화면접을 제안했어요.",
+      message: "#{business_name}에서 전화면접을 제안했어요.
+
+■ 어르신 정보
+#{customer_info}
+■ 근무 시간
+#{work_schedule}
+■ 근무 장소
+#{location_info}
 
 ✅ 공고가 조건에 맞다면?
 아래 버튼을 눌러 제안을 수락하거나 문의해 보세요!
@@ -1656,6 +1789,7 @@ carepartner.kr#{path}
       title: "#{user_info} 요양보호사가 지원했어요.",
       message: "#{user_info} 요양보호사가 지원했어요.
 
+■ 지원자의 한마디
 “#{user_message}”
 
 ■ 공고
@@ -1673,6 +1807,20 @@ carepartner.kr#{path}
           url_pc: link,
         }
       ]
+    }
+  end
+
+  def get_proposal_notification_expires(tem_params)
+    expires_date = tem_params[:expires_date]
+    expires_date_with_time = tem_params[:expires_date_with_time]
+    {
+      title: "#{expires_date}부터 요양센터로부터 전화면접 제안을 받을 수 없게 돼요.",
+      message: "#{expires_date}부터 요양센터로부터 전화면접 제안을 받을 수 없게 돼요
+
+■ 전화면접 제안 종료 예정시각
+#{expires_date_with_time}
+
+계속해서 면접 제안을 받으려면, 종료 예정시각 이후 케어파트너에서 면접 제안 받기를 눌러주세요."
     }
   end
 
