@@ -104,11 +104,33 @@ module KakaoNotificationLoggingHelper
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when JOB_APPLICATION
       return get_job_application(template_id, tem_params)
+    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
+      return get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
+    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
+      return get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
     when PROPOSAL_NOTIFICATION_EXPIRES
       return get_proposal_notification_expires(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
+  end
+
+  def self.get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
+    job_posting_public_id = tem_params.dig(:job_posting_public_id)
+    title = tem_params.dig(:title)
+
+    return {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_BUSINESS,
+        "template" => template_id,
+        "job_posting_public_id" => job_posting_public_id,
+        "job_posting_title" => title,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
   end
 
   def self.get_close_job_posting_notification_logging_data(template_params, template_id, target_public_id)
