@@ -15,7 +15,7 @@ class Notification::Factory::AccumulatedDraft < Notification::Factory::Notificat
         target_public_id: user.public_id,
         name: user.name
       }
-      @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, "AI", user.phone_number, params, user.public_id))
+      @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, "AI"))
     end
   end
 

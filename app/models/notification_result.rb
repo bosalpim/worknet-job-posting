@@ -39,6 +39,10 @@ class NotificationResult < ApplicationRecord
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
 
+  # 과금 대상 무료공고 종료 관련
+  NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO = 'free_job_posting_close_1dayago'.freeze
+  NOTIFY_FREE_JOB_POSTING_CLOSE = 'free_job_posting_close'.freeze
+
   # 전화면접 제안 알림
   PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'.freeze
 
@@ -86,6 +90,8 @@ class NotificationResult < ApplicationRecord
     CAREPARTNER_PRESENT => CAREPARTNER_PRESENT,
     ACCUMULATED_DRAFT => ACCUMULATED_DRAFT,
     ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE,
+    NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO => NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO,
+    NOTIFY_FREE_JOB_POSTING_CLOSE => NOTIFY_FREE_JOB_POSTING_CLOSE,
     PROPOSAL_NOTIFICATION_EXPIRES => PROPOSAL_NOTIFICATION_EXPIRES,
     ROULETTE => ROULETTE,
   }

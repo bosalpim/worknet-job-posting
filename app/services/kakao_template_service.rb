@@ -134,6 +134,10 @@ class KakaoTemplateService
       get_connect_result_user_survey_B(tem_params)
     when MessageTemplateName::JOB_APPLICATION
       get_job_application(tem_params)
+    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
+      get_notify_free_job_posting_close_one_day_ago(tem_params)
+    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
+      get_notify_free_job_posting_close(tem_params)
     when MessageTemplateName::PROPOSAL_NOTIFICATION_EXPIRES
       get_proposal_notification_expires(tem_params)
     when MessageTemplateName::ROULETTE
@@ -1807,6 +1811,53 @@ carepartner.kr#{path}
           name: "지원자 확인하기",
           url_mobile: link,
           url_pc: link,
+        }
+      ]
+    }
+  end
+
+  def get_notify_free_job_posting_close_one_day_ago(tem_params)
+    {
+      title: "무료 공고 종료 1일전 안내",
+      message: "#{tem_params[:title]} 공고가 1일 후 자동 종료될 예정입니다.
+아직 채용되지 않았다면 케어파트너 [번개채용] 공고를 통해 요양보호사님을 만나보세요!
+
+[번개채용] 공고는
+1. 공고를 무제한 연장하실 수 있습니다.
+2. 요양보호사 프로필을 먼저 조회하고, 면접 제안을 할 수 있습니다.
+3. 채용되지 않으면 무료!
+
+👇공고 연장하러가기👇",
+      buttons: [
+        {
+          type: "WL",
+          name: "공고 연장하러 가기!",
+          url_mobile: tem_params[:link],
+          url_pc: tem_params[:link],
+        }
+      ]
+    }
+  end
+
+  def get_notify_free_job_posting_close(tem_params)
+    {
+      title: "무료 공고 종료 안내",
+      message: "#{tem_params[:title]} 공고가 자동 종료되었습니다.
+케어파트너 무료공고를 통해 요양보호사 분과 잘 연결이 되셨을까요?
+아직 채용되지 않았다면 케어파트너 [번개채용] 공고를 통해 요양보호사님을 만나보세요!
+
+[번개채용] 공고는
+1. 공고를 무제한 연장하실 수 있습니다.
+2. 요양보호사 프로필을 먼저 조회하고, 면접 제안을 할 수 있습니다.
+3. 채용되지 않으면 무료!
+
+👇공고 연장하러가기👇",
+      buttons: [
+        {
+          type: "WL",
+          name: "공고 연장하러 가기!",
+          url_mobile: tem_params[:link],
+          url_pc: tem_params[:link],
         }
       ]
     }
