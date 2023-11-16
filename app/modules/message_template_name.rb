@@ -53,4 +53,6 @@ module MessageTemplateName
   JOB_APPLICATION = 'job_application'.freeze
   # 전화면접 제안 알림 만료일 경고
   PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'.freeze
+  # 룰렛 수령 알림
+  ROULETTE = 'roulette'.freeze
 end

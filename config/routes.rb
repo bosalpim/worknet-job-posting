@@ -43,6 +43,7 @@ Jets.application.routes.draw do
     end
     collection do
       post :active_service_guide
+      post :receive_roulette_ticket
     end
   end
   resources :job_applications, only: [] do
