@@ -93,6 +93,7 @@ class JobPosting < ApplicationRecord
   before_create :set_work_type
   before_create :set_default_values
   before_save :update_location, if: :will_save_change_to_address?
+  before_create :update_closing_at
   before_save :update_closing_at, if: :will_save_change_to_applying_due_date?
 
   after_save :check_job_posting_customer
@@ -130,6 +131,9 @@ class JobPosting < ApplicationRecord
       self.closing_at = base_date + 1.week
     elsif self.applying_due_date == 'two_weeks'
       self.closing_at = base_date + 2.weeks
+    else
+      # 기본
+      self.closing_at = base_date + DEFAULT_EXPIRATION_DATE
     end
   end
 

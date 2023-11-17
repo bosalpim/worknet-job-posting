@@ -14,13 +14,12 @@ class GetWorknetJobService
 
   # attr_reader :test
 
-
   def create_job_postings_by_worknet
     loop.with_index do |_, index|
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
       if data.present?
         message_code = data.dig("messageCd")
-        return if message_code == "006" || data.dig("total") == "0"  # 정보가 더 이상 존재하지 않는 경우
+        return if message_code == "006" || data.dig("total") == "0" # 정보가 더 이상 존재하지 않는 경우
 
         jobs = data.dig("wanted")
         if jobs.length > 0
@@ -173,9 +172,10 @@ class GetWorknetJobService
       work_keywords = nil
       if keyword_list.present?
         if keyword_list.class == Array
-          work_keywords = keyword_list.map {|kwd| kwd.dig("srchKeywordNm")}.join(", ")
-        else keyword_list.class == Hash
-        work_keywords = keyword_list.dig("srchKeywordNm")
+          work_keywords = keyword_list.map { |kwd| kwd.dig("srchKeywordNm") }.join(", ")
+        else
+          keyword_list.class == Hash
+          work_keywords = keyword_list.dig("srchKeywordNm")
         end
       end
 
@@ -194,7 +194,7 @@ class GetWorknetJobService
         }
       ]
 
-      payload[:info][:working_conditions] =  [
+      payload[:info][:working_conditions] = [
         {
           name: "임금조건",
           value: job_posting_info.dig("salTpNm")
@@ -217,7 +217,7 @@ class GetWorknetJobService
         }
       ]
 
-      attach_list =  job_posting_info.dig("corpAttachList")
+      attach_list = job_posting_info.dig("corpAttachList")
       attach_file_info = "등록된 파일이 없습니다."
 
       if attach_list.present?
@@ -322,10 +322,11 @@ class GetWorknetJobService
         working_hours_type: worknet_job_info.dig("working_hours_type"),
         region: worknet_job_info.dig("region"),
         employment_type: worknet_job_info.dig("employment_type"),
-        applying_options: worknet_job_info.dig("applying_options")
+        applying_options: worknet_job_info.dig("applying_options"),
+        applying_due_date: 'one_week'
       },
     )
-    search_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" &&  search_api_service.present?
+    search_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" && search_api_service.present?
     job_posting
   end
 
@@ -398,7 +399,7 @@ class GetWorknetJobService
     end
 
     start_hour += 12 if (start_hour != 12 && start_text.match?(/오후/)) || (start_hour == 12 && start_text.match?(/오전/)) || (start_text.match?(/자정/))
-    end_hour += 12 if (end_hour != 12 && end_text.match?(/오후/))|| (end_hour == 12 && end_text.match?(/오전/)) || (end_text.match?(/자정/))
+    end_hour += 12 if (end_hour != 12 && end_text.match?(/오후/)) || (end_hour == 12 && end_text.match?(/오전/)) || (end_text.match?(/자정/))
 
     if start_min % 10 != 0 || end_min % 10 != 0 || raw_hours_text.match?(/또는/) || raw_hours_text.match?(/혹은/)
       start_hour = nil
