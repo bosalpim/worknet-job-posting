@@ -56,8 +56,6 @@ module MessageTemplateName
   NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO = 'free_job_posting_close_1dayago'.freeze
   NOTIFY_FREE_JOB_POSTING_CLOSE = 'free_job_posting_close'.freeze
 
-  # 전화면접 제안 알림 만료일 경고
-  PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'.freeze
   # 룰렛 수령 알림
   ROULETTE = 'roulette'.freeze
 end
