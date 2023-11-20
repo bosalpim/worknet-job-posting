@@ -43,9 +43,6 @@ class NotificationResult < ApplicationRecord
   NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO = 'free_job_posting_close_1dayago'.freeze
   NOTIFY_FREE_JOB_POSTING_CLOSE = 'free_job_posting_close'.freeze
 
-  # 전화면접 제안 알림
-  PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'.freeze
-
   validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -92,7 +89,6 @@ class NotificationResult < ApplicationRecord
     ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE,
     NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO => NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO,
     NOTIFY_FREE_JOB_POSTING_CLOSE => NOTIFY_FREE_JOB_POSTING_CLOSE,
-    PROPOSAL_NOTIFICATION_EXPIRES => PROPOSAL_NOTIFICATION_EXPIRES,
     ROULETTE => ROULETTE,
   }
 end
