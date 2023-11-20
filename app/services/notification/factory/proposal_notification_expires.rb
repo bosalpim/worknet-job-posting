@@ -47,7 +47,7 @@ class Notification::Factory::ProposalNotificationExpires < Notification::Factory
   def create_bizm_post_pay_message(user)
     params = getExpiresInfo(user)
 
-    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, "AI", user.phone_number, params, user.public_id))
+    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, "AI"))
   end
   def create_message
     @list.each do |user|
