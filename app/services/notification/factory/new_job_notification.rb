@@ -68,7 +68,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
 
     params = {
       title: "신규일자리 알림",
-      message: homecare_yes ? build_visit_message(origin_url, user, job_posting_customer) : build_facility_message(origin_url, user),
+      message: homecare_yes ? build_visit_message(user, job_posting_customer) : build_facility_message(user),
       work_type_ko: work_type_ko,
       address: @job_posting.address,
       days_text: get_days_text(@job_posting),
