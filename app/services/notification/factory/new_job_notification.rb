@@ -94,7 +94,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
     @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, 'AT'))
   end
 
-  def build_visit_message(url, user, job_posting_customer)
+  def build_visit_message(user, job_posting_customer)
     "신규 일자리 알림
 ■ 어르신 정보
 #{job_posting_customer.korean_summary}
@@ -109,7 +109,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
 자세한 내용을 확인하고 지원해보세요!"
   end
 
-  def build_facility_message(url, user)
+  def build_facility_message(user)
     work_type_ko = translate_type('job_posting', @job_posting, :work_type)
 
     "신규 일자리 알림
