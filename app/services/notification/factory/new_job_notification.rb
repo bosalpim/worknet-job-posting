@@ -57,7 +57,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
 
   def create_bizm_post_pay_message(user)
     base_url = "https://www.carepartner.kr"
-    view_endpoint = "/jobs/recently_published?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting&lat=#{user.lat}&lng=#{user.lng}"
+    view_endpoint = "/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting&lat=#{user.lat}&lng=#{user.lng}"
     origin_url = "#{base_url}#{view_endpoint}"
     mute_endpoint = "/me/notification/off?type=job&utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting"
     mute_url = "#{base_url}#{mute_endpoint}"
@@ -106,8 +106,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
 #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
 ■ 급여
 #{get_pay_text(@job_posting)}
-자세한 내용을 확인하고 지원해보세요!
-#{build_shorten_url(url)}"
+자세한 내용을 확인하고 지원해보세요!"
   end
 
   def build_facility_message(url, user)
@@ -124,7 +123,6 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
 #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
 ■ 급여
 #{get_pay_text(@job_posting)}
-자세한 내용을 확인하고 지원해보세요!
-#{build_shorten_url(url)}"
+자세한 내용을 확인하고 지원해보세요!"
   end
 end
