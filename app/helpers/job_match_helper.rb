@@ -15,6 +15,53 @@ module JobMatchHelper
     OTHERS => [0, 0]
   }
 
+  class MatchInfo
+    include JobMatchHelper
+
+    def initialize(
+      user:,
+      job_posting:
+    )
+
+      unless user.is_a?(User) && job_posting.is_a?(JobPosting)
+        return
+      end
+
+      @type_match = is_type_match(user.preferred_work_types, job_posting.work_type)
+      @time_match = is_time_match(
+        work_start_time: job_posting.work_start_time,
+        work_end_time: job_posting.work_end_time,
+        job_search_times: user.job_search_times)
+      @day_match = is_day_match(
+        user.job_search_days,
+        job_posting.working_days
+      )
+      @gender_match = is_gender_match(
+        user.preferred_gender,
+        job_posting.gender
+      )
+      @grade_match = is_grade_match(
+        user.preferred_grades,
+        job_posting.grade
+      )
+      @distance_match = is_distance_match(
+        user.preferred_distance,
+        user.distance_from(job_posting)
+      )
+    end
+
+    def to_hash
+      {
+        time_match: @time_match,
+        day_match: @day_match,
+        distance_match: @distance_match,
+        type_match: @type_match,
+        grade_match: @grade_match,
+        distance_match: @distance_match
+      }
+    end
+  end
+
   def is_time_match(work_start_time:, work_end_time:, job_search_times:)
     return nil if [work_start_time, work_end_time, job_search_times].any?(&:nil?)
 

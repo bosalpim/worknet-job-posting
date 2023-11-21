@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class Proposal::NewService
+  include JobMatchHelper
+
   def initialize(params)
-    @template_id = MessageTemplateName::CALL_INTERVIEW_PROPOSAL_V2
+    @template_id = MessageTemplateName::PROPOSAL
     @target_public_id = params['target_public_id']
     @job_posting_id = params['job_posting_id']
     @job_posting_title = params['job_posting_title']
@@ -15,6 +17,9 @@ class Proposal::NewService
     @accept_link = params['accept_link']
     @deny_link = params['deny_link']
     @pay_info = params['pay_info']
+    @user = User.find_by(public_id: @target_public_id)
+    @job_posting = JobPosting.find_by(public_id: @job_posting_id)
+    @match_info = MatchInfo.new(user: @user, job_posting: @job_posting)
   end
 
   def call
@@ -33,7 +38,8 @@ class Proposal::NewService
         accept_link: @accept_link,
         tel_link: @tel_link,
         deny_link: @deny_link,
-        pay_info: @pay_info
+        pay_info: @pay_info,
+        **@match_info.to_hash
       }
     )
 
@@ -56,7 +62,7 @@ class Proposal::NewService
     fail_reason = response.dig('originMessage') if code != 'success'
     NotificationResult.create(
       template_id: @template_id,
-      send_type: NotificationResult::CALL_INTERVIEW_PROPOSAL,
+      send_type: NotificationResult::PROPOSAL,
       send_id: @target_public_id,
       success_count: success_count,
       tms_success_count: tms_success_count,
