@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class NotifyCareerCertificationService
+  include JobMatchHelper
+
   def self.call(params)
     self.new(params).call
   end
@@ -11,6 +13,10 @@ class NotifyCareerCertificationService
     @phone = params.dig(:phone)
     @center_name = params.dig(:center_name)
     @job_posting_title = params.dig(:job_posting_title)
+    @job_posting_public_id = params.dig(:job_posting_public_id)
+    @user_public_id = params.dig(:user_public_id)
+    @user = User.find_by(public_id: @user_public_id)
+    @job_posting = JobPosting.find_by(public_id: @job_posting_public_id)
   end
 
   def call
@@ -28,7 +34,13 @@ class NotifyCareerCertificationService
       template_params: {
         link: @link,
         center_name: @center_name,
-        job_posting_title: @job_posting_title
+        job_posting_title: @job_posting_title,
+        job_posting_public_id: @job_posting_public_id,
+        type_match: is_type_match(user.preferred_work_types, job_posting.work_type),
+        gender_match: is_gender_match(user.preferred_gender, job_posting.gender),
+        day_match: is_day_match(user.job_search_days, job_posting.working_days),
+        time_match: is_time_match(work_start_time: job_posting.work_start_time, work_end_time: job_posting.work_end_time, job_search_times: user.job_search_times),
+        grade_match: is_grade_match(user.preferred_grades, job_posting.grade),
       },
       reserve_dt: Jets.env == 'production' ? reserve_dt : nil
     )
