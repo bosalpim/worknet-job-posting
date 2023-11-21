@@ -42,6 +42,7 @@ class NotifyCareerCertificationService
         day_match: is_day_match(@user.job_search_days, @job_posting.working_days),
         time_match: is_time_match(work_start_time: @job_posting.work_start_time, work_end_time: @job_posting.work_end_time, job_search_times: @user.job_search_times),
         grade_match: is_grade_match(@user.preferred_grades, @job_posting.grade),
+        distance_match: is_distance_match(@user.preferred_distance, @user.distance_from(@job_posting))
       },
       reserve_dt: Jets.env == 'production' ? reserve_dt : nil
     )
