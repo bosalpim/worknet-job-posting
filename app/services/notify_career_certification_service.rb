@@ -32,6 +32,7 @@ class NotifyCareerCertificationService
       message_type: 'AI',
       phone: @phone,
       template_params: {
+        target_public_id: @user.public_id,
         link: @link,
         center_name: @center_name,
         job_posting_title: @job_posting_title,
