@@ -3,32 +3,36 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
   include TranslationHelper
   include JobPostingsHelper
   include KakaoNotificationLoggingHelper
+  include DispatchedNotificationsHelper
 
   NewJobPostingUsersService = Notification::Factory::SearchTarget::NewJobPostingUsersService
+  DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
   def initialize(job_posting_id)
     super(MessageTemplateName::NEW_JOB_POSTING)
     job_posting = JobPosting.find(job_posting_id)
     @job_posting = job_posting
     @list = NewJobPostingUsersService.call(job_posting)
+    @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "job_posting", @job_posting.id, "yobosa")
     create_message
   end
   def create_message
     @list.each do |user|
+      dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "job_detail")
       if @target_medium == 'app_push'
         if user.is_sendable_app_push
-          create_app_push_message(user)
+          create_app_push_message(user, dispatched_notification_param)
         else
-          create_bizm_post_pay_message(user)
+          create_bizm_post_pay_message(user, dispatched_notification_param)
         end
       else
-        create_bizm_post_pay_message(user)
+        create_bizm_post_pay_message(user, dispatched_notification_param)
       end
     end
   end
 
   private
 
-  def create_app_push_message(user)
+  def create_app_push_message(user, dispatched_notification_param)
     work_type_ko = translate_type('job_posting', @job_posting, :work_type)
 
     app_push = AppPush.new(
@@ -38,7 +42,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
       {
         body: "#{@job_posting.title}",
         title: '놓치면 곧 마감되는 신규 일자리가 있어요!',
-        link: "#{DEEP_LINK_SCEHEME}/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=app-push&utm_campaign=new_job_posting",
+        link: "#{DEEP_LINK_SCEHEME}/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=app-push&utm_campaign=new_job_posting" + dispatched_notification_param,
       },
       user.public_id,
       {
@@ -55,9 +59,9 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
     @app_push_list.push(app_push)
   end
 
-  def create_bizm_post_pay_message(user)
+  def create_bizm_post_pay_message(user, dispatched_notification_param)
     base_url = "https://www.carepartner.kr"
-    view_endpoint = "/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting&lat=#{user.lat}&lng=#{user.lng}"
+    view_endpoint = "/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting&lat=#{user.lat}&lng=#{user.lng}" + dispatched_notification_param
     origin_url = "#{base_url}#{view_endpoint}"
     mute_endpoint = "/me/notification/off?type=job&utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting"
     mute_url = "#{base_url}#{mute_endpoint}"

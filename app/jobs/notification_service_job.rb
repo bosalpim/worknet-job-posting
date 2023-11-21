@@ -37,5 +37,7 @@ class NotificationServiceJob < ApplicationJob
     notification.notify
     # 발송결과 DB 저장 (사후 처리 대상 구분되도록 DB 내역을 생성해야합니다.)
     notification.save_result
+    # 구인비서 관련 메세지 DB 저장
+    notification.create_dispatched_notifications
   end
 end
