@@ -108,6 +108,8 @@ module KakaoNotificationLoggingHelper
       return get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
     when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
       return get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
+    when CAREER_CERTIFICATION_V2
+      return get_career_certification_v2(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
