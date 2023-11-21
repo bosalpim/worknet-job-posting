@@ -868,10 +868,10 @@ class KakaoTemplateService
   def get_career_certification_v2_alarm(tem_params)
     {
       title: "취업 성공하셨나요?",
-      message: "≫공고
+      message: "≫ 공고
 #{tem_params[:job_posting_title]}
 
-≫기관
+≫ 기관
 #{tem_params[:center_name]}
 
 ≫ 경력자 인증이 궁금해요
