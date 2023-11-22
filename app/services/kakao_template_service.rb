@@ -1840,7 +1840,7 @@ carepartner.kr#{path}
   end
 
   def get_proposal_data(tem_params)
-    center_name = tem_params[:center_name]
+    center_name = tem_params[:business_name]
     tel_link = tem_params[:tel_link]
     accept_link = tem_params[:accept_link]
     deny_link = tem_params[:deny_link]
@@ -1849,7 +1849,7 @@ carepartner.kr#{path}
     location_info = tem_params[:location_info]
     pay_info = tem_params[:pay_info]
     client_message = tem_params[:client_message]
-    
+
     return {
       title: "#{center_name}에서 전화면접을 제안했어요.",
       message: "#{center_name}에서 전화면접을 제안했어요.
