@@ -40,7 +40,7 @@ class Proposal::NewService
         tel_link: @tel_link,
         deny_link: @deny_link,
         pay_info: @pay_info,
-        client_message: @client_message,
+        client_message: (@client_message || "").gsub("\n", " "),
         is_high_wage: is_high_wage(
           work_type: @job_posting.work_type,
           pay_type: @job_posting.pay_type,
