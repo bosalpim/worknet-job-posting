@@ -1,6 +1,27 @@
-# frozen_string_literal: true
-
 module JobMatchHelper
+  HIGH_WAGE_MAP = {
+    "commute" => {
+      pay_type: 'hourly',
+      wage: 13_000
+    },
+    "bath_help" => {
+      pay_type: 'hourly',
+      wage: 20_000
+    },
+    "resident" => {
+      pay_type: 'monthly',
+      wage: 3_400_000
+    },
+    "day_care" => {
+      pay_type: 'monthly',
+      wage: 2_200_000
+    },
+    "sanatorium" => {
+      pay_type: 'monthly',
+      wage: 2_300_000
+    }
+  }
+
   MORNING = 'morning'
   EARLY_AFTERNOON = 'early_afternoon'
   LATE_AFTERNOON = 'late_afternoon'
@@ -153,4 +174,29 @@ module JobMatchHelper
       false
     end
   end
+
+  def is_high_wage(work_type:, pay_type:, wage:)
+    high_wage_info = HIGH_WAGE_MAP.dig(work_type)
+
+    if high_wage_info.dig("pay_type") != pay_type
+      return false
+    end
+
+    return high_wage_info.wage >= wage
+
+  rescue nil
+  end
+
+  def is_support_transportation_expences(welfare_types = [])
+    return welfare_types.include?("transportation_expenses")
+
+  rescue nil
+  end
+
+  def is_newbie_appliable(applying_options = [])
+    return applying_options.include?("newbie")
+
+  rescue nil
+  end
+
 end

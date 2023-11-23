@@ -17,6 +17,7 @@ class Proposal::NewService
     @accept_link = params['accept_link']
     @deny_link = params['deny_link']
     @pay_info = params['pay_info']
+    @client_message = params['client_message']
     @user = User.find_by(public_id: @target_public_id)
     @job_posting = JobPosting.find_by(public_id: @job_posting_id)
     @match_info = MatchInfo.new(user: @user, job_posting: @job_posting)
@@ -39,6 +40,15 @@ class Proposal::NewService
         tel_link: @tel_link,
         deny_link: @deny_link,
         pay_info: @pay_info,
+        client_message: @client_message,
+        is_high_wage: is_high_wage(
+          work_type: @job_posting.work_type,
+          pay_type: @job_posting.pay_type,
+          wage: @job_posting.max_wage
+        ),
+        is_can_negotiate_work_time: @job_posting.can_negotiate_work_time,
+        is_newbie_appliable: is_newbie_appliable(@job_posting.applying_options),
+        is_support_transportation_expences: is_support_transportation_expences(@job_posting.welfare_types),
         **@match_info.to_hash
       }
     )

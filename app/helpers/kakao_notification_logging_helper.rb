@@ -82,6 +82,8 @@ module KakaoNotificationLoggingHelper
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when MessageTemplateName::CALL_INTERVIEW_PROPOSAL, CALL_INTERVIEW_PROPOSAL_V2
       return get_call_interview_proposal_logging_data(template_id, tem_params)
+    when PROPOSAL
+      return get_proposal_logging_data(template_id, tem_params)
     when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
       return get_call_interview_accepted_logging_data(template_id, tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
@@ -301,6 +303,24 @@ module KakaoNotificationLoggingHelper
         "centerName" => tem_params[:business_name],
         "jobPostingId" => tem_params[:job_posting_id],
         "title" => tem_params[:job_posting_title],
+      }
+    }
+  end
+
+  def self.get_proposal_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "centerName" => tem_params[:business_name],
+        "jobPostingId" => tem_params[:job_posting_id],
+        "title" => tem_params[:job_posting_title],
+        "message" => tem_params[:client_message],
+        "highWage" => tem_params[:is_high_wage],
+        "canNegotiateWorkTime" => tem_params[:is_can_negotiate_work_time],
+        "transportationExpenses" => tem_params[:is_support_transportation_expences],
+        "canApplyNewBie" => tem_params[:is_newbie_appliable]
       }
     }
   end
