@@ -182,7 +182,7 @@ module JobMatchHelper
       return false
     end
 
-    return high_wage_info.wage >= wage
+    return high_wage_info.dig(:wage) >= wage
 
   rescue nil
   end
