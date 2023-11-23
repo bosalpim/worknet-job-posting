@@ -178,7 +178,7 @@ module JobMatchHelper
   def is_high_wage(work_type:, pay_type:, wage:)
     high_wage_info = HIGH_WAGE_MAP.dig(work_type)
 
-    if high_wage_info.dig("pay_type") != pay_type
+    if high_wage_info.dig(:pay_type) != pay_type
       return false
     end
 
