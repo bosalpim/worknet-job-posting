@@ -14,7 +14,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
   end
   def create_message
     @list.each do |user|
-      if @target_medium == 'app_push'
+      if @target_medium == APP_PUSH
         if user.is_sendable_app_push
           create_app_push_message(user)
         else

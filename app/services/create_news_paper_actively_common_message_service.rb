@@ -43,7 +43,7 @@ class CreateNewsPaperActivelyCommonMessageService < CreateScheduledMessageServic
   def create_message(user)
     phone_number = user.phone_number
     should_app_push = user.is_sendable_app_push
-    target_medium = should_app_push ? 'app_push' : 'kakao_arlimtalk'
+    target_medium = should_app_push ? Notification::Factory::NotificationFactoryClass::APP_PUSH : Notification::Factory::NotificationFactoryClass::KAKAO_ARLIMTALK
     jsonb = { lat: user.lat, lng: user.lng, target_public_id: user.public_id, target_medium: target_medium }
     jsonb["push_token"] = user.push_token.token if should_app_push
 
