@@ -281,12 +281,7 @@ module KakaoNotificationLoggingHelper
         "jobPostingId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:job_posting_title],
         "employee_id" => tem_params[:employee_id],
-        "centerName" => tem_params[:business_name],
-        "message" => tem_params[:client_message],
-        "highWage" => tem_params[:is_high_wage],
-        "canNegotiateWorkTime" => tem_params[:is_can_negotiate_work_time],
-        "transportationExpenses" => tem_params[:is_support_transportation_expences],
-        "canApplyNewBie" => tem_params[:is_newbie_appliable]
+        "centerName" => tem_params[:business_name]
       }
     }
   end
@@ -341,7 +336,12 @@ module KakaoNotificationLoggingHelper
         "centerName" => tem_params[:business_name],
         "jobPostingId" => tem_params[:job_posting_id],
         "title" => tem_params[:job_posting_title],
-        "employee_id" => tem_params[:employee_id]
+        "employee_id" => tem_params[:employee_id],
+        "message" => tem_params[:client_message],
+        "highWage" => tem_params[:is_high_wage],
+        "canNegotiateWorkTime" => tem_params[:is_can_negotiate_work_time],
+        "transportationExpenses" => tem_params[:is_support_transportation_expences],
+        "canApplyNewBie" => tem_params[:is_newbie_appliable]
       }
     }
   end
