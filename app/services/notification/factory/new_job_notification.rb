@@ -38,7 +38,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
       {
         body: "#{@job_posting.title}",
         title: '놓치면 곧 마감되는 신규 일자리가 있어요!',
-        link: "#{DEEP_LINK_SCEHEME}/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=app-push&utm_campaign=new_job_posting",
+        link: "#{DEEP_LINK_SCEHEME}/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=app_push&utm_campaign=new_job_posting",
       },
       user.public_id,
       {
