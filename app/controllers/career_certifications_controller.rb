@@ -7,8 +7,7 @@ class CareerCertificationsController < ApplicationController
     }, status: :ok
   end
 
-
   def notify_params
-    params.permit(:phone, :link, :center_name, :job_posting_title)
+    params.permit(:phone, :link, :center_name, :job_posting_title, :job_posting_public_id, :user_public_id)
   end
 end
