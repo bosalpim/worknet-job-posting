@@ -1,6 +1,27 @@
-# frozen_string_literal: true
-
 module JobMatchHelper
+  HIGH_WAGE_MAP = {
+    "commute" => {
+      pay_type: 'hourly',
+      wage: 13_000
+    },
+    "bath_help" => {
+      pay_type: 'hourly',
+      wage: 20_000
+    },
+    "resident" => {
+      pay_type: 'monthly',
+      wage: 3_400_000
+    },
+    "day_care" => {
+      pay_type: 'monthly',
+      wage: 2_200_000
+    },
+    "sanatorium" => {
+      pay_type: 'monthly',
+      wage: 2_300_000
+    }
+  }
+
   MORNING = 'morning'
   EARLY_AFTERNOON = 'early_afternoon'
   LATE_AFTERNOON = 'late_afternoon'
@@ -14,6 +35,53 @@ module JobMatchHelper
     EVENING => [18, 24],
     OTHERS => [0, 0]
   }
+
+  class MatchInfo
+    include JobMatchHelper
+
+    def initialize(
+      user:,
+      job_posting:
+    )
+
+      unless user.is_a?(User) && job_posting.is_a?(JobPosting)
+        return
+      end
+
+      @type_match = is_type_match(user.preferred_work_types, job_posting.work_type)
+      @time_match = is_time_match(
+        work_start_time: job_posting.work_start_time,
+        work_end_time: job_posting.work_end_time,
+        job_search_times: user.job_search_times)
+      @day_match = is_day_match(
+        user.job_search_days,
+        job_posting.working_days
+      )
+      @gender_match = is_gender_match(
+        user.preferred_gender,
+        job_posting.gender
+      )
+      @grade_match = is_grade_match(
+        user.preferred_grades,
+        job_posting.grade
+      )
+      @distance_match = is_distance_match(
+        user.preferred_distance,
+        user.distance_from(job_posting)
+      )
+    end
+
+    def to_hash
+      {
+        time_match: @time_match,
+        day_match: @day_match,
+        distance_match: @distance_match,
+        type_match: @type_match,
+        grade_match: @grade_match,
+        distance_match: @distance_match
+      }
+    end
+  end
 
   def is_time_match(work_start_time:, work_end_time:, job_search_times:)
     return nil if [work_start_time, work_end_time, job_search_times].any?(&:nil?)
@@ -106,4 +174,29 @@ module JobMatchHelper
       false
     end
   end
+
+  def is_high_wage(work_type:, pay_type:, wage:)
+    high_wage_info = HIGH_WAGE_MAP.dig(work_type)
+
+    if high_wage_info.dig(:pay_type) != pay_type
+      return false
+    end
+
+    return high_wage_info.dig(:wage) >= wage
+
+  rescue nil
+  end
+
+  def is_support_transportation_expences(welfare_types = [])
+    return welfare_types.include?("transportation_expenses")
+
+  rescue nil
+  end
+
+  def is_newbie_appliable(applying_options = [])
+    return applying_options.include?("newbie")
+
+  rescue nil
+  end
+
 end
