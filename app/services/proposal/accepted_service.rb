@@ -37,7 +37,7 @@ class Proposal::AcceptedService
         user_info: @user_info,
         accepted_at: @accepted_at,
         address: @address,
-        message: @client_message,
+        client_message: @client_message,
         is_high_wage: is_high_wage(
           work_type: @job_posting.work_type,
           pay_type: @job_posting.pay_type,
