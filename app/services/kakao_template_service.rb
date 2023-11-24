@@ -227,53 +227,6 @@ class KakaoTemplateService
     data
   end
 
-  def get_proposal_data(tem_params)
-    items = {
-      itemHighlight: {
-        title: "#{tem_params[:user_name]}님! 제안 내용을 확인하고 응답해주세요",
-        description: '인기 공고는 빠르게 마감됩니다'
-      },
-      item: {
-        list: [
-          {
-            title: '센터명',
-            description: convert_safe_text(tem_params[:business_name])
-          },
-          {
-            title: '거리',
-            description: convert_safe_text(tem_params[:distance])
-          },
-          {
-            title: '근무지',
-            description: convert_safe_text(tem_params[:address])
-          },
-          {
-            title: '근무유형',
-            description: convert_safe_text(tem_params[:work_type_ko])
-          },
-          {
-            title: '임금조건',
-            description: convert_safe_text(tem_params[:pay_text])
-          },
-        ],
-        summary: ""
-      }
-    }
-    {
-      title: "#{tem_params[:user_name]}님, 가까운 센터에서 일자리를 제안했어요!",
-      message: "#{tem_params[:business_name]}에서 #{tem_params[:user_name]}님에게 일자리 제안을 보냈습니다.\n(7일 내 응답하지 않으면 자동 거절됩니다)\n\n본 공고에 취업하시면 5만원의 취업축하금을 드려요!\n\n[아래 버튼을 눌러 상세공고를 확인하시고 수락 여부를 결정해주세요]\n센터번호: #{good_number(tem_params[:business_vn])}",
-      img_url: "https://mud-kage.kakao.com/dn/btfYkj/btrXIoI2ckc/85jhQdX5TuqNEdfrfBXgX0/img_l.jpg",
-      items: items,
-      buttons: [
-        {
-          name: "일자리 제안 확인하기",
-          type: "WL",
-          url_mobile: "https://carepartner.kr/jobs/#{tem_params[:job_posting_public_id]}?proposal=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=job_proposal_response"
-        },
-      ]
-    }
-  end
-
   def get_proposal_response_edit_data(tem_params)
     return {
       title: '가까운 거리의 일자리 제안 도착!',
@@ -1882,6 +1835,60 @@ carepartner.kr#{path}
           url_mobile: url,
           url_pc: url
         }
+      ]
+    }
+  end
+
+  def get_proposal_data(tem_params)
+    center_name = tem_params[:business_name]
+    tel_link = tem_params[:tel_link]
+    accept_link = tem_params[:accept_link]
+    deny_link = tem_params[:deny_link]
+    customer_info = tem_params[:customer_info]
+    work_schedule = tem_params[:work_schedule]
+    location_info = tem_params[:location_info]
+    pay_info = tem_params[:pay_info]
+    client_message = tem_params[:client_message]
+
+    return {
+      title: "#{center_name}에서 전화면접을 제안했어요.",
+      message: "#{center_name}에서 전화면접을 제안했어요.
+
+■ 어르신 정보
+#{customer_info}
+
+■ 근무 요일
+#{work_schedule}
+
+■ 근무 장소
+#{location_info}
+
+■ 급여 정보
+#{pay_info}
+
+■ 제안 메세지
+#{client_message}
+
+* 3일 내 응답하지 않으면 자동 거절돼요",
+      buttons: [
+        {
+          name: "📞 제안수락 (전화)",
+          type: "AL",
+          scheme_ios: tel_link,
+          scheme_android: tel_link,
+        },
+        {
+          name: '💬 제안수락 (문자)',
+          type: 'WL',
+          url_mobile: accept_link,
+          url_pc: accept_link
+        },
+        {
+          name: '❌ 제안거절',
+          type: 'WL',
+          url_mobile: deny_link,
+          url_pc: deny_link
+        },
       ]
     }
   end

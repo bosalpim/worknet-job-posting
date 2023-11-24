@@ -1,5 +1,5 @@
 module MessageTemplateName
-  PROPOSAL = "proposal_response".freeze
+
   NEW_JOB_POSTING_VISIT = "new_job_visit(no_hotdeal)".freeze
   NEW_JOB_POSTING_FACILITY = "new_job_facility(no_hotdeal)".freeze
   PERSONALIZED = "personalized_job_message_edit3".freeze # done
@@ -58,4 +58,7 @@ module MessageTemplateName
 
   # 룰렛 수령 알림
   ROULETTE = 'roulette'.freeze
+
+  # 전화면접 제안
+  PROPOSAL = "proposal".freeze
 end

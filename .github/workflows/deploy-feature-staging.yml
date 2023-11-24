@@ -1,4 +1,4 @@
-name: Feature Staging Deploy To AWS Lambda
+name: Staging Deploy To AWS Lambda
 
 on:
   push:
@@ -54,6 +54,7 @@ jobs:
           AMPLITUDE_STAGING: ${{ secrets.AMPLITUDE_STAGING }}
           FCM_APP_PUSH_AUTHORIZATION: ${{ secrets.FCM_APP_PUSH_AUTHORIZATION }}
           BEX_STAGING_API_URL: ${{ secrets.BEX_STAGING_API_URL }}
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
