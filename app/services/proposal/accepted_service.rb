@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Proposal::AcceptedService
+  include JobMatchHelper
+
   def initialize(params)
     @template_id = MessageTemplateName::CALL_INTERVIEW_ACCEPTED
     @target_public_id = params['target_public_id']
@@ -15,6 +17,8 @@ class Proposal::AcceptedService
     @user_name = params["user_name"]
     @accepted_at = params["accepted_at"]
     @address = params["address"]
+    @client_message = params["client_message"]
+    @job_posting = JobPosting.find_by(public_id: @job_posting_id)
   end
 
   def call
@@ -32,7 +36,16 @@ class Proposal::AcceptedService
         user_name: @user_name,
         user_info: @user_info,
         accepted_at: @accepted_at,
-        address: @address
+        address: @address,
+        message: @client_message,
+        is_high_wage: is_high_wage(
+          work_type: @job_posting.work_type,
+          pay_type: @job_posting.pay_type,
+          wage: @job_posting.max_wage
+        ),
+        is_can_negotiate_work_time: @job_posting.can_negotiate_work_time,
+        is_newbie_appliable: is_newbie_appliable(@job_posting.applying_options),
+        is_support_transportation_expences: is_support_transportation_expences(@job_posting.welfare_types),
       }
     )
 
