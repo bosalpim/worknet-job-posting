@@ -1,11 +1,10 @@
 class ActiveUserServiceGuideService
-  def self.call(user_id, treatment_key)
-    new.call(user_id, treatment_key)
+  def self.call(user_id)
+    new.call(user_id)
   end
 
-  def call(user_id, treatment_key)
+  def call(user_id)
     @user = User.find_by(id: user_id, notification_enabled: true)
-    @treatment_key = treatment_key
     if @user.present?
       send_signup_complete_guide
     else
@@ -14,7 +13,7 @@ class ActiveUserServiceGuideService
   end
 
   def send_signup_complete_guide
-    template_id = (@treatment_key == 'B') ? MessageTemplateName::SIGNUP_COMPLETE_GUIDE3 : MessageTemplateName::SIGNUP_COMPLETE_GUIDE
+    template_id = MessageTemplateName::SIGNUP_COMPLETE_GUIDE3
     phone = if Jets.env == 'production'
               @user.phone_number
             elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(@user.phone_number)
