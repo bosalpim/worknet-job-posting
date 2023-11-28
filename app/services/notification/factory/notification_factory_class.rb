@@ -1,8 +1,11 @@
 class Notification::Factory::NotificationFactoryClass
   include NotificationSaveResultHelper
 
-  AppPush = Notification::Factory::SendMedium::AppPush
   DEEP_LINK_SCEHEME = "carepartner://app"
+  KAKAO_ARLIMTALK = "kakao_arlimtalk"
+  APP_PUSH = "app_push"
+
+  AppPush = Notification::Factory::SendMedium::AppPush
   BizmPostPayMessage = Notification::Factory::SendMedium::BizmPostPayMessage
   BizmPrePayMessage = Notification::Factory::SendMedium::BizmPrePayMessage
   def initialize(message_template_id)
@@ -20,7 +23,7 @@ class Notification::Factory::NotificationFactoryClass
     @bizm_pre_pay_result = []
 
     @message_template_id = message_template_id
-    target_medium = MessageTemplate.find_by(name: message_template_id).nil? ? 'kakao_arlimtalk' : MessageTemplate.find_by(name: message_template_id).target_medium
+    target_medium = MessageTemplate.find_by(name: message_template_id).nil? ? KAKAO_ARLIMTALK : MessageTemplate.find_by(name: message_template_id).target_medium
     @target_medium = target_medium
   end
 
