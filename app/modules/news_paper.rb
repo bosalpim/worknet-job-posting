@@ -1,8 +1,10 @@
 module NewsPaper
+  def self.get_today_date
+    return (Time.current + (9 * 60 * 60)).strftime("%-m월%d일")
+  end
   def self.get_today
-    today = (Time.current + (9 * 60 * 60)).strftime("%-m월%d일")
     weekday = getWeekDay((Time.current + (9 * 60 * 60)).strftime("%w"))
-    return today + " " + weekday
+    return get_today_date + " " + weekday
   end
 
   def self.getWeekDay(weekDayNumber)

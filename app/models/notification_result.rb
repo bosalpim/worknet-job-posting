@@ -35,6 +35,8 @@ class NotificationResult < ApplicationRecord
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
   ROULETTE = 'roulette'.freeze
+  NEWSPAPER_JOB_ALARM = 'newspaper_job_alarm'.freeze
+
 
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
@@ -90,5 +92,6 @@ class NotificationResult < ApplicationRecord
     NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO => NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO,
     NOTIFY_FREE_JOB_POSTING_CLOSE => NOTIFY_FREE_JOB_POSTING_CLOSE,
     ROULETTE => ROULETTE,
+    NEWSPAPER_JOB_ALARM => NEWSPAPER_JOB_ALARM
   }
 end
