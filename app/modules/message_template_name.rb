@@ -61,4 +61,7 @@ module MessageTemplateName
 
   # 전화면접 제안
   PROPOSAL = "proposal".freeze
+
+  #문자문의
+  CONTACT_MESSAGE = 'contact_message'.freeze
 end
