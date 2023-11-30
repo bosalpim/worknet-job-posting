@@ -28,7 +28,7 @@ class Notification::Factory::NotifyCloseFreeJobPosting < Notification::Factory::
                      .where(applying_due_date: 'three_days')
                      .where(closing_at: today_afternoon_4...next_day_afternoon_4)
 
-    Jets.logger.info "금일, 내일 완전 종료 대상 : #{job_postings.pluck(:publid_id)}"
+    Jets.logger.info "금일, 내일 완전 종료 대상 : #{job_postings.pluck(:public_id)}"
 
     @list = job_postings
     create_message
