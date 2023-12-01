@@ -24,7 +24,7 @@ class ContactMessage::CreateContactMessageService
                   .join('/')
 
     arlimtalk_utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{MessageTemplateName::CONTACT_MESSAGE}"
-    suffix = "/employment_management/job_applications/#{@contact_message.public_id}"
+    suffix = "/employment_management/contact_messages/#{@contact_message.public_id}"
 
     link = if Jets.env.production?
              "https://business.carepartner.kr#{suffix}?#{arlimtalk_utm}"
