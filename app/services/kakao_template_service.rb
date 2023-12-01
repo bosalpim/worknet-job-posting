@@ -1930,7 +1930,7 @@ carepartner.kr#{path}
       buttons: [
         {
           type: "WL",
-          name: "지원자 확인하기",
+          name: "문자문의 확인하기",
           url_mobile: link,
           url_pc: link,
         }
