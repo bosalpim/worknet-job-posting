@@ -17,8 +17,13 @@ class JobPosting::CloseExpiredJobPostingsService
                      .free_job_posting
                      .where('closing_at < ?', @date)
 
+    Jets.logger.info "종료대상 공고정보 : #{job_postings.pluck(:public_id)}"
+
     # 과금대상 기관이 올린 무료공고는 applying_due_date가 'three_days'
-    target_job_posting = job_postings.where(applying_due_date: 'three_days')
+    paid_business_id_list = Business.where.not(paid_feature_transitioned_at: nil).ids
+    target_job_posting = job_postings.where(business_id: paid_business_id_list)
+
+    Jets.logger.info "종료대상 무료 공고정보 : #{target_job_posting.pluck(:public_id)}"
     # 종료된 공고 번개채용 전환 유도 알림톡 발송
     NotificationServiceJob.perform_later(:notify, { message_template_id: MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE, params: {job_postings: target_job_posting}}) if target_job_posting.count > 0
 

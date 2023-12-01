@@ -20,7 +20,12 @@ class CreateNewsPaperActivelyCommonMessageService < CreateScheduledMessageServic
     data = create_message(User.where(phone_number: '01094659404').first!)
     return if data.nil?
 
-    message = ScheduledMessage.create!(
+    ScheduledMessageCount.create!(
+      template_id: MessageTemplateName::NEWSPAPER_V2,
+      total_count: 10
+    )
+
+    ScheduledMessage.create!(
       template_id: @template_id,
       send_type: @send_type,
       content: data.dig(:jsonb),
@@ -28,12 +33,9 @@ class CreateNewsPaperActivelyCommonMessageService < CreateScheduledMessageServic
       scheduled_date: data.dig(:scheduled_date)
     )
 
-    # KakaoNotificationService.call(
-    #   template_id: message.template_id,
-    #   message_type: "AI",
-    #   phone: message.phone_number,
-    #   template_params: JSON.parse(message.content)
-    # )
+    factory = Notification::Factory::SendNewsPaper.new(0.1, 0)
+    factory.notify
+    factory.save_result
   end
 
   def call
