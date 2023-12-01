@@ -20,7 +20,7 @@ class JobPosting::CloseExpiredJobPostingsService
     Jets.logger.info "종료대상 공고정보 : #{job_postings.pluck(:public_id)}"
 
     # 과금대상 기관이 올린 무료공고는 applying_due_date가 'three_days'
-    paid_business_id_list = Business.where.not(paid_feature_transitioned_at: nil)
+    paid_business_id_list = Business.where.not(paid_feature_transitioned_at: nil).ids
     target_job_posting = job_postings.where(business_id: paid_business_id_list)
 
     Jets.logger.info "종료대상 무료 공고정보 : #{target_job_posting.pluck(:public_id)}"
