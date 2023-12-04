@@ -140,6 +140,8 @@ class KakaoTemplateService
       get_notify_free_job_posting_close(tem_params)
     when MessageTemplateName::ROULETTE
       get_roulette_ticket_receive(tem_params)
+    when MessageTemplateName::CONTACT_MESSAGE
+      get_contact_message(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1903,5 +1905,36 @@ carepartner.kr#{path}
 
   def convert_safe_text(text, empty_string = "정보없음")
     text.presence&.truncate(MAX_ITEM_LIST_TEXT_LENGTH) || empty_string
+  end
+
+  def get_contact_message(tem_params)
+    job_posting_title = tem_params[:job_posting_title]
+    user_info = tem_params[:user_info]
+    user_message = tem_params[:user_message]
+    preferred_call_time = tem_params[:preferred_call_time]
+    link = tem_params[:link]
+    {
+      title: "#{user_info} 요양보호사가 문의했어요.",
+      message: "#{user_info} 요양보호사가 문의했어요.
+
+■ 문의내용
+“#{user_message}”
+
+■ 공고
+#{job_posting_title}
+
+■ 통화 가능한 시간
+#{preferred_call_time}
+
+아래 버튼을 눌러 지원자의 자세한 정보를 확인하고 무료로 전화해 보세요!",
+      buttons: [
+        {
+          type: "WL",
+          name: "문자문의 확인하기",
+          url_mobile: link,
+          url_pc: link,
+        }
+      ]
+    }
   end
 end
