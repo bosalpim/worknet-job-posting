@@ -51,6 +51,11 @@ Jets.application.routes.draw do
       post :new_application
     end
   end
+  resources :contact_messages, only: [] do
+    member do
+      post :new_contact_message
+    end
+  end
   post '/notification/ask_active', to: 'notification#ask_active'
   post '/point_histories/add_point_changed_active_user', to: 'point_histories#add_point_changed_active_user'
   post '/gamification/misson_complete', to: 'gamification#missionComplete'
