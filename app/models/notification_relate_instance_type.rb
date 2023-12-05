@@ -1,0 +1,2 @@
+class NotificationRelateInstanceType < ApplicationRecord
+end
