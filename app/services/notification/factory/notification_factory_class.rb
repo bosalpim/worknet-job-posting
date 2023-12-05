@@ -22,8 +22,14 @@ class Notification::Factory::NotificationFactoryClass
     @bizm_post_pay_result = []
     @bizm_pre_pay_result = []
 
+    # 구인 비서 공고 알림 일자리 발송 개별 관리
+    # 개별 메세지 저장 table dispatched_notifications를 활용할 때, 이용되며 subclass에서 관련 구현체를 initialize 합니다.
+    @dispatched_notifications_service = nil?
     @message_template_id = message_template_id
+
+    message_template = MessageTemplate.find_by(name: message_template_id)
     target_medium = MessageTemplate.find_by(name: message_template_id).nil? ? KAKAO_ARLIMTALK : MessageTemplate.find_by(name: message_template_id).target_medium
+    Jets.logger.info "요청하신 #{message_template_id}가 message_templates Table에 존재하지 않습니다." if message_template.nil? & Jets.env.development?
     @target_medium = target_medium
   end
 
@@ -45,6 +51,13 @@ class Notification::Factory::NotificationFactoryClass
     save_results_bizm_post_pay(@bizm_post_pay_result, @message_template_id)
     # pre_pay 결과 처리
     save_results_bizm_pre_pay(@bizm_pre_pay_result, @message_template_id)
+  end
+
+  def create_dispatched_notifications
+    if @dispatched_notifications_service != nil
+      results = @app_push_result + @bizm_post_pay_result + @bizm_pre_pay_result
+      @dispatched_notifications_service.set_dispatced_notifications(results)
+    end
   end
 
   private
