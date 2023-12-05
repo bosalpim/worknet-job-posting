@@ -138,10 +138,10 @@ class KakaoTemplateService
       get_notify_free_job_posting_close_one_day_ago(tem_params)
     when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
       get_notify_free_job_posting_close(tem_params)
-    when MessageTemplateName::PROPOSAL_NOTIFICATION_EXPIRES
-      get_proposal_notification_expires(tem_params)
     when MessageTemplateName::ROULETTE
       get_roulette_ticket_receive(tem_params)
+    when MessageTemplateName::CONTACT_MESSAGE
+      get_contact_message(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -227,53 +227,6 @@ class KakaoTemplateService
     end
 
     data
-  end
-
-  def get_proposal_data(tem_params)
-    items = {
-      itemHighlight: {
-        title: "#{tem_params[:user_name]}님! 제안 내용을 확인하고 응답해주세요",
-        description: '인기 공고는 빠르게 마감됩니다'
-      },
-      item: {
-        list: [
-          {
-            title: '센터명',
-            description: convert_safe_text(tem_params[:business_name])
-          },
-          {
-            title: '거리',
-            description: convert_safe_text(tem_params[:distance])
-          },
-          {
-            title: '근무지',
-            description: convert_safe_text(tem_params[:address])
-          },
-          {
-            title: '근무유형',
-            description: convert_safe_text(tem_params[:work_type_ko])
-          },
-          {
-            title: '임금조건',
-            description: convert_safe_text(tem_params[:pay_text])
-          },
-        ],
-        summary: ""
-      }
-    }
-    {
-      title: "#{tem_params[:user_name]}님, 가까운 센터에서 일자리를 제안했어요!",
-      message: "#{tem_params[:business_name]}에서 #{tem_params[:user_name]}님에게 일자리 제안을 보냈습니다.\n(7일 내 응답하지 않으면 자동 거절됩니다)\n\n본 공고에 취업하시면 5만원의 취업축하금을 드려요!\n\n[아래 버튼을 눌러 상세공고를 확인하시고 수락 여부를 결정해주세요]\n센터번호: #{good_number(tem_params[:business_vn])}",
-      img_url: "https://mud-kage.kakao.com/dn/btfYkj/btrXIoI2ckc/85jhQdX5TuqNEdfrfBXgX0/img_l.jpg",
-      items: items,
-      buttons: [
-        {
-          name: "일자리 제안 확인하기",
-          type: "WL",
-          url_mobile: "https://carepartner.kr/jobs/#{tem_params[:job_posting_public_id]}?proposal=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=job_proposal_response"
-        },
-      ]
-    }
   end
 
   def get_proposal_response_edit_data(tem_params)
@@ -870,10 +823,10 @@ class KakaoTemplateService
   def get_career_certification_v2_alarm(tem_params)
     {
       title: "취업 성공하셨나요?",
-      message: "≫공고
+      message: "≫ 공고
 #{tem_params[:job_posting_title]}
 
-≫기관
+≫ 기관
 #{tem_params[:center_name]}
 
 ≫ 경력자 인증이 궁금해요
@@ -1863,20 +1816,6 @@ carepartner.kr#{path}
     }
   end
 
-  def get_proposal_notification_expires(tem_params)
-    expires_date = tem_params[:expires_date]
-    expires_date_with_time = tem_params[:expires_date_with_time]
-    {
-      title: "#{expires_date}부터 요양센터로부터 전화면접 제안을 받을 수 없게 돼요.",
-      message: "#{expires_date}부터 요양센터로부터 전화면접 제안을 받을 수 없게 돼요
-
-■ 전화면접 제안 종료 예정시각
-#{expires_date_with_time}
-
-계속해서 면접 제안을 받으려면, 종료 예정시각 이후 케어파트너에서 면접 제안 받기를 눌러주세요."
-    }
-  end
-
   def get_roulette_ticket_receive(tem_params)
     url = if Jets.env == 'production'
             "https://www.carepartner.kr/event/roulette?utm_source=message&utm_medium=arlimtalk&utm_campaign=roulette_invite_complete"
@@ -1902,6 +1841,60 @@ carepartner.kr#{path}
     }
   end
 
+  def get_proposal_data(tem_params)
+    center_name = tem_params[:business_name]
+    tel_link = tem_params[:tel_link]
+    accept_link = tem_params[:accept_link]
+    deny_link = tem_params[:deny_link]
+    customer_info = tem_params[:customer_info]
+    work_schedule = tem_params[:work_schedule]
+    location_info = tem_params[:location_info]
+    pay_info = tem_params[:pay_info]
+    client_message = tem_params[:client_message]
+
+    return {
+      title: "#{center_name}에서 전화면접을 제안했어요.",
+      message: "#{center_name}에서 전화면접을 제안했어요.
+
+■ 어르신 정보
+#{customer_info}
+
+■ 근무 요일
+#{work_schedule}
+
+■ 근무 장소
+#{location_info}
+
+■ 급여 정보
+#{pay_info}
+
+■ 제안 메세지
+#{client_message}
+
+* 3일 내 응답하지 않으면 자동 거절돼요",
+      buttons: [
+        {
+          name: "📞 제안수락 (전화)",
+          type: "AL",
+          scheme_ios: tel_link,
+          scheme_android: tel_link,
+        },
+        {
+          name: '💬 제안수락 (문자)',
+          type: 'WL',
+          url_mobile: accept_link,
+          url_pc: accept_link
+        },
+        {
+          name: '❌ 제안거절',
+          type: 'WL',
+          url_mobile: deny_link,
+          url_pc: deny_link
+        },
+      ]
+    }
+  end
+
   def good_number(phone_number)
     if phone_number&.length == 12
       phone_number&.scan(/.{4}/)&.join('-')
@@ -1912,5 +1905,36 @@ carepartner.kr#{path}
 
   def convert_safe_text(text, empty_string = "정보없음")
     text.presence&.truncate(MAX_ITEM_LIST_TEXT_LENGTH) || empty_string
+  end
+
+  def get_contact_message(tem_params)
+    job_posting_title = tem_params[:job_posting_title]
+    user_info = tem_params[:user_info]
+    user_message = tem_params[:user_message]
+    preferred_call_time = tem_params[:preferred_call_time]
+    link = tem_params[:link]
+    {
+      title: "#{user_info} 요양보호사가 문의했어요.",
+      message: "#{user_info} 요양보호사가 문의했어요.
+
+■ 문의내용
+“#{user_message}”
+
+■ 공고
+#{job_posting_title}
+
+■ 통화 가능한 시간
+#{preferred_call_time}
+
+아래 버튼을 눌러 지원자의 자세한 정보를 확인하고 무료로 전화해 보세요!",
+      buttons: [
+        {
+          type: "WL",
+          name: "문자문의 확인하기",
+          url_mobile: link,
+          url_pc: link,
+        }
+      ]
+    }
   end
 end

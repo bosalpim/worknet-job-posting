@@ -1,8 +1,11 @@
 class Notification::Factory::NotificationFactoryClass
   include NotificationSaveResultHelper
 
-  AppPush = Notification::Factory::SendMedium::AppPush
   DEEP_LINK_SCEHEME = "carepartner://app"
+  KAKAO_ARLIMTALK = "kakao_arlimtalk"
+  APP_PUSH = "app_push"
+
+  AppPush = Notification::Factory::SendMedium::AppPush
   BizmPostPayMessage = Notification::Factory::SendMedium::BizmPostPayMessage
   BizmPrePayMessage = Notification::Factory::SendMedium::BizmPrePayMessage
   def initialize(message_template_id)
@@ -22,10 +25,10 @@ class Notification::Factory::NotificationFactoryClass
     # 구인 비서 공고 알림 일자리 발송 개별 관리
     # 개별 메세지 저장 table dispatched_notifications를 활용할 때, 이용되며 subclass에서 관련 구현체를 initialize 합니다.
     @dispatched_notifications_service = nil?
-
     @message_template_id = message_template_id
+
     message_template = MessageTemplate.find_by(name: message_template_id)
-    target_medium = message_template.nil? ? 'kakao_arlimtalk' : MessageTemplate.find_by(name: message_template_id).target_medium
+    target_medium = MessageTemplate.find_by(name: message_template_id).nil? ? KAKAO_ARLIMTALK : MessageTemplate.find_by(name: message_template_id).target_medium
     Jets.logger.info "요청하신 #{message_template_id}가 message_templates Table에 존재하지 않습니다." if message_template.nil? & Jets.env.development?
     @target_medium = target_medium
   end

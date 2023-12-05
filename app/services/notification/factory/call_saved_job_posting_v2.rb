@@ -36,7 +36,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Noti
       Jets.logger.info "-------------- INFO END --------------\n"
       user = saved_job_posting.user
 
-      if @target_medium == 'app_push'
+      if @target_medium == APP_PUSH
         if user.is_sendable_app_push
           create_app_push_messsage(job_posting, user)
         else

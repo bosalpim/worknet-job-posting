@@ -17,10 +17,20 @@ class JobPosting::CloseExpiredJobPostingsService
                      .free_job_posting
                      .where('closing_at < ?', @date)
 
-    # 과금대상 기관이 올린 무료공고는 applying_due_date가 'three_days'
-    target_job_posting = job_postings.where(applying_due_date: 'three_days')
+    Jets.logger.info "종료대상 공고정보 : #{job_postings.pluck(:public_id)}"
+
+    paid_business_id_list = Business.where.not(paid_feature_transitioned_at: nil).ids
+    target_job_posting = job_postings.where(business_id: paid_business_id_list)
+    Jets.logger.info "종료대상 중 과금대상 유저의 공고 정보 : #{target_job_posting.pluck(:public_id)}"
+
     # 종료된 공고 번개채용 전환 유도 알림톡 발송
-    NotificationServiceJob.perform_later(:notify, { message_template_id: MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE, params: {job_postings: target_job_posting}}) if target_job_posting.count > 0
+    if target_job_posting.count > 0
+      notification = Notification::FactoryService.create(MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE,  { job_postings: target_job_posting })
+      # 발송 (ps. 메세지 성공/실패에 따른 이벤트로깅은 재발송등 사후 처리의 편의성을 위해 Amplitude 로깅이 함께 수행됩니다.)
+      notification.notify
+      # 발송결과 DB 저장 (사후 처리 대상 구분되도록 DB 내역을 생성해야합니다.)
+      notification.save_result
+    end
 
     job_postings.update_all(status: 'closed')
   end

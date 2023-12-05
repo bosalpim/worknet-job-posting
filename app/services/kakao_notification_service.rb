@@ -36,7 +36,12 @@ class KakaoNotificationService
   private
 
   def log_result(response)
-    KakaoNotificationLoggingHelper.send_log(response, @template_id, @template_params) rescue nil
+    begin
+      KakaoNotificationLoggingHelper.send_log(response, @template_id, @template_params)
+    rescue => e
+      puts "카카오 알림 로깅 에러: #{e.message}"
+    end
+
     Jets.logger.info "KAKAOMESSAGE #{response.to_yaml}" if Jets.env != 'production'
   end
 end

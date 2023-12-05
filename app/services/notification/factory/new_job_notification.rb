@@ -18,7 +18,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
   def create_message
     @list.each do |user|
       dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "job_detail")
-      if @target_medium == 'app_push'
+      if @target_medium == APP_PUSH
         if user.is_sendable_app_push
           create_app_push_message(user, dispatched_notification_param)
         else

@@ -1,5 +1,5 @@
 module MessageTemplateName
-  PROPOSAL = "proposal_response".freeze
+
   NEW_JOB_POSTING_VISIT = "new_job_visit(no_hotdeal)".freeze
   NEW_JOB_POSTING_FACILITY = "new_job_facility(no_hotdeal)".freeze
   PERSONALIZED = "personalized_job_message_edit3".freeze # done
@@ -56,8 +56,12 @@ module MessageTemplateName
   NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO = 'free_job_posting_close_1dayago'.freeze
   NOTIFY_FREE_JOB_POSTING_CLOSE = 'free_job_posting_close'.freeze
 
-  # 전화면접 제안 알림 만료일 경고
-  PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'.freeze
   # 룰렛 수령 알림
   ROULETTE = 'roulette'.freeze
+
+  # 전화면접 제안
+  PROPOSAL = "proposal".freeze
+
+  #문자문의
+  CONTACT_MESSAGE = 'contact_message'.freeze
 end

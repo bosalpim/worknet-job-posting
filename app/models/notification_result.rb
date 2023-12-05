@@ -35,6 +35,8 @@ class NotificationResult < ApplicationRecord
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
   ROULETTE = 'roulette'.freeze
+  NEWSPAPER_JOB_ALARM = 'newspaper_job_alarm'.freeze
+
 
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
@@ -42,9 +44,6 @@ class NotificationResult < ApplicationRecord
   # 과금 대상 무료공고 종료 관련
   NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO = 'free_job_posting_close_1dayago'.freeze
   NOTIFY_FREE_JOB_POSTING_CLOSE = 'free_job_posting_close'.freeze
-
-  # 전화면접 제안 알림
-  PROPOSAL_NOTIFICATION_EXPIRES = 'proposal_notification_expired'.freeze
 
   validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
@@ -92,7 +91,7 @@ class NotificationResult < ApplicationRecord
     ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE,
     NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO => NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO,
     NOTIFY_FREE_JOB_POSTING_CLOSE => NOTIFY_FREE_JOB_POSTING_CLOSE,
-    PROPOSAL_NOTIFICATION_EXPIRES => PROPOSAL_NOTIFICATION_EXPIRES,
     ROULETTE => ROULETTE,
+    NEWSPAPER_JOB_ALARM => NEWSPAPER_JOB_ALARM
   }
 end

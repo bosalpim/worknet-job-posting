@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-class JobApplication::NewService
+class ContactMessage::CreateContactMessageService
   include JobPostingsHelper
   include JobMatchHelper
   include Notification
 
   def initialize(
-    job_application_public_id:
+    contact_message_public_id:
   )
-    @job_application = JobApplication.find_by(
-      public_id: job_application_public_id
+    @contact_message = ContactMessage.find_by(
+      public_id: contact_message_public_id
     )
   end
 
   def call
-    user = @job_application.user
-    job_posting = @job_application.job_posting
+    user = @contact_message.user
+    job_posting = @contact_message.job_posting
     business = Business.find(job_posting.business_id)
     client = Client.find(job_posting.client_id)
 
@@ -23,8 +23,8 @@ class JobApplication::NewService
                   .filter { |i| i.present? }
                   .join('/')
 
-    arlimtalk_utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{MessageTemplateName::JOB_APPLICATION}"
-    suffix = "/employment_management/job_applications/#{@job_application.public_id}"
+    arlimtalk_utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{MessageTemplateName::CONTACT_MESSAGE}"
+    suffix = "/employment_management/contact_messages/#{@contact_message.public_id}"
 
     link = if Jets.env.production?
              "https://business.carepartner.kr#{suffix}?#{arlimtalk_utm}"
@@ -35,7 +35,7 @@ class JobApplication::NewService
            end
 
     KakaoNotificationService.call(
-      template_id: MessageTemplateName::JOB_APPLICATION,
+      template_id: MessageTemplateName::CONTACT_MESSAGE,
       message_type: "AI",
       phone: job_posting.manager_phone_number,
       template_params: {
@@ -45,8 +45,8 @@ class JobApplication::NewService
         user_public_id: user.public_id,
         business_name: business.name,
         user_info: user_info,
-        user_message: @job_application.user_message,
-        preferred_call_time: @job_application.preferred_call_time,
+        user_message: @contact_message.user_message,
+        preferred_call_time: @contact_message.preferred_call_time,
         type_match: is_type_match(user.preferred_work_types, job_posting.work_type),
         gender_match: is_gender_match(user.preferred_gender, job_posting.gender),
         day_match: is_day_match(user.job_search_days, job_posting.working_days),
