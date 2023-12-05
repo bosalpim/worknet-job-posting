@@ -19,6 +19,9 @@ class Notification::Factory::SendMedium::AppPush < Notification::Factory::SendMe
         amplitude_log unless @logging_properties.nil?
         return { status: 'success', response: response, target_public_id: @target_public_id }
       else
+        if response["results"].first["error"] == 'NotRegistered'
+          UserPushToken.find_by(token: @to).destroy rescue nil
+        end
         return { status: 'fail', response: response.to_s, target_public_id: @target_public_id }
       end
     rescue Net::ReadTimeout
