@@ -13,7 +13,7 @@ class ActiveUserServiceGuideService
   end
 
   def send_signup_complete_guide
-    template_id = MessageTemplateName::SIGNUP_COMPLETE_GUIDE3
+    template_id = MessageTemplateName::SIGNUP_COMPLETE_GUIDE
     phone = if Jets.env == 'production'
               @user.phone_number
             elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(@user.phone_number)
