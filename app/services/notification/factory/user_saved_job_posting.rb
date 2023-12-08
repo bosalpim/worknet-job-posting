@@ -36,13 +36,13 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
 
   def create_message
     if @target_medium == APP_PUSH && @client.client_push_tokens.valid.present?
-      return create_app_push
+      return create_app_push_message
     end
 
     create_bizm_message
   end
 
-  def create_push_message
+  def create_app_push_message
     link = "#{@template_params[:url_path]}&utm_source=message&utm_medium=app_push&utm_campaign=call_saved_job_caregiver"
 
     @app_push_list.push(

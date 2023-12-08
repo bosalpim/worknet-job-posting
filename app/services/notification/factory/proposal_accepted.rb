@@ -34,13 +34,13 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
 
   def create_message
     if @target_medium == APP_PUSH && @client.client_push_tokens.valid.present?
-      return create_app_push
+      return create_app_push_message
     end
 
     create_bizm_message
   end
 
-  def create_push_message
+  def create_app_push_message
 
     @app_push_list.push(
       @client.client_push_tokens.valid.map do |push_token|
