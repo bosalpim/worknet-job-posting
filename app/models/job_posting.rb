@@ -73,6 +73,7 @@ class JobPosting < ApplicationRecord
   enum applying_due_date: { one_week: 'one_week', two_weeks: 'two_weeks', three_weeks: 'three_weeks' }
 
   belongs_to :business
+  belongs_to :client
   belongs_to :scraped_worknet_job_posting, required: false
   belongs_to :scrape_yynr_job_posting, required: false
   has_many :care_manager_job_applications
