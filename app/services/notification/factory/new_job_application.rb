@@ -5,10 +5,10 @@ class Notification::Factory::NewJobApplication < Notification::Factory::Notifica
   include ApplicationHelper
   include JobPostingsHelper
 
-  def initialize(job_application_id)
+  def initialize(job_application_public_id)
     super(MessageTemplateName::JOB_APPLICATION)
 
-    @job_application = JobApplication.find(job_application_id)
+    @job_application = JobApplication.find_by(public_id: job_application_public_id)
 
     unless @job_application.present?
       raise "JobApplication #{job_application_id} is not exists."
@@ -25,7 +25,7 @@ class Notification::Factory::NewJobApplication < Notification::Factory::Notifica
     if @target_medium == APP_PUSH && @client.client_push_tokens.valid.present?
       return create_app_push
     end
-    
+
     create_bizm_message
   end
 
