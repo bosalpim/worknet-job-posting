@@ -46,6 +46,7 @@ class Notification::Factory::NewContactMessage < Notification::Factory::Notifica
           },
           @client.public_id,
           {
+            "type" => NOTIFICATION_TYPE_APP_PUSH,
             "template" => @message_template_id,
             "centerName" => @business.name,
             "jobPostingId" => @job_posting.public_id,

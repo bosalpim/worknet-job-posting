@@ -4,6 +4,7 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
   include JobPostingsHelper
   include JobMatchHelper
   include Notification
+  include KakaoNotificationLoggingHelper
 
   def initialize(params)
     super(MessageTemplateName::CALL_SAVED_JOB_CAREGIVER)
@@ -33,6 +34,7 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
     }
     @user = User.find_by(public_id: params["user_public_id"])
     @job_posting = JobPosting.find_by(public_id: params["job_posting_public_id"])
+    @business = @job_posting.business
     @client = Client.find_by(public_id: params["client_public_id"])
     create_message
   end
@@ -63,6 +65,7 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
           },
           @client.public_id,
           {
+            "type" => NOTIFICATION_TYPE_APP_PUSH,
             "template" => @message_template_id,
             "centerName" => @business.name,
             "jobPostingId" => @job_posting.public_id,
