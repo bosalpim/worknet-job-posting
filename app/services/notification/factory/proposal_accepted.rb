@@ -6,7 +6,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
   include Notification
 
   def initialize(params)
-    super(MessageTemplateName::PROPOSAL_ACCEPTED)
+    super(MessageTemplateName::CALL_INTERVIEW_ACCEPTED)
 
     @target_public_id = params['target_public_id']
     @business_id = params["business_id"]
