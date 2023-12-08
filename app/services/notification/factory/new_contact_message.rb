@@ -4,7 +4,8 @@ class Notification::Factory::NewContactMessage < Notification::Factory::Notifica
   include JobPostingsHelper
   include JobMatchHelper
   include Notification
-
+  include KakaoNotificationLoggingHelper
+  
   def initialize(contact_message_public_id)
     super(MessageTemplateName::CONTACT_MESSAGE)
 
