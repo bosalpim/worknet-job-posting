@@ -2,9 +2,12 @@
 
 class JobApplicationsController < ApplicationController
   def new_application
-    JobApplication::NewService.new(
-      job_application_public_id: params[:job_application_id]
-    ).call
+    notification = Notification::FactoryService.create(
+      MessageTemplateName::JOB_APPLICATION,
+      params
+    )
+    notification.notify
+    notification.save_result
 
     render json: { success: true }
   end

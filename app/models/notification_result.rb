@@ -9,6 +9,7 @@ class NotificationResult < ApplicationRecord
   USER_CALL_FAILURE_ALERT = "user_calls_failure_alert".freeze
   BUSINESS_CALL_FAILURE_ALERT = "business_calls_failure_alert".freeze
   BUSINESS_CALL_APPLY_USER_FAILURE_ALERT = "business_call_apply_user_failure_alert".freeze
+  CALL_INTERVIEW_ACCEPTED = "call_interview_proposal_accept".freeze
   CALL_REQUEST_ALARM = "call_request_alarm".freeze
   NEWS_PAPER = 'news_paper'.freeze
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze
@@ -37,7 +38,6 @@ class NotificationResult < ApplicationRecord
   ROULETTE = 'roulette'.freeze
   NEWSPAPER_JOB_ALARM = 'newspaper_job_alarm'.freeze
 
-
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
 
@@ -52,6 +52,7 @@ class NotificationResult < ApplicationRecord
   validates :fail_count, numericality: { grater_than_or_equal_to: 0 }
 
   enum send_type: {
+    CALL_INTERVIEW_ACCEPTED => CALL_INTERVIEW_ACCEPTED,
     PROPOSAL => 'proposal',
     NEW_JOB_POSTING => "new_job_posting",
     PERSONALIZED => "personalized_notification",
