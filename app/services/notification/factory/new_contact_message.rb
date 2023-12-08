@@ -45,6 +45,18 @@ class Notification::Factory::NewContactMessage < Notification::Factory::Notifica
             link: link,
           },
           @client.public_id,
+          {
+            "template" => @message_template_id,
+            "centerName" => @business.name,
+            "jobPostingId" => @job_posting.public_id,
+            "employee_id" => @user.public_id,
+            "title" => @job_posting.title,
+            "type_match" => is_type_match(@user.preferred_work_types, @job_posting.work_type),
+            "gender_match" => is_gender_match(@user.preferred_gender, @job_posting.gender),
+            "day_match" => is_day_match(@user.job_search_days, @job_posting.working_days),
+            "time_match" => is_time_match(work_start_time: @job_posting.work_start_time, work_end_time: @job_posting.work_end_time, job_search_times: @user.job_search_times),
+            "grade_match" => is_grade_match(@user.preferred_grades, @job_posting.grade)
+          }
         )
       end
     )

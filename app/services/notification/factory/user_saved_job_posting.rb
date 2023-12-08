@@ -31,6 +31,7 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
       grade_match: params["grade_match"],
       url_path: params["url_path"]
     }
+    @user = User.find_by(public_id: params["user_public_id"])
     @job_posting = JobPosting.find_by(public_id: params["job_posting_public_id"])
     @client = Client.find_by(public_id: params["client_public_id"])
     create_message
@@ -61,6 +62,18 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
             link: link,
           },
           @client.public_id,
+          {
+            "template" => @message_template_id,
+            "centerName" => @business.name,
+            "jobPostingId" => @job_posting.public_id,
+            "employee_id" => @user.public_id,
+            "title" => @job_posting.title,
+            "type_match" => is_type_match(@user.preferred_work_types, @job_posting.work_type),
+            "gender_match" => is_gender_match(@user.preferred_gender, @job_posting.gender),
+            "day_match" => is_day_match(@user.job_search_days, @job_posting.working_days),
+            "time_match" => is_time_match(work_start_time: @job_posting.work_start_time, work_end_time: @job_posting.work_end_time, job_search_times: @user.job_search_times),
+            "grade_match" => is_grade_match(@user.preferred_grades, @job_posting.grade)
+          }
         )
       end
     )
@@ -68,7 +81,6 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
   end
 
   def create_bizm_message
-
     @bizm_post_pay_list.push(
       BizmPostPayMessage.new(
         @message_template_id,
