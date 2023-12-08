@@ -43,7 +43,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
   def create_app_push_message
 
     @app_push_list.push(
-      @client.client_push_tokens.valid.map do |push_token|
+      *@client.client_push_tokens.valid.map do |push_token|
         AppPush.new(
           @message_template_id,
           push_token.token,

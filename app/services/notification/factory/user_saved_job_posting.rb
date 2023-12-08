@@ -48,7 +48,7 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
     link = "#{@template_params[:url_path]}&utm_source=message&utm_medium=app_push&utm_campaign=call_saved_job_caregiver"
 
     @app_push_list.push(
-      @client.client_push_tokens.valid.map do |push_token|
+      *@client.client_push_tokens.valid.map do |push_token|
         AppPush.new(
           @message_template_id,
           push_token.token,
