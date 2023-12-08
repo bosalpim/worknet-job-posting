@@ -31,11 +31,12 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
       grade_match: params["grade_match"],
       url_path: params["url_path"]
     }
+    create_message
   end
 
   def create_message
     if @target_medium == APP_PUSH && @client.client_push_tokens.valid.present?
-      create_app_push
+      return create_app_push
     end
 
     create_bizm_message

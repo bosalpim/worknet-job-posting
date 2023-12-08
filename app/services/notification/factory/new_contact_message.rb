@@ -18,12 +18,12 @@ class Notification::Factory::NewContactMessage < Notification::Factory::Notifica
     @user = @contact_message.user
     @client = @job_posting.client
     @business = @job_posting.business
+    create_message
   end
 
   def create_message
     if @target_medium == APP_PUSH && @client.client_push_tokens.valid.present?
-      create_app_push
-
+      return create_app_push
     end
 
     create_bizm_message
