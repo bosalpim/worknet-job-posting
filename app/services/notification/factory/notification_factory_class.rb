@@ -24,7 +24,7 @@ class Notification::Factory::NotificationFactoryClass
 
     # 구인 비서 공고 알림 일자리 발송 개별 관리
     # 개별 메세지 저장 table dispatched_notifications를 활용할 때, 이용되며 subclass에서 관련 구현체를 initialize 합니다.
-    @dispatched_notifications_service = nil?
+    @dispatched_notifications_service = nil
     @message_template_id = message_template_id
 
     message_template = MessageTemplate.find_by(name: message_template_id)
