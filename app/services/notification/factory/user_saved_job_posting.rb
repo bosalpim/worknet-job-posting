@@ -47,7 +47,7 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
   def create_app_push_message
     base_url = "#{DEEP_LINK_SCEHEME}/redirect/business"
     to = "#{@template_params[:url_path]}"
-    link = "#{base_url}?to=#{CGI.escape("#{to}?utm_source=message&utm_campaign=app_push&utm_campaign=#{@message_template_id}")}"
+    link = "#{base_url}?to=#{CGI.escape("#{to}&utm_source=message&utm_campaign=app_push&utm_campaign=#{@message_template_id}")}"
 
     @app_push_list.push(
       *@client.client_push_tokens.valid.map do |push_token|
