@@ -31,6 +31,8 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
       grade_match: params["grade_match"],
       url_path: params["url_path"]
     }
+    @job_posting = JobPosting.find_by(public_id: params["job_posting_public_id"])
+    @client = Client.find_by(public_id: params["client_public_id"])
     create_message
   end
 
