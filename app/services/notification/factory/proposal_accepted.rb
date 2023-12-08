@@ -41,19 +41,22 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
 
   def create_push_message
 
-    @client.client_push_tokens.valid.map do |push_token|
-      AppPush.new(
-        @message_template_id,
-        push_token.token,
-        @message_template_id,
-        {
-          title: '내가 보낸 전화면접 제안을 요양보호사가 수락했어요!',
-          body: '제안을 수락한 요양보호사는 채용 확률이 높으니 지금바로 전화 응답해 보세요.',
-          link: @tel_link,
-        },
-        @client.public_id,
-      )
-    end
+    @app_push_list.push(
+      @client.client_push_tokens.valid.map do |push_token|
+        AppPush.new(
+          @message_template_id,
+          push_token.token,
+          @message_template_id,
+          {
+            title: '내가 보낸 전화면접 제안을 요양보호사가 수락했어요!',
+            body: '제안을 수락한 요양보호사는 채용 확률이 높으니 지금바로 전화 응답해 보세요.',
+            link: @tel_link,
+          },
+          @client.public_id,
+        )
+      end
+    )
+
   end
 
   def create_bizm_message

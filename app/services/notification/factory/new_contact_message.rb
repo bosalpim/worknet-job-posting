@@ -33,19 +33,21 @@ class Notification::Factory::NewContactMessage < Notification::Factory::Notifica
     base_url = "#{DEEP_LINK_SCEHEME}/redirect/business"
     to = "employment_management/contact_messages/#{@contact_message.public_id}"
     link = "#{base_url}?to=#{CGI.escape("#{to}?utm_source=message&utm_campaign=app_push&utm_campaign=#{@message_template_id}")}"
-    @client.client_push_tokens.valid.map do |push_token|
-      AppPush.new(
-        @message_template_id,
-        push_token.token,
-        @message_template_id,
-        {
-          title: '요양보호사가 문자문의 했어요!',
-          body: '지금바로 문의 내용과 통화가능 시간을 확인하고 무료로 전화 응답해 보세요.',
-          link: link,
-        },
-        @client.public_id,
-      )
-    end
+    @app_push_list.push(
+      @client.client_push_tokens.valid.map do |push_token|
+        AppPush.new(
+          @message_template_id,
+          push_token.token,
+          @message_template_id,
+          {
+            title: '요양보호사가 문자문의 했어요!',
+            body: '지금바로 문의 내용과 통화가능 시간을 확인하고 무료로 전화 응답해 보세요.',
+            link: link,
+          },
+          @client.public_id,
+        )
+      end
+    )
   end
 
   def create_bizm_message

@@ -36,7 +36,6 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
   def create_message
     if @target_medium == APP_PUSH && @client.client_push_tokens.valid.present?
       create_app_push
-
     end
 
     create_bizm_message
@@ -44,20 +43,23 @@ class Notification::Factory::UserSavedJobPosting < Notification::Factory::Notifi
 
   def create_push_message
     link = "#{@template_params[:url_path]}&utm_source=message&utm_medium=app_push&utm_campaign=call_saved_job_caregiver"
-    
-    @client.client_push_tokens.valid.map do |push_token|
-      AppPush.new(
-        @message_template_id,
-        push_token.token,
-        @message_template_id,
-        {
-          title: '요양보호사가 공고에 관심 표시했어요!',
-          body: '지금바로 공고에 관심 표시한 요양보호사에게 무료로 전화해보세요.',
-          link: link,
-        },
-        @client.public_id,
-      )
-    end
+
+    @app_push_list.push(
+      @client.client_push_tokens.valid.map do |push_token|
+        AppPush.new(
+          @message_template_id,
+          push_token.token,
+          @message_template_id,
+          {
+            title: '요양보호사가 공고에 관심 표시했어요!',
+            body: '지금바로 공고에 관심 표시한 요양보호사에게 무료로 전화해보세요.',
+            link: link,
+          },
+          @client.public_id,
+        )
+      end
+    )
+
   end
 
   def create_bizm_message
