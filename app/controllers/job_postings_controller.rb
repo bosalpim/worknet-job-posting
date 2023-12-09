@@ -18,6 +18,23 @@ class JobPostingsController < ApplicationController
     }, status: :ok
   end
 
+  def job_ads_messages
+    begin
+      # 발송 데이터 생성
+      notification = Notification::FactoryService.create(MessageTemplateName::NEW_JOB_POSTING, { job_posting_id: params["job_posting_id"] })
+      notification.process
+
+      # 1차 메세지 발송 완료 히스토리 & 2차 예약 히스토리 생성
+
+      # 2차 메세지 예약 알림톡 발송
+      render json: {
+        success: true
+      }, status: :ok
+    rescue => e
+      console.error(e)
+    end
+  end
+
   def call_interview_proposal
     event = { proposal_id: params["proposal_id"] }
     rsp = nil

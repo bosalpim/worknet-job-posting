@@ -64,4 +64,7 @@ module MessageTemplateName
 
   #문자문의
   CONTACT_MESSAGE = 'contact_message'.freeze
+
+  # 구인광고 메세지
+  JOB_ADS_MESSAGE_FIRST = 'job_ads_message_first'.freeze
 end

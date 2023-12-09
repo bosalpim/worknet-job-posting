@@ -37,6 +37,12 @@ class Notification::Factory::NotificationFactoryClass
     raise NotImplementedError, "#{self.class}에서 해당 '#{__method__}'를 구현하지 않았습니다. Notification::CreateMessage::CallSavedJobPostingV2를 참고하여 개발해주세요."
   end
 
+  def process
+    notify
+    save_result
+    create_dispatched_notifications unless @dispatched_notifications_service.nil?
+  end
+
   def notify
     send_app_push
     send_bizm_post_pay

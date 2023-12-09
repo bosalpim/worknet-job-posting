@@ -45,6 +45,9 @@ class NotificationResult < ApplicationRecord
   NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO = 'free_job_posting_close_1dayago'.freeze
   NOTIFY_FREE_JOB_POSTING_CLOSE = 'free_job_posting_close'.freeze
 
+  # 구인광고 메세지
+  JOB_ADS_MESSAGE_FIRST = 'job_ads_message_first'.freeze
+
   validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -93,6 +96,7 @@ class NotificationResult < ApplicationRecord
     NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO => NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO,
     NOTIFY_FREE_JOB_POSTING_CLOSE => NOTIFY_FREE_JOB_POSTING_CLOSE,
     ROULETTE => ROULETTE,
-    NEWSPAPER_JOB_ALARM => NEWSPAPER_JOB_ALARM
+    NEWSPAPER_JOB_ALARM => NEWSPAPER_JOB_ALARM,
+    JOB_ADS_MESSAGE_FIRST => JOB_ADS_MESSAGE_FIRST
   }
 end

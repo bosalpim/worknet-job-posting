@@ -27,6 +27,9 @@ class Notification::FactoryService
       return Notification::Factory::ProposalAccepted.new(params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       return Notification::Factory::UserSavedJobPosting.new(params)
+    when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
+      # 교체
+      return Notification::Factory::NewJobNotification.new(params[:job_posting_id])
     else
       puts "no template found"
       return []
