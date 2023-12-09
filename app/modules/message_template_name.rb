@@ -65,6 +65,11 @@ module MessageTemplateName
   #문자문의
   CONTACT_MESSAGE = 'contact_message'.freeze
 
-  # 구인광고 메세지
+  # 구인광고 메세지 > 요양보호사 1차
+  # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1386%3A5741&mode=dev
   JOB_ADS_MESSAGE_FIRST = 'job_ads_message_first'.freeze
+  # 구인광고 메세지 > 2차 발송 예약 기관 알림톡
+  # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1285%3A1896&mode=dev
+  JOB_ADS_MESSAGE_RESERVE = 'job_ads_message_reserve'.freeze
+
 end

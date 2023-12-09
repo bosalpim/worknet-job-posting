@@ -47,6 +47,7 @@ class NotificationResult < ApplicationRecord
 
   # 구인광고 메세지
   JOB_ADS_MESSAGE_FIRST = 'job_ads_message_first'.freeze
+  JOB_ADS_MESSAGE_RESERVE = 'job_ads_message_reserve'.freeze
 
   validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
@@ -97,6 +98,7 @@ class NotificationResult < ApplicationRecord
     NOTIFY_FREE_JOB_POSTING_CLOSE => NOTIFY_FREE_JOB_POSTING_CLOSE,
     ROULETTE => ROULETTE,
     NEWSPAPER_JOB_ALARM => NEWSPAPER_JOB_ALARM,
-    JOB_ADS_MESSAGE_FIRST => JOB_ADS_MESSAGE_FIRST
+    JOB_ADS_MESSAGE_FIRST => JOB_ADS_MESSAGE_FIRST,
+    JOB_ADS_MESSAGE_RESERVE => JOB_ADS_MESSAGE_RESERVE
   }
 end

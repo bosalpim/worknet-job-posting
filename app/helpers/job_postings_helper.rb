@@ -135,4 +135,8 @@ module JobPostingsHelper
     end
       .join(', ')
   end
+
+  def get_dong_name_by_address(address)
+    address&.split&.last(2)&.join(' ')
+  end
 end

@@ -6,7 +6,17 @@ module ApplicationHelper
     elsif Jets.env.staging?
        "https://dev-carepartner.kr"
     else
-       "http://localhost:3000"
+       "https://localhost:3000"
+    end
+  end
+
+  def business_base_url
+    if Jets.env.production?
+      "https://business.carepartner.kr"
+    elsif Jets.env.staging?
+      "https://staging-business.vercel.app"
+    else
+      "https://localhost:3001"
     end
   end
 

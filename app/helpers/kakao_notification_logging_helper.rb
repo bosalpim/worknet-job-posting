@@ -116,11 +116,31 @@ module KakaoNotificationLoggingHelper
       return get_contact_message(template_id, tem_params)
     when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
       return get_new_job_posting_logging_data(tem_params, template_id)
+    when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
+      return get_job_ads_message_reserve(tem_params, template_id)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
   end
 
+  def self.get_job_ads_message_reserve(tem_params, template_id)
+    target_public_id = tem_params.dig(:target_public_id)
+    job_posting_public_id = tem_params.dig(:job_posting_public_id)
+    title = tem_params.dig(:job_posting_title)
+
+    return {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_BUSINESS,
+        "template" => template_id,
+        "job_posting_public_id" => job_posting_public_id,
+        "job_posting_title" => title,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
   def self.get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
     job_posting_public_id = tem_params.dig(:job_posting_public_id)
     title = tem_params.dig(:title)

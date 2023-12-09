@@ -30,6 +30,8 @@ class Notification::FactoryService
     when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
       # 교체
       return Notification::Factory::NewJobNotification.new(params[:job_posting_id])
+    when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
+      return Notification::Factory::JobAdsMessageReserve.new(params[:job_posting_id], params[:times], params[:scheduled_at_text])
     else
       puts "no template found"
       return []
