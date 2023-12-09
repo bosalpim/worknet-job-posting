@@ -1,5 +1,14 @@
 module ApplicationHelper
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
+  def carepartner_base_url
+    if Jets.env.production?
+       "https://carepartner.kr"
+    elsif Jets.env.staging?
+       "https://dev-carepartner.kr"
+    else
+       "http://localhost:3000"
+    end
+  end
 
   def build_shorten_url(origin_url)
     ShortUrl.build(origin_url).url

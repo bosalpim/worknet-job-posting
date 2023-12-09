@@ -42,6 +42,7 @@ class User < ApplicationRecord
   scope :receive_notifications, -> { where(notification_enabled: true) }
   scope :receive_job_notifications, -> { where(job_notification_enabled: true).where(has_certification: true).active }
   scope :receive_proposal_notifications, -> { where(proposal_notification_enabled: true).where(has_certification: true).active }
+  scope :within_last_3_days, -> { where('last_used_at >= ?', 3.days.ago) }
 
   validates :address, presence: true, if: -> { self.status == 'active' }
   validates :preferred_distance,

@@ -25,8 +25,13 @@ class JobPostingsController < ApplicationController
       notification.process
 
       # 1차 메세지 발송 완료 히스토리 & 2차 예약 히스토리 생성
+      MessageHistory.create!(type_name: "completed", notification_relate_instance_types_id: 1, notification_relate_instance_id: params["job_posting_id"])
+      MessageHistory.create!(type_name: "reserved", notification_relate_instance_types_id: 1, notification_relate_instance_id: params["job_posting_id"], scheduled_at: Time.current.tomorrow.beginning_of_day + 8.hours)
 
       # 2차 메세지 예약 알림톡 발송
+      # notification = Notification::FactoryService.create(MessageTemplateName::NEW_JOB_POSTING, { job_posting_id: params["job_posting_id"] })
+      # notification.process
+
       render json: {
         success: true
       }, status: :ok

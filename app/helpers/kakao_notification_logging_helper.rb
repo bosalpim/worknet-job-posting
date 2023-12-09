@@ -43,7 +43,7 @@ module KakaoNotificationLoggingHelper
 
     case template_id
     when MessageTemplateName::NEW_JOB_POSTING
-      return get_new_job_posting_logging_data(tem_params, template_id, target_public_id)
+      return get_new_job_posting_logging_data(tem_params, template_id)
     when MessageTemplateName::NEWSPAPER_V2
       return get_news_paper_logging_data(template_id, target_public_id)
     when MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION
@@ -114,6 +114,8 @@ module KakaoNotificationLoggingHelper
       return get_career_certification_v2(template_id, tem_params)
     when CONTACT_MESSAGE
       return get_contact_message(template_id, tem_params)
+    when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
+      return get_new_job_posting_logging_data(tem_params, template_id)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -155,7 +157,7 @@ module KakaoNotificationLoggingHelper
     }
   end
 
-  def self.get_new_job_posting_logging_data(template_params, template_id, target_public_id)
+  def self.get_new_job_posting_logging_data(template_params, template_id)
     target_public_id = template_params.dig(:target_public_id)
     job_posting_public_id = template_params.dig(:job_posting_public_id)
     job_posting_title = template_params.dig(:job_posting_title)
