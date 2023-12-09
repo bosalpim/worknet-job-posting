@@ -20,17 +20,24 @@ class JobPostingsController < ApplicationController
 
   def job_ads_messages
     begin
+      american_time = Time.current
+      korean_offset = 9 * 60 * 60 # 9 hours ahead of American time
+      korean_time = american_time + korean_offset
+
       # 발송 데이터 생성
       notification = Notification::FactoryService.create(MessageTemplateName::NEW_JOB_POSTING, { job_posting_id: params["job_posting_id"] })
       notification.process
 
       # 1차 메세지 발송 완료 히스토리 & 2차 예약 히스토리 생성
       MessageHistory.create!(type_name: "completed", notification_relate_instance_types_id: 1, notification_relate_instance_id: params["job_posting_id"])
-      MessageHistory.create!(type_name: "reserved", notification_relate_instance_types_id: 1, notification_relate_instance_id: params["job_posting_id"], scheduled_at: Time.current.tomorrow.beginning_of_day + 8.hours)
+      # 1차가 내일 오전8시로 예약된다면, 2차 발송 예약 시간은 2일뒤가 되어야한다.
+      scheduled_at = Time.current.tomorrow.beginning_of_day + 8.hours
+      scheduled_at = scheduled_at + 1.days if korean_time.hour > 21
+      MessageHistory.create!(type_name: "reserved", notification_relate_instance_types_id: 1, notification_relate_instance_id: params["job_posting_id"], scheduled_at: scheduled_at)
 
       # 2차 메세지 예약 알림톡 발송
-      # notification = Notification::FactoryService.create(MessageTemplateName::NEW_JOB_POSTING, { job_posting_id: params["job_posting_id"] })
-      # notification.process
+      notification = Notification::FactoryService.create(MessageTemplateName::NEW_JOB_POSTING, { job_posting_id: params["job_posting_id"] })
+      notification.process
 
       render json: {
         success: true
