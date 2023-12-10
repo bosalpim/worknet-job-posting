@@ -143,7 +143,9 @@ class KakaoTemplateService
     when MessageTemplateName::CONTACT_MESSAGE
       get_contact_message(tem_params)
     when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
-      get_job_ads_message_first(tem_params)
+      get_job_ads_message(tem_params)
+    when MessageTemplateName::JOB_ADS_MESSAGE_SECOND
+      get_job_ads_message(tem_params)
     when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
       get_job_ads_message_reserve(tem_params)
     else
@@ -1899,7 +1901,7 @@ carepartner.kr#{path}
     }
   end
 
-  def get_job_ads_message_first(tem_params)
+  def get_job_ads_message(tem_params)
     {
       title: tem_params[:title],
       message: tem_params[:message],

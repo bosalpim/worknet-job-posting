@@ -1,4 +1,4 @@
-class Notification::Factory::SearchTarget::JobAdsFirstMessageUsersService
+class Notification::Factory::SearchTarget::JobAdsFirstTargetService
   DISTANCE_LIST = {
     by_walk15: 900,
     by_walk30: 1800,

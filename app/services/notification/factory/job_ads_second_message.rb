@@ -1,22 +1,18 @@
-class Notification::Factory::JobAdsFirstMessage < Notification::Factory::NotificationFactoryClass
+class Notification::Factory::JobAdsSecondMessage < Notification::Factory::NotificationFactoryClass
   include ApplicationHelper
   include TranslationHelper
   include JobPostingsHelper
   include KakaoNotificationLoggingHelper
   include DispatchedNotificationsHelper
+
+  DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
   def initialize(job_posting_id)
-    super(MessageTemplateName::JOB_ADS_MESSAGE_FIRST)
-    job_posting = JobPosting.find(job_posting_id)
+    super(MessageTemplateName::JOB_ADS_MESSAGE_SECOND)
+    job_posting = JobPosting.find_by(id: job_posting_id)
     @job_posting = job_posting
-    @list = Notification::Factory::SearchTarget::JobAdsFirstTargetService.call(job_posting)
+    @list = Notification::Factory::SearchTarget::JobAdsSecondTargetService.call(job_posting)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "job_posting", @job_posting.id, "yobosa")
     create_message
-  end
-
-  def create_message
-    @list.each do |user|
-      create_bizm_post_pay_message(user)
-    end
   end
 
   def create_bizm_post_pay_message(user)
@@ -61,8 +57,8 @@ class Notification::Factory::JobAdsFirstMessage < Notification::Factory::Notific
   end
 
   def build_visit_message(user, title, job_posting_customer)
-    "안녕하세요.
-선생님께서 등록해주신 구직 정보에 맞는 일자리 정보를 안내드립니다.
+    "안녕하세요! #{user.name} 요양보호사님.
+#{title} 공고의 내용을 확인해보셨나요?
 
 ■ 공고제목
 #{title}
@@ -86,8 +82,8 @@ class Notification::Factory::JobAdsFirstMessage < Notification::Factory::Notific
   end
 
   def build_facility_message(user, title)
-    "안녕하세요.
-선생님께서 등록해주신 구직 정보에 맞는 일자리 정보를 안내드립니다.
+    "안녕하세요! #{user.name} 요양보호사님.
+#{title} 공고의 내용을 확인해보셨나요?
 
 ■ 공고제목
 #{title}

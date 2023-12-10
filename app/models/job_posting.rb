@@ -79,6 +79,7 @@ class JobPosting < ApplicationRecord
   has_many :care_manager_job_applications
   has_many :care_managers, through: :care_manager_job_applications
   has_many :paid_job_posting_features, dependent: :destroy
+  has_many :user_saved_job_postings
   has_one :job_posting_customer
 
   scope :commute_work, -> { where(work_type: %w[commute bath_help]) }

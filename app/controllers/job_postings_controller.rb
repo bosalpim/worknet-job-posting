@@ -36,8 +36,8 @@ class JobPostingsController < ApplicationController
       MessageHistory.create!(type_name: "reserved", status: 2, notification_relate_instance_types_id: 1, notification_relate_instance_id: params["job_posting_id"], scheduled_at: scheduled_at)
 
       # 2차 메세지 예약 알림톡 발송
-      notification = Notification::FactoryService.create(MessageTemplateName::JOB_ADS_MESSAGE_RESERVE, { job_posting_id: params["job_posting_id"], times: 2, scheduled_at_text: (scheduled_at + korean_offset).strftime('%m월 %d일 %I시 %M분') })
-      notification.process
+      reserve_notification = Notification::FactoryService.create(MessageTemplateName::JOB_ADS_MESSAGE_RESERVE, { job_posting_id: params["job_posting_id"], times: 2, scheduled_at_text: (scheduled_at + korean_offset).strftime('%m월 %d일 %I시 %M분') })
+      reserve_notification.process
 
       render json: {
         success: true
