@@ -57,7 +57,7 @@ class Notification::Factory::JobAdsFirstMessage < Notification::Factory::Notific
       target_public_id: user.public_id
     }
 
-    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, 'AT'))
+    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, 'AI'))
   end
 
   def build_visit_message(user, title, job_posting_customer)

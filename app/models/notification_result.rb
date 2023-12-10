@@ -50,6 +50,7 @@ class NotificationResult < ApplicationRecord
   JOB_ADS_MESSAGE_RESERVE = 'job_ads_message_reserve'.freeze
   JOB_ADS_MESSAGE_SECOND = 'job_ads_message_second'.freeze
   JOB_ADS_MESSAGE_THIRD = 'job_ads_message_third'.freeze
+  JOB_ADS_ENDED = 'job_ads_last_end'.freeze
 
   validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
@@ -103,6 +104,7 @@ class NotificationResult < ApplicationRecord
     JOB_ADS_MESSAGE_FIRST => JOB_ADS_MESSAGE_FIRST,
     JOB_ADS_MESSAGE_RESERVE => JOB_ADS_MESSAGE_RESERVE,
     JOB_ADS_MESSAGE_SECOND => JOB_ADS_MESSAGE_SECOND,
-    JOB_ADS_MESSAGE_THIRD => JOB_ADS_MESSAGE_THIRD
+    JOB_ADS_MESSAGE_THIRD => JOB_ADS_MESSAGE_THIRD,
+    JOB_ADS_ENDED => JOB_ADS_ENDED
   }
 end
