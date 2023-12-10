@@ -118,6 +118,8 @@ module KakaoNotificationLoggingHelper
       return get_new_job_posting_logging_data(tem_params, template_id)
     when MessageTemplateName::JOB_ADS_MESSAGE_SECOND
       return get_new_job_posting_logging_data(tem_params, template_id)
+    when MessageTemplateName::JOB_ADS_MESSAGE_THIRD
+      return get_new_job_posting_logging_data(tem_params, template_id)
     when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
       return get_job_ads_message_reserve(tem_params, template_id)
     else

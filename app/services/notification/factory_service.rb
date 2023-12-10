@@ -28,10 +28,15 @@ class Notification::FactoryService
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       return Notification::Factory::UserSavedJobPosting.new(params)
     when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
-      # 교체
-      return Notification::Factory::NewJobNotification.new(params[:job_posting_id])
+      return Notification::Factory::JobAdsFirstMessage.new(params[:job_posting_id])
+    when MessageTemplateName::JOB_ADS_MESSAGE_SECOND
+      return Notification::Factory::JobAdsSecondMessage.new(params[:job_posting_id])
+    when MessageTemplateName::JOB_ADS_MESSAGE_THIRD
+      return Notification::Factory::JobAdsThirdMessage.new(params[:job_posting_id])
     when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
       return Notification::Factory::JobAdsMessageReserve.new(params[:job_posting_id], params[:times], params[:scheduled_at_text])
+    when MessageTemplateName::JOB_ADS_COMPLETED
+      return Notification::Factory::JobAdsMessageReserve.new(params[:job_posting_id])
     else
       puts "no template found"
       return []
