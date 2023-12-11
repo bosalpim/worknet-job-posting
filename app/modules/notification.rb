@@ -5,7 +5,7 @@ module Notification
   TYPE_STARTED = 'started'
   TYPE_SUCCEDED = 'succeded'
   TYPE_RESERVED = 'reserved'
-  TYPE_COMPLETED = 'completed'
+  TYPE_ENDED = 'ended'
   TYPE_CANCELED = 'canceled'
 
   class Base
