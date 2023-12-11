@@ -5,10 +5,10 @@ class JobPostingJob < ApplicationJob
   include Notification
   include JobPostingsHelper
 
-  cron "0 1 * * ? *"
-
   KOREAN_OFFSET = 9.hours
   RESERVE_TARGET_TIME = 8.hours
+
+  cron "0 1 * * ? *"
   def notify_expiration_date(date = nil)
     now = date.nil? ? DateTime.now : date
 
