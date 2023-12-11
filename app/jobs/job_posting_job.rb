@@ -71,7 +71,7 @@ class JobPostingJob < ApplicationJob
         notification.process
 
         MessageHistory.create!(type_name: TYPE_SUCCEDED, status: 3, notification_relate_instance_types_id: RELATE_TYPE_JOB_POSTING, notification_relate_instance_id: job_posting.id)
-        MessageHistory.create!(type_name: TYPE_COMPLETED, notification_relate_instance_types_id: RELATE_TYPE_JOB_POSTING, notification_relate_instance_id: job_posting.id)
+        MessageHistory.create!(type_name: TYPE_ENDED, notification_relate_instance_types_id: RELATE_TYPE_JOB_POSTING, notification_relate_instance_id: job_posting.id)
 
         # 예약 메세지 발송 모두 처리 완료
         reserve_notification = Notification::FactoryService.create(MessageTemplateName::JOB_ADS_ENDED, { job_posting_id: job_posting.id })
@@ -110,7 +110,7 @@ class JobPostingJob < ApplicationJob
         third_notification.process
 
         MessageHistory.create!(type_name: TYPE_SUCCEDED, status: 3, notification_relate_instance_types_id: RELATE_TYPE_JOB_POSTING, notification_relate_instance_id: job_posting_id)
-        MessageHistory.create!(type_name: TYPE_COMPLETED, notification_relate_instance_types_id: RELATE_TYPE_JOB_POSTING, notification_relate_instance_id: job_posting_id)
+        MessageHistory.create!(type_name: TYPE_ENDED, notification_relate_instance_types_id: RELATE_TYPE_JOB_POSTING, notification_relate_instance_id: job_posting_id)
 
         ended_notification = Notification::FactoryService.create(MessageTemplateName::JOB_ADS_ENDED, { job_posting_id: job_posting_id })
         ended_notification.process
