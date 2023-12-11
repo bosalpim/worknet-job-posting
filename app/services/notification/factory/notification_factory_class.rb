@@ -38,9 +38,13 @@ class Notification::Factory::NotificationFactoryClass
   end
 
   def process
-    notify
-    save_result
-    create_dispatched_notifications unless @dispatched_notifications_service.nil?
+    begin
+      notify
+      save_result
+      create_dispatched_notifications unless @dispatched_notifications_service.nil?
+    rescue => e
+      Jets.logger.info e.message
+    end
   end
 
   def notify

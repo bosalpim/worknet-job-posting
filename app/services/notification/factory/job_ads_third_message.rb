@@ -15,6 +15,12 @@ class Notification::Factory::JobAdsThirdMessage < Notification::Factory::Notific
     create_message
   end
 
+  def create_message
+    @list.each do |user|
+      create_bizm_post_pay_message(user)
+    end
+  end
+
   def create_bizm_post_pay_message(user)
     job_detail_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "job_detail")
     application_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "application")
@@ -78,7 +84,7 @@ class Notification::Factory::JobAdsThirdMessage < Notification::Factory::Notific
 ■ 급여
 #{get_pay_text(@job_posting)}
 
-근무를 원하시는 선생님은 담당자에게 연락주세요:)
+근무를 원하시는 선생님은 담당자에게 연락주세요. :)
 
 아래 버튼을 눌러 사이트를 방문해 자세한 내용을 확인하고 지원해보세요!"
   end
@@ -102,7 +108,7 @@ class Notification::Factory::JobAdsThirdMessage < Notification::Factory::Notific
 ■ 급여
 #{get_pay_text(@job_posting)}
 
-근무를 원하시는 선생님은 담당자에게 연락주세요:)
+근무를 원하시는 선생님은 담당자에게 연락주세요. :)
 
 아래 버튼을 눌러 사이트를 방문해 자세한 내용을 확인하고 지원해보세요!"
   end

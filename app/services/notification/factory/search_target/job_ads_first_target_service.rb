@@ -17,7 +17,7 @@ class Notification::Factory::SearchTarget::JobAdsFirstTargetService
   def call
     users = []
     if Jets.env != 'production'
-      return [User.last]
+      return [User.where.not(last_used_at: nil).order(last_used_at: :desc).first]
     end
 
     User.preferred_distances.each do |key, value|

@@ -15,6 +15,12 @@ class Notification::Factory::JobAdsSecondMessage < Notification::Factory::Notifi
     create_message
   end
 
+  def create_message
+    @list.each do |user|
+      create_bizm_post_pay_message(user)
+    end
+  end
+
   def create_bizm_post_pay_message(user)
     job_detail_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "job_detail")
     application_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "application")

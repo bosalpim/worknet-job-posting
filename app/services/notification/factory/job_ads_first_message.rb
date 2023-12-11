@@ -4,6 +4,8 @@ class Notification::Factory::JobAdsFirstMessage < Notification::Factory::Notific
   include JobPostingsHelper
   include KakaoNotificationLoggingHelper
   include DispatchedNotificationsHelper
+
+  DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
   def initialize(job_posting_id)
     super(MessageTemplateName::JOB_ADS_MESSAGE_FIRST)
     job_posting = JobPosting.find(job_posting_id)
