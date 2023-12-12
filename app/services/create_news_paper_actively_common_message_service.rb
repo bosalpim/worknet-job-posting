@@ -34,8 +34,7 @@ class CreateNewsPaperActivelyCommonMessageService < CreateScheduledMessageServic
     )
 
     factory = Notification::Factory::SendNewsPaper.new(0.1, 0)
-    factory.notify
-    factory.save_result
+    factory.process
   end
 
   def call
