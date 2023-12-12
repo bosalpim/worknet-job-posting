@@ -115,17 +115,21 @@ module KakaoNotificationLoggingHelper
     when CONTACT_MESSAGE
       return get_contact_message(template_id, tem_params)
     when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
-      return get_new_job_posting_logging_data(tem_params, template_id)
+      return get_job_ads_message_logging_data(tem_params, template_id)
     when MessageTemplateName::JOB_ADS_MESSAGE_SECOND
-      return get_new_job_posting_logging_data(tem_params, template_id)
+      return get_job_ads_message_logging_data(tem_params, template_id)
+    when MessageTemplateName::JOB_ADS_MESSAGE_THIRD
+      return get_job_ads_message_logging_data(tem_params, template_id)
     when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
-      return get_job_ads_message_reserve(tem_params, template_id)
+      return get_job_ads_etc(tem_params, template_id)
+    when MessageTemplateName::JOB_ADS_ENDED
+      return get_job_ads_etc(tem_params, template_id)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
   end
 
-  def self.get_job_ads_message_reserve(tem_params, template_id)
+  def self.get_job_ads_etc(tem_params, template_id)
     target_public_id = tem_params.dig(:target_public_id)
     job_posting_public_id = tem_params.dig(:job_posting_public_id)
     title = tem_params.dig(:job_posting_title)
@@ -174,6 +178,29 @@ module KakaoNotificationLoggingHelper
         "template" => template_id,
         "job_posting_public_id" => job_posting_public_id,
         "job_posting_title" => title,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
+
+  def self.get_job_ads_message_logging_data(template_params, template_id)
+    target_public_id = template_params.dig(:target_public_id)
+    job_posting_public_id = template_params.dig(:job_posting_public_id)
+    job_posting_title = template_params.dig(:job_posting_title)
+    business_name = template_params.dig(:business_name)
+    work_type_ko = template_params.dig(:work_type_ko)
+
+    return {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "template" => template_id,
+        "job_posting_public_id" => job_posting_public_id,
+        "job_posting_title" => job_posting_title,
+        "job_posting_type" => work_type_ko,
+        "business_name" => business_name,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }

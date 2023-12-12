@@ -10,9 +10,15 @@ class Notification::Factory::JobAdsSecondMessage < Notification::Factory::Notifi
     super(MessageTemplateName::JOB_ADS_MESSAGE_SECOND)
     job_posting = JobPosting.find_by(id: job_posting_id)
     @job_posting = job_posting
-    @list = Notification::Factory::SearchTarget::JobAdsSecondTargetService.call(job_posting)
+    @list = Notification::Factory::SearchTarget::JobAdsNewAndRetargetService.call(job_posting, 2)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "job_posting", @job_posting.id, "yobosa")
     create_message
+  end
+
+  def create_message
+    @list.each do |user|
+      create_bizm_post_pay_message(user)
+    end
   end
 
   def create_bizm_post_pay_message(user)
@@ -29,7 +35,7 @@ class Notification::Factory::JobAdsSecondMessage < Notification::Factory::Notifi
     homecare_yes = %w[commute resident bath_help].include?(@job_posting.work_type)
 
     params = {
-      title: "구인 광고 메세지 1차",
+      title: "구인 광고 메세지 2차",
       message: homecare_yes ? build_visit_message(user, @job_posting.title, job_posting_customer) : build_facility_message(user, @job_posting.title),
       work_type_ko: work_type_ko,
       address: @job_posting.address,
@@ -53,7 +59,7 @@ class Notification::Factory::JobAdsSecondMessage < Notification::Factory::Notifi
       target_public_id: user.public_id
     }
 
-    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, 'AT'))
+    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, 'AI'))
   end
 
   def build_visit_message(user, title, job_posting_customer)

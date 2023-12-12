@@ -1,4 +1,4 @@
-class Notification::Factory::SearchTarget::JobAdsSecondTargetService
+class Notification::Factory::SearchTarget::JobAdsNewAndRetargetService
   DISTANCE_LIST = {
     by_walk15: 900,
     by_walk30: 1800,
@@ -6,17 +6,21 @@ class Notification::Factory::SearchTarget::JobAdsSecondTargetService
     by_km_5: 5000,
   }
 
-  def self.call(job_posting)
-    new(job_posting).call
+  def self.call(job_posting, times)
+    new(job_posting, times).call
   end
 
-  def initialize(job_posting)
+  def initialize(job_posting, times)
     @job_posting = job_posting
+
+    # 2차 / 3차 분기
+    @times = times
+    @previous_message_template_name = times == 2 ? MessageTemplateName::JOB_ADS_MESSAGE_FIRST : MessageTemplateName::JOB_ADS_MESSAGE_SECOND
   end
   def call
     users = []
     if Jets.env != 'production'
-      return [User.last]
+      return [User.where.not(last_used_at: nil).order(last_used_at: :desc).first]
     end
 
     User.preferred_distances.each do |key, value|
@@ -24,9 +28,8 @@ class Notification::Factory::SearchTarget::JobAdsSecondTargetService
         @job_posting.work_type == 'hospital' ? 'etc' : @job_posting.work_type
 
       if @job_posting.lat.present? && @job_posting.lng.present?
-        users += User
-                   .within_last_7_days
-                   .receive_job_notifications
+        target_users = @times == 2 ? User.within_last_7_days.receive_job_notifications : User.receive_job_notifications
+        users += target_users
                    .select(
                      "users.*, earth_distance(ll_to_earth(lat, lng), ll_to_earth(#{@job_posting.lat}, #{@job_posting.lng})) AS distance",
                      )
@@ -49,22 +52,21 @@ class Notification::Factory::SearchTarget::JobAdsSecondTargetService
     end
 
     # 1차 발송자들 전부 제거
-    not_confirmed_id = DispatchedNotification.where(notification_relate_instance_id: @job_posting.id, notification_relate_instance_types_id: 1)
+    not_confirmed_id = DispatchedNotification.where(notification_relate_instance_id: @job_posting.id, notification_relate_instance_types_id: 1, message_template_name: @previous_message_template_name)
                                                .where(confirmed: nil)
                                                .pluck(:receiver_id)
     not_confirmed_user = User.where(id: not_confirmed_id)
     users = users - not_confirmed_user
-    retarget_user = second_ads_retarget
 
-    # retargeting 로직 적용
+    # retarget 대상 유저 겹치지 않게 추가
     users | retarget_user
   end
 
   private
 
-  def second_ads_retarget
-  # 1차에서 확인한 사람
-  confirmed_receiver_id = DispatchedNotification.where(notification_relate_instance_id: @job_posting.id, notification_relate_instance_types_id: 1)
+  def retarget_user
+  # 확인한 사람
+  confirmed_receiver_id = DispatchedNotification.where(notification_relate_instance_id: @job_posting.id, notification_relate_instance_types_id: 1, message_template_name: @previous_message_template_name)
                         .where.not(confirmed: nil)
                         .pluck(:receiver_id)
   confirmed_user = User.where(id: confirmed_receiver_id)
