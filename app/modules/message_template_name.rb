@@ -71,5 +71,13 @@ module MessageTemplateName
   # 구인광고 메세지 > 2차 발송 예약 기관 알림톡
   # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1285%3A1896&mode=dev
   JOB_ADS_MESSAGE_RESERVE = 'job_ads_message_reserve'.freeze
-
+  # 구인광고 메세지 > 요양보호사 2차
+  # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1386%3A5768&mode=dev
+  JOB_ADS_MESSAGE_SECOND = 'job_ads_message_second'.freeze
+  # 구인광고 메세지 > 요양보호사 3차
+  # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1386%3A5785&mode=dev
+  JOB_ADS_MESSAGE_THIRD = 'job_ads_message_third'.freeze
+  # 구인광고 메세지 > 전체 발송 완료
+  # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1308%3A6117&mode=dev
+  JOB_ADS_ENDED = 'job_ads_last_end'.freeze
 end

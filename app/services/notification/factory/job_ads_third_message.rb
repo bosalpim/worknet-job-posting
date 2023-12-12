@@ -1,4 +1,4 @@
-class Notification::Factory::JobAdsFirstMessage < Notification::Factory::NotificationFactoryClass
+class Notification::Factory::JobAdsThirdMessage < Notification::Factory::NotificationFactoryClass
   include ApplicationHelper
   include TranslationHelper
   include JobPostingsHelper
@@ -7,10 +7,10 @@ class Notification::Factory::JobAdsFirstMessage < Notification::Factory::Notific
 
   DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
   def initialize(job_posting_id)
-    super(MessageTemplateName::JOB_ADS_MESSAGE_FIRST)
-    job_posting = JobPosting.find(job_posting_id)
+    super(MessageTemplateName::JOB_ADS_MESSAGE_THIRD)
+    job_posting = JobPosting.find_by(id: job_posting_id)
     @job_posting = job_posting
-    @list = Notification::Factory::SearchTarget::JobAdsFirstTargetService.call(job_posting)
+    @list = Notification::Factory::SearchTarget::JobAdsNewAndRetargetService.call(job_posting, 3)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "job_posting", @job_posting.id, "yobosa")
     create_message
   end
@@ -35,7 +35,7 @@ class Notification::Factory::JobAdsFirstMessage < Notification::Factory::Notific
     homecare_yes = %w[commute resident bath_help].include?(@job_posting.work_type)
 
     params = {
-      title: "구인 광고 메세지 1차",
+      title: "구인 광고 메세지 3차",
       message: homecare_yes ? build_visit_message(user, @job_posting.title, job_posting_customer) : build_facility_message(user, @job_posting.title),
       work_type_ko: work_type_ko,
       address: @job_posting.address,
@@ -63,8 +63,8 @@ class Notification::Factory::JobAdsFirstMessage < Notification::Factory::Notific
   end
 
   def build_visit_message(user, title, job_posting_customer)
-    "안녕하세요.
-선생님께서 등록해주신 구직 정보에 맞는 일자리 정보를 안내드립니다.
+    "어르신과 센터장님이 #{user.name} 요양보호사님의 응답을 기다리고 있어요.
+사이트를 방문해 일자리 지원 여부를 선택해주세요.
 
 ■ 공고제목
 #{title}
@@ -84,12 +84,14 @@ class Notification::Factory::JobAdsFirstMessage < Notification::Factory::Notific
 ■ 급여
 #{get_pay_text(@job_posting)}
 
+근무를 원하시는 선생님은 담당자에게 연락주세요. :)
+
 아래 버튼을 눌러 사이트를 방문해 자세한 내용을 확인하고 지원해보세요!"
   end
 
   def build_facility_message(user, title)
-    "안녕하세요.
-선생님께서 등록해주신 구직 정보에 맞는 일자리 정보를 안내드립니다.
+    "어르신과 센터장님이 #{user.name} 요양보호사님의 응답을 기다리고 있어요.
+사이트를 방문해 일자리 지원 여부를 선택해주세요.
 
 ■ 공고제목
 #{title}
@@ -105,6 +107,8 @@ class Notification::Factory::JobAdsFirstMessage < Notification::Factory::Notific
 
 ■ 급여
 #{get_pay_text(@job_posting)}
+
+근무를 원하시는 선생님은 담당자에게 연락주세요. :)
 
 아래 버튼을 눌러 사이트를 방문해 자세한 내용을 확인하고 지원해보세요!"
   end

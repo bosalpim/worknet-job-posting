@@ -12,7 +12,6 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
     job_posting = JobPosting.find(job_posting_id)
     @job_posting = job_posting
     @list = NewJobPostingUsersService.call(job_posting)
-    @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "job_posting", @job_posting.id, "yobosa")
     create_message
   end
   def create_message

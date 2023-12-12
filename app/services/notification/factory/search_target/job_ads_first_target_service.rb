@@ -1,4 +1,4 @@
-class Notification::Factory::SearchTarget::JobAdsFirstMessageUsersService
+class Notification::Factory::SearchTarget::JobAdsFirstTargetService
   DISTANCE_LIST = {
     by_walk15: 900,
     by_walk30: 1800,
@@ -17,7 +17,7 @@ class Notification::Factory::SearchTarget::JobAdsFirstMessageUsersService
   def call
     users = []
     if Jets.env != 'production'
-      return [User.last]
+      return [User.where.not(last_used_at: nil).order(last_used_at: :desc).first]
     end
 
     User.preferred_distances.each do |key, value|
