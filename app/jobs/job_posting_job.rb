@@ -41,7 +41,7 @@ class JobPostingJob < ApplicationJob
         notification.process
 
         MessageHistory.create!(type_name: TYPE_SUCCEDED, status: 2, notification_relate_instance_types_id: RELATE_TYPE_JOB_POSTING, notification_relate_instance_id: job_posting.id)
-        scheduled_at = Time.current.tomorrow.beginning_of_day + RESERVE_TARGET_TIME - KOREAN_OFFSET
+        scheduled_at = Time.current.tomorrow.tomorrow.beginning_of_day + RESERVE_TARGET_TIME - KOREAN_OFFSET
         MessageHistory.create!(type_name: TYPE_RESERVED, status: 3, notification_relate_instance_types_id: RELATE_TYPE_JOB_POSTING, notification_relate_instance_id: job_posting.id, scheduled_at: scheduled_at)
 
         # 3차 메세지 예약 알림톡 발송
