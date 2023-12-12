@@ -14,6 +14,7 @@ Jets.application.routes.draw do
       post :new_notification
       post :new_satisfaction_survey
       post :new_user_satisfaction_survey
+      post :job_ads_messages
     end
     collection do
       post :notify_matched_user

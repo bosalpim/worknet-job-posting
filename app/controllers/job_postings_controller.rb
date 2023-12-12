@@ -18,6 +18,15 @@ class JobPostingsController < ApplicationController
     }, status: :ok
   end
 
+  def job_ads_messages
+    event = { job_posting_id: params["job_posting_id"] }
+    JobPostingJob.perform_later(:first_message, event)
+
+    render json: {
+      success: true
+    }, status: :ok
+  end
+
   def call_interview_proposal
     event = { proposal_id: params["proposal_id"] }
     rsp = nil

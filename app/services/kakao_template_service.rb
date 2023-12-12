@@ -142,6 +142,16 @@ class KakaoTemplateService
       get_roulette_ticket_receive(tem_params)
     when MessageTemplateName::CONTACT_MESSAGE
       get_contact_message(tem_params)
+    when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
+      get_job_ads_message(tem_params)
+    when MessageTemplateName::JOB_ADS_MESSAGE_SECOND
+      get_job_ads_message(tem_params)
+    when MessageTemplateName::JOB_ADS_MESSAGE_THIRD
+      get_job_ads_message(tem_params)
+    when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
+      get_job_ads_message_reserve(tem_params)
+    when MessageTemplateName::JOB_ADS_ENDED
+      get_job_ads_ended(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1891,6 +1901,68 @@ carepartner.kr#{path}
           url_mobile: deny_link,
           url_pc: deny_link
         },
+      ]
+    }
+  end
+
+  def get_job_ads_message(tem_params)
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '⚡️ 간편 지원하기',
+          type: 'WL',
+          url_pc: tem_params[:application_url],
+          url_mobile: tem_params[:application_url]
+        },
+        {
+          name: '🔎 일자리 확인하기',
+          type: 'WL',
+          url_pc: tem_params[:origin_url],
+          url_mobile: tem_params[:origin_url]
+        }
+      ]
+    }
+  end
+
+  def get_job_ads_ended(tem_params)
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '채용 종료하기',
+          type: 'WL',
+          url_pc: tem_params[:close_link],
+          url_mobile: tem_params[:close_link]
+        },
+        {
+          name: '발송 결과보기',
+          type: 'WL',
+          url_pc: tem_params[:result_link],
+          url_mobile: tem_params[:result_link]
+        }
+      ]
+    }
+  end
+  def get_job_ads_message_reserve(tem_params)
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '채용했어요 (발송취소)',
+          type: 'WL',
+          url_pc: tem_params[:cancel_message_link],
+          url_mobile: tem_params[:cancel_message_link]
+        },
+        {
+          name: '발송 결과보기',
+          type: 'WL',
+          url_pc: tem_params[:result_link],
+          url_mobile: tem_params[:result_link]
+        }
       ]
     }
   end

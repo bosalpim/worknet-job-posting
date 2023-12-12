@@ -135,4 +135,9 @@ module JobPostingsHelper
     end
       .join(', ')
   end
+
+  def get_dong_name_by_address(address)
+    dong = address.split(' ')&.slice(2, 1).first
+    dong.nil? ? "" : dong
+  end
 end
