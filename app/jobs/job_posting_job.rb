@@ -41,7 +41,7 @@ class JobPostingJob < ApplicationJob
         notification.process
 
         MessageHistory.create!(type_name: TYPE_SUCCEDED, status: 2, notification_relate_instance_types_id: RELATE_TYPE_JOB_POSTING, notification_relate_instance_id: job_posting.id)
-        scheduled_at = Time.current.tomorrow.tomorrow.beginning_of_day + RESERVE_TARGET_TIME - KOREAN_OFFSET
+        scheduled_at = (Time.current + KOREAN_OFFSET).tomorrow.beginning_of_day + RESERVE_TARGET_TIME - KOREAN_OFFSET
         MessageHistory.create!(type_name: TYPE_RESERVED, status: 3, notification_relate_instance_types_id: RELATE_TYPE_JOB_POSTING, notification_relate_instance_id: job_posting.id, scheduled_at: scheduled_at)
 
         # 3차 메세지 예약 알림톡 발송
@@ -135,8 +135,8 @@ class JobPostingJob < ApplicationJob
 
       # 1차 메세지 발송 완료 히스토리 & 2차 예약 히스토리 생성
       MessageHistory.create!(type_name: TYPE_SUCCEDED, status: 1, notification_relate_instance_types_id: 1, notification_relate_instance_id: job_posting_id)
-      # 1차가 내일 오전8시로 예약된다면, 2차 발송 예약 시간은 2일뒤가 되어야한다.
-      scheduled_at = Time.current.tomorrow.beginning_of_day + RESERVE_TARGET_TIME - KOREAN_OFFSET
+      # 오후 21:00에는 1차가 내일 오전8시로 발송 예약되기에, 2차 발송 예약 시간은 2일뒤 오전8시가 되어야한다.
+      scheduled_at = (Time.current + KOREAN_OFFSET).tomorrow.beginning_of_day + RESERVE_TARGET_TIME - KOREAN_OFFSET
       scheduled_at = scheduled_at + 1.days if korean_time.hour > 21
       MessageHistory.create!(type_name: TYPE_RESERVED, status: 2, notification_relate_instance_types_id: 1, notification_relate_instance_id: job_posting_id, scheduled_at: scheduled_at)
 
