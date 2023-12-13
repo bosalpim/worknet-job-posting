@@ -54,6 +54,9 @@ class Notification::Factory::JobAdsMessageReserve < Notification::Factory::Notif
 ■ 발송 내역
 지금까지 #{get_dong_name_by_address(@job_posting.address)} 주변 요양보호사 #{dispatched_notifications_count}명이 메세지를 받았어요. 자세한 내용은 발송 결과보기 버튼을 눌러 확인해 보세요.
 
+■ 번개채용 구인광고 메세지가 어떤 도움을 주는지 궁금하시다면, 링크를 눌러주세요!
+https://link.carepartner.kr/41gsH01
+
 ■ 이미 채용 했나요?
 구인광고 메세지를 보고 계속해서 지원, 문의 연락을 받을 수 있어요. 이미 채용했다면 채용 종료하여 발송 취소해주세요."
   end
