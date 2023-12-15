@@ -49,6 +49,8 @@ module MessageTemplateName
   CAREPARTNER_PRESENT = 'carepartner_present'.freeze
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
+  # 자격증 인증 이탈자 알림
+  CHECK_CERTIFICATION = 'check_certification'.freeze
   # 간편 지원
   JOB_APPLICATION = 'job_application'.freeze
 

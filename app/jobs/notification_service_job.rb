@@ -14,6 +14,11 @@ class NotificationServiceJob < ApplicationJob
   end
 
   cron "0 7 ? * * *"
+  def notify_certification_leave
+    process({ message_template_id: MessageTemplateName::CHECK_CERTIFICATION })
+  end
+
+  cron "0 7 ? * * *"
   def notify_draft_new_user
     process({ message_template_id: MessageTemplateName::CAREPARTNER_PRESENT })
   end

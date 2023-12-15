@@ -152,6 +152,8 @@ class KakaoTemplateService
       get_job_ads_message_reserve(tem_params)
     when MessageTemplateName::JOB_ADS_ENDED
       get_job_ads_ended(tem_params)
+    when MessageTemplateName::CHECK_CERTIFICATION
+      get_leave_certification_message(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1962,6 +1964,34 @@ carepartner.kr#{path}
           type: 'WL',
           url_pc: tem_params[:result_link],
           url_mobile: tem_params[:result_link]
+        }
+      ]
+    }
+  end
+
+  def get_leave_certification_message(tem_params)
+    url = if Jets.env == 'production'
+            "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=check_certification"
+          else
+            "https://dev-carepartner.vercel.app/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=check_certification"
+          end
+
+    {
+      title: "정보등록 완료하고 커피쿠폰 받아가세요.",
+      message: "#{tem_params[:name]} 요양보호사님 안녕하세요.
+아직 선생님께서 입력하지 않은 정보가 있습니다. 정보입력을 완료 하시고 집근처 일자리 알림과 이벤트 중인 커피쿠폰도 받아보세요.
+
+■ 구직 정보 입력을 완료하시면 추가로 집 근처의 급여 높은 일자리에 취업하실 수 있도록 케어파트너가 무료 일자리 알림을 보내드려요!
+
+■ 자격증 인증을 포함한 구직 정보 입력을 완료해주시면 커피 쿠폰을 무료로 증정해드립니다.
+
+■ 자격증 사진은 선생님께서 요양보호사임을 확인하는 용도 외에 절대 활용하지 않으니 안심하셔도 됩니다.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '구직 정보 입력하기',
+          url_mobile: url,
+          url_pc: url
         }
       ]
     }

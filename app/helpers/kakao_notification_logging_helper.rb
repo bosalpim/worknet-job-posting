@@ -124,6 +124,8 @@ module KakaoNotificationLoggingHelper
       return get_job_ads_etc(tem_params, template_id)
     when MessageTemplateName::JOB_ADS_ENDED
       return get_job_ads_etc(tem_params, template_id)
+    when MessageTemplateName::CHECK_CERTIFICATION
+      return get_basic_logging_data(tem_params, template_id, "Certification Enroll Leave Message")
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -147,6 +149,8 @@ module KakaoNotificationLoggingHelper
       }
     }
   end
+
+
   def self.get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
     job_posting_public_id = tem_params.dig(:job_posting_public_id)
     title = tem_params.dig(:title)
@@ -455,6 +459,17 @@ module KakaoNotificationLoggingHelper
       "event_properties" => {
         "template" => template_id,
         "title" => "CBT Draft Message",
+      }
+    }
+  end
+
+  def self.get_basic_logging_data(template_id, tem_params, title)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => title,
       }
     }
   end
