@@ -1985,6 +1985,7 @@ carepartner.kr#{path}
     user_message = tem_params[:user_message]
     preferred_call_time = tem_params[:preferred_call_time]
     link = tem_params[:link]
+    close_link = tem_params[:close_link]
     {
       title: "#{user_info} 요양보호사가 문의했어요.",
       message: "#{user_info} 요양보호사가 문의했어요.
@@ -2005,6 +2006,12 @@ carepartner.kr#{path}
           name: "문자문의 확인하기",
           url_mobile: link,
           url_pc: link,
+        },
+        {
+          type: "WL",
+          name: "문의 그만받기 (채용종료)",
+          url_mobile: close_link,
+          url_pc: close_link,
         }
       ]
     }

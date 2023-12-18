@@ -63,7 +63,7 @@ module MessageTemplateName
   PROPOSAL = "proposal".freeze
 
   #문자문의
-  CONTACT_MESSAGE = 'contact_message'.freeze
+  CONTACT_MESSAGE = 'contact_message (close_avail)'.freeze
 
   # 구인광고 메세지 > 요양보호사 1차
   # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1386%3A5741&mode=dev
