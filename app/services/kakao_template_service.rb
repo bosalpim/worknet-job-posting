@@ -618,6 +618,12 @@ class KakaoTemplateService
       message: "안녕하세요, #{tem_params[:business_name]} 담당자님\n조금 전 요양보호사와의 통화는 어떠셨나요?\n≫ 공고명: #{tem_params[:job_posting_title]}\n\n아래 버튼을 눌러 1분 채용결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n여러 번 참여하면 당첨 확률 상승!\n#{tem_params[:link]}",
       buttons: [
         {
+          name: "채용종료하기",
+          type: "WL",
+          url_mobile: "https://business.carepartner.kr/recruitment_management/#{tem_params[:job_posting_public_id]}/close",
+          url_pc: "https://business.carepartner.kr/recruitment_management/#{tem_params[:job_posting_public_id]}/close"
+        },
+        {
           name: "설문조사 참여하기",
           type: "WL",
           url_mobile: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=business_satisfaction_survey",
@@ -1754,6 +1760,7 @@ carepartner.kr#{path}
     user_message = tem_params[:user_message]
     preferred_call_time = tem_params[:preferred_call_time]
     link = tem_params[:link]
+    close_link = tem_params[:close_link]
     {
       title: "#{user_info} 요양보호사가 지원했어요.",
       message: "#{user_info} 요양보호사가 지원했어요.
@@ -1774,6 +1781,12 @@ carepartner.kr#{path}
           name: "지원자 확인하기",
           url_mobile: link,
           url_pc: link,
+        },
+        {
+          type: "WL",
+          name: "지원 그만받기 (채용종료)",
+          url_mobile: close_link,
+          url_pc: close_link,
         }
       ]
     }

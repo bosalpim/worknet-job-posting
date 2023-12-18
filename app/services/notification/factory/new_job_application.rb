@@ -45,6 +45,15 @@ class Notification::Factory::NewJobApplication < Notification::Factory::Notifica
              "https://staging-business.vercel.app#{suffix}?#{arlimtalk_utm}"
            end
 
+    close_suffix = "/recruitment_management/#{@job_posting.public_id}/close"
+    close_link = if Jets.env.production?
+             "https://business.carepartner.kr#{close_suffix}?#{arlimtalk_utm}"
+           elsif Jets.env.staging?
+             "https://business.dev-carepartner.kr#{close_suffix}?#{arlimtalk_utm}"
+           else
+             "https://staging-business.vercel.app#{close_suffix}?#{arlimtalk_utm}"
+           end
+
     params = {
       target_public_id: @client.public_id,
       job_posting_public_id: @job_posting.public_id,
@@ -60,6 +69,7 @@ class Notification::Factory::NewJobApplication < Notification::Factory::Notifica
       time_match: is_time_match(work_start_time: @job_posting.work_start_time, work_end_time: @job_posting.work_end_time, job_search_times: @user.job_search_times),
       grade_match: is_grade_match(@user.preferred_grades, @job_posting.grade),
       link: link,
+      close_link: close_link
     }
     @bizm_post_pay_list.push(BizmPostPayMessage.new(
       @message_template_id,
