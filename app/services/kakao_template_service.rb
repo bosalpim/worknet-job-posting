@@ -614,8 +614,15 @@ class KakaoTemplateService
 
   def get_satisfaction_survey_data(tem_params)
     {
-      title: "#{tem_params[:business_name]} 담당자님 채용여부는 결정되었나요?",
-      message: "안녕하세요, #{tem_params[:business_name]} 담당자님\n조금 전 요양보호사와의 통화는 어떠셨나요?\n≫ 공고명: #{tem_params[:job_posting_title]}\n\n아래 버튼을 눌러 1분 채용결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n여러 번 참여하면 당첨 확률 상승!\n#{tem_params[:link]}",
+      title: "방금 전화한 공고 채용중 인가요?",
+      message: "방금 요양보호사와 전화한 공고가 아직 채용중 인가요?
+
+더 이상 채용하지 않는다면, 아래 '채용종료하기'버튼을 눌러주세요.
+
+■ 공고
+#{tem_params[:job_posting_title]}
+
+(설문 참여 시 매주 추첨을 통해 커피 쿠폰을 드려요.)",
       buttons: [
         {
           name: "채용종료하기",

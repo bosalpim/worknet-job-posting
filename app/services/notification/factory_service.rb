@@ -22,7 +22,7 @@ class Notification::FactoryService
     when MessageTemplateName::JOB_APPLICATION
       return Notification::Factory::NewJobApplication.new(params[:job_application_id])
     when MessageTemplateName::CONTACT_MESSAGE
-      return Notification::Factory::NewContactMessage.new(params[:contact_message_id])
+      return Notification::Factory::NewContactMessage.new(params[:contact_message_id]+"abc")
     when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
       return Notification::Factory::ProposalAccepted.new(params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
