@@ -210,6 +210,8 @@ module KakaoNotificationLoggingHelper
     job_posting_title = template_params.dig(:job_posting_title)
     business_name = template_params.dig(:business_name)
     work_type_ko = template_params.dig(:work_type_ko)
+    is_retarget_user = template_params.dig(:is_retarget_user)
+    last_used_under_three_day = template_params.dig(:last_used_under_three_day)
 
     return {
       "user_id" => target_public_id,
@@ -222,7 +224,9 @@ module KakaoNotificationLoggingHelper
         "job_posting_title" => job_posting_title,
         "job_posting_type" => work_type_ko,
         "business_name" => business_name,
-        "send_at" => Time.current + (9 * 60 * 60)
+        "send_at" => Time.current + (9 * 60 * 60),
+        "is_retarget_user" => is_retarget_user.nil? ? false : is_retarget_user,
+        "last_used_under_three_day" => last_used_under_three_day,
       }
     }
   end

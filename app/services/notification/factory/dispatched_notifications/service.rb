@@ -12,8 +12,12 @@ class Notification::Factory::DispatchedNotifications::Service
   end
 
   def set_dispatced_notifications(results)
-    @send_results = results
-    save_dispatced_notifications
+    begin
+      @send_results = results
+      save_dispatced_notifications
+    rescue => e
+      Jets.logger.info "SET DISPATCHED ERROR : #{e.message}, template: #{@template_name}, instance_type: #{@relate_instance_type}, instance: #{@relate_instance_id}"
+    end
   end
 
   private
