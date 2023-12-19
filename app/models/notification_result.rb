@@ -4,7 +4,7 @@ class NotificationResult < ApplicationRecord
   EXTRA_BENEFIT = "extra_benefit_notification".freeze
   PROPOSAL_ACCEPTED = "proposal_accepted".freeze
   PROPOSAL_REJECTED = "proposal_refused".freeze
-  SATISFACTION_SURVEY = "satisfaction_survey".freeze
+  SATISFACTION_SURVEY = "business_call_survey".freeze
   USER_SATISFACTION_SURVEY = "user_satisfaction_survey".freeze
   USER_CALL_FAILURE_ALERT = "user_calls_failure_alert".freeze
   BUSINESS_CALL_FAILURE_ALERT = "business_calls_failure_alert".freeze
