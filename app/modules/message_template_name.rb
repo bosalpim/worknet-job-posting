@@ -36,7 +36,7 @@ module MessageTemplateName
   CALL_INTERVIEW_PROPOSAL = 'call_interview_proposal'.freeze
   CALL_INTERVIEW_PROPOSAL_V2 = 'call_interview_proposal_v2'.freeze
   CALL_INTERVIEW_ACCEPTED = 'call_interview_proposal_accept'.freeze
-  CALL_SAVED_JOB_CAREGIVER = 'call_saved_job_caregiver'.freeze # 공고에 관심표시한 요양보호사 기관에게 알림톡
+  CALL_SAVED_JOB_CAREGIVER = 'call_saved_care(close_avail)'.freeze # 공고에 관심표시한 요양보호사 기관에게 알림톡
   CALL_SAVED_JOB_POSTING_V2 = 'call_saved_job_posting_v2'.freeze
   # TFT 구직상태 업데이트 시 추가된 템플릿
   ASK_ACTIVE = 'Off_Job_Proposal_Notification'.freeze
