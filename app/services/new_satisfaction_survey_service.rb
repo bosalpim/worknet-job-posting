@@ -27,7 +27,8 @@ class NewSatisfactionSurveyService
         link: short_url.url,
         target_public_id: business.clients.first.public_id
 
-      }
+      },
+      message_type: 'AI'
     )
     save_kakao_notification(response, NotificationResult::SATISFACTION_SURVEY, job_posting.id, template_id)
     response

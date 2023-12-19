@@ -614,15 +614,15 @@ class KakaoTemplateService
 
   def get_satisfaction_survey_data(tem_params)
     {
-      title: "방금 전화한 공고 채용중 인가요?",
-      message: "방금 요양보호사와 전화한 공고가 아직 채용중 인가요?
+      title: "방금 요양보호사와 통화한 공고가 아직 채용중 인가요?",
+      message: "방금 요양보호사와 통화한 공고가 아직 채용중 인가요?
 
-더 이상 채용하지 않는다면, 아래 '채용종료하기'버튼을 눌러주세요.
+더 이상 채용하지 않는다면, 아래 ‘채용 종료하기' 버튼을 눌러주세요.
 
 ■ 공고
 #{tem_params[:job_posting_title]}
 
-(설문 참여 시 매주 추첨을 통해 커피 쿠폰을 드려요.)",
+(설문 참여 시 매주 추첨을 통해 커피 쿠폰을 드려요)",
       buttons: [
         {
           name: "채용종료하기",
