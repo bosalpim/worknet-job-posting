@@ -614,8 +614,15 @@ class KakaoTemplateService
 
   def get_satisfaction_survey_data(tem_params)
     {
-      title: "#{tem_params[:business_name]} 담당자님 채용여부는 결정되었나요?",
-      message: "안녕하세요, #{tem_params[:business_name]} 담당자님\n조금 전 요양보호사와의 통화는 어떠셨나요?\n≫ 공고명: #{tem_params[:job_posting_title]}\n\n아래 버튼을 눌러 1분 채용결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n여러 번 참여하면 당첨 확률 상승!\n#{tem_params[:link]}",
+      title: "방금 요양보호사와 통화한 공고가 아직 채용중 인가요?",
+      message: "방금 요양보호사와 통화한 공고가 아직 채용중 인가요?
+
+더 이상 채용하지 않는다면, 아래 ‘채용 종료하기' 버튼을 눌러주세요.
+
+■ 공고
+#{tem_params[:job_posting_title]}
+
+(설문 참여 시 매주 추첨을 통해 커피 쿠폰을 드려요)",
       buttons: [
         {
           name: "채용종료하기",
@@ -1327,7 +1334,8 @@ class KakaoTemplateService
            end
     url_path = "#{tem_params[:url_path]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_caregiver"
     shorturl = ShortUrl.build(host + url_path, host)
-
+    utm = "?utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_care(close_avail)"
+    close_link = "#{host}/recruitment_management/#{@job_posting.public_id}/close#{utm}"
     job_posting_title = tem_params[:job_posting_title]
     user_name = tem_params[:user_name]
     user_info = "#{user_name} / #{tem_params[:user_gender]} / #{tem_params[:user_age]}세"
@@ -1353,7 +1361,13 @@ class KakaoTemplateService
           name: '자세히 확인하기',
           url_mobile: shorturl.url,
           url_pc: shorturl.url
-        }
+        },
+      {
+        type: 'WL',
+        name: '알림 그만받기 (채용종료)',
+        url_mobile: close_link,
+        url_pc: close_link
+      }
       ]
     }
 
