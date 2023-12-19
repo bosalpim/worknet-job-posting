@@ -10,7 +10,9 @@ class Notification::Factory::JobAdsThirdMessage < Notification::Factory::Notific
     super(MessageTemplateName::JOB_ADS_MESSAGE_THIRD)
     job_posting = JobPosting.find_by(id: job_posting_id)
     @job_posting = job_posting
-    @list = Notification::Factory::SearchTarget::JobAdsNewAndRetargetService.call(job_posting, 3)
+    target = Notification::Factory::SearchTarget::JobAdsNewAndRetargetService.call(job_posting, 3)
+    @list = target.dig(:users)
+    @retarget_users = target.dig(:retarget_users)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "job_posting", @job_posting.id, "yobosa")
     create_message
   end
@@ -56,7 +58,9 @@ class Notification::Factory::JobAdsThirdMessage < Notification::Factory::Notific
       path: shorten_url.sub("https://carepartner.kr", ""),
       job_posting_public_id: @job_posting.public_id,
       job_posting_title: @job_posting.title,
-      target_public_id: user.public_id
+      target_public_id: user.public_id,
+      is_retarget_user: @retarget_users.include?(user),
+      last_used_under_three_day: user.last_used_at.nil? ? false : (user.last_used_at > 3.days.ago)
     }
 
     @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, 'AI'))
