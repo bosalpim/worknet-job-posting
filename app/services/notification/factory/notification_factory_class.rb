@@ -64,7 +64,7 @@ class Notification::Factory::NotificationFactoryClass
   end
 
   def create_dispatched_notifications
-    if @dispatched_notifications_service != nil
+    unless @dispatched_notifications_service.nil?
       results = @app_push_result + @bizm_post_pay_result + @bizm_pre_pay_result
       @dispatched_notifications_service.set_dispatced_notifications(results)
     end
