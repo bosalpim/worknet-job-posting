@@ -20,7 +20,7 @@ class Notification::Factory::SearchTarget::JobAdsNewAndRetargetService
   def call
     users = []
     if Jets.env != 'production'
-      return [User.where.not(last_used_at: nil).order(last_used_at: :desc).first]
+      return { users: [User.where.not(last_used_at: nil).order(last_used_at: :desc).first], retarget_users: [] }
     end
 
     User.preferred_distances.each do |key, value|
@@ -58,8 +58,7 @@ class Notification::Factory::SearchTarget::JobAdsNewAndRetargetService
     not_confirmed_user = User.where(id: not_confirmed_id)
     users = users - not_confirmed_user
 
-    # retarget 대상 유저 겹치지 않게 추가
-    users | retarget_user
+    { users: users | retarget_user, retarget_users: retarget_user }
   end
 
   private
