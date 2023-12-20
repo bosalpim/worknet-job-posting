@@ -1,4 +1,5 @@
 class KakaoTemplateService
+  include ApplicationHelper
   include MessageTemplateName
   DEFAULT_RESERVE_AT = "00000000000000".freeze
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
@@ -613,7 +614,12 @@ class KakaoTemplateService
   end
 
   def get_satisfaction_survey_data(tem_params)
-    {
+    base_url = business_base_url
+    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=business_satisfaction_survey"
+    close_link = "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/close?#{utm}",
+    survey_link = "#{base_url}/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&#{utm}"
+
+    return {
       title: "방금 요양보호사와 통화한 공고가 아직 채용중 인가요?",
       message: "방금 요양보호사와 통화한 공고가 아직 채용중 인가요?
 
@@ -627,14 +633,14 @@ class KakaoTemplateService
         {
           name: "채용종료하기",
           type: "WL",
-          url_mobile: "https://business.carepartner.kr/recruitment_management/#{tem_params[:job_posting_public_id]}/close",
-          url_pc: "https://business.carepartner.kr/recruitment_management/#{tem_params[:job_posting_public_id]}/close"
+          url_mobile: close_link,
+          url_pc: close_link
         },
         {
           name: "설문조사 참여하기",
           type: "WL",
-          url_mobile: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=business_satisfaction_survey",
-          url_pc: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=business_satisfaction_survey",
+          url_mobile: survey_link,
+          url_pc: survey_link
         },
       ]
     }
