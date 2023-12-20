@@ -9,6 +9,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
     super(MessageTemplateName::CALL_INTERVIEW_ACCEPTED)
 
     @target_public_id = params['target_public_id']
+    @proposal_id = params['id']
     @business_id = params["business_id"]
     @business_name = params["business_name"]
     @job_posting_id = params["job_posting_id"]
@@ -23,10 +24,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
     @client_message = params["client_message"]
     @job_posting = JobPosting.find_by(public_id: @job_posting_id)
     @user = User.find_by(public_id: @employee_id)
-    @proposal = Proposal.find_by(
-      user_id: @user.id,
-      job_posting_id: @job_posting_id
-    )
+    @proposal = Proposal.find(@proposal_id)
     @client = @job_posting.client
 
     create_message
@@ -41,7 +39,10 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
   end
 
   def create_app_push_message
-
+    base_url = "#{DEEP_LINK_SCHEME}/redirect/business"
+    to = "employment_management/proposals/#{@proposal.id}"
+    link = "#{base_url}?to=#{CGI.escape("#{to}?utm_source=message&utm_campaign=app_push&utm_campaign=#{@message_template_id}")}"
+    
     @app_push_list.push(
       *@client.client_push_tokens.valid.map do |push_token|
         AppPush.new(
@@ -51,7 +52,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
           {
             title: '내가 보낸 전화면접 제안을 요양보호사가 수락했어요!',
             body: '제안을 수락한 요양보호사는 채용 확률이 높으니 지금바로 전화 응답해 보세요.',
-            link: @tel_link,
+            link: link,
           },
           @client.public_id,
         )

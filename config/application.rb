@@ -100,4 +100,5 @@ Jets.application.configure do
   TEST_PHONE_NUMBER = ENV['TEST_PHONE_NUMBER'] || '01029685055'
   BEX_API_URl = ENV['BEX_API_URL']
   BIZMSG_PROFILE = ENV['KAKAO_BIZMSG_PROFILE']
+  DEEP_LINK_SCHEME = "carepartner://app"
 end

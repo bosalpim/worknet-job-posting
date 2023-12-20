@@ -7,6 +7,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
 
   NewJobPostingUsersService = Notification::Factory::SearchTarget::NewJobPostingUsersService
   DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
+
   def initialize(job_posting_id)
     super(MessageTemplateName::NEW_JOB_POSTING)
     job_posting = JobPosting.find(job_posting_id)
@@ -14,6 +15,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
     @list = NewJobPostingUsersService.call(job_posting)
     create_message
   end
+
   def create_message
     @list.each do |user|
       dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "job_detail")
@@ -41,7 +43,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
       {
         body: "#{@job_posting.title}",
         title: '놓치면 곧 마감되는 신규 일자리가 있어요!',
-        link: "#{DEEP_LINK_SCEHEME}/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=new_job_posting" + dispatched_notification_param,
+        link: "#{DEEP_LINK_SCHEME}/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=new_job_posting" + dispatched_notification_param,
       },
       user.public_id,
       {

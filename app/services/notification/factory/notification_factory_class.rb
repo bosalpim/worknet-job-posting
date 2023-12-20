@@ -1,13 +1,13 @@
 class Notification::Factory::NotificationFactoryClass
   include NotificationSaveResultHelper
 
-  DEEP_LINK_SCEHEME = "carepartner://app"
   KAKAO_ARLIMTALK = "kakao_arlimtalk"
   APP_PUSH = "app_push"
 
   AppPush = Notification::Factory::SendMedium::AppPush
   BizmPostPayMessage = Notification::Factory::SendMedium::BizmPostPayMessage
   BizmPrePayMessage = Notification::Factory::SendMedium::BizmPrePayMessage
+
   def initialize(message_template_id)
     # 알림 발송 대상 배열
     @list = nil
@@ -71,6 +71,7 @@ class Notification::Factory::NotificationFactoryClass
   end
 
   private
+
   def send_app_push
     return unless check_class_type(@app_push_list, AppPush) == true
     send_process(@app_push_list, @app_push_result)

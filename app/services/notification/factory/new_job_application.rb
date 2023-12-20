@@ -5,7 +5,7 @@ class Notification::Factory::NewJobApplication < Notification::Factory::Notifica
   include ApplicationHelper
   include JobPostingsHelper
   include KakaoNotificationLoggingHelper
-  
+
   def initialize(job_application_public_id)
     super(MessageTemplateName::JOB_APPLICATION)
 
@@ -47,12 +47,12 @@ class Notification::Factory::NewJobApplication < Notification::Factory::Notifica
 
     close_suffix = "/recruitment_management/#{@job_posting.public_id}/close"
     close_link = if Jets.env.production?
-             "https://business.carepartner.kr#{close_suffix}?#{arlimtalk_utm}"
-           elsif Jets.env.staging?
-             "https://business.dev-carepartner.kr#{close_suffix}?#{arlimtalk_utm}"
-           else
-             "https://staging-business.vercel.app#{close_suffix}?#{arlimtalk_utm}"
-           end
+                   "https://business.carepartner.kr#{close_suffix}?#{arlimtalk_utm}"
+                 elsif Jets.env.staging?
+                   "https://business.dev-carepartner.kr#{close_suffix}?#{arlimtalk_utm}"
+                 else
+                   "https://staging-business.vercel.app#{close_suffix}?#{arlimtalk_utm}"
+                 end
 
     params = {
       target_public_id: @client.public_id,
@@ -78,7 +78,7 @@ class Notification::Factory::NewJobApplication < Notification::Factory::Notifica
   end
 
   def create_app_push_message
-    base_url = "#{DEEP_LINK_SCEHEME}/redirect/business"
+    base_url = "#{DEEP_LINK_SCHEME}/redirect/business"
     to = "employment_management/job_applications/#{@job_application.public_id}"
     link = "#{base_url}?to=#{CGI.escape("#{to}?utm_source=message&utm_campaign=app_push&utm_campaign=#{@message_template_id}")}"
     @app_push_list.push(
