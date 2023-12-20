@@ -21,6 +21,7 @@ class Notification::Factory::SendMedium::AppPush < Notification::Factory::SendMe
       else
         if response["results"].first["error"] == 'NotRegistered'
           UserPushToken.find_by(token: @to).destroy rescue nil
+          ClientPushToken.find_by(token: @to).destroy rescue nil
         end
         return { status: 'fail', response: response.to_s, target_public_id: @target_public_id }
       end
