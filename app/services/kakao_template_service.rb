@@ -1341,7 +1341,7 @@ class KakaoTemplateService
     url_path = "#{tem_params[:url_path]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_caregiver"
     shorturl = ShortUrl.build(host + url_path, host)
     utm = "?utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_care(close_avail)"
-    close_link = "#{host}/recruitment_management/#{@job_posting.public_id}/close#{utm}"
+    close_link = "#{host}/recruitment_management/#{tem_params[:job_posting_public_id]}/close#{utm}"
     job_posting_title = tem_params[:job_posting_title]
     user_name = tem_params[:user_name]
     user_info = "#{user_name} / #{tem_params[:user_gender]} / #{tem_params[:user_age]}세"
