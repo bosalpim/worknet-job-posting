@@ -37,6 +37,8 @@ class Notification::FactoryService
       return Notification::Factory::JobAdsMessageReserve.new(params[:job_posting_id], params[:times], params[:scheduled_at_text])
     when MessageTemplateName::JOB_ADS_ENDED
       return Notification::Factory::JobAdsMessageEnded.new(params[:job_posting_id])
+    when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
+      return Notification::Factory::ConfirmCareerCertification.new(params[:career_certification_id])
     else
       puts "no template found"
       return []
