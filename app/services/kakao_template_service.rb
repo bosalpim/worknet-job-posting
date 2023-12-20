@@ -2072,7 +2072,7 @@ carepartner.kr#{path}
       buttons: [
         {
           type: "WL",
-          name: "채용종료하기",
+          name: "채용결과 입력하기",
           url_mobile: link,
           url_pc: link,
         }
