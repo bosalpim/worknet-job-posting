@@ -1,4 +1,5 @@
 class KakaoTemplateService
+  include ApplicationHelper
   include MessageTemplateName
   DEFAULT_RESERVE_AT = "00000000000000".freeze
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
@@ -613,15 +614,33 @@ class KakaoTemplateService
   end
 
   def get_satisfaction_survey_data(tem_params)
-    {
-      title: "#{tem_params[:business_name]} 담당자님 채용여부는 결정되었나요?",
-      message: "안녕하세요, #{tem_params[:business_name]} 담당자님\n조금 전 요양보호사와의 통화는 어떠셨나요?\n≫ 공고명: #{tem_params[:job_posting_title]}\n\n아래 버튼을 눌러 1분 채용결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n여러 번 참여하면 당첨 확률 상승!\n#{tem_params[:link]}",
+    base_url = business_base_url
+    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=business_satisfaction_survey"
+    close_link = "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/close?#{utm}",
+    survey_link = "#{base_url}/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&#{utm}"
+
+    return {
+      title: "방금 요양보호사와 통화한 공고가 아직 채용중 인가요?",
+      message: "방금 요양보호사와 통화한 공고가 아직 채용중 인가요?
+
+더 이상 채용하지 않는다면, 아래 ‘채용 종료하기' 버튼을 눌러주세요.
+
+■ 공고
+#{tem_params[:job_posting_title]}
+
+(설문 참여 시 매주 추첨을 통해 커피 쿠폰을 드려요)",
       buttons: [
+        {
+          name: "채용종료하기",
+          type: "WL",
+          url_mobile: close_link,
+          url_pc: close_link
+        },
         {
           name: "설문조사 참여하기",
           type: "WL",
-          url_mobile: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=business_satisfaction_survey",
-          url_pc: "https://business.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=business_satisfaction_survey",
+          url_mobile: survey_link,
+          url_pc: survey_link
         },
       ]
     }
@@ -1321,7 +1340,8 @@ class KakaoTemplateService
            end
     url_path = "#{tem_params[:url_path]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_job_caregiver"
     shorturl = ShortUrl.build(host + url_path, host)
-
+    utm = "?utm_source=message&utm_medium=arlimtalk&utm_campaign=call_saved_care(close_avail)"
+    close_link = "#{host}/recruitment_management/#{tem_params[:job_posting_public_id]}/close#{utm}"
     job_posting_title = tem_params[:job_posting_title]
     user_name = tem_params[:user_name]
     user_info = "#{user_name} / #{tem_params[:user_gender]} / #{tem_params[:user_age]}세"
@@ -1347,7 +1367,13 @@ class KakaoTemplateService
           name: '자세히 확인하기',
           url_mobile: shorturl.url,
           url_pc: shorturl.url
-        }
+        },
+      {
+        type: 'WL',
+        name: '알림 그만받기 (채용종료)',
+        url_mobile: close_link,
+        url_pc: close_link
+      }
       ]
     }
 
@@ -1754,6 +1780,7 @@ carepartner.kr#{path}
     user_message = tem_params[:user_message]
     preferred_call_time = tem_params[:preferred_call_time]
     link = tem_params[:link]
+    close_link = tem_params[:close_link]
     {
       title: "#{user_info} 요양보호사가 지원했어요.",
       message: "#{user_info} 요양보호사가 지원했어요.
@@ -1774,6 +1801,12 @@ carepartner.kr#{path}
           name: "지원자 확인하기",
           url_mobile: link,
           url_pc: link,
+        },
+        {
+          type: "WL",
+          name: "지원 그만받기 (채용종료)",
+          url_mobile: close_link,
+          url_pc: close_link,
         }
       ]
     }
@@ -1985,6 +2018,7 @@ carepartner.kr#{path}
     user_message = tem_params[:user_message]
     preferred_call_time = tem_params[:preferred_call_time]
     link = tem_params[:link]
+    close_link = tem_params[:close_link]
     {
       title: "#{user_info} 요양보호사가 문의했어요.",
       message: "#{user_info} 요양보호사가 문의했어요.
@@ -2005,6 +2039,12 @@ carepartner.kr#{path}
           name: "문자문의 확인하기",
           url_mobile: link,
           url_pc: link,
+        },
+        {
+          type: "WL",
+          name: "문의 그만받기 (채용종료)",
+          url_mobile: close_link,
+          url_pc: close_link,
         }
       ]
     }

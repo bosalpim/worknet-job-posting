@@ -7,7 +7,7 @@ module MessageTemplateName
   PROPOSAL_ACCEPTED = "proposal_accepted3".freeze
   PROPOSAL_REJECTED = "proposal_refused".freeze
   PROPOSAL_RESPONSE_EDIT = 'proposal_response(edit)'.freeze
-  SATISFACTION_SURVEY = "business_satisfaction_survey".freeze # 기관 채용만족도 조사 알림톡
+  SATISFACTION_SURVEY = "business_call_survey".freeze # 기관 채용만족도 조사 알림톡
   USER_SATISFACTION_SURVEY = "user_satisfaction_survey(edit)".freeze # 요양보호사 채용만족도 조사 알림톡
   USER_SATISFACTION_SURVEY_2 = "user_satisfaction_survey2".freeze
   USER_SURVEY_FOLLOW_UP_EDIT = 'user_survey_follow_up(edit)'.freeze
@@ -36,7 +36,7 @@ module MessageTemplateName
   CALL_INTERVIEW_PROPOSAL = 'call_interview_proposal'.freeze
   CALL_INTERVIEW_PROPOSAL_V2 = 'call_interview_proposal_v2'.freeze
   CALL_INTERVIEW_ACCEPTED = 'call_interview_proposal_accept'.freeze
-  CALL_SAVED_JOB_CAREGIVER = 'call_saved_job_caregiver'.freeze # 공고에 관심표시한 요양보호사 기관에게 알림톡
+  CALL_SAVED_JOB_CAREGIVER = 'call_saved_care(close_avail)'.freeze # 공고에 관심표시한 요양보호사 기관에게 알림톡
   CALL_SAVED_JOB_POSTING_V2 = 'call_saved_job_posting_v2'.freeze
   # TFT 구직상태 업데이트 시 추가된 템플릿
   ASK_ACTIVE = 'Off_Job_Proposal_Notification'.freeze
@@ -50,7 +50,7 @@ module MessageTemplateName
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
   # 간편 지원
-  JOB_APPLICATION = 'job_application'.freeze
+  JOB_APPLICATION = 'job_application (close_avail)'.freeze
 
   # 과금 대상 무료공고 종료 관련
   NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO = 'free_job_posting_close_1dayago'.freeze
@@ -63,7 +63,7 @@ module MessageTemplateName
   PROPOSAL = "proposal".freeze
 
   #문자문의
-  CONTACT_MESSAGE = 'contact_message'.freeze
+  CONTACT_MESSAGE = 'contact_message (close_avail)'.freeze
 
   # 구인광고 메세지 > 요양보호사 1차
   # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1386%3A5741&mode=dev
