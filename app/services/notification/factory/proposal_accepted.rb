@@ -9,7 +9,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
     super(MessageTemplateName::PROPOSAL_ACCEPT)
 
     @target_public_id = params['target_public_id']
-    @proposal_id = params['id']
+    @proposal_id = params['proposal_id']
     @business_id = params["business_id"]
     @business_name = params["business_name"]
     @job_posting_id = params["job_posting_id"]
