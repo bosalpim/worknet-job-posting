@@ -155,6 +155,8 @@ class KakaoTemplateService
       get_job_ads_ended(tem_params)
     when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
       get_confirm_career_certification_message(tem_params)
+    when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
+      get_business_job_posting_complete(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -240,6 +242,32 @@ class KakaoTemplateService
     end
 
     data
+  end
+
+  def get_business_job_posting_complete(tem_params)
+    base_url = business_base_url
+    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@template_id}"
+
+    {
+      title: "공고등록 완료",
+      message: "안녕하세요. 센터장님
+#{tem_params[:job_posting_title]} 공고가 정상 등록되었어요.
+등록한 공고를 주변 요양보호사에게 전달해 보세요.
+
+■ 공고제목
+#{tem_params[:job_posting_title]}
+
+■ 공고를 전달해보세요.
+케어파트너에 등록한 공고를 주변 요양보호사에게 빠르게 전달할 수 있어요. 공고 전달 시 3일 내 채용될 가능성이 높습니다.",
+      buttons: [
+        {
+          name: "등록한 공고 전달하기",
+          type: "WL",
+          url_mobile: "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/dashboard?#{utm}",
+          url_pc: "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/dashboard?#{utm}"
+        }
+      ]
+    }
   end
 
   def get_proposal_response_edit_data(tem_params)
