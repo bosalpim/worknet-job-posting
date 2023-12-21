@@ -15,10 +15,6 @@ class JobPostingsController < ApplicationController
     NotificationServiceJob.perform_now(:notify, { message_template_id: MessageTemplateName::NEW_JOB_POSTING, params: { job_posting_id: event[:job_posting_id] } }) if Jets.env.development?
     NotificationServiceJob.perform_later(:notify, { message_template_id: MessageTemplateName::NEW_JOB_POSTING, params: { job_posting_id: event[:job_posting_id] } }) unless Jets.env.development?
 
-    # 기관:공고 등록 알림
-    NotificationServiceJob.perform_now(:notify, { message_template_id: MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE, params: { job_posting_id: event[:job_posting_id] } }) if Jets.env.development?
-    NotificationServiceJob.perform_later(:notify, { message_template_id: MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE, params: { job_posting_id: event[:job_posting_id] } }) unless Jets.env.development?
-
     render json: {
       success: true
     }, status: :ok

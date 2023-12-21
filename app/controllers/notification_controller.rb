@@ -1,6 +1,23 @@
 # frozen_string_literal: true
 
 class NotificationController < ApplicationController
+  def send_message
+    begin
+      case params[:template]
+      else
+        Jets.logger.info "#{params} 요청 대응 case 추가 필요"
+      end
+
+      render json: {
+        success: true
+      }, status: :ok
+    rescue => e
+      Jets.logger.info "#{params}, Error: #{e.message}"
+      render json: {
+        success: true
+      }, status: :ok
+    end
+  end
   def ask_active
     Notification::AskActiveService.new(ask_active_params).call
   end
