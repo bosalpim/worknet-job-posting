@@ -1,4 +1,5 @@
 class NotificationResult < ApplicationRecord
+
   PROPOSAL = "proposal".freeze
   PERSONALIZED = "personalized_notification".freeze
   EXTRA_BENEFIT = "extra_benefit_notification".freeze
@@ -61,6 +62,7 @@ class NotificationResult < ApplicationRecord
   enum send_type: {
     CALL_INTERVIEW_ACCEPTED => CALL_INTERVIEW_ACCEPTED,
     PROPOSAL => 'proposal',
+    PROPOSAL_ACCEPT => 'proposal_accept',
     NEW_JOB_POSTING => "new_job_posting",
     PERSONALIZED => "personalized_notification",
     EXTRA_BENEFIT => "extra_benefit_notification",
@@ -105,6 +107,7 @@ class NotificationResult < ApplicationRecord
     JOB_ADS_MESSAGE_RESERVE => JOB_ADS_MESSAGE_RESERVE,
     JOB_ADS_MESSAGE_SECOND => JOB_ADS_MESSAGE_SECOND,
     JOB_ADS_MESSAGE_THIRD => JOB_ADS_MESSAGE_THIRD,
-    JOB_ADS_ENDED => JOB_ADS_ENDED
+    JOB_ADS_ENDED => JOB_ADS_ENDED,
+    MessageTemplateName::PROPOSAL_ACCEPT => MessageTemplateName::PROPOSAL_ACCEPT
   }
 end

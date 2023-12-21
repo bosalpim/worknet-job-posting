@@ -84,8 +84,8 @@ module KakaoNotificationLoggingHelper
       return get_call_interview_proposal_logging_data(template_id, tem_params)
     when PROPOSAL
       return get_proposal_logging_data(template_id, tem_params)
-    when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
-      return get_call_interview_accepted_logging_data(template_id, tem_params)
+    when PROPOSAL_ACCEPT
+      return get_proposal_accept_logging_data(template_id, tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       return get_call_saved_job_caregiver(template_id, tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
@@ -168,6 +168,7 @@ module KakaoNotificationLoggingHelper
       }
     }
   end
+
   def self.get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
     job_posting_public_id = tem_params.dig(:job_posting_public_id)
     title = tem_params.dig(:title)
@@ -405,7 +406,7 @@ module KakaoNotificationLoggingHelper
     }
   end
 
-  def self.get_call_interview_accepted_logging_data(template_id, tem_params)
+  def self.get_proposal_accept_logging_data(template_id, tem_params)
     return {
       "user_id" => tem_params[:target_public_id],
       "event_type" => NOTIFICATION_EVENT_NAME,

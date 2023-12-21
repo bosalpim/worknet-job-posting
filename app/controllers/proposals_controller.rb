@@ -11,7 +11,7 @@ class ProposalsController < ApplicationController
   end
 
   def accepted_v2
-    notification = Notification::FactoryService.create(MessageTemplateName::CALL_INTERVIEW_ACCEPTED, params)
+    notification = Notification::FactoryService.create(MessageTemplateName::PROPOSAL_ACCEPT, params)
     notification.notify
     notification.save_result
 
@@ -19,19 +19,7 @@ class ProposalsController < ApplicationController
       success: true
     }, status: :ok
   end
-
-  def accepted
-    event = { proposal_id: params["proposal_id"] }
-
-    notification = Notification::FactoryService.create(MessageTemplateName::CALL_INTERVIEW_ACCEPTED, event)
-    notification.notify
-    notification.save_result
-
-    render json: {
-      success: true
-    }, status: :ok
-  end
-
+  
   def rejected
     event = { proposal_id: params["proposal_id"] }
     rsp = ProposalResultNotificationJob.perform_now(:rejected, event)

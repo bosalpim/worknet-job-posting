@@ -62,7 +62,7 @@ module MessageTemplateName
   # 전화면접 제안
   PROPOSAL = "proposal".freeze
 
-  #문자문의
+  # 문자문의
   CONTACT_MESSAGE = 'contact_message (close_avail)'.freeze
 
   # 구인광고 메세지 > 요양보호사 1차
@@ -80,4 +80,7 @@ module MessageTemplateName
   # 구인광고 메세지 > 전체 발송 완료
   # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1308%3A6117&mode=dev
   JOB_ADS_ENDED = 'job_ads_last_end'.freeze
+
+  # 제안 수락 알림 메시지
+  PROPOSAL_ACCEPT = 'proposal_accept'.freeze
 end

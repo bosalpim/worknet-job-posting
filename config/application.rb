@@ -101,4 +101,11 @@ Jets.application.configure do
   BEX_API_URl = ENV['BEX_API_URL']
   BIZMSG_PROFILE = ENV['KAKAO_BIZMSG_PROFILE']
   DEEP_LINK_SCHEME = "carepartner://app"
+  BUSINESS_URL = if Jets.env.production?
+                   "http://business.carepartner.kr"
+                 elsif Jets.env.staging?
+                   "http://business.dev-carepartner.kr"
+                 else
+                   "http://127.0.0.1"
+                 end
 end

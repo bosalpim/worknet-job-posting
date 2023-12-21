@@ -6,7 +6,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
   include Notification
 
   def initialize(params)
-    super(MessageTemplateName::CALL_INTERVIEW_ACCEPTED)
+    super(MessageTemplateName::PROPOSAL_ACCEPT)
 
     @target_public_id = params['target_public_id']
     @proposal_id = params['id']
@@ -40,9 +40,9 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
 
   def create_app_push_message
     base_url = "#{DEEP_LINK_SCHEME}/redirect/business"
-    to = "employment_management/proposals/#{@proposal.id}"
+    to = "employment_management/proposals/#{@proposal_id}"
     link = "#{base_url}?to=#{CGI.escape("#{to}?utm_source=message&utm_campaign=app_push&utm_campaign=#{@message_template_id}")}"
-    
+
     @app_push_list.push(
       *@client.client_push_tokens.valid.map do |push_token|
         AppPush.new(
@@ -62,18 +62,21 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
   end
 
   def create_bizm_message
+    link = "#{BUSINESS_URL}/employment_management/proposals/#{@proposal_id}?utm_source=message&utm_campaign=app_push&utm_campaign=#{@message_template_id}"
+
     params = {
       target_public_id: @target_public_id,
       employee_id: @employee_id,
       job_posting_id: @job_posting_id,
       job_posting_title: @job_posting_title,
       business_name: @business_name,
-      tel_link: @tel_link,
+      link: link,
       user_name: @user_name,
       user_info: @user_info,
       accepted_at: @accepted_at,
       address: @address,
       client_message: @client_message,
+      proposal_id: @proposal_id,
       is_high_wage: is_high_wage(
         work_type: @job_posting.work_type,
         pay_type: @job_posting.pay_type,
