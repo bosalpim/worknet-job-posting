@@ -261,8 +261,8 @@ class KakaoTemplateService
         {
           name: "등록한 공고 전달하기",
           type: "WL",
-          url_mobile: "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/dashboard?#{utm}",
-          url_pc: "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/dashboard?#{utm}"
+          url_mobile: "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/share?#{utm}",
+          url_pc: "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/share?#{utm}"
         }
       ]
     }
