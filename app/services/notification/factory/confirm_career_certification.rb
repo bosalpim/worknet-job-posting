@@ -89,7 +89,6 @@ class Notification::Factory::ConfirmCareerCertification < Notification::Factory:
       business_name: @business.name,
       user_name: @user.name,
       user_info: user_info,
-      preferred_call_time: @career_certification.preferred_call_time,
       type_match: is_type_match(@user.preferred_work_types, @job_posting.work_type),
       gender_match: is_gender_match(@user.preferred_gender, @job_posting.gender),
       day_match: is_day_match(@user.job_search_days, @job_posting.working_days),
