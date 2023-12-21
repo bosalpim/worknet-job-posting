@@ -19,7 +19,7 @@ class Notification::Factory::BusinessJobPostingComplete  < Notification::Factory
         job_posting_public_id: @job_posting.public_id
       }
 
-      @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, client.phone_number, params, client.public_id, "AI"))
+      @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, @job_posting.manager_phone_number, params, client.public_id, "AI"))
     end
   end
 end
