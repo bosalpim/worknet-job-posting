@@ -1,6 +1,7 @@
 class NotificationResult < ApplicationRecord
 
   PROPOSAL = "proposal".freeze
+  PROPOSAL_ACCEPT = "proposal_accept".freeze
   PERSONALIZED = "personalized_notification".freeze
   EXTRA_BENEFIT = "extra_benefit_notification".freeze
   PROPOSAL_ACCEPTED = "proposal_accepted".freeze
@@ -108,6 +109,6 @@ class NotificationResult < ApplicationRecord
     JOB_ADS_MESSAGE_SECOND => JOB_ADS_MESSAGE_SECOND,
     JOB_ADS_MESSAGE_THIRD => JOB_ADS_MESSAGE_THIRD,
     JOB_ADS_ENDED => JOB_ADS_ENDED,
-    MessageTemplateName::PROPOSAL_ACCEPT => MessageTemplateName::PROPOSAL_ACCEPT
+    PROPOSAL_ACCEPT => PROPOSAL_ACCEPT
   }
 end
