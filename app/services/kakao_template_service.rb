@@ -153,6 +153,8 @@ class KakaoTemplateService
       get_job_ads_message_reserve(tem_params)
     when MessageTemplateName::JOB_ADS_ENDED
       get_job_ads_ended(tem_params)
+    when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
+      get_confirm_career_certification_message(tem_params)
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
       get_business_job_posting_complete(tem_params)
     else
@@ -2073,6 +2075,34 @@ carepartner.kr#{path}
           name: "문의 그만받기 (채용종료)",
           url_mobile: close_link,
           url_pc: close_link,
+        }
+      ]
+    }
+  end
+
+  def get_confirm_career_certification_message(tem_params)
+    job_posting_title = tem_params[:job_posting_title]
+    user_info = tem_params[:user_info]
+    user_name = tem_params[:user_name]
+    link = tem_params[:link]
+    {
+      title: "#{user_name} 요양보호사가 아래 공고에 채용인증을 요청했어요. 맞다면 채용 결과 입력 후 전화번호 열람권(3장)을 받아 보세요.",
+      message: "#{user_name} 요양보호사가 아래 공고에 채용인증을 요청했어요. 맞다면 채용 결과 입력 후 전화번호 열람권(3장)을 받아 보세요.
+
+■ 공고
+#{job_posting_title}
+
+■ 요양보호사
+#{user_info}
+
+■ 혜택안내
+채용 결과를 입력하면 요양보호사에게 즉시 전화할 수 있는 전화번호 열람권(3장/ 4,500원 상당)을 드려요.",
+      buttons: [
+        {
+          type: "WL",
+          name: "채용결과 입력하기",
+          url_mobile: link,
+          url_pc: link,
         }
       ]
     }
