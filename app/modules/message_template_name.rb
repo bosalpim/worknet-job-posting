@@ -80,4 +80,7 @@ module MessageTemplateName
   # 구인광고 메세지 > 전체 발송 완료
   # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1308%3A6117&mode=dev
   JOB_ADS_ENDED = 'job_ads_last_end'.freeze
+
+  # 공고 등록 완료
+  BUSINESS_JOB_POSTING_COMPLETE = 'business_job_posting_complete'.freeze
 end

@@ -11,8 +11,10 @@ class JobPostingsController < ApplicationController
 
   def new_notification
     event = { job_posting_id: params["job_posting_id"] }
+    # 요보사:신규 일자리 알림
     NotificationServiceJob.perform_now(:notify, { message_template_id: MessageTemplateName::NEW_JOB_POSTING, params: { job_posting_id: event[:job_posting_id] } }) if Jets.env.development?
     NotificationServiceJob.perform_later(:notify, { message_template_id: MessageTemplateName::NEW_JOB_POSTING, params: { job_posting_id: event[:job_posting_id] } }) unless Jets.env.development?
+
     render json: {
       success: true
     }, status: :ok

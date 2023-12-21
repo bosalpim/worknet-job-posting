@@ -126,9 +126,30 @@ module KakaoNotificationLoggingHelper
       return get_job_ads_etc(tem_params, template_id)
     when MessageTemplateName::SATISFACTION_SURVEY
       return get_satisfaction_survey(tem_params, template_id)
+    when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
+      return get_business_base_event(tem_params, template_id)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
+  end
+
+  def self.get_business_base_event(tem_params, template_id)
+    target_public_id = tem_params.dig(:target_public_id)
+    job_posting_public_id = tem_params.dig(:job_posting_public_id)
+    title = tem_params.dig(:job_posting_title)
+
+    return {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_BUSINESS,
+        "job_posting_public_id" => job_posting_public_id,
+        "job_posting_title" => title,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
   end
 
   def self.get_satisfaction_survey(tem_params, template_id)
