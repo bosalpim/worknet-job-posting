@@ -9,11 +9,6 @@ class NotificationServiceJob < ApplicationJob
   end
 
   cron "0 7 ? * * *"
-  def cbt_draft_until_3day
-    process({ message_template_id: MessageTemplateName::CBT_DRAFT })
-  end
-
-  cron "0 7 ? * * *"
   def notify_draft_new_user
     process({ message_template_id: MessageTemplateName::CAREPARTNER_PRESENT })
   end
