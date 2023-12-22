@@ -30,7 +30,7 @@ class SearchPreparativeCbtUsersService
       month_before_last_str, last_month_str,
       '^\\d{4}/\\d{2}/\\d{1,2}$', ninety_days_ago.strftime('%Y/%m/%d'), one_days_ago.strftime('%Y/%m/%d')
     )
-    users.where(has_certification: false)
+    users.where(has_certification: false, status: %w[active draft])
 
   end
 end
