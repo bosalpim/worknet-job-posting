@@ -166,8 +166,9 @@ module KakaoNotificationLoggingHelper
         "template" => template_id,
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => title,
+        "centerName" => tem_params[:business_name],
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
