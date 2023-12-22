@@ -666,7 +666,7 @@ module KakaoNotificationLoggingHelper
     }
   end
 
-  def self.get_confirm_career_certification(template_id, tem_params)
+  def self.get_confirm_career_certification(tem_params, template_id)
     return {
       "user_id" => tem_params[:target_public_id],
       "event_type" => NOTIFICATION_EVENT_NAME,
