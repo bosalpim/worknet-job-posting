@@ -453,10 +453,10 @@ module KakaoNotificationLoggingHelper
       "event_type" => NOTIFICATION_EVENT_NAME,
       "event_properties" => {
         "template" => template_id,
-        "centerName" => tem_params[:business_name],
-        "jobPostingId" => tem_params[:job_posting_id],
+        "centerName" => tem_params[:center_name],
+        "jobPostingId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:job_posting_title],
-        "employee_id" => tem_params[:employee_id],
+        "employee_id" => tem_params[:user_public_id],
         "type_match" => tem_params[:type_match],
         "gender_match" => tem_params[:gender_match],
         "day_match" => tem_params[:day_match],
