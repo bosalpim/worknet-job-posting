@@ -147,8 +147,8 @@ module KakaoNotificationLoggingHelper
         "template" => template_id,
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => title,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
@@ -186,8 +186,8 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
         "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => title,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
@@ -203,8 +203,8 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
         "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => title,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
@@ -221,8 +221,8 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
         "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => title,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
@@ -244,10 +244,10 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_USER,
         "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => job_posting_title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => job_posting_title,
         "job_posting_type" => work_type_ko,
-        "business_name" => business_name,
+        "centerName" => business_name,
         "send_at" => Time.current + (9 * 60 * 60),
         "is_retarget_user" => is_retarget_user.nil? ? false : is_retarget_user,
         "last_used_under_three_day" => last_used_under_three_day,
@@ -269,10 +269,10 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_USER,
         "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => job_posting_title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => job_posting_title,
         "job_posting_type" => work_type_ko,
-        "business_name" => business_name,
+        "centerName" => business_name,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
