@@ -92,8 +92,6 @@ module KakaoNotificationLoggingHelper
       return get_call_saved_job_caregiver2(template_id, tem_params)
     when MessageTemplateName::ASK_ACTIVE
       return get_ask_active_logging_data(template_id, tem_params)
-    when MessageTemplateName::CBT_DRAFT
-      return get_cbt_logging_data(template_id, tem_params)
     when MessageTemplateName::CAREPARTNER_PRESENT
       return carepartner_null_certification_logging_data(template_id, tem_params)
     when MessageTemplateName::ACCUMULATED_DRAFT
@@ -126,9 +124,30 @@ module KakaoNotificationLoggingHelper
       return get_job_ads_etc(tem_params, template_id)
     when MessageTemplateName::SATISFACTION_SURVEY
       return get_satisfaction_survey(tem_params, template_id)
+    when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
+      return get_business_base_event(tem_params, template_id)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
+  end
+
+  def self.get_business_base_event(tem_params, template_id)
+    target_public_id = tem_params.dig(:target_public_id)
+    job_posting_public_id = tem_params.dig(:job_posting_public_id)
+    title = tem_params.dig(:job_posting_title)
+
+    return {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_BUSINESS,
+        "job_posting_public_id" => job_posting_public_id,
+        "job_posting_title" => title,
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
   end
 
   def self.get_satisfaction_survey(tem_params, template_id)
@@ -470,17 +489,6 @@ module KakaoNotificationLoggingHelper
         "centerName" => tem_params[:business_name],
         "jobPostingId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:title],
-      }
-    }
-  end
-
-  def self.get_cbt_logging_data(template_id, tem_params)
-    return {
-      "user_id" => tem_params[:target_public_id],
-      "event_type" => NOTIFICATION_EVENT_NAME,
-      "event_properties" => {
-        "template" => template_id,
-        "title" => "CBT Draft Message",
       }
     }
   end

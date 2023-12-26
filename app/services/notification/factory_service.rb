@@ -5,8 +5,6 @@ class Notification::FactoryService
     case template_id
     when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
       return Notification::Factory::CallSavedJobPostingV2.new
-    when MessageTemplateName::CBT_DRAFT
-      return Notification::Factory::CbtDraft.new
     when MessageTemplateName::CAREPARTNER_PRESENT
       return Notification::Factory::CarepartnerNewDraft.new
     when MessageTemplateName::ACCUMULATED_DRAFT
@@ -37,6 +35,8 @@ class Notification::FactoryService
       return Notification::Factory::JobAdsMessageReserve.new(params[:job_posting_id], params[:times], params[:scheduled_at_text])
     when MessageTemplateName::JOB_ADS_ENDED
       return Notification::Factory::JobAdsMessageEnded.new(params[:job_posting_id])
+    when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
+      return Notification::Factory::BusinessJobPostingComplete.new(params[:job_posting_id])
     else
       puts "no template found"
       return []

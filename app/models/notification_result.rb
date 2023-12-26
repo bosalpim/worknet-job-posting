@@ -33,7 +33,6 @@ class NotificationResult < ApplicationRecord
   NEW_JOB_VISIT_V2 = 'new_job_visit_v2'.freeze
   NEW_JOB_FACILITY_V2 = 'new_job_facility(23-09-2w)'.freeze
   NEWSPAPER_V2 = 'newspaper_v2'.freeze
-  CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
   CAREPARTNER_PRESENT = 'carepartner_present'.freeze
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
@@ -53,6 +52,8 @@ class NotificationResult < ApplicationRecord
   JOB_ADS_MESSAGE_SECOND = 'job_ads_message_second'.freeze
   JOB_ADS_MESSAGE_THIRD = 'job_ads_message_third'.freeze
   JOB_ADS_ENDED = 'job_ads_last_end'.freeze
+
+  BUSINESS_JOB_POSTING_COMPLETE = 'business_job_posting_complete'.freeze
 
   validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
@@ -96,7 +97,6 @@ class NotificationResult < ApplicationRecord
     NEW_JOB_FACILITY_V2 => NEW_JOB_FACILITY_V2,
     ASK_ACTIVE => ASK_ACTIVE,
     NEW_JOB_POSTING => NEW_JOB_POSTING,
-    CBT_DRAFT => CBT_DRAFT,
     CAREPARTNER_PRESENT => CAREPARTNER_PRESENT,
     ACCUMULATED_DRAFT => ACCUMULATED_DRAFT,
     ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE,
@@ -109,6 +109,7 @@ class NotificationResult < ApplicationRecord
     JOB_ADS_MESSAGE_SECOND => JOB_ADS_MESSAGE_SECOND,
     JOB_ADS_MESSAGE_THIRD => JOB_ADS_MESSAGE_THIRD,
     JOB_ADS_ENDED => JOB_ADS_ENDED,
-    PROPOSAL_ACCEPT => PROPOSAL_ACCEPT
+    PROPOSAL_ACCEPT => PROPOSAL_ACCEPT,
+    BUSINESS_JOB_POSTING_COMPLETE => BUSINESS_JOB_POSTING_COMPLETE
   }
 end
