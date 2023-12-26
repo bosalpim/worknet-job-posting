@@ -51,6 +51,8 @@ class KakaoTemplateService
       get_personalized_data_by_json(tem_params)
     when MessageTemplateName::EXTRA_BENEFIT
       get_extra_benefit_data_by_json(tem_params)
+    when MessageTemplateName::PROPOSAL_ACCEPT
+      get_proposal_accept_data(tem_params)
     when MessageTemplateName::PROPOSAL_ACCEPTED
       get_proposal_accepted_data(tem_params)
     when MessageTemplateName::PROPOSAL_REJECTED
@@ -105,8 +107,6 @@ class KakaoTemplateService
       get_call_interview_proposal(tem_params)
     when MessageTemplateName::CALL_INTERVIEW_PROPOSAL_V2
       get_call_interview_proposal_v2(tem_params)
-    when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
-      get_call_interview_accepted(tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       get_call_saved_job_caregiver(tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
@@ -1356,8 +1356,31 @@ class KakaoTemplateService
         }
       ]
     }
-    p data
     data
+  end
+
+  def get_proposal_accept_data(tem_params)
+    link = tem_params[:link]
+    job_posting_title = tem_params[:job_posting_title]
+    user_info = tem_params[:user_info]
+    {
+      title: "#{user_info} 요양보호사가 전화면접 제안을 수락했어요!",
+      message: "#{user_info} 요양보호사가 전화면접 제안을 수락했어요.
+
+■ 제안 수락한 공고
+#{job_posting_title}
+
+■ 도움말
+제안 수락한 요양보호사는 채용 확률이 높아요. 아래 버튼을 눌러 확인후 요양보호사에게 무료로 전화해 보세요.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '자세히 확인하기',
+          url_mobile: link,
+          url_pc: link
+        }
+      ]
+    }
   end
 
   def get_call_saved_job_caregiver(tem_params)
@@ -1396,12 +1419,12 @@ class KakaoTemplateService
           url_mobile: shorturl.url,
           url_pc: shorturl.url
         },
-      {
-        type: 'WL',
-        name: '알림 그만받기 (채용종료)',
-        url_mobile: close_link,
-        url_pc: close_link
-      }
+        {
+          type: 'WL',
+          name: '알림 그만받기 (채용종료)',
+          url_mobile: close_link,
+          url_pc: close_link
+        }
       ]
     }
 
@@ -1976,6 +1999,7 @@ carepartner.kr#{path}
       ]
     }
   end
+
   def get_job_ads_message_reserve(tem_params)
     {
       title: tem_params[:title],

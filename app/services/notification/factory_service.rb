@@ -21,7 +21,7 @@ class Notification::FactoryService
       return Notification::Factory::NewJobApplication.new(params[:job_application_id])
     when MessageTemplateName::CONTACT_MESSAGE
       return Notification::Factory::NewContactMessage.new(params[:contact_message_id])
-    when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
+    when MessageTemplateName::PROPOSAL_ACCEPT
       return Notification::Factory::ProposalAccepted.new(params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       return Notification::Factory::UserSavedJobPosting.new(params)

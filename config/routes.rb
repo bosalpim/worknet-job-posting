@@ -2,7 +2,6 @@ Jets.application.routes.draw do
   resources :proposals, only: [] do
     member do
       post :new_notification
-      post :accepted
       post :rejected
       post :new_v2
       post :accepted_v2
