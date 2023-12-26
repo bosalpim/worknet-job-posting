@@ -82,6 +82,10 @@ module MessageTemplateName
 
   # 제안 수락 알림 메시지
   PROPOSAL_ACCEPT = 'proposal_accept'.freeze
+
+  # 요보사 취업인증 완료 후 기관에 확인 알림톡
+  CONFIRM_CAREER_CERTIFICATION = 'confirm_career_certification'.freeze
+
   # 공고 등록 완료
   BUSINESS_JOB_POSTING_COMPLETE = 'business_job_posting_complete'.freeze
 end
