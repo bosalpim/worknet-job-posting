@@ -21,7 +21,7 @@ class Notification::FactoryService
       return Notification::Factory::NewJobApplication.new(params[:job_application_id])
     when MessageTemplateName::CONTACT_MESSAGE
       return Notification::Factory::NewContactMessage.new(params[:contact_message_id])
-    when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
+    when MessageTemplateName::PROPOSAL_ACCEPT
       return Notification::Factory::ProposalAccepted.new(params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       return Notification::Factory::UserSavedJobPosting.new(params)
@@ -35,6 +35,8 @@ class Notification::FactoryService
       return Notification::Factory::JobAdsMessageReserve.new(params[:job_posting_id], params[:times], params[:scheduled_at_text])
     when MessageTemplateName::JOB_ADS_ENDED
       return Notification::Factory::JobAdsMessageEnded.new(params[:job_posting_id])
+    when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
+      return Notification::Factory::ConfirmCareerCertification.new(params[:career_certification_id])
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
       return Notification::Factory::BusinessJobPostingComplete.new(params[:job_posting_id])
     else

@@ -24,6 +24,7 @@ bundle install
 jest db:create db:migrate
 ```
 ## 실행하기
+
 ### 서버 실행
 ```bash
 jets s

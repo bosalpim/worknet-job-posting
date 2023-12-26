@@ -51,6 +51,8 @@ class KakaoTemplateService
       get_personalized_data_by_json(tem_params)
     when MessageTemplateName::EXTRA_BENEFIT
       get_extra_benefit_data_by_json(tem_params)
+    when MessageTemplateName::PROPOSAL_ACCEPT
+      get_proposal_accept_data(tem_params)
     when MessageTemplateName::PROPOSAL_ACCEPTED
       get_proposal_accepted_data(tem_params)
     when MessageTemplateName::PROPOSAL_REJECTED
@@ -105,8 +107,6 @@ class KakaoTemplateService
       get_call_interview_proposal(tem_params)
     when MessageTemplateName::CALL_INTERVIEW_PROPOSAL_V2
       get_call_interview_proposal_v2(tem_params)
-    when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
-      get_call_interview_accepted(tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       get_call_saved_job_caregiver(tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
@@ -151,6 +151,8 @@ class KakaoTemplateService
       get_job_ads_message_reserve(tem_params)
     when MessageTemplateName::JOB_ADS_ENDED
       get_job_ads_ended(tem_params)
+    when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
+      get_confirm_career_certification_message(tem_params)
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
       get_business_job_posting_complete(tem_params)
     else
@@ -640,9 +642,9 @@ class KakaoTemplateService
   end
 
   def get_satisfaction_survey_data(tem_params)
-    base_url = business_base_url
-    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=business_satisfaction_survey"
-    close_link = "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/close?#{utm}",
+    base_url = business_base_ur
+    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=business_call_survey"
+    close_link = "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/close?#{utm}"
     survey_link = "#{base_url}/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&#{utm}"
 
     return {
@@ -1354,8 +1356,31 @@ class KakaoTemplateService
         }
       ]
     }
-    p data
     data
+  end
+
+  def get_proposal_accept_data(tem_params)
+    link = tem_params[:link]
+    job_posting_title = tem_params[:job_posting_title]
+    user_info = tem_params[:user_info]
+    {
+      title: "#{user_info} 요양보호사가 전화면접 제안을 수락했어요!",
+      message: "#{user_info} 요양보호사가 전화면접 제안을 수락했어요.
+
+■ 제안 수락한 공고
+#{job_posting_title}
+
+■ 도움말
+제안 수락한 요양보호사는 채용 확률이 높아요. 아래 버튼을 눌러 확인후 요양보호사에게 무료로 전화해 보세요.",
+      buttons: [
+        {
+          type: 'WL',
+          name: '자세히 확인하기',
+          url_mobile: link,
+          url_pc: link
+        }
+      ]
+    }
   end
 
   def get_call_saved_job_caregiver(tem_params)
@@ -1394,12 +1419,12 @@ class KakaoTemplateService
           url_mobile: shorturl.url,
           url_pc: shorturl.url
         },
-      {
-        type: 'WL',
-        name: '알림 그만받기 (채용종료)',
-        url_mobile: close_link,
-        url_pc: close_link
-      }
+        {
+          type: 'WL',
+          name: '알림 그만받기 (채용종료)',
+          url_mobile: close_link,
+          url_pc: close_link
+        }
       ]
     }
 
@@ -1974,6 +1999,7 @@ carepartner.kr#{path}
       ]
     }
   end
+
   def get_job_ads_message_reserve(tem_params)
     {
       title: tem_params[:title],
@@ -2040,6 +2066,34 @@ carepartner.kr#{path}
           name: "문의 그만받기 (채용종료)",
           url_mobile: close_link,
           url_pc: close_link,
+        }
+      ]
+    }
+  end
+
+  def get_confirm_career_certification_message(tem_params)
+    job_posting_title = tem_params[:job_posting_title]
+    user_info = tem_params[:user_info]
+    user_name = tem_params[:user_name]
+    link = tem_params[:link]
+    {
+      title: "#{user_name} 요양보호사가 아래 공고에 채용인증을 요청했어요. 맞다면 채용 결과 입력 후 전화번호 열람권(3장)을 받아 보세요.",
+      message: "#{user_name} 요양보호사가 아래 공고에 채용인증을 요청했어요. 맞다면 채용 결과 입력 후 전화번호 열람권(3장)을 받아 보세요.
+
+■ 공고
+#{job_posting_title}
+
+■ 요양보호사
+#{user_info}
+
+■ 혜택안내
+채용 결과를 입력하면 요양보호사에게 즉시 전화할 수 있는 전화번호 열람권(3장/ 4,500원 상당)을 드려요.",
+      buttons: [
+        {
+          type: "WL",
+          name: "채용결과 입력하기",
+          url_mobile: link,
+          url_pc: link,
         }
       ]
     }

@@ -84,8 +84,8 @@ module KakaoNotificationLoggingHelper
       return get_call_interview_proposal_logging_data(template_id, tem_params)
     when PROPOSAL
       return get_proposal_logging_data(template_id, tem_params)
-    when MessageTemplateName::CALL_INTERVIEW_ACCEPTED
-      return get_call_interview_accepted_logging_data(template_id, tem_params)
+    when PROPOSAL_ACCEPT
+      return get_proposal_accept_logging_data(template_id, tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       return get_call_saved_job_caregiver(template_id, tem_params)
     when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
@@ -124,6 +124,8 @@ module KakaoNotificationLoggingHelper
       return get_job_ads_etc(tem_params, template_id)
     when MessageTemplateName::SATISFACTION_SURVEY
       return get_satisfaction_survey(tem_params, template_id)
+    when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
+      return get_confirm_career_certification(tem_params, template_id)
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
       return get_business_base_event(tem_params, template_id)
     else
@@ -143,8 +145,8 @@ module KakaoNotificationLoggingHelper
         "template" => template_id,
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => title,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
@@ -162,8 +164,9 @@ module KakaoNotificationLoggingHelper
         "template" => template_id,
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => title,
+        "centerName" => tem_params[:business_name],
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
@@ -181,12 +184,13 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
         "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => title,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
   end
+
   def self.get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
     job_posting_public_id = tem_params.dig(:job_posting_public_id)
     title = tem_params.dig(:title)
@@ -198,8 +202,8 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
         "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => title,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
@@ -216,8 +220,8 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
         "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => title,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
@@ -239,10 +243,10 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_USER,
         "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => job_posting_title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => job_posting_title,
         "job_posting_type" => work_type_ko,
-        "business_name" => business_name,
+        "centerName" => business_name,
         "send_at" => Time.current + (9 * 60 * 60),
         "is_retarget_user" => is_retarget_user.nil? ? false : is_retarget_user,
         "last_used_under_three_day" => last_used_under_three_day,
@@ -264,10 +268,10 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_USER,
         "template" => template_id,
-        "job_posting_public_id" => job_posting_public_id,
-        "job_posting_title" => job_posting_title,
+        "jobPostingId" => job_posting_public_id,
+        "title" => job_posting_title,
         "job_posting_type" => work_type_ko,
-        "business_name" => business_name,
+        "centerName" => business_name,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }
@@ -424,7 +428,7 @@ module KakaoNotificationLoggingHelper
     }
   end
 
-  def self.get_call_interview_accepted_logging_data(template_id, tem_params)
+  def self.get_proposal_accept_logging_data(template_id, tem_params)
     return {
       "user_id" => tem_params[:target_public_id],
       "event_type" => NOTIFICATION_EVENT_NAME,
@@ -449,9 +453,10 @@ module KakaoNotificationLoggingHelper
       "event_type" => NOTIFICATION_EVENT_NAME,
       "event_properties" => {
         "template" => template_id,
-        "centerName" => tem_params[:business_name],
-        "jobPostingId" => tem_params[:job_posting_id],
+        "centerName" => tem_params[:center_name],
+        "jobPostingId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:job_posting_title],
+        "employee_id" => tem_params[:user_public_id],
         "type_match" => tem_params[:type_match],
         "gender_match" => tem_params[:gender_match],
         "day_match" => tem_params[:day_match],
@@ -631,6 +636,25 @@ module KakaoNotificationLoggingHelper
   end
 
   def self.get_contact_message(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => tem_params[:job_posting_title],
+        "jobPostingId" => tem_params[:job_posting_public_id],
+        "employee_id" => tem_params[:user_public_id],
+        "centerName" => tem_params[:business_name],
+        "type_match" => tem_params[:type_match],
+        "gender_match" => tem_params[:gender_match],
+        "day_match" => tem_params[:day_match],
+        "time_match" => tem_params[:time_match],
+        "grade_match" => tem_params[:grade_match],
+      }
+    }
+  end
+
+  def self.get_confirm_career_certification(tem_params, template_id)
     return {
       "user_id" => tem_params[:target_public_id],
       "event_type" => NOTIFICATION_EVENT_NAME,
