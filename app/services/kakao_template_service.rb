@@ -642,7 +642,7 @@ class KakaoTemplateService
   end
 
   def get_satisfaction_survey_data(tem_params)
-    base_url = business_base_ur
+    base_url = business_base_url
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=business_call_survey"
     close_link = "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/close?#{utm}"
     survey_link = "#{base_url}/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&#{utm}"
