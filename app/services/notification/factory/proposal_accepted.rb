@@ -58,7 +58,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
           push_token.token,
           @message_template_id,
           {
-            title: '전화면접 제안을 수락했어요!!',
+            title: '전화면접 제안을 수락했어요!',
             body: '제안을 수락한 요양보호사는 채용 확률이 높으니 지금바로 전화 응답해 보세요.',
             link: link,
           },
