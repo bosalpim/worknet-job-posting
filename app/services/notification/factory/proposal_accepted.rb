@@ -26,6 +26,14 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
     @user = User.find_by(public_id: @employee_id)
     @proposal = Proposal.find(@proposal_id)
     @client = @job_posting.client
+    @is_high_wage = is_high_wage(
+      work_type: @job_posting.work_type,
+      pay_type: @job_posting.pay_type,
+      wage: @job_posting.max_wage
+    )
+    @is_can_negotiate_work_time = @job_posting.can_negotiate_work_time
+    @is_newbie_appliable = is_newbie_appliable(@job_posting.applying_options)
+    @is_support_transportation_expences = is_support_transportation_expences(@job_posting.welfare_types)
 
     create_message
   end
@@ -50,11 +58,23 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
           push_token.token,
           @message_template_id,
           {
-            title: '내가 보낸 전화면접 제안을 요양보호사가 수락했어요!',
+            title: '전화면접 제안을 수락했어요!',
             body: '제안을 수락한 요양보호사는 채용 확률이 높으니 지금바로 전화 응답해 보세요.',
             link: link,
           },
           @client.public_id,
+          {
+            "template" => @message_template_id,
+            "centerName" => @business_name,
+            "jobPostingId" => @job_posting_id,
+            "title" => @job_posting_title,
+            "employee_id" => @employee_id,
+            "message" => @client_message,
+            "highWage" => @is_high_wage,
+            "canNegotiateWorkTime" => @is_can_negotiate_work_time,
+            "transportationExpenses" => @is_support_transportation_expences,
+            "canApplyNewBie" => @is_newbie_appliable
+          }
         )
       end
     )
