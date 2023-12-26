@@ -16,6 +16,10 @@ class Notification::Factory::SearchTarget::NewJobPostingUsersService
 
   def call
     users = []
+    
+    if Jets.env != 'production'
+      return [User.last]
+    end
 
     unless @job_posting.lat.present? && @job_posting.lng.present?
       return
