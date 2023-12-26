@@ -1,8 +1,8 @@
 class Notification::Factory::SearchTarget::NewJobPostingUsersService
   DISTANCE_LIST = {
-    by_walk15: 900,
-    by_walk30: 1800,
-    by_km_3: 3000,
+    by_walk15: 1800,
+    by_walk30: 3000,
+    by_km_3: 5000,
     by_km_5: 5000,
   }
 
@@ -20,9 +20,13 @@ class Notification::Factory::SearchTarget::NewJobPostingUsersService
       return [User.last]
     end
 
+    unless @job_posting.lat.present? && @job_posting.lng.present?
+      return
+    end
+
+    prefer_work_type = @job_posting.work_type == 'hospital' ? 'etc' : @job_posting.work_type
+
     User.preferred_distances.each do |key, value|
-      prefer_work_type =
-        @job_posting.work_type == 'hospital' ? 'etc' : @job_posting.work_type
 
       if @job_posting.lat.present? && @job_posting.lng.present?
         users += User
@@ -31,7 +35,7 @@ class Notification::Factory::SearchTarget::NewJobPostingUsersService
                      "users.*, earth_distance(ll_to_earth(lat, lng), ll_to_earth(#{@job_posting.lat}, #{@job_posting.lng})) AS distance",
                    )
                    .within_radius(
-                     key.to_sym == :by_km_5 ? DISTANCE_LIST[key.to_sym] : DISTANCE_LIST[:by_km_3],
+                     DISTANCE_LIST[key.to_sym],
                      @job_posting.lat,
                      @job_posting.lng
                    )
