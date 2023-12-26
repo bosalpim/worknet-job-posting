@@ -29,9 +29,9 @@ class Notification::Factory::SearchTarget::NewJobPostingUsersService
                    .receive_job_notifications
                    .select(
                      "users.*, earth_distance(ll_to_earth(lat, lng), ll_to_earth(#{@job_posting.lat}, #{@job_posting.lng})) AS distance",
-                     )
+                   )
                    .within_radius(
-                     DISTANCE_LIST[key.to_sym],
+                     key.to_sym == :by_km_5 ? DISTANCE_LIST[key.to_sym] : DISTANCE_LIST[:by_km_3],
                      @job_posting.lat,
                      @job_posting.lng
                    )
@@ -39,12 +39,12 @@ class Notification::Factory::SearchTarget::NewJobPostingUsersService
                    .where(
                      'preferred_work_types::jsonb ? :type',
                      type: prefer_work_type,
-                     )
+                   )
                    .where('id not in (?)', users.empty? ? [0] : users.map(&:id))
                    .where(
                      'has_certification = true OR expected_acquisition in (?)',
                      %w[2022/05 2022/08 2022/11 2023/02],
-                     )
+                   )
                    .active
       end
     end
