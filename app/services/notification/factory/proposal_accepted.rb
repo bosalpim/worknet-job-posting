@@ -4,6 +4,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
   include JobPostingsHelper
   include JobMatchHelper
   include Notification
+  include KakaoNotificationLoggingHelper
 
   def initialize(params)
     super(MessageTemplateName::PROPOSAL_ACCEPT)
@@ -64,6 +65,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
           },
           @client.public_id,
           {
+            "type" => NOTIFICATION_TYPE_APP_PUSH,
             "template" => @message_template_id,
             "centerName" => @business_name,
             "jobPostingId" => @job_posting_id,
