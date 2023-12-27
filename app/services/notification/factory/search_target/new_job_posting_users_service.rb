@@ -1,5 +1,5 @@
 class Notification::Factory::SearchTarget::NewJobPostingUsersService
-  DISTANCE_LIST = {
+  NEW_JOB_POSTING_TARGET_DISTANCE_MAP = {
     by_walk15: 1800,
     by_walk30: 3000,
     by_km_3: 5000,
@@ -33,7 +33,7 @@ class Notification::Factory::SearchTarget::NewJobPostingUsersService
                    "users.*, earth_distance(ll_to_earth(lat, lng), ll_to_earth(#{@job_posting.lat}, #{@job_posting.lng})) AS distance",
                  )
                  .within_radius(
-                   DISTANCE_LIST[key.to_sym],
+                   NEW_JOB_POSTING_TARGET_DISTANCE_MAP[key.to_sym],
                    @job_posting.lat,
                    @job_posting.lng
                  )
