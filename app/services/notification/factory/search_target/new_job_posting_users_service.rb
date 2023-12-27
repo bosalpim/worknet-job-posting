@@ -27,8 +27,6 @@ class Notification::Factory::SearchTarget::NewJobPostingUsersService
     prefer_work_type = @job_posting.work_type == 'hospital' ? 'etc' : @job_posting.work_type
 
     User.preferred_distances.each do |key, value|
-
-      if @job_posting.lat.present? && @job_posting.lng.present?
         users += User
                    .receive_job_notifications
                    .select(
