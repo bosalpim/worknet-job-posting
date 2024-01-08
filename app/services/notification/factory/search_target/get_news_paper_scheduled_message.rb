@@ -13,8 +13,11 @@ class Notification::Factory::SearchTarget::GetNewsPaperScheduledMessage
 
     Jets.logger.info "Calculate Result > message_count : #{message_count}, sent_count: #{sent_count}"
 
-    messages = ScheduledMessage.where(scheduled_date: message_created_time.days.ago..).where(template_id: template_id).order(:scheduled_date).offset(sent_count).limit(message_count)
-    messages.update_all(is_send: true)
+    messages = ScheduledMessage.where(scheduled_date: message_created_time.days.ago..)
+                 .where(template_id: template_id)
+                 .order(:scheduled_date)
+                 .offset(sent_count)
+                 .limit(message_count)
     messages.filter do |message|
       message.sendable
     end

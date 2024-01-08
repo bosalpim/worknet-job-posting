@@ -125,7 +125,6 @@ class SendScheduledMessageJob < ApplicationJob
 
   def send_new_paper_message(should_send_percent, sent_percent)
     factory = Notification::Factory::SendNewsPaper.new(should_send_percent, sent_percent)
-    factory.notify
-    factory.save_result
+    factory.process
   end
 end
