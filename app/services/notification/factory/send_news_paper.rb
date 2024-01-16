@@ -8,37 +8,51 @@ class Notification::Factory::SendNewsPaper < Notification::Factory::Notification
     create_message
   end
 
-  def create_message
-    @list.each do |message|
-      template_params = JSON.parse(message.content)
-      message_target_medium = template_params["target_medium"]
-      send_app_push = @target_medium == APP_PUSH && message_target_medium == APP_PUSH
-      if send_app_push
-        push_token = template_params["push_token"]
-        path = "/newspaper?lat=#{template_params["lat"]}&lng=#{template_params["lng"]}&utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=newspaper_job_alarm"
-        date = NewsPaper::get_today_date
-        @app_push_list.push(
-          AppPush.new(
-            @message_template_id,
-            push_token,
-            nil,
-            {
-              title: "#{date} 우리동네 요양일자리 신문이 도착했어요!",
-              body: "지금 바로 맞춤 일자리를 확인해보세요.",
-              link: "#{DEEP_LINK_SCHEME}#{path}"
-            },
-            template_params["target_public_id"],
-            {
-              "sender_type" => SENDER_TYPE_CAREPARTNER,
-              "receiver_type" => RECEIVER_TYPE_USER,
-              "template" => @message_template_id,
-              "type" => NOTIFICATION_TYPE_APP_PUSH
-            }
+  def process
+    return false unless @list.present?
+
+    @list.each_slice(10) do |message_chunk|
+      # 10개씩 끊어서 발송, 발송 완료 플래그 처리
+      # 람다 최대실행시간인 15분 초과로 처음부터 재시도되어도 중복발송을 최소화
+      message_chunk.each do |message|
+        template_params = JSON.parse(message.content)
+        message_target_medium = template_params["target_medium"]
+        send_app_push = @target_medium == APP_PUSH && message_target_medium == APP_PUSH
+        if send_app_push
+          push_token = template_params["push_token"]
+          path = "/newspaper?lat=#{template_params["lat"]}&lng=#{template_params["lng"]}&utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=newspaper_job_alarm"
+          date = NewsPaper::get_today_date
+          @app_push_list.push(
+            AppPush.new(
+              @message_template_id,
+              push_token,
+              nil,
+              {
+                title: "#{date} 우리동네 요양일자리 신문이 도착했어요!",
+                body: "지금 바로 맞춤 일자리를 확인해보세요.",
+                link: "#{DEEP_LINK_SCHEME}#{path}"
+              },
+              template_params["target_public_id"],
+              {
+                "sender_type" => SENDER_TYPE_CAREPARTNER,
+                "receiver_type" => RECEIVER_TYPE_USER,
+                "template" => @message_template_id,
+                "type" => NOTIFICATION_TYPE_APP_PUSH
+              }
+            )
           )
-        )
-      else
-        @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, message.phone_number, template_params, template_params["target_public_id"], "AI"))
+        else
+          @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, message.phone_number, template_params, template_params["target_public_id"], "AI"))
+        end
       end
+
+      ScheduledMessage
+        .where(id: message_chunk.map do |message|
+          message.id
+        end)
+        .update_all(is_send: true)
+      save_result rescue nil
+      clear_notification_lists
     end
   end
 end
