@@ -53,6 +53,7 @@ class Notification::Factory::NotificationFactoryClass
     send_bizm_pre_pay
   end
 
+
   def save_result
     Jets.logger.info "전체 발송 대상자 : #{@list.nil? ? 0 : @list.count} 명 발송처리 완료"
     # app push 결과 처리
@@ -111,5 +112,15 @@ class Notification::Factory::NotificationFactoryClass
 
       threads.each(&:join)
     end
+  end
+
+  def clear_notification_lists
+    @app_push_list = []
+    @bizm_post_pay_list = []
+    @bizm_pre_pay_list = []
+
+    @app_push_result = []
+    @bizm_post_pay_result = []
+    @bizm_pre_pay_result = []
   end
 end
