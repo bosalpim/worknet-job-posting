@@ -81,9 +81,11 @@ class Notification::Factory::SendNewsPaper < Notification::Factory::Notification
       end
 
       notify
-      message_chunk.map do |message|
-        message.id
-      end.update_all(is_send: true)
+      ScheduledMessage
+        .where(id: message_chunk.map do |message|
+          message.id
+        end)
+        .update_all(is_send: true)
       save_result rescue nil
       clear_notification_lists
     end
