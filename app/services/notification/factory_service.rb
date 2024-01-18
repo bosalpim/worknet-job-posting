@@ -5,6 +5,8 @@ class Notification::FactoryService
     case template_id
     when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
       return Notification::Factory::CallSavedJobPostingV2.new
+    when MessageTemplateName::CBT_DRAFT
+      return Notification::Factory::CbtDraft.new
     when MessageTemplateName::CAREPARTNER_PRESENT
       return Notification::Factory::CarepartnerNewDraft.new
     when MessageTemplateName::ACCUMULATED_DRAFT
