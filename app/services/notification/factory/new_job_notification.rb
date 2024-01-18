@@ -12,6 +12,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
     super(MessageTemplateName::NEW_JOB_POSTING)
     job_posting = JobPosting.find(job_posting_id)
     @job_posting = job_posting
+    @job_posting_id_for_notification_results = job_posting.id
     @list = NewJobPostingUsersService.call(job_posting)
     create_message
   end
