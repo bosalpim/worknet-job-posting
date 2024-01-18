@@ -14,16 +14,18 @@ class Notification::Factory::SearchTarget::GetNewsPaperScheduledMessage
     Jets.logger.info "Calculate Result > message_count : #{message_count}, sent_count: #{sent_count}"
 
     messages = ScheduledMessage.where(scheduled_date: message_created_time.days.ago..)
-                 .where(template_id: template_id)
-                 .order(:scheduled_date)
-                 .offset(sent_count)
-                 .limit(message_count)
+                               .where(template_id: template_id)
+                               .order(:scheduled_date)
+                               .offset(sent_count)
+                               .limit(message_count)
+    messages.update_all(is_send: true)
     messages.filter do |message|
       message.sendable
     end
   end
 
   private
+
   def calculate_sent_and_message_count(total_count, should_send_percent, sent_percent)
     message_count = (total_count * should_send_percent).ceil
     sent_count = (total_count * sent_percent).ceil
