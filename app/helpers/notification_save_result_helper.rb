@@ -1,5 +1,5 @@
 module NotificationSaveResultHelper
-  def save_results_bizm_pre_pay(results, template_id)
+  def save_results_bizm_pre_pay(results, template_id, job_posting_id)
     return if results.nil? || results.empty?
 
     success_count = 0
@@ -33,11 +33,12 @@ module NotificationSaveResultHelper
       success_count: success_count,
       tms_success_count: tms_success_count,
       fail_count: fail_count,
-      fail_reasons: fail_reasons
+      fail_reasons: fail_reasons,
+      job_posting_id: job_posting_id
     )
   end
 
-  def save_results_bizm_post_pay(results, template_id)
+  def save_results_bizm_post_pay(results, template_id, job_posting_id)
     return if results.nil? || results.empty?
 
     success_count = 0
@@ -76,11 +77,12 @@ module NotificationSaveResultHelper
       success_count: success_count,
       tms_success_count: tms_success_count,
       fail_count: fail_count,
-      fail_reasons: fail_reasons
+      fail_reasons: fail_reasons,
+      job_posting_id: job_posting_id
     )
   end
 
-  def save_results_app_push(results, template_id)
+  def save_results_app_push(results, template_id, job_posting_id)
     return if results.nil? || results.empty?
 
     success_count = 0
@@ -109,7 +111,8 @@ module NotificationSaveResultHelper
       tms_success_count: 0,
       fail_count: fail_count,
       fail_reasons: fail_reasons,
-      used_medium: 'app_push'
+      used_medium: 'app_push',
+      job_posting_id: job_posting_id
     )
   end
 end

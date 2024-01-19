@@ -27,6 +27,10 @@ class Notification::Factory::NotificationFactoryClass
     @dispatched_notifications_service = nil
     @message_template_id = message_template_id
 
+    # 어떤 공고를 통해 발생한 것인지, 파악하기 위한 Id를 받는 변수
+    # 각 서브클래스에서 주입
+    @job_posting_id_for_notification_results = nil
+
     message_template = MessageTemplate.find_by(name: message_template_id)
     target_medium = MessageTemplate.find_by(name: message_template_id).nil? ? KAKAO_ARLIMTALK : MessageTemplate.find_by(name: message_template_id).target_medium
     Jets.logger.info "요청하신 #{message_template_id}가 message_templates Table에 존재하지 않습니다." if message_template.nil? & Jets.env.development?
@@ -57,11 +61,11 @@ class Notification::Factory::NotificationFactoryClass
   def save_result
     Jets.logger.info "전체 발송 대상자 : #{@list.nil? ? 0 : @list.count} 명 발송처리 완료"
     # app push 결과 처리
-    save_results_app_push(@app_push_result, @message_template_id)
+    save_results_app_push(@app_push_result, @message_template_id, @job_posting_id_for_notification_results)
     # post_pay 결과 처리
-    save_results_bizm_post_pay(@bizm_post_pay_result, @message_template_id)
+    save_results_bizm_post_pay(@bizm_post_pay_result, @message_template_id, @job_posting_id_for_notification_results)
     # pre_pay 결과 처리
-    save_results_bizm_pre_pay(@bizm_pre_pay_result, @message_template_id)
+    save_results_bizm_pre_pay(@bizm_pre_pay_result, @message_template_id, @job_posting_id_for_notification_results)
   end
 
   def create_dispatched_notifications
