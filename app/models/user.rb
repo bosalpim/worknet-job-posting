@@ -39,6 +39,7 @@ class User < ApplicationRecord
     sleep: 'sleep'
   }
 
+  scope :receive_marketing, -> { where.not(marketing_agree: nil) }
   scope :receive_notifications, -> { where(notification_enabled: true) }
   scope :receive_job_notifications, -> { where(job_notification_enabled: true).where(has_certification: true).active }
   scope :receive_proposal_notifications, -> { where(proposal_notification_enabled: true).where(has_certification: true).active }

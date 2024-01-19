@@ -18,6 +18,8 @@ class SearchAccumulateDraftUsersService
     end_of_day = today
 
     # 범위에 해당하는 데이터 쿼리
-    User.where(created_at: start_of_day..end_of_day, status: 'draft')
+    User
+      .receive_marketing
+      .where(created_at: start_of_day..end_of_day, status: 'draft')
   end
 end

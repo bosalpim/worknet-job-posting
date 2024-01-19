@@ -23,7 +23,8 @@ class SearchPreparativeCbtUsersService
     # %y.%m.%d로 저장된 경우는 91일전부터 1일전까지
     # 예: 23년 10월 13일 기준 23.08, 23.09, 23.07.14~23.10.12
 
-    users = User.where(
+    users = User.receive_marketing
+                .where(
       '(expected_acquisition IN (?, ?) AND LENGTH(expected_acquisition) = 7) OR (
         expected_acquisition ~ ? AND expected_acquisition::DATE >= ? AND expected_acquisition::DATE <= ?
         )',
