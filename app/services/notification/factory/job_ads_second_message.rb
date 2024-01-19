@@ -14,6 +14,7 @@ class Notification::Factory::JobAdsSecondMessage < Notification::Factory::Notifi
     @list = target.dig(:users)
     @retarget_users = target.dig(:retarget_users)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "job_posting", @job_posting.id, "yobosa")
+    @job_posting_id_for_notification_results = job_posting.id
     create_message
   end
 
