@@ -6,8 +6,6 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
   include DispatchedNotificationsHelper
 
   NewJobPostingUsersService = Notification::Factory::SearchTarget::NewJobPostingUsersService
-  DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
-
   def initialize(job_posting_id)
     super(MessageTemplateName::NEW_JOB_POSTING)
     job_posting = JobPosting.find(job_posting_id)
