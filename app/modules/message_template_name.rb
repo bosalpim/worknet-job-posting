@@ -82,7 +82,7 @@ module MessageTemplateName
   JOB_ADS_ENDED = 'job_ads_last_end'.freeze
 
   # 제안 수락 알림 메시지
-  PROPOSAL_ACCEPT = 'proposal_accept'.freeze
+  PROPOSAL_ACCEPT = 'proposal_accept (close_avail)'.freeze
 
   # 요보사 취업인증 완료 후 기관에 확인 알림톡
   CONFIRM_CAREER_CERTIFICATION = 'confirm_career_certification'.freeze

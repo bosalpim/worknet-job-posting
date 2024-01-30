@@ -84,7 +84,9 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
   end
 
   def create_bizm_message
-    link = "#{BUSINESS_URL}/employment_management/proposals/#{@proposal_id}?utm_source=message&utm_campaign=arlimtalk&utm_campaign=#{@message_template_id}"
+    utm = "utm_source=message&utm_campaign=arlimtalk&utm_campaign=#{@message_template_id}"
+    link = "#{BUSINESS_URL}/employment_management/proposals/#{@proposal_id}?#{utm}"
+    close_link = "#{BUSINESS_URL}/recruitment_management/#{@job_posting_id}/close?#{utm}"
 
     params = {
       target_public_id: @target_public_id,
@@ -93,6 +95,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
       job_posting_title: @job_posting_title,
       business_name: @business_name,
       link: link,
+      close_link: close_link,
       user_name: @user_name,
       user_info: @user_info,
       accepted_at: @accepted_at,
