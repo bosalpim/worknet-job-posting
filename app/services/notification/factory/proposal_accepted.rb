@@ -50,7 +50,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
   def create_app_push_message
     base_url = "#{DEEP_LINK_SCHEME}/redirect/business"
     to = "employment_management/proposals/#{@proposal_id}"
-    link = "#{base_url}?to=#{CGI.escape("#{to}?utm_source=message&utm_campaign=app_push&utm_campaign=#{@message_template_id}")}"
+    link = "#{base_url}?to=#{CGI.escape("#{to}?utm_source=message&medium=app_push&utm_campaign=#{@message_template_id}")}"
 
     @app_push_list.push(
       *@client.client_push_tokens.valid.map do |push_token|
@@ -84,7 +84,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
   end
 
   def create_bizm_message
-    utm = "utm_source=message&utm_campaign=arlimtalk&utm_campaign=#{@message_template_id}"
+    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
     link = "#{BUSINESS_URL}/employment_management/proposals/#{@proposal_id}?#{utm}"
     close_link = "#{HTTPS_BUSINESS_URL}/recruitment_management/#{@job_posting_id}/close?#{utm}"
 
