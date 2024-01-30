@@ -3,7 +3,7 @@
 class Notification::Factory::ConfirmCareerCertification < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
   include JobMatchHelper
-  include Notification
+  include NotificationType
   include KakaoNotificationLoggingHelper
   
   def initialize(career_certification_public_id)

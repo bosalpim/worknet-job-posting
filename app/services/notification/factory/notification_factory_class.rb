@@ -25,6 +25,9 @@ class Notification::Factory::NotificationFactoryClass
     # 구인 비서 공고 알림 일자리 발송 개별 관리
     # 개별 메세지 저장 table dispatched_notifications를 활용할 때, 이용되며 subclass에서 관련 구현체를 initialize 합니다.
     @dispatched_notifications_service = nil
+
+    # 요양보호사 신규 일자리 관련 받은 메세지함
+    @notification_create_service = nil
     @message_template_id = message_template_id
 
     # 어떤 공고를 통해 발생한 것인지, 파악하기 위한 Id를 받는 변수
@@ -43,8 +46,11 @@ class Notification::Factory::NotificationFactoryClass
 
   def process
     begin
+      # 알림 유저 내역 데이터 생성
+      create_notifications unless @notification_create_service.nil?
       notify
       save_result
+      # 발송 성공한 알림 진입 전환 추적 데이터 생성
       create_dispatched_notifications unless @dispatched_notifications_service.nil?
     rescue => e
       Jets.logger.info e.message
@@ -68,14 +74,24 @@ class Notification::Factory::NotificationFactoryClass
     save_results_bizm_pre_pay(@bizm_pre_pay_result, @message_template_id, @job_posting_id_for_notification_results)
   end
 
-  def create_dispatched_notifications
-    unless @dispatched_notifications_service.nil?
-      results = @app_push_result + @bizm_post_pay_result + @bizm_pre_pay_result
-      @dispatched_notifications_service.set_dispatced_notifications(results)
+  private
+
+  def total_result
+    @app_push_result + @bizm_post_pay_result + @bizm_pre_pay_result
+  end
+
+  def create_notifications
+    unless @notification_create_service.nil?
+      public_id_list = @list.map { |element| element.public_id }
+      @notification_create_service.set_notifications(public_id_list)
     end
   end
 
-  private
+  def create_dispatched_notifications
+    unless @dispatched_notifications_service.nil?
+      @dispatched_notifications_service.set_dispatced_notifications(total_result)
+    end
+  end
 
   def send_app_push
     return unless check_class_type(@app_push_list, AppPush) == true
