@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Notification::Lms < Notification::Base
+class Notification::Lms < NotificationType::Base
   def initialize(
     phone_number:,
     message:

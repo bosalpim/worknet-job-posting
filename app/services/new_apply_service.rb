@@ -1,5 +1,5 @@
 class NewApplyService
-  include Notification
+  include NotificationType
 
   attr_reader :apply, :job_posting, :business, :client, :user
 

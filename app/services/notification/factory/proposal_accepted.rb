@@ -3,7 +3,7 @@
 class Notification::Factory::ProposalAccepted < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
   include JobMatchHelper
-  include Notification
+  include NotificationType
   include KakaoNotificationLoggingHelper
 
   def initialize(params)

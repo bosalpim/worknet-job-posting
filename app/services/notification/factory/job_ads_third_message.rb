@@ -6,14 +6,17 @@ class Notification::Factory::JobAdsThirdMessage < Notification::Factory::Notific
   include DispatchedNotificationsHelper
 
   DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
+  NotificationCreateService = Notification::Factory::Notifications::Service
   def initialize(job_posting_id)
     super(MessageTemplateName::JOB_ADS_MESSAGE_THIRD)
     job_posting = JobPosting.find_by(id: job_posting_id)
     @job_posting = job_posting
+    @end_point = "/jobs/#{@job_posting.public_id}"
     target = Notification::Factory::SearchTarget::JobAdsNewAndRetargetService.call(job_posting, 3)
     @list = target.dig(:users)
     @retarget_users = target.dig(:retarget_users)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "job_posting", @job_posting.id, "yobosa")
+    @notification_create_service = NotificationCreateService.call(@message_template_id, "조건에 딱 맞는 일자리가 도착했어요.", @job_posting.title, @end_point, "yobosa")
     @job_posting_id_for_notification_results = job_posting.id
     create_message
   end
@@ -29,7 +32,7 @@ class Notification::Factory::JobAdsThirdMessage < Notification::Factory::Notific
     application_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "application")
 
     base_url = carepartner_base_url
-    view_endpoint = "/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}&lat=#{user.lat}&lng=#{user.lng}" + job_detail_notification_param
+    view_endpoint = "#{@end_point}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}&lat=#{user.lat}&lng=#{user.lng}" + job_detail_notification_param
     origin_url = "#{base_url}#{view_endpoint}"
     shorten_url = build_shorten_url(origin_url)
     work_type_ko = translate_type('job_posting', @job_posting, :work_type)
