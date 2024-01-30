@@ -6,12 +6,15 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
   include DispatchedNotificationsHelper
 
   NewJobPostingUsersService = Notification::Factory::SearchTarget::NewJobPostingUsersService
+  NotificationCreateService = Notification::Factory::Notifications::Service
   def initialize(job_posting_id)
     super(MessageTemplateName::NEW_JOB_POSTING)
     job_posting = JobPosting.find(job_posting_id)
     @job_posting = job_posting
+    @end_point = "/jobs/#{@job_posting.public_id}"
     @job_posting_id_for_notification_results = job_posting.id
     @list = NewJobPostingUsersService.call(job_posting)
+    @notification_create_service = NotificationCreateService.call(@message_template_id, "신규 일자리 알림", @job_posting.title, @end_point, "yobosa")
     create_message
   end
 
@@ -42,7 +45,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
       {
         body: "#{@job_posting.title}",
         title: '놓치면 곧 마감되는 신규 일자리가 있어요!',
-        link: "#{DEEP_LINK_SCHEME}/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=new_job_posting" + dispatched_notification_param,
+        link: "#{DEEP_LINK_SCHEME}#{@end_point}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=new_job_posting" + dispatched_notification_param,
       },
       user.public_id,
       {
@@ -61,7 +64,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
 
   def create_bizm_post_pay_message(user, dispatched_notification_param)
     base_url = "https://www.carepartner.kr"
-    view_endpoint = "/jobs/#{@job_posting.public_id}?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting&lat=#{user.lat}&lng=#{user.lng}" + dispatched_notification_param
+    view_endpoint = "#{@end_point}?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting&lat=#{user.lat}&lng=#{user.lng}" + dispatched_notification_param
     origin_url = "#{base_url}#{view_endpoint}"
     mute_endpoint = "/me/notification/off?type=job&utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting"
     mute_url = "#{base_url}#{mute_endpoint}"
