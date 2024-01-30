@@ -108,4 +108,11 @@ Jets.application.configure do
                  else
                    "http://127.0.0.1"
                  end
+  HTTPS_BUSINESS_URL = if Jets.env.production?
+                         "https://business.carepartner.kr"
+                       elsif Jets.env.staging?
+                         "https://business.dev-carepartner.kr"
+                       else
+                         "https://127.0.0.1"
+                       end
 end
