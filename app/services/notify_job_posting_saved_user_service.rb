@@ -1,5 +1,5 @@
 class NotifyJobPostingSavedUserService
-  include Notification
+  include NotificationType
 
   def self.call(event)
     new(event).call
