@@ -6,7 +6,6 @@ class UserCallFailureAlertService
     @job_posting = job_posting
     @business = build_business(job_posting)
     @client = build_client(business)
-    p client
   end
 
   def self.call(user, job_posting)
