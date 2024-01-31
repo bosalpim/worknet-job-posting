@@ -8,7 +8,6 @@ class User < ApplicationRecord
 
   has_many :proposals, dependent: :nullify
   has_many :user_push_tokens, dependent: :destroy
-  has_many :notifications, as: :notifiable, dependent: :destroy
 
   enum gender: { male: 'male', female: 'female' }
 
