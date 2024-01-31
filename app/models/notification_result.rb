@@ -1,7 +1,7 @@
 class NotificationResult < ApplicationRecord
 
   PROPOSAL = "proposal".freeze
-  PROPOSAL_ACCEPT = "proposal_accept".freeze
+  PROPOSAL_ACCEPT = "proposal_accept (close_avail)".freeze
   PERSONALIZED = "personalized_notification".freeze
   EXTRA_BENEFIT = "extra_benefit_notification".freeze
   PROPOSAL_ACCEPTED = "proposal_accepted".freeze

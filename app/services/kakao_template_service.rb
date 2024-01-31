@@ -53,8 +53,6 @@ class KakaoTemplateService
       get_extra_benefit_data_by_json(tem_params)
     when MessageTemplateName::PROPOSAL_ACCEPT
       get_proposal_accept_data(tem_params)
-    when MessageTemplateName::PROPOSAL_ACCEPTED
-      get_proposal_accepted_data(tem_params)
     when MessageTemplateName::PROPOSAL_REJECTED
       get_proposal_rejected_data(tem_params)
     when MessageTemplateName::PROPOSAL_RESPONSE_EDIT
@@ -540,56 +538,6 @@ class KakaoTemplateService
           type: "WL",
           url_mobile: "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=extra_benefits_job"
         }
-      ]
-    }
-  end
-
-  def get_proposal_accepted_data(tem_params)
-    items = {
-      itemHighlight: {
-        title: "#{tem_params[:business_name]} 담당자님 제안이 수락되었습니다",
-        description: '빠르게 연락해서 일자리를 제안하세요'
-      },
-      item: {
-        list: [
-          {
-            title: '공고명',
-            description: convert_safe_text(tem_params[:job_posting_title])
-          },
-          {
-            title: '요양보호사',
-            description: convert_safe_text(tem_params[:user_name])
-          },
-          {
-            title: '나이',
-            description: convert_safe_text(tem_params[:age])
-          },
-          {
-            title: '거주지',
-            description: convert_safe_text(tem_params[:address])
-          },
-          {
-            title: '경력',
-            description: convert_safe_text(tem_params[:career])
-          },
-          {
-            title: '자기소개',
-            description: convert_safe_text(tem_params[:self_introduce])
-          },
-        ]
-      }
-    }
-    {
-      title: "#{tem_params[:business_name]} 담당자님 제안이 수락되었습니다.",
-      message: "[아래 버튼 혹은 링크를 눌러 요양보호사의 정보를 확인하고 직접 전화해보세요]\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n#{tem_params[:link]}",
-      items: items,
-      buttons: [
-        {
-          name: "전화번호 확인하기",
-          type: "WL",
-          url_mobile: "https://business.carepartner.kr/proposals/#{tem_params[:proposal_id]}?auth_token=#{tem_params[:auth_token]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=proposal_accepted",
-          url_pc: "https://business.carepartner.kr/proposals/#{tem_params[:proposal_id]}?auth_token=#{tem_params[:auth_token]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=proposal_accepted"
-        },
       ]
     }
   end
@@ -1363,6 +1311,7 @@ class KakaoTemplateService
 
   def get_proposal_accept_data(tem_params)
     link = tem_params[:link]
+    close_link = tem_params[:close_link]
     job_posting_title = tem_params[:job_posting_title]
     user_info = tem_params[:user_info]
     {
@@ -1380,6 +1329,12 @@ class KakaoTemplateService
           name: '자세히 확인하기',
           url_mobile: link,
           url_pc: link
+        },
+        {
+          type: 'WL',
+          name: '알림 그만받기 (채용종료)',
+          url_mobile: close_link,
+          url_pc: close_link,
         }
       ]
     }
