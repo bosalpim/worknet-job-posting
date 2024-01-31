@@ -4,7 +4,7 @@ class Notification::Factory::JobAdsMessageEnded < Notification::Factory::Notific
   include JobPostingsHelper
   include KakaoNotificationLoggingHelper
   include DispatchedNotificationsHelper
-  include NotificationType
+  include Notification
 
   def initialize(job_posting_id)
     super(MessageTemplateName::JOB_ADS_ENDED)
