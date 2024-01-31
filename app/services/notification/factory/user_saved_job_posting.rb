@@ -3,7 +3,7 @@
 class Notification::Factory::UserSavedJobPosting < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
   include JobMatchHelper
-  include NotificationType
+  include Notification
   include KakaoNotificationLoggingHelper
 
   def initialize(params)

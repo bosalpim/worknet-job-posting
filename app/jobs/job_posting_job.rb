@@ -2,7 +2,7 @@
 
 class JobPostingJob < ApplicationJob
   include Translation
-  include NotificationType
+  include Notification
   include JobPostingsHelper
 
   KOREAN_OFFSET = 9.hours

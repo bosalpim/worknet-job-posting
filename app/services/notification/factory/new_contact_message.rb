@@ -3,7 +3,7 @@
 class Notification::Factory::NewContactMessage < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
   include JobMatchHelper
-  include NotificationType
+  include Notification
   include KakaoNotificationLoggingHelper
 
   def initialize(contact_message_public_id)
