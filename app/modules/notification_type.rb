@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Notification
+module NotificationType
   RELATE_TYPE_JOB_POSTING = 1
   TYPE_STARTED = 'started'
   TYPE_SUCCEDED = 'succeded'

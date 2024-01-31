@@ -10,6 +10,7 @@ class Business < ApplicationRecord
   has_many :clients, through: :business_clients
   has_many :proposals, dependent: :destroy
   has_many :proposed_users, through: :proposals, source: :user
+  has_many :notifications, as: :notifiable, dependent: :destroy
 
   validates :business_number, uniqueness: { allow_blank: true }
 end

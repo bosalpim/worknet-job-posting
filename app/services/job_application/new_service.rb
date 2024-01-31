@@ -3,7 +3,7 @@
 class JobApplication::NewService
   include JobPostingsHelper
   include JobMatchHelper
-  include Notification
+  include NotificationType
 
   def initialize(
     job_application_public_id:

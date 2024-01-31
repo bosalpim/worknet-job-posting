@@ -3,7 +3,7 @@
 class ContactMessage::CreateContactMessageService
   include JobPostingsHelper
   include JobMatchHelper
-  include Notification
+  include NotificationType
 
   def initialize(
     contact_message_public_id:

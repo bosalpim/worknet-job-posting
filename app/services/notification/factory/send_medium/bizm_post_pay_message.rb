@@ -12,7 +12,6 @@ class Notification::Factory::SendMedium::BizmPostPayMessage < Notification::Fact
     request_params = @bizm_template_service.get_final_request_params(@params, false)
     begin
       response = request_post_pay(request_params)
-      p response
       response.class == Array ? response.first : response
       amplitude_log(response)
       { status: 'success', response: response, target_public_id: @target_public_id }
