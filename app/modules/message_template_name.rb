@@ -89,4 +89,7 @@ module MessageTemplateName
 
   # 공고 등록 완료
   BUSINESS_JOB_POSTING_COMPLETE = 'business_job_posting_complete'.freeze
+
+  # 스마트 메모 홍보
+  SMART_MEMO = 'smart_memo'.freeze
 end
