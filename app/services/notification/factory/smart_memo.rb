@@ -22,6 +22,15 @@ class Notification::Factory::SmartMemo < Notification::Factory::NotificationFact
   def create_message
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
     link = "#{BUSINESS_URL}/smart-memo?#{utm}"
+    connected_at = @job_postings_connects.connected_at
+    connected_at_text = [
+      "#{connected_at.year}년",
+      "#{connected_at.month}월",
+      "#{connected_at.day}일",
+      "#{connected_at.hour < 12 ? '오전' : '오후'}",
+      "#{connected_at.hour == 12 ? '12시' : "#{connected_at.hour % 12}시"}",
+      "#{connected_at.minute}분"
+    ].join(" ")
 
     params = {
       link: link,
@@ -30,7 +39,9 @@ class Notification::Factory::SmartMemo < Notification::Factory::NotificationFact
       user_age: calculate_korean_age(@user.birth_year),
       user_gender: @user.korean_gender,
       indur: @call_record.indur,
+      indur_minute: (@call_record.indur / 60).ceil,
       connected_at: @job_postings_connect.connected_at,
+      connected_at_text: connected_at_text,
       user_public_id: @user.public_id,
       job_posting_public_id: @job_posting.public_id,
       job_postings_connect_id: @job_postings_connect.id,
