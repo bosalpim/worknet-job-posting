@@ -11,7 +11,8 @@ class Notification::Factory::SmartMemo < Notification::Factory::NotificationFact
     @job_posting = JobPosting.find(params[:job_posting_id])
     @user = User.find(params[:user_id])
     @job_postings_connect = JobPostingsConnect.find(params[:job_postings_connect_id])
-    @call_record = CallRecord.find(params[:call_record_id])
+    @call_record = CallRecord.find(params[:call_record_id]) if params[:call_record_id].present?
+    @bizcall_callback = BizcallCallback.find(params[:bizcall_callback_id]) if params[:bizcall_callback_id].present?
     @business = JobPosting.business
     @client = @business.clients.first
     @target_medium = MessageTemplate.find_by(name: @message_template_id)&.target_medium
@@ -22,7 +23,7 @@ class Notification::Factory::SmartMemo < Notification::Factory::NotificationFact
   def create_message
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
     link = "#{BUSINESS_URL}/smart-memo?#{utm}"
-    connected_at = @job_postings_connects.connected_at
+    connected_at = @job_postings_connect.connected_at
     connected_at_text = [
       "#{connected_at.year}년",
       "#{connected_at.month}월",
@@ -32,14 +33,15 @@ class Notification::Factory::SmartMemo < Notification::Factory::NotificationFact
       "#{connected_at.minute}분"
     ].join(" ")
 
+    indur = @call_record&.indur || @bizcall_callback&.indur
     params = {
       link: link,
       target_public_id: @client.public_id,
       user_name: @user.name,
       user_age: calculate_korean_age(@user.birth_year),
       user_gender: @user.korean_gender,
-      indur: @call_record.indur,
-      indur_minute: (@call_record.indur / 60).ceil,
+      indur: indur,
+      indur_minute: (indur / 60).ceil,
       connected_at: @job_postings_connect.connected_at,
       connected_at_text: connected_at_text,
       user_public_id: @user.public_id,
