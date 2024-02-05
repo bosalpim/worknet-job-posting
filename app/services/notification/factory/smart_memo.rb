@@ -13,7 +13,7 @@ class Notification::Factory::SmartMemo < Notification::Factory::NotificationFact
     @job_postings_connect = JobPostingsConnect.find(params[:job_postings_connect_id])
     @call_record = CallRecord.find(params[:call_record_id]) if params[:call_record_id].present?
     @bizcall_callback = BizcallCallback.find(params[:bizcall_callback_id]) if params[:bizcall_callback_id].present?
-    @business = JobPosting.business
+    @business = @job_posting.business
     @client = @business.clients.first
     @target_medium = MessageTemplate.find_by(name: @message_template_id)&.target_medium
 
