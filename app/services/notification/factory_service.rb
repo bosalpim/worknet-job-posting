@@ -41,11 +41,12 @@ class Notification::FactoryService
       return Notification::Factory::ConfirmCareerCertification.new(params[:career_certification_id])
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
       return Notification::Factory::BusinessJobPostingComplete.new(params[:job_posting_id])
+    when MessageTemplateName::SMART_MEMO
+      return Notification::Factory::SmartMemo.new(params)
     else
       puts "no template found"
       return []
     end
   end
-  
 
 end
