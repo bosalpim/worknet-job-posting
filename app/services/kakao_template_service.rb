@@ -155,6 +155,8 @@ class KakaoTemplateService
       get_confirm_career_certification_message(tem_params)
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
       get_business_job_posting_complete(tem_params)
+    when MessageTemplateName::SMART_MEMO
+      get_smart_memo_data(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -2000,6 +2002,30 @@ carepartner.kr#{path}
           type: 'WL',
           url_pc: tem_params[:result_link],
           url_mobile: tem_params[:result_link]
+        }
+      ]
+    }
+  end
+
+  def get_smart_memo_data(tem_params)
+    {
+      title: "중요 통화 내용 대신 메모해드려요",
+      message: "아래 통화에서 놓치면 안되는 중요한 내용, AI가 대신 메모해 놨어요. 지금 바로 확인해 보세요!
+
+■ 요양보호사
+#{[tem_params[:user_name], tem_params[:user_age], tem_params[:user_gender]].reject(&:nil?).join('/')}
+
+■ 통화 시간
+#{tem_params[:indur_minute]}분 / #{tem_params[:connected_at_text]}
+
+■ 스마트 자동메모 내용
+통화후 할 일/ 요양보호사 주요 정보/ 통화 내용 요약",
+      buttons: [
+        {
+          name: '스마트 자동메모 확인하기',
+          type: 'WL',
+          url_pc: tem_params[:link],
+          url_mobile: tem_params[:link]
         }
       ]
     }

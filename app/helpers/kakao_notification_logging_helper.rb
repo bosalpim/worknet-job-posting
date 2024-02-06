@@ -130,6 +130,8 @@ module KakaoNotificationLoggingHelper
       return get_confirm_career_certification(tem_params, template_id)
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
       return get_business_base_event(tem_params, template_id)
+    when MessageTemplateName::SMART_MEMO
+      return get_smart_memo_logging_data(tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -682,6 +684,22 @@ module KakaoNotificationLoggingHelper
         "day_match" => tem_params[:day_match],
         "time_match" => tem_params[:time_match],
         "grade_match" => tem_params[:grade_match],
+      }
+    }
+  end
+
+  def self.get_smart_memo_logging_data(tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => SMART_MEMO,
+        "employee_id" => tem_params[:user_public_id],
+        "jobPostingId" => tem_params[:job_posting_public_id],
+        "call_time" => tem_params[:indur],
+        "call_type" => tem_params[:connected_type],
+        "job_postings_connect_id" => tem_params[:job_postings_connect_id],
+        "centerName" => tem_params[:business_name],
       }
     }
   end
