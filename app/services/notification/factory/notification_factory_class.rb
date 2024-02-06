@@ -53,7 +53,7 @@ class Notification::Factory::NotificationFactoryClass
       # 발송 성공한 알림 진입 전환 추적 데이터 생성
       create_dispatched_notifications unless @dispatched_notifications_service.nil?
     rescue => e
-      Jets.logger.info e.message
+      Jets.logger.error e.full_message
     end
   end
 
@@ -62,7 +62,6 @@ class Notification::Factory::NotificationFactoryClass
     send_bizm_post_pay
     send_bizm_pre_pay
   end
-
 
   def save_result
     Jets.logger.info "전체 발송 대상자 : #{@list.nil? ? 0 : @list.count} 명 발송처리 완료"

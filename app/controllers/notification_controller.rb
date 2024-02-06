@@ -24,13 +24,25 @@ class NotificationController < ApplicationController
           :notify,
           {
             message_template_id: SMART_MEMO,
-            params: params
+            params: {
+              job_posting_id: params[:job_posting_id],
+              user_id: params[:user_id],
+              job_postings_connect_id: params[:job_postings_connect_id],
+              call_record_id: params[:call_record_id],
+              bizcall_callback_id: params[:bizcall_callback_id]
+            }
           }) if Jets.env.development?
         NotificationServiceJob.perform_later(
           :notify,
           {
             message_template_id: SMART_MEMO,
-            params: params,
+            params: {
+              job_posting_id: params[:job_posting_id],
+              user_id: params[:user_id],
+              job_postings_connect_id: params[:job_postings_connect_id],
+              call_record_id: params[:call_record_id],
+              bizcall_callback_id: params[:bizcall_callback_id]
+            }
           }) unless Jets.env.development?
       else
         Jets.logger.info "#{params} 요청 대응 case 추가 필요"
