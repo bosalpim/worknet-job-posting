@@ -20,7 +20,6 @@ class NotificationController < ApplicationController
             params: { job_posting_id: params[:job_posting_id] }
           }) unless Jets.env.development?
       when SMART_MEMO
-        Jets.logger.info(params)
         NotificationServiceJob.perform_now(
           :notify,
           {

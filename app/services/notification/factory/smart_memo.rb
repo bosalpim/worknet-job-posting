@@ -8,6 +8,10 @@ class Notification::Factory::SmartMemo < Notification::Factory::NotificationFact
 
   def initialize(params)
     super(MessageTemplateName::SMART_MEMO)
+
+    Jets.logger.info "-----"
+    Jets.logger.info params
+    Jets.logger.info "-----"
     @job_posting = JobPosting.find(params[:job_posting_id])
     @user = User.find(params[:user_id])
     @job_postings_connect = JobPostingsConnect.find(params[:job_postings_connect_id])
