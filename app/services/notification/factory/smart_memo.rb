@@ -12,6 +12,11 @@ class Notification::Factory::SmartMemo < Notification::Factory::NotificationFact
     Jets.logger.info "-----"
     Jets.logger.info params
     Jets.logger.info "-----"
+    Jets.logger.info "#1 -----"
+    Jets.logger.info params[:job_posting_id]
+    Jets.logger.info "#2 -----"
+    Jets.logger.info params["job_posting_id"]
+
     @job_posting = JobPosting.find(params[:job_posting_id])
     @user = User.find(params[:user_id])
     @job_postings_connect = JobPostingsConnect.find(params[:job_postings_connect_id])

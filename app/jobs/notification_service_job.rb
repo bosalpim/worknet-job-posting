@@ -39,6 +39,8 @@ class NotificationServiceJob < ApplicationJob
   def process(event)
     begin
       # 발송 데이터 생성
+      Jets.logger.info event
+      
       notification = Notification::FactoryService.create(event[:message_template_id], event[:params])
       notification.process
     rescue => e
