@@ -13,7 +13,7 @@ class Notification::Factory::SmartMemo < Notification::Factory::NotificationFact
     Jets.logger.info params
     Jets.logger.info "-----"
     Jets.logger.info "#1 -----"
-    Jets.logger.info params[:job_posting_id]
+    Jets.logger.info params.dig(:job_posting_id)
     Jets.logger.info "#2 -----"
     Jets.logger.info params["job_posting_id"]
 
