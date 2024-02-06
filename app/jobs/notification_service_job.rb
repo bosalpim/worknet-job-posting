@@ -1,5 +1,6 @@
 class NotificationServiceJob < ApplicationJob
   def notify
+    Jets.logger.info event
     process(event)
   end
 
