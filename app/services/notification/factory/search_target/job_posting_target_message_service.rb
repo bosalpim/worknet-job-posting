@@ -6,30 +6,29 @@ class Notification::Factory::SearchTarget::JobPostingTargetMessageService
     by_km_5: 5000,
   }
 
-  def self.call(job_posting, distance, gender)
-    new(job_posting, distance, gender).call
+  def self.call(lat, lng, distance, gender)
+    new(lat, lng, distance, gender).call
   end
 
-  def initialize(job_posting, distance, gender)
+  def initialize(lat, lng, distance, gender)
+    @lat = lat
+    @lng = lng
     @job_posting = job_posting
     @distance = distance
     @gender = gender
   end
 
   def call
-    unless @job_posting.lat.present? && @job_posting.lng.present?
-      return []
-    end
 
     users = User.preferred_distances
         .receive_job_notifications
         .select(
-         "users.*, earth_distance(ll_to_earth(lat, lng), ll_to_earth(#{@job_posting.lat}, #{@job_posting.lng})) AS distance",
+         "users.*, earth_distance(ll_to_earth(lat, lng), ll_to_earth(#{@lat}, #{@lng})) AS distance",
          )
         .within_radius(
          NEW_JOB_POSTING_TARGET_DISTANCE_MAP[@distance],
-         @job_posting.lat,
-         @job_posting.lng
+         @lat,
+         @lng
        )
        .where(gender: @gender, has_certification: true)
        .active
