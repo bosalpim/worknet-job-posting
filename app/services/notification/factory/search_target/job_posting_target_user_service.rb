@@ -1,4 +1,4 @@
-class Notification::Factory::SearchTarget::JobPostingTargetMessageService
+class Notification::Factory::SearchTarget::JobPostingTargetUserService
   NEW_JOB_POSTING_TARGET_DISTANCE_MAP = {
     by_walk15: 1800,
     by_walk30: 3000,
