@@ -19,11 +19,8 @@ class Notification::Factory::SearchTarget::JobPostingTargetUserService
 
   def call
 
-    users = User.preferred_distances
+    users = User
         .receive_job_notifications
-        .select(
-         "users.*, earth_distance(ll_to_earth(lat, lng), ll_to_earth(#{@lat}, #{@lng})) AS distance",
-         )
         .within_radius(
          NEW_JOB_POSTING_TARGET_DISTANCE_MAP[@distance],
          @lat,
