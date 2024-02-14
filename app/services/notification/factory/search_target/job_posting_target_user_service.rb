@@ -13,7 +13,6 @@ class Notification::Factory::SearchTarget::JobPostingTargetUserService
   def initialize(lat, lng, distance, gender)
     @lat = lat
     @lng = lng
-    @job_posting = job_posting
     @distance = distance
     @gender = gender
   end
