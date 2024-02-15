@@ -18,6 +18,7 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
     @end_point = "/jobs/#{@job_posting.public_id}"
     @job_posting_id_for_notification_results = job_posting.id
     @list = JobPostingTargetUserService.call(@job_posting.lat, @job_posting.lng, @params[:distance], @params[:gender])
+    @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     @notification_create_service = NotificationCreateService.call(@message_template_id, "신규 일자리 알림", @job_posting.title, @end_point, "yobosa")
     create_message
   end
