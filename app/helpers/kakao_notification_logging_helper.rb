@@ -132,6 +132,8 @@ module KakaoNotificationLoggingHelper
       return get_business_base_event(tem_params, template_id)
     when MessageTemplateName::SMART_MEMO
       return get_smart_memo_logging_data(tem_params)
+    when MessageTemplateName::TARGET_USER_JOB_POSTING
+      return get_target_message_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -700,6 +702,17 @@ module KakaoNotificationLoggingHelper
         "call_type" => tem_params[:connected_type],
         "job_postings_connect_id" => tem_params[:job_postings_connect_id],
         "centerName" => tem_params[:business_name],
+      }
+    }
+  end
+
+  def self.get_target_message_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => "Target Message",
       }
     }
   end
