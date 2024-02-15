@@ -147,6 +147,8 @@ class KakaoTemplateService
       get_job_ads_message(tem_params)
     when MessageTemplateName::JOB_ADS_MESSAGE_THIRD
       get_job_ads_message(tem_params)
+    when MessageTemplateName::TARGET_USER_JOB_POSTING
+      get_job_ads_message(tem_params)
     when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
       get_job_ads_message_reserve(tem_params)
     when MessageTemplateName::JOB_ADS_ENDED
