@@ -7,7 +7,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
 
   NewJobPostingUsersService = Notification::Factory::SearchTarget::NewJobPostingUsersService
   NotificationCreateService = Notification::Factory::Notifications::Service
-  def initialize(params)
+  def initialize(job_posting_id)
     super(MessageTemplateName::NEW_JOB_POSTING)
     @params = params
     job_posting_id = params[:job_posting_id]
@@ -15,13 +15,9 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
     @job_posting = job_posting
     @end_point = "/jobs/#{@job_posting.public_id}"
     @job_posting_id_for_notification_results = job_posting.id
-    set_list
+    @list = NewJobPostingUsersService.call(job_posting)
     @notification_create_service = NotificationCreateService.call(@message_template_id, "신규 일자리 알림", @job_posting.title, @end_point, "yobosa")
     create_message
-  end
-
-  def set_list
-    @list = NewJobPostingUsersService.call(@job_posting)
   end
 
   def create_message
