@@ -50,7 +50,7 @@ class NotificationController < ApplicationController
           {
             message_template_id: TARGET_USER_JOB_POSTING,
             params: {
-              job_posting_id: event[:job_posting_id],
+              job_posting_id: params[:job_posting_id],
               distance: params["distance"],
               gender: params["gender"]
             }
@@ -60,7 +60,7 @@ class NotificationController < ApplicationController
           {
             message_template_id: TARGET_USER_JOB_POSTING,
             params: {
-              job_posting_id: event[:job_posting_id],
+              job_posting_id: params[:job_posting_id],
               distance: params["distance"],
               gender: params["gender"]
             }
