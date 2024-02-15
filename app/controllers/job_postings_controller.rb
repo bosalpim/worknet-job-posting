@@ -20,17 +20,6 @@ class JobPostingsController < ApplicationController
     }, status: :ok
   end
 
-  def target_user_notification
-    event = { job_posting_id: params["job_posting_id"] }
-    # 요보사:신규 일자리 알림
-    NotificationServiceJob.perform_now(:notify, { message_template_id: MessageTemplateName::TARGET_USER_JOB_POSTING, params: { job_posting_id: event[:job_posting_id], distance: params["distance"], gender: params["gender"] } }) if Jets.env.development?
-    NotificationServiceJob.perform_later(:notify, { message_template_id: MessageTemplateName::TARGET_USER_JOB_POSTING, params: { job_posting_id: event[:job_posting_id], distance: params["distance"], gender: params["gender"] } }) unless Jets.env.development?
-
-    render json: {
-      success: true
-    }, status: :ok
-  end
-
   def job_ads_messages
     event = { job_posting_id: params["job_posting_id"] }
     JobPostingJob.perform_later(:first_message, event)
