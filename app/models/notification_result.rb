@@ -113,6 +113,7 @@ class NotificationResult < ApplicationRecord
     JOB_ADS_ENDED => JOB_ADS_ENDED,
     PROPOSAL_ACCEPT => PROPOSAL_ACCEPT,
     BUSINESS_JOB_POSTING_COMPLETE => BUSINESS_JOB_POSTING_COMPLETE,
-    MessageTemplateName::SMART_MEMO => MessageTemplateName::SMART_MEMO
+    MessageTemplateName::SMART_MEMO => MessageTemplateName::SMART_MEMO,
+    MessageTemplateName::TARGET_USER_JOB_POSTING => MessageTemplateName::TARGET_USER_JOB_POSTING,
   }
 end
