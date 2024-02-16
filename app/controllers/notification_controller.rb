@@ -51,8 +51,6 @@ class NotificationController < ApplicationController
             message_template_id: TARGET_USER_JOB_POSTING,
             params: {
               job_posting_id: params[:job_posting_id],
-              distance: params["distance"],
-              gender: params["gender"]
             }
           }) if Jets.env.development?
         NotificationServiceJob.perform_later(
@@ -61,8 +59,6 @@ class NotificationController < ApplicationController
             message_template_id: TARGET_USER_JOB_POSTING,
             params: {
               job_posting_id: params[:job_posting_id],
-              distance: params["distance"],
-              gender: params["gender"]
             }
           }) unless Jets.env.development?
       else
