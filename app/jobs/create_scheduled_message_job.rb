@@ -1,5 +1,6 @@
 class CreateScheduledMessageJob < ApplicationJob
   # "From 12:00 on Monday in Korean Time"
+  class_timeout 1800
 
   cron "0 20 ? * SUN *"
 
