@@ -27,9 +27,13 @@ class Notification::Factory::TargetJobPostingPerformance < Notification::Factory
           contact_messages_count += 1 if ContactMessage.exists?(job_posting_id: job_posting.id, user_id: receiver_id)
           call_feedbacks_count += 1 if CallFeedback.exists?(job_posting_id: job_posting.id, user_id: receiver_id)
         end
+
+        business = Business.find(job_posting.business_id)
         utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
         link = "#{BUSINESS_URL}/recruitment_management/#{job_posting.public_id}/dashboard?#{utm}"
         params = {
+          job_posting_id: job_posting.id,
+          center_name: business.name,
           target_public_id: job_posting.public_id,
           title: job_posting.title,
           address: get_dong_name_by_address(job_posting.address),

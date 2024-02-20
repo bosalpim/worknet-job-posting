@@ -115,5 +115,6 @@ class NotificationResult < ApplicationRecord
     BUSINESS_JOB_POSTING_COMPLETE => BUSINESS_JOB_POSTING_COMPLETE,
     MessageTemplateName::SMART_MEMO => MessageTemplateName::SMART_MEMO,
     MessageTemplateName::TARGET_USER_JOB_POSTING => MessageTemplateName::TARGET_USER_JOB_POSTING,
+    MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE => MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE
   }
 end
