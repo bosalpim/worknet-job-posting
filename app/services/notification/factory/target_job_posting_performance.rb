@@ -9,21 +9,37 @@ class Notification::Factory::TargetJobPostingPerformance < Notification::Factory
     @list.each do |job_posting|
       Jets.logger.info "-------------- INFO START --------------\n"
       Jets.logger.info "케어파트너 대상 공고 : #{job_posting.public_id}\n"
-
-      count = DispatchedNotification.where(notification_relate_instance_types_id: 3,
+      dispatched_notifications = DispatchedNotification.where(notification_relate_instance_types_id: 3,
                                            notification_relate_instance_id: job_posting.id)
-                                    .where.not(confirmed: nil)
-                                    .count
-      if count > 0
-        Jets.logger.info "수신 대상자 : #{count}명\n"
+
+      read_count = dispatched_notifications.where.not(confirmed: nil)
+                                          .count
+      if read_count > 0
+        job_applications_count = 0
+        contact_messages_count = 0
+        call_feedbacks_count = 0
+
+        dispatched_notifications.each do |notification|
+          receiver_id = notification.receiver_id
+
+          job_applications_count += 1 if JobApplication.exists?(job_posting_id: job_posting.id, user_id: receiver_id)
+          contact_messages_count += 1 if ContactMessage.exists?(job_posting_id: job_posting.id, user_id: receiver_id)
+          call_feedbacks_count += 1 if CallFeedback.exists?(job_posting_id: job_posting.id, user_id: receiver_id)
+        end
         params = {
           target_public_id: job_posting.public_id,
           title: job_posting.title,
-          count: count
+          count: {
+            read: read_count,
+            job_applications: job_applications_count,
+            contact_messages: contact_messages_count,
+            calls: call_feedbacks_count
+          }
         }
+        Jets.logger.info "전송 완료\n"
         @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, job_posting.manager_phone_number, params, job_posting.public_id, "AI"))
       else
-        Jets.logger.info "수신 대상자 없음 종료\n"
+        Jets.logger.info "클릭자가 없기에 전송 취소\n"
       end
       Jets.logger.info "-------------- INFO END --------------\n"
     end
