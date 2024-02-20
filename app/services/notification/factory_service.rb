@@ -47,6 +47,8 @@ class Notification::FactoryService
       return Notification::Factory::SmartMemo.new(params)
     when MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE
       return Notification::Factory::TargetJobPostingPerformance.new
+    when MessageTemplateName::TARGET_JOB_POSTING_AD
+      return Notification::Factory::TargetJobPostingAd.new
     else
       puts "no template found"
       return []
