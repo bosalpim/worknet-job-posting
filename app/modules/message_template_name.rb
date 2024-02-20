@@ -45,7 +45,11 @@ module MessageTemplateName
   NEWSPAPER_V2 = 'newspaper_job_alarm'.freeze
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
+
+  # 동네광고 관련
   TARGET_USER_JOB_POSTING = 'target_user_job_posting'.freeze # 신규일자리 알림을 타겟 사용자에게 전송
+  TARGET_JOB_POSTING_AD = 'target_job_posting_ad'.freeze # 동네 광고 유도
+
   CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
   CAREPARTNER_PRESENT = 'carepartner_present'.freeze
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
