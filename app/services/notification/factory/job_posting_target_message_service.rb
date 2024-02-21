@@ -34,11 +34,11 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
 
   def create_bizm_post_pay_message(user, dispatched_notification_param, application_notification_param)
     base_url = if Jets.env.production?
-                            "http://business.carepartner.kr"
+                            "http://www.carepartner.kr"
                           elsif Jets.env.staging?
-                            "http://staging-business.vercel.app"
+                            "http://www.dev-carepartner.kr"
                           else
-                            "http://localhost:3001"
+                            "http://localhost:3000"
                           end
     view_endpoint = "#{@end_point}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}&lat=#{user.lat}&lng=#{user.lng}" + dispatched_notification_param
     origin_url = "#{base_url}#{view_endpoint}"
