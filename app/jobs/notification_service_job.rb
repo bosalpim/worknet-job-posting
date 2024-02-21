@@ -34,12 +34,6 @@ class NotificationServiceJob < ApplicationJob
     process({ message_template_id: MessageTemplateName::ACCUMULATED_PREPARATIVE })
   end
 
-  cron "0 0 ? * * *"
-
-  def target_job_posting_performance
-    process({ message_template_id: MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE })
-  end
-
   private
 
   def process(event)
