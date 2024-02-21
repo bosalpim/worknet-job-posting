@@ -48,7 +48,7 @@ class Notification::FactoryService
     when MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE
       return Notification::Factory::TargetJobPostingPerformance.new
     when MessageTemplateName::TARGET_JOB_POSTING_AD
-      return Notification::Factory::TargetJobPostingAd.new
+      return Notification::Factory::TargetJobPostingAd.new(params)
     else
       puts "no template found"
       return []
