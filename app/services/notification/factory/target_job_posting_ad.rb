@@ -20,7 +20,7 @@ class Notification::Factory::TargetJobPostingAd < Notification::Factory::Notific
       title: @job_posting.title,
       address: get_dong_name_by_address(@job_posting.address),
       count: @count,
-      center_name: business.name,
+      center_name: @business.name,
     }
 
     @bizm_post_pay_list.push(
