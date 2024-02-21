@@ -24,8 +24,8 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
 
   def create_message
     @list.each do |user|
-      dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "job_detail")
-      application_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "application")
+      dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "target_message", @job_posting.id, "yobosa", user.id, "job_detail")
+      application_notification_param = create_dispatched_notification_params(@message_template_id, "target_message", @job_posting.id, "yobosa", user.id, "application")
       create_bizm_post_pay_message(user, dispatched_notification_param, application_notification_param) if Jets.env == 'production' || (PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(user.phone_number))
     end
   end
