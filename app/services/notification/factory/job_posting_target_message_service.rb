@@ -33,7 +33,7 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
   private
 
   def create_bizm_post_pay_message(user, dispatched_notification_param, application_notification_param)
-    base_url = base_url = if Jets.env.production?
+    base_url = if Jets.env.production?
                             "http://business.carepartner.kr"
                           elsif Jets.env.staging?
                             "http://staging-business.vercel.app"
