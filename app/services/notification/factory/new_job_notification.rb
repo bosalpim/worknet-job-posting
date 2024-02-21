@@ -9,6 +9,8 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
   NotificationCreateService = Notification::Factory::Notifications::Service
   def initialize(job_posting_id)
     super(MessageTemplateName::NEW_JOB_POSTING)
+    @params = params
+    job_posting_id = params[:job_posting_id]
     job_posting = JobPosting.find(job_posting_id)
     @job_posting = job_posting
     @end_point = "/jobs/#{@job_posting.public_id}"

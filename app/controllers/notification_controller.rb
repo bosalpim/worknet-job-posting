@@ -44,6 +44,42 @@ class NotificationController < ApplicationController
               bizcall_callback_id: params[:bizcall_callback_id]
             }
           }) unless Jets.env.development?
+      when TARGET_USER_JOB_POSTING
+        NotificationServiceJob.perform_now(
+          :notify,
+          {
+            message_template_id: TARGET_USER_JOB_POSTING,
+            params: {
+              job_posting_id: params[:job_posting_id],
+            }
+          }) if Jets.env.development?
+        NotificationServiceJob.perform_later(
+          :notify,
+          {
+            message_template_id: TARGET_USER_JOB_POSTING,
+            params: {
+              job_posting_id: params[:job_posting_id],
+            }
+          }) unless Jets.env.development?
+      when TARGET_JOB_POSTING_AD
+        NotificationServiceJob.perform_now(
+          :notify,
+          {
+            message_template_id: TARGET_JOB_POSTING_AD,
+            params: {
+              job_posting_id: params[:job_posting_id],
+              count: params[:count]
+            }
+          }) if Jets.env.development?
+        NotificationServiceJob.perform_later(
+          :notify,
+          {
+            message_template_id: TARGET_JOB_POSTING_AD,
+            params: {
+              job_posting_id: params[:job_posting_id],
+              count: params[:count]
+            }
+          }) unless Jets.env.development?
       else
         Jets.logger.info "#{params} 요청 대응 case 추가 필요"
       end
