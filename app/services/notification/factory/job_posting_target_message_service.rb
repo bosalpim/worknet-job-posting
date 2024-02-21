@@ -26,7 +26,7 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
     @list.each do |user|
       dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "job_detail")
       application_notification_param = create_dispatched_notification_params(@message_template_id, "job_posting", @job_posting.id, "yobosa", user.id, "application")
-      create_bizm_post_pay_message(user, dispatched_notification_param, application_notification_param)
+      create_bizm_post_pay_message(user, dispatched_notification_param, application_notification_param) if Jets.env == 'production' || (PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(user.phone_number))
     end
   end
 
@@ -39,7 +39,7 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
     view_endpoint = "#{@end_point}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}&lat=#{user.lat}&lng=#{user.lng}" + dispatched_notification_param
     origin_url = "#{base_url}#{view_endpoint}"
     application_url = "#{base_url}/jobs/#{@job_posting.public_id}/application?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}" + application_notification_param
-
+    Jets.logger.info user.name
     params = {
       title: "일자리 동네 광고",
       message: build_visit_message(user),

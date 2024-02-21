@@ -19,10 +19,6 @@ class Notification::Factory::SearchTarget::JobPostingTargetUserService
          @lng
        )
 
-    if Jets.env != 'production'
-      return [User.last]
-    end
-
     users
   end
 end
