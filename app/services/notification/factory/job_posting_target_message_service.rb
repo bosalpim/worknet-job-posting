@@ -32,14 +32,12 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
 
   private
 
-  # Todo 알림톡 내용 추가하면서 반영 예정
-
   def create_bizm_post_pay_message(user, dispatched_notification_param, application_notification_param)
-    base_url = "https://www.carepartner.kr"
+    base_url = "http://www.carepartner.kr"
     view_endpoint = "#{@end_point}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}&lat=#{user.lat}&lng=#{user.lng}" + dispatched_notification_param
     origin_url = "#{base_url}#{view_endpoint}"
     application_url = "#{base_url}/jobs/#{@job_posting.public_id}/application?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}" + application_notification_param
-    Jets.logger.info user.name
+
     params = {
       title: "일자리 동네 광고",
       message: build_visit_message(user),
@@ -48,12 +46,11 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
       target_public_id: user.public_id
     }
 
-    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, 'AT'))
+    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, user.phone_number, params, user.public_id, 'AI'))
   end
 
   def build_visit_message(user)
-    "신규 일자리 알림
-#{@job_posting.title}
+    "#{@job_posting.title}
 
 ■ 근무지
 #{@job_posting.address}

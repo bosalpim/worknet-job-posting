@@ -34,6 +34,7 @@ module NotificationRequestHelper
       headers: headers,
       timeout: 10
     ).parsed_response
+    Jets.logger.info "response : #{response}\n"
 
     response.class == Array ? response.first : response
   end

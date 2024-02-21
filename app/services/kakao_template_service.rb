@@ -1958,13 +1958,11 @@ carepartner.kr#{path}
         {
           name: '⚡️ 간편 지원하기',
           type: 'WL',
-          url_pc: tem_params[:application_url],
           url_mobile: tem_params[:application_url]
         },
         {
           name: '🔎 일자리 확인하기',
           type: 'WL',
-          url_pc: tem_params[:origin_url],
           url_mobile: tem_params[:origin_url]
         }
       ]
