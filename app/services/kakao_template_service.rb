@@ -147,6 +147,8 @@ class KakaoTemplateService
       get_job_ads_message(tem_params)
     when MessageTemplateName::JOB_ADS_MESSAGE_THIRD
       get_job_ads_message(tem_params)
+    when MessageTemplateName::TARGET_USER_JOB_POSTING
+      get_job_ads_message(tem_params)
     when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
       get_job_ads_message_reserve(tem_params)
     when MessageTemplateName::JOB_ADS_ENDED
@@ -157,6 +159,10 @@ class KakaoTemplateService
       get_business_job_posting_complete(tem_params)
     when MessageTemplateName::SMART_MEMO
       get_smart_memo_data(tem_params)
+    when MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE
+      get_target_job_posting_performance_data(tem_params)
+    when MessageTemplateName::TARGET_JOB_POSTING_AD
+      get_target_job_posting_ad_data(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -1952,13 +1958,11 @@ carepartner.kr#{path}
         {
           name: '⚡️ 간편 지원하기',
           type: 'WL',
-          url_pc: tem_params[:application_url],
           url_mobile: tem_params[:application_url]
         },
         {
           name: '🔎 일자리 확인하기',
           type: 'WL',
-          url_pc: tem_params[:origin_url],
           url_mobile: tem_params[:origin_url]
         }
       ]
@@ -2023,6 +2027,53 @@ carepartner.kr#{path}
       buttons: [
         {
           name: '스마트 자동메모 확인하기',
+          type: 'WL',
+          url_pc: tem_params[:link],
+          url_mobile: tem_params[:link]
+        }
+      ]
+    }
+  end
+
+  def get_target_job_posting_performance_data(tem_params)
+    {
+      title: "오늘의 동네 광고 성과 공유 드려요",
+      message: "지금까지 대치동에 거주하고 있는 요양보호사 #{tem_params[:count][:total]}명이 광고를 받았으며, 그 중 #{tem_params[:count][:read]}명이 광고를 클릭 했어요.
+
+■ 공고제목
+#{tem_params[:title]}
+
+■ 광고 성과
+간편지원 #{tem_params[:count][:job_applications]}명/ 문자문의 #{tem_params[:count][:contact_messages]}명/ 전화문의 #{tem_params[:count][:calls]}명
+
+■ 지원자를 늘려 보세요
+광고를 받았지만 반응이 없는 요양보호사 #{tem_params[:count][:total]-tem_params[:count][:read]}명에게 전화면접 제안해 보세요.",
+      buttons: [
+        {
+          name: '동네광고 성과 보기',
+          type: 'WL',
+          url_pc: tem_params[:link],
+          url_mobile: tem_params[:link]
+        }
+      ]
+    }
+  end
+
+  def get_target_job_posting_ad_data(tem_params)
+    {
+      title: "동네 광고로 지원을 늘려보세요",
+      message: "공고에 언제 지원이 올지 걱정인가요? 동네광고를 사용하면 즉시 카카오톡으로 광고할 수 있어요!
+
+■ 공고제목
+#{tem_params[:title]}
+
+■ 예상 노출수
+#{tem_params[:address]} 거주 요양보호사 #{tem_params[:count]}명
+
+지금 바로 아래 버튼을 눌러 빠르게 지원 받아보세요!",
+      buttons: [
+        {
+          name: '동네 광고하기',
           type: 'WL',
           url_pc: tem_params[:link],
           url_mobile: tem_params[:link]
