@@ -161,6 +161,8 @@ class KakaoTemplateService
       get_smart_memo_data(tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE
       get_target_job_posting_performance_data(tem_params)
+    when MessageTemplateName::TARGET_JOB_POSTING_AD
+      get_target_job_posting_ad_data(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -2051,6 +2053,29 @@ carepartner.kr#{path}
       buttons: [
         {
           name: '동네광고 성과 보기',
+          type: 'WL',
+          url_pc: tem_params[:link],
+          url_mobile: tem_params[:link]
+        }
+      ]
+    }
+  end
+
+  def get_target_job_posting_ad_data(tem_params)
+    {
+      title: "동네 광고로 지원을 늘려보세요",
+      message: "공고에 언제 지원이 올지 걱정인가요? 동네광고를 사용하면 즉시 카카오톡으로 광고할 수 있어요!
+
+■ 공고제목
+#{tem_params[:title]}
+
+■ 예상 노출수
+#{tem_params[:address]} 거주 요양보호사 #{tem_params[:count]}명
+
+지금 바로 아래 버튼을 눌러 빠르게 지원 받아보세요!",
+      buttons: [
+        {
+          name: '동네 광고하기',
           type: 'WL',
           url_pc: tem_params[:link],
           url_mobile: tem_params[:link]
