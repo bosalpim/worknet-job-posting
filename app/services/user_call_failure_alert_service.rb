@@ -13,7 +13,7 @@ class UserCallFailureAlertService
   end
 
   def call
-    template_id = MessageTemplateName::BUSINESS_CALL_REMINDER
+    template_id = MessageTemplateName::MISSED_CAREGIVER_TO_BUSINESS_CALL
 
     response = KakaoNotificationService.call(
       template_id: template_id,
@@ -25,7 +25,8 @@ class UserCallFailureAlertService
         job_posting_title: job_posting.title,
         job_posting_public_id: job_posting.public_id,
         called_at: (Time.current + 9.hour - 1.minute).strftime("%Y-%m-%d %H시%M분 경")
-      }
+      },
+      message_type: "AI"
     )
     save_kakao_notification(
       response,
