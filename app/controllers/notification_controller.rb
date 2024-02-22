@@ -4,6 +4,8 @@ class NotificationController < ApplicationController
   include MessageTemplateName
 
   def send_message
+    Jets.logger.info "-------------- Notification Start  --------------\n"
+    Jets.logger.info "-------------- template name: #{params[:template]} --------------\n"
     begin
       case params[:template]
       when BUSINESS_JOB_POSTING_COMPLETE
@@ -45,6 +47,7 @@ class NotificationController < ApplicationController
             }
           }) unless Jets.env.development?
       when TARGET_USER_JOB_POSTING
+        Jets.logger.info "-------------- Inside target Job Posting  --------------\n"
         NotificationServiceJob.perform_now(
           :notify,
           {
