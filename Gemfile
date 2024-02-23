@@ -19,7 +19,7 @@ gem "faraday"
 gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 gem "bcrypt", "~> 3.1.7"
 gem "connection_pool"
-gem "nokogiri", "~> 1.16", force_ruby_platform: true
+gem "nokogiri", "~> 1.16"
 
 # development and test groups are not bundled as part of the deployment
 group :development, :test do
