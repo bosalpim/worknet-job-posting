@@ -22,9 +22,8 @@ jobs:
 
       - name: Bundle install
         run: bundle config set path vendor/gems
-          | bundle config set deployment true
           | bundle config set force_ruby_platform true
-          | bundle install
+          | bundle install --path vendor/gems
 
       - name: Generate Environment Variables File for Staging
         run: |
