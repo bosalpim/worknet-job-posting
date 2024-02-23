@@ -62,5 +62,5 @@ jobs:
       - name: Jets deploy
         env:
           JETS_ENV: production
-          JETS_MASTER_KEY: ${{ secrets.JETS_MASTER_KEY }}
+          JETS_MASTER_KEY: ${{ secrets.MASTER_KEY }}
         run: echo y | bundle exec jets deploy
