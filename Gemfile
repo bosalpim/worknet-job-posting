@@ -8,7 +8,7 @@ gem "sassc" # only required if using sass in stylesheets
 
 # Include pg gem if you are using ActiveRecord, remove next line
 # and config/database.yml file if you are not
-gem "pg", "~> 1.2.3"
+gem "pg", "~> 1.5.0"
 
 # gem "dynomite"
 gem "dynomite", "~> 2.0.0" # recommend upgrading
