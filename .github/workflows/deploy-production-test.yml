@@ -20,7 +20,9 @@ jobs:
           bundler-cache: false # runs 'bundle install' and caches installed gems automatically
 
       - name: Bundle install
-        run: bundle install --path vendor/bundle
+        run: |
+          bundle config set --local path 'vendor/gems' |
+          bundle install
 
       - name: Generate Environment Variables File for Production
         run: |
