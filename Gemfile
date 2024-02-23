@@ -1,12 +1,17 @@
 source "https://rubygems.org"
 
-gem "jets", "~> 3.2.0"
+# gem "jets", "~> 3.2.0"
+gem "jets", "~> 5.0.0"
+gem "importmap-jets"
+gem "sprockets-jets"
+gem "sassc" # only required if using sass in stylesheets
 
 # Include pg gem if you are using ActiveRecord, remove next line
 # and config/database.yml file if you are not
 gem "pg", "~> 1.2.3"
 
-gem "dynomite"
+# gem "dynomite"
+gem "dynomite", "~> 2.0.0" # recommend upgrading
 gem "zeitwerk", ">= 2.5.0"
 gem "httparty"
 gem "google-apis-indexing_v3", "~> 0.1"
