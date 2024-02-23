@@ -15,16 +15,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up Ruby
-        uses: ruby/setup-ruby@ee2113536afb7f793eed4ce60e8d3b26db912da4 # v1.127.0
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-          bundler-cache: false # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-      - name: Bundle install
-        run: pwd
-          | bundle config set path vendor/gems
-          | bundle config set force_ruby_platform true
-          | bundle install
+      #      - name: Bundle install
+      #        run: pwd
+      #          | bundle config set path vendor/gems
+      #          | bundle config set force_ruby_platform true
+      #          | bundle install
 
       - name: Generate Environment Variables File for Staging
         run: |
