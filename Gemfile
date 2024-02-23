@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # gem "jets", "~> 3.2.0"
-gem "jets", "~> 5.0.0"
+gem "jets", "5.0.5"
 gem "importmap-jets"
 gem "sprockets-jets"
 gem "sassc" # only required if using sass in stylesheets
