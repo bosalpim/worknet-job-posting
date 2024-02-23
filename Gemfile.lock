@@ -270,7 +270,7 @@ GEM
     nokogiri (1.16.2-arm64-darwin)
       racc (~> 1.4)
     os (1.1.4)
-    pg (1.2.3)
+    pg (1.5.5)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -363,7 +363,7 @@ DEPENDENCIES
   importmap-jets
   jets (~> 5.0.0)
   launchy
-  pg (~> 1.2.3)
+  pg (~> 1.5.0)
   pry
   puma
   rack
@@ -374,4 +374,4 @@ DEPENDENCIES
   zeitwerk (>= 2.5.0)
 
 BUNDLED WITH
-   2.4.13
+   2.4.1
