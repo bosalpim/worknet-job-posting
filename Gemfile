@@ -35,4 +35,4 @@ group :test do
   gem 'capybara'
 end
 
-gem "nokogiri", "~> 1.16"
+gem "nokogiri", "~> 1.16", force_ruby_platform: true
