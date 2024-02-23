@@ -21,7 +21,6 @@ jobs:
 
       - name: Bundle install
         run: |
-          bundle config set --local path 'vendor/bundle' |
           bundle install
 
       - name: Generate Environment Variables File for Production
