@@ -18,13 +18,13 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: false # runs 'bundle install' and caches installed gems automatically
 
-      #      - name: Bundle install
-      #        run: pwd
-      #          | bundle config set path vendor/gems
-      #          | bundle config set force_ruby_platform true
-      #          | bundle install
+      - name: Bundle install
+        run: pwd
+          | bundle config set path vendor/bundle
+          | bundle config set force_ruby_platform true
+          | bundle install
 
       - name: Generate Environment Variables File for Staging
         run: |
@@ -69,6 +69,7 @@ jobs:
       - name: Jets deploy
         env:
           JETS_ENV: staging
+          JETS_EXTRA: 2
         run: tree /tmp/jets/worknet-job-posting
           | echo y | bundle exec jets deploy
 
