@@ -39,7 +39,8 @@ jobs:
           echo "AMPLITUDE_PRODUCTION=$AMPLITUDE_PRODUCTION" >> .env.production
           echo "FCM_APP_PUSH_AUTHORIZATION=$FCM_APP_PUSH_AUTHORIZATION" >> .env.production
           echo "BEX_API_URL=$BEX_PRODUCTION_API_URL" >> .env.production
-          echo "JETS_MASTER_KEY=$MASTER_KEY" >> .env.production 
+          echo "JETS_MASTER_KEY=$JETS_MASTER_KEY" >> .env.production
+          echo "JETS_MASTER_KEY=$JETS_MASTER_KEY" >> .env
 
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
@@ -56,7 +57,7 @@ jobs:
           AMPLITUDE_PRODUCTION: ${{ secrets.AMPLITUDE_PRODUCTION }}
           FCM_APP_PUSH_AUTHORIZATION: ${{ secrets.FCM_APP_PUSH_AUTHORIZATION }}
           BEX_PRODUCTION_API_URL: ${{ secrets.BEX_PRODUCTION_API_URL }}
-          MASTER_KEY: ${{ secrets.MASTER_KEY }}
+          JETS_MASTER_KEY: ${{ secrets.MASTER_KEY }}
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
