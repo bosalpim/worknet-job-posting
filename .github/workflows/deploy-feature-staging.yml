@@ -69,8 +69,7 @@ jobs:
       - name: Jets deploy
         env:
           JETS_ENV: staging
-        run: ls /tmp/jets/worknet-job-posting/stage/code/vendor/gems/ruby/3.2.0
-          | ls /tmp/jets/worknet-job-posting/stage/opt/ruby/gems/3.2.0/
+        run: tree /tmp/jets/worknet-job-posting
           | echo y | bundle exec jets deploy
 
 
