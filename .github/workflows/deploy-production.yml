@@ -61,6 +61,7 @@ jobs:
       - name: Jets deploy
         env:
           JETS_ENV: production
+          JETS_EXTRA: 2
         run: echo y | bundle exec jets deploy
 
 
