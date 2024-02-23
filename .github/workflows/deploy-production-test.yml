@@ -2,7 +2,7 @@ name: Production Deploy To AWS Lambda
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main-test ]
 
 jobs:
   deploy:
@@ -61,7 +61,7 @@ jobs:
       - name: Jets deploy
         env:
           JETS_ENV: production
-        run: echo y | bundle exec jets deploy
+        run: echo y | JETS_ENV=production bundle exec jets deploy
 
 
       - name: Action Slack
