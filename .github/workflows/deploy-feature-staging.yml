@@ -20,11 +20,11 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: false # runs 'bundle install' and caches installed gems automatically
 
-      #      - name: Bundle install
-      #        run: pwd
-      #          | bundle config set path vendor/gems
-      #          | bundle config set force_ruby_platform true
-      #          | bundle install
+      - name: Bundle install
+        run: pwd
+          | bundle config set path vendor/gems
+          | bundle config set force_ruby_platform true
+          | bundle install
 
       - name: Generate Environment Variables File for Staging
         run: |
