@@ -13,5 +13,3 @@ tmp
 .idea
 .gitmessage.txt
 /public/assets
-
-/config/master.key
