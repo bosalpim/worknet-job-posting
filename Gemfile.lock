@@ -131,7 +131,7 @@ GEM
     date (3.3.4)
     declarative (0.0.20)
     diff-lcs (1.5.1)
-    dotenv (3.0.2)
+    dotenv (2.8.1)
     dsl_evaluator (0.3.1)
       activesupport
       memoist
@@ -188,7 +188,7 @@ GEM
       zeitwerk
     importmap-jets (0.1.1)
       importmap
-    jets (5.0.5)
+    jets (5.0.1)
       actionmailer (~> 7.0.8)
       actionpack (~> 7.0.8)
       actionview (~> 7.0.8)
@@ -206,7 +206,7 @@ GEM
       aws-sdk-sns
       aws-sdk-sqs
       aws-sdk-ssm
-      cfn-status (>= 0.5.0)
+      cfn-status
       cfn_camelizer (>= 0.4.9)
       cfn_response
       cli-format (>= 0.4.0)
@@ -367,7 +367,7 @@ DEPENDENCIES
   google-apis-indexing_v3 (~> 0.1)
   httparty
   importmap-jets
-  jets (= 5.0.5)
+  jets (= 5.0.1)
   launchy
   nokogiri (~> 1.16)
   pg (~> 1.5.0)
