@@ -19,9 +19,6 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-      - name: Bundle install
-        run: bundle install --path vendor/gems
-
       - name: Generate Environment Variables File for Production
         run: |
           echo "DB_HOST_PRODUCTION=$DB_HOST_PRODUCTION" >> .env.production
