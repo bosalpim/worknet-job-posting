@@ -58,6 +58,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
+      - name: Create config/master.key
+        env:
+          MASTER_KEY: ${{ secrets.MASTER_KEY }}
+        run:
+          echo "$MASTER_KEY" >> config/master.key
 
       - name: Jets deploy
         env:
