@@ -67,14 +67,3 @@ jobs:
         env:
           JETS_ENV: production
         run: echo y | bundle exec jets deploy
-
-
-      - name: Action Slack
-        uses: 8398a7/action-slack@v3
-        if: always()
-        with:
-          status: ${{ job.status }}
-          author_name: PRODUCTION Deployment
-          fields: repo,message,commit,author,action,eventName,workflow
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
