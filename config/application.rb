@@ -118,4 +118,6 @@ module Main
                        else
                          "https://127.0.0.1"
                        end
+
+  p ENV
 end
