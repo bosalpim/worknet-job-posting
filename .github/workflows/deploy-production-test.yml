@@ -35,6 +35,7 @@ jobs:
           echo "AMPLITUDE_PRODUCTION=$AMPLITUDE_PRODUCTION" >> .env.production
           echo "FCM_APP_PUSH_AUTHORIZATION=$FCM_APP_PUSH_AUTHORIZATION" >> .env.production
           echo "BEX_API_URL=$BEX_PRODUCTION_API_URL" >> .env.production
+        #          echo "JETS_MASTER_KEY=$JETS_MASTER_KEY" >> .env.production
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
           DB_PASSWORD_PRODUCTION: ${{ secrets.DB_PASSWORD_PRODUCTION }}
@@ -62,35 +63,4 @@ jobs:
       - name: Jets deploy
         env:
           JETS_ENV: production
-          JETS_MASTER_KEY: ${{ secrets.MASTER_KEY }}
-          DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
-          DB_PASSWORD_PRODUCTION: ${{ secrets.DB_PASSWORD_PRODUCTION }}
-          WORKNET_API_KEY: ${{ secrets.WORKNET_API_KEY }}
-          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
-          GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
-          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
-          NAVER_API_KEY_ID: ${{ secrets.NAVER_API_KEY_ID }}
-          NAVER_API_KEY: ${{ secrets.NAVER_API_KEY }}
-          NAVER_SEARCH_API_KEY: ${{ secrets.NAVER_SEARCH_API_KEY }}
-          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
-          KAKAO_BIZMSG_PROFILE: ${{ secrets.KAKAO_BIZMSG_PROFILE }}
-          AMPLITUDE_PRODUCTION: ${{ secrets.AMPLITUDE_PRODUCTION }}
-          FCM_APP_PUSH_AUTHORIZATION: ${{ secrets.FCM_APP_PUSH_AUTHORIZATION }}
-          BEX_PRODUCTION_API_URL: ${{ secrets.BEX_PRODUCTION_API_URL }}
-        run: |
-          echo "DB_HOST_PRODUCTION=$DB_HOST_PRODUCTION" >> .env.production
-          echo "DB_PASSWORD_PRODUCTION=$DB_PASSWORD_PRODUCTION" >> .env.production
-          echo "WORKNET_API_KEY=$WORKNET_API_KEY" >> .env.production
-          echo "GOOGLE_PROJECT_ID=$GOOGLE_PROJECT_ID" >> .env.production
-          echo "GOOGLE_CLIENT_EMAIL=$GOOGLE_CLIENT_EMAIL" >> .env.production
-          echo "GOOGLE_PRIVATE_KEY=$GOOGLE_PRIVATE_KEY" >> .env.production
-          echo "NAVER_API_KEY_ID=$NAVER_API_KEY_ID" >> .env.production
-          echo "NAVER_API_KEY=$NAVER_API_KEY" >> .env.production
-          echo "NAVER_SEARCH_API_KEY=$NAVER_SEARCH_API_KEY" >> .env.production
-          echo "KAKAO_REST_API_KEY=$KAKAO_REST_API_KEY" >> .env.production
-          echo "KAKAO_BIZMSG_PROFILE=$KAKAO_BIZMSG_PROFILE" >> .env.production
-          echo "AMPLITUDE_PRODUCTION=$AMPLITUDE_PRODUCTION" >> .env.production
-          echo "FCM_APP_PUSH_AUTHORIZATION=$FCM_APP_PUSH_AUTHORIZATION" >> .env.production
-          echo "BEX_API_URL=$BEX_PRODUCTION_API_URL" >> .env
-          echo "JETS_MASTER_KEY=$JETS_MASTER_KEY" >> .env.production
-          | bundle exec jets deploy
+        run: echo y | bundle exec jets deploy
