@@ -63,8 +63,7 @@ jobs:
       - name: Jets deploy
         env:
           JETS_ENV: staging
-        run: tree /tmp/jets/worknet-job-posting
-          | echo y | bundle exec jets deploy
+        run: echo y | bundle exec jets deploy
 
 
       - name: Action Slack
