@@ -14,4 +14,4 @@ tmp
 .gitmessage.txt
 /public/assets
 
-/config/master.key
+#/config/master.key

@@ -37,7 +37,6 @@ jobs:
           echo "BEX_API_URL=$BEX_PRODUCTION_API_URL" >> .env.production
           echo "JETS_MASTER_KEY=$JETS_MASTER_KEY" >> .env.production
           echo "JETS_MASTER_KEY=$JETS_MASTER_KEY" >> .env
-
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
           DB_PASSWORD_PRODUCTION: ${{ secrets.DB_PASSWORD_PRODUCTION }}
