@@ -46,6 +46,12 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
 
     params = {
       title: "일자리 동네 광고",
+      job_posting_id: @job_posting.id,
+      job_posting_public_id: @job_posting.public_id,
+      job_posting_title: @job_posting.title,
+      business_name: @job_posting.business.name,
+      job_posting_type: translate_type('job_posting', @job_posting, :work_type),
+      send_at: Time.current + (9 * 60 * 60),
       message: build_visit_message(user),
       origin_url: origin_url,
       application_url: application_url,
