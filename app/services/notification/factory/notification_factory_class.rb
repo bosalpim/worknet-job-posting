@@ -33,6 +33,7 @@ class Notification::Factory::NotificationFactoryClass
     # 어떤 공고를 통해 발생한 것인지, 파악하기 위한 Id를 받는 변수
     # 각 서브클래스에서 주입
     @job_posting_id_for_notification_results = nil
+    @fail_alert_message_payload = nil
 
     message_template = MessageTemplate.find_by(name: message_template_id)
     target_medium = MessageTemplate.find_by(name: message_template_id).nil? ? KAKAO_ARLIMTALK : MessageTemplate.find_by(name: message_template_id).target_medium
@@ -54,6 +55,7 @@ class Notification::Factory::NotificationFactoryClass
       create_dispatched_notifications unless @dispatched_notifications_service.nil?
     rescue => e
       Jets.logger.error e.full_message
+      SlackWebhookService.call(:dev_alert, @fail_alert_message_payload) unless @fail_alert_message_payload.nil?
     end
   end
 

@@ -19,6 +19,28 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
     @job_posting_id_for_notification_results = job_posting.id
     @list = JobPostingTargetUserService.call(@job_posting.lat, @job_posting.lng)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
+    @fail_alert_message_payload = {
+      text: '동네광고 전송 실패!',
+      attachments: [
+        {
+          fallback: '전송 실패!',
+          color: '#A7B8A3',
+          title: '동네광고 전송 샐패',
+          fields: [
+            {
+              title: '기관명',
+              value: @job_posting.business.name,
+              short: false,
+            },
+            {
+              title: '공고명',
+              value: @job_posting.title,
+              short: false,
+            },
+          ],
+        }
+      ]
+    }
     create_message
   end
 
