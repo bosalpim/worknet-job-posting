@@ -8,7 +8,7 @@ gem "sassc" # only required if using sass in stylesheets
 
 # Include pg gem if you are using ActiveRecord, remove next line
 # and config/database.yml file if you are not
-gem "pg", "~> 1.2.3"
+gem "pg", "~> 1.5.0"
 
 # gem "dynomite"
 gem "dynomite", "~> 2.0.0" # recommend upgrading
@@ -19,6 +19,8 @@ gem "faraday"
 gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 gem "bcrypt", "~> 3.1.7"
 gem "connection_pool"
+gem "nokogiri", "~> 1.16", platforms: [:ruby]
+gem "authorizer", "~> 0.0.6"
 
 # development and test groups are not bundled as part of the deployment
 group :development, :test do
@@ -34,3 +36,4 @@ group :test do
   gem 'launchy'
   gem 'capybara'
 end
+
