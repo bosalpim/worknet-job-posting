@@ -60,6 +60,7 @@ class Notification::Factory::NotificationFactoryClass
   end
 
   def notify
+    raise "This is an exception"
     send_app_push
     send_bizm_post_pay
     send_bizm_pre_pay
