@@ -21,7 +21,8 @@ jobs:
           bundler-cache: false # runs 'bundle install' and caches installed gems automatically
 
       - name: Bundle install
-        run: bundle config set path vendor/gems
+        run: pwd
+          | bundle config set path vendor/gems
           | bundle config set force_ruby_platform true
           | bundle install
 
