@@ -99,7 +99,7 @@ module Main
     PHONE_NUMBER_WHITELIST = PHONE_NUMBER_WHITELIST.present? ? JSON.parse(PHONE_NUMBER_WHITELIST) :
                                %w[01037863607 01025179362 01094659404 01066121746 01049195808 01091372316 01029685055 01051119300 01098651017 01057513286 01034308850]
     TEST_PHONE_NUMBER = ENV['TEST_PHONE_NUMBER'] || '01029685055'
-    BEX_API_URl = ENV['BEX_API_URL']
+    BEX_API_URL = ENV['BEX_API_URL']
     BIZMSG_PROFILE = ENV['KAKAO_BIZMSG_PROFILE']
     DEEP_LINK_SCHEME = "carepartner://app"
     BUSINESS_URL = if Jets.env.production?
@@ -108,8 +108,9 @@ module Main
                      "http://business.dev-carepartner.kr"
                    else
                      "http://127.0.0.1"
+                   end
   end
-end
+
   HTTPS_BUSINESS_URL = if Jets.env.production?
                          "https://business.carepartner.kr"
                        elsif Jets.env.staging?
