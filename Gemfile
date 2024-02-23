@@ -34,3 +34,5 @@ group :test do
   gem 'launchy'
   gem 'capybara'
 end
+
+gem "nokogiri", "~> 1.16"
