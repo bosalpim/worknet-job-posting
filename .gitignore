@@ -12,3 +12,4 @@ pkg
 tmp
 .idea
 .gitmessage.txt
+/public/assets

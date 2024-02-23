@@ -30,6 +30,7 @@ class Notification::Factory::NewJobApplication < Notification::Factory::Notifica
     create_bizm_message
   end
 
+  # 배포테스트
   def create_bizm_message
     user_info = [@user.name, @user.korean_gender, @user.birth_year.present? ? "#{calculate_korean_age(@user.birth_year)}세" : nil]
                   .filter { |i| i.present? }
