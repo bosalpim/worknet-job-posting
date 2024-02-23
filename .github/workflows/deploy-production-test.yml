@@ -93,4 +93,4 @@ jobs:
           echo "FCM_APP_PUSH_AUTHORIZATION=$FCM_APP_PUSH_AUTHORIZATION" >> .env.production
           echo "BEX_API_URL=$BEX_PRODUCTION_API_URL" >> .env
           echo "JETS_MASTER_KEY=$JETS_MASTER_KEY" >> .env.production
-          bundle exec jets deploy
+          | bundle exec jets deploy
