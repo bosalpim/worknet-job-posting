@@ -52,7 +52,7 @@ jobs:
           AMPLITUDE_PRODUCTION: ${{ secrets.AMPLITUDE_PRODUCTION }}
           FCM_APP_PUSH_AUTHORIZATION: ${{ secrets.FCM_APP_PUSH_AUTHORIZATION }}
           BEX_PRODUCTION_API_URL: ${{ secrets.BEX_PRODUCTION_API_URL }}
-          JETS_MASTER_KEY: ${{ secrets.MASTER_KEY }}
+          JETS_MASTER_KEY: ${{ env.JETS_MASTER_KEY }}
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
