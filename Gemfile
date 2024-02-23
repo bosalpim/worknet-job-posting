@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # gem "jets", "~> 3.2.0"
-gem "jets", "~> 5.0.0"
+gem "jets", "5.0.1"
 gem "importmap-jets"
 gem "sprockets-jets"
 gem "sassc" # only required if using sass in stylesheets
@@ -19,6 +19,8 @@ gem "faraday"
 gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 gem "bcrypt", "~> 3.1.7"
 gem "connection_pool"
+gem "nokogiri", "~> 1.16", platforms: [:ruby]
+gem "authorizer", "~> 0.0.6"
 
 # development and test groups are not bundled as part of the deployment
 group :development, :test do
@@ -34,5 +36,3 @@ group :test do
   gem 'launchy'
   gem 'capybara'
 end
-
-gem "nokogiri", "~> 1.16", force_ruby_platform: true
