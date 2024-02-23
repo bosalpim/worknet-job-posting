@@ -2,7 +2,7 @@ name: Production Deploy To AWS Lambda
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "RCRT-203" ]
 
 jobs:
   deploy:
@@ -20,7 +20,7 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: Bundle install
-        run: bundle install --path vendor/gems
+        run: bundle install --path vendor/bundle
 
       - name: Generate Environment Variables File for Production
         run: |
