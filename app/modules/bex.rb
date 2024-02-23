@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Bex
-  BASE_URL = BEX_API_URl
+  BASE_URL = Main::Application::BEX_API_URL
 
   module Experiment
     CAREER_CERTIFICATION = 'career_certification'
