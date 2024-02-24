@@ -31,7 +31,6 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
   end
 
   private
-
   def create_bizm_post_pay_message(user, dispatched_notification_param, application_notification_param)
     base_url = if Jets.env.production?
                             "http://www.carepartner.kr"
@@ -63,7 +62,7 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
 
   def build_visit_message(user)
     "#{@job_posting.title}
-
+    
 ■ 근무지
 #{@job_posting.address}
 
