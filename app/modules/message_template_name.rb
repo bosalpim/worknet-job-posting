@@ -13,6 +13,7 @@ module MessageTemplateName
   USER_SURVEY_FOLLOW_UP_EDIT = 'user_survey_follow_up(edit)'.freeze
   USER_CALL_REMINDER = "proposal_call_remind_user1".freeze # 기관이 요양보호사에게 전화했을 때 안받은 경우
   BUSINESS_CALL_REMINDER = "posting_call_reminder_biz1".freeze # 요보사가 기관에게 전화했을 때 안받은 경우
+  MISSED_CAREGIVER_TO_BUSINESS_CALL = "missed_call_biz".freeze # 요보사 => 기관 부재중 알림
   CALL_REQUEST_ALARM = "call_request_alarm".freeze # 요양보호사가 기관에 지원했을 때, 기관에게 지원 안내를 하는 알림톡입니다.
   BUSINESS_CALL_APPLY_USER_REMINDER = "call_request_remind".freeze # 요양보호사가 기관 일자리 상담 전화를 안받은 경우
   JOB_ALARM_ACTIVELY = 'job_alarm(actively)'.freeze # 적극구직 요양보호사에게 매일 전달되는 신문

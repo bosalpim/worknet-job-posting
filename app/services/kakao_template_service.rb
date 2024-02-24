@@ -63,8 +63,8 @@ class KakaoTemplateService
       get_user_satisfaction_survey_data(tem_params)
     when MessageTemplateName::USER_CALL_REMINDER
       get_user_call_reminder_data(tem_params)
-    when MessageTemplateName::BUSINESS_CALL_REMINDER
-      get_business_call_reminder_data(tem_params)
+    when MessageTemplateName::MISSED_CAREGIVER_TO_BUSINESS_CALL
+      get_missed_caregiver_to_business_call_data(tem_params)
     when MessageTemplateName::CALL_REQUEST_ALARM
       get_new_apply_data(tem_params)
     when MessageTemplateName::BUSINESS_CALL_APPLY_USER_REMINDER
@@ -653,10 +653,28 @@ class KakaoTemplateService
     }
   end
 
-  def get_business_call_reminder_data(tem_params)
+  # MISSED_CAREGIVER_TO_BUSINESS_CALL
+  def get_missed_caregiver_to_business_call_data(tem_params)
     {
       title: "[케어파트너] 부재중전화 알림",
-      message: "[케어파트너] 부재중전화 알림\n#{tem_params[:business_name]} 담당자님, 등록하신 공고를 통해 #{tem_params[:user_name]} 요양보호사에게 걸려온 부재중 전화가 있습니다.\n최근 전화 기록을 확인하여 전화해보세요.\n\n빠르게 연락할수록 채용확률이 높아집니다.\n\n≫ 공고명: #{tem_params[:job_posting_title]}\n≫ 부재중시간: #{tem_params[:called_at]}\n\n*전화를 받지 않는 경우 문자를 남겨보세요.",
+      message: "케어파트너를 통해 걸려온 부재중 전화가 있어요. 통화기록을 확인하고 전화해보세요.
+
+■ 공고제목
+#{tem_params[:job_posting_title]}
+
+■ 전화문의한 요양보호사
+#{tem_params[:user_name]}
+
+■ 부재중 시간
+#{tem_params[:called_at]}",
+      buttons: [
+        {
+          name: "부재중 통화기록 확인",
+          type: "WL",
+          url_mobile: BUSINESS_URL + '/call-record?utm_source=message&utm_medium=arlimtalk&utm_campaign=missed_call_biz',
+          url_pc: BUSINESS_URL + '/call-record?utm_source=message&utm_medium=arlimtalk&utm_campaign=missed_call_biz'
+        }
+      ]
     }
   end
 
@@ -1958,13 +1976,11 @@ carepartner.kr#{path}
         {
           name: '⚡️ 간편 지원하기',
           type: 'WL',
-          url_pc: tem_params[:application_url],
           url_mobile: tem_params[:application_url]
         },
         {
           name: '🔎 일자리 확인하기',
           type: 'WL',
-          url_pc: tem_params[:origin_url],
           url_mobile: tem_params[:origin_url]
         }
       ]

@@ -53,9 +53,9 @@ module KakaoNotificationLoggingHelper
     when MessageTemplateName::USER_CALL_REMINDER
       # 기관이 요보사한테 전화했는데 부재중일 경우
       return get_user_call_reminder_logging_data(template_id, tem_params)
-    when MessageTemplateName::BUSINESS_CALL_REMINDER
+    when MessageTemplateName::MISSED_CAREGIVER_TO_BUSINESS_CALL
       # 요보사가 기관한테 전화했는데 부재중일 경우
-      return get_business_call_reminder_logging_data(template_id, tem_params)
+      return get_missed_caregiver_to_business_call_logging_data(template_id, tem_params)
     when MessageTemplateName::BUSINESS_CALL_APPLY_USER_REMINDER
       # 기관에게 전화신청한 요보사가 기관의 전화를 안 받았을 경우
       return get_business_call_apply_user_reminder(template_id, tem_params)
@@ -329,7 +329,7 @@ module KakaoNotificationLoggingHelper
     }
   end
 
-  def self.get_business_call_reminder_logging_data(template_id, tem_params)
+  def self.get_missed_caregiver_to_business_call_logging_data(template_id, tem_params)
     return {
       "user_id" => tem_params[:target_public_id],
       "event_type" => NOTIFICATION_EVENT_NAME,
@@ -716,7 +716,12 @@ module KakaoNotificationLoggingHelper
       "event_type" => NOTIFICATION_EVENT_NAME,
       "event_properties" => {
         "template" => template_id,
-        "title" => "Target Message",
+        "jobPostingId" => tem_params[:job_posting_id],
+        "job_posting_public_id" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:job_posting_title],
+        "centerName" => tem_params[:business_name],
+        "job_posting_type" => tem_params[:job_posting_type],
+        "send_at" => tem_params[:send_at],
       }
     }
   end

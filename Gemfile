@@ -1,12 +1,17 @@
 source "https://rubygems.org"
 
-gem "jets", "~> 3.2.0"
+# gem "jets", "~> 3.2.0"
+gem "jets", "5.0.1"
+gem "importmap-jets"
+gem "sprockets-jets"
+gem "sassc" # only required if using sass in stylesheets
 
 # Include pg gem if you are using ActiveRecord, remove next line
 # and config/database.yml file if you are not
-gem "pg", "~> 1.2.3"
+gem "pg", "~> 1.5.0"
 
-gem "dynomite"
+# gem "dynomite"
+gem "dynomite", "~> 2.0.0" # recommend upgrading
 gem "zeitwerk", ">= 2.5.0"
 gem "httparty"
 gem "google-apis-indexing_v3", "~> 0.1"
@@ -14,6 +19,8 @@ gem "faraday"
 gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 gem "bcrypt", "~> 3.1.7"
 gem "connection_pool"
+gem "nokogiri", "~> 1.16", platforms: [:ruby]
+gem "authorizer", "~> 0.0.6"
 
 # development and test groups are not bundled as part of the deployment
 group :development, :test do
