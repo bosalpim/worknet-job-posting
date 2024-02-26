@@ -163,6 +163,8 @@ class KakaoTemplateService
       get_target_job_posting_performance_data(tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD
       get_target_job_posting_ad_data(tem_params)
+    when MessageTemplateName::NONE_LTC_REQUEST
+      get_none_ltc_request(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -2171,6 +2173,35 @@ carepartner.kr#{path}
         {
           type: "WL",
           name: "채용결과 입력하기",
+          url_mobile: link,
+          url_pc: link,
+        }
+      ]
+    }
+  end
+
+
+  def get_none_ltc_request(tem_params)
+    service = tem_params[:service]
+    date = tem_params[:date]
+    link = tem_params[:link]
+    {
+      title: "케어파트너 돌봄 플러스 서비스 상담 신청이 접수 되었어요",
+      message: "케어파트너 돌봄 플러스 서비스 상담 신청이 접수 되었어요
+
+■ 신청 서비스
+#{service}
+
+■ 상담 접수 일정
+#{date}
+
+■ 문의 내용 확인 후 케어파트너 담당 매니저가 고객님께 유선으로 연락드릴 예정입니다.
+
+■ 빠른 상담을 원하신다면 아래 상담원 연결 버튼을 클릭하여 카카오톡으로 문의남겨주세요",
+      buttons: [
+        {
+          type: "WL",
+          name: "⚡ 상담원 연결	",
           url_mobile: link,
           url_pc: link,
         }
