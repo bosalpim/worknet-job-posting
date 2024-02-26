@@ -34,7 +34,7 @@ class Notification::Factory::NewContactMessage < Notification::Factory::Notifica
   end
 
   def format_app_push_link
-    base_url = "#{DEEP_LINK_SCHEME}/redirect/business"
+    base_url = "#{Main::Application::DEEP_LINK_SCHEME}/redirect/business"
     to = "employment_management/contact_messages/#{@contact_message.public_id}"
     "#{base_url}?to=#{CGI.escape("#{to}?utm_source=message&utm_campaign=app_push&utm_campaign=#{@message_template_id}")}"
   end

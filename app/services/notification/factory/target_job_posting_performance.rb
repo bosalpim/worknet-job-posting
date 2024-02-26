@@ -30,7 +30,7 @@ class Notification::Factory::TargetJobPostingPerformance < Notification::Factory
 
         business = Business.find(job_posting.business_id)
         utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-        link = "#{BUSINESS_URL}/recruitment_management/#{job_posting.public_id}/dashboard?#{utm}"
+        link = "#{Main::Application::BUSINESS_URL}/recruitment_management/#{job_posting.public_id}/dashboard?#{utm}"
         params = {
           job_posting_id: job_posting.id,
           center_name: business.name,

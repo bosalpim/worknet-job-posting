@@ -79,7 +79,7 @@ class Notification::Factory::NewJobApplication < Notification::Factory::Notifica
   end
 
   def create_app_push_message
-    base_url = "#{DEEP_LINK_SCHEME}/redirect/business"
+    base_url = "#{Main::Application::DEEP_LINK_SCHEME}/redirect/business"
     to = "employment_management/job_applications/#{@job_application.public_id}"
     link = "#{base_url}?to=#{CGI.escape("#{to}?utm_source=message&utm_campaign=app_push&utm_campaign=#{@message_template_id}")}"
     @app_push_list.push(
