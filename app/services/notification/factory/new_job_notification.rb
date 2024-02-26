@@ -47,7 +47,7 @@ class Notification::Factory::NewJobNotification < Notification::Factory::Notific
       {
         body: "#{@job_posting.title}",
         title: '놓치면 곧 마감되는 신규 일자리가 있어요!',
-        link: "#{DEEP_LINK_SCHEME}#{@end_point}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=new_job_posting" + dispatched_notification_param,
+        link: "#{Main::Application::DEEP_LINK_SCHEME}#{@end_point}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=new_job_posting" + dispatched_notification_param,
       },
       user.public_id,
       {

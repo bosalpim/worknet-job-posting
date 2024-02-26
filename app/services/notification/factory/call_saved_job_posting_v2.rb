@@ -56,7 +56,7 @@ class Notification::Factory::CallSavedJobPostingV2 < Notification::Factory::Noti
       {
         body: "저장한 관심일자리에 연락해보세요.",
         title: "저장한 관심일자리 추천",
-        "link": "#{DEEP_LINK_SCHEME}/jobs/#{job_posting.public_id}?&utm_source=message&utm_medium=app_push&utm_campaign=call_saved_job_posting2"
+        "link": "#{Main::Application::DEEP_LINK_SCHEME}/jobs/#{job_posting.public_id}?&utm_source=message&utm_medium=app_push&utm_campaign=call_saved_job_posting2"
       },
       user.public_id,
     )
