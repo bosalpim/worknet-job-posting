@@ -13,7 +13,7 @@ class Notification::Sms < NotificationType::Base
     body = [{
               message_type: "AT",
               phn: @phone_number,
-              profile: BIZMSG_PROFILE,
+              profile: Main::Application::BIZMSG_PROFILE,
               msg: @message,
               smsKind: "S",
               msgSms: @message,

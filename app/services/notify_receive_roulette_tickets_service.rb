@@ -16,10 +16,10 @@ class NotifyReceiveRouletteTicketsService
     template_id = MessageTemplateName::ROULETTE
     phone = if Jets.env == 'production'
               @user.phone_number
-            elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(@user.phone_number)
+            elsif Main::Application::PHONE_NUMBER_WHITELIST.is_a?(Array) && Main::Application::PHONE_NUMBER_WHITELIST.include?(@user.phone_number)
               @user.phone_number
             else
-              TEST_PHONE_NUMBER
+              Main::Application::TEST_PHONE_NUMBER
             end
     response = BizmsgService.call(
       template_id: template_id,

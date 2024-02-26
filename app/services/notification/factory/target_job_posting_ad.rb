@@ -11,7 +11,7 @@ class Notification::Factory::TargetJobPostingAd < Notification::Factory::Notific
 
   def create_message
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    link = "#{BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/local-ads?#{utm}"
+    link = "#{Main::Application::BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/local-ads?#{utm}"
 
     params = {
       link: link,

@@ -173,10 +173,10 @@ class KakaoTemplateService
   def set_phone(phone)
     @phone = if Jets.env == 'production'
                phone
-             elsif PHONE_NUMBER_WHITELIST.is_a?(Array) && PHONE_NUMBER_WHITELIST.include?(phone)
+             elsif Main::Application::PHONE_NUMBER_WHITELIST.is_a?(Array) && Main::Application::PHONE_NUMBER_WHITELIST.include?(phone)
                phone
              else
-               TEST_PHONE_NUMBER
+               Main::Application::TEST_PHONE_NUMBER
              end
   end
 
@@ -671,8 +671,8 @@ class KakaoTemplateService
         {
           name: "부재중 통화기록 확인",
           type: "WL",
-          url_mobile: BUSINESS_URL + '/call-record?utm_source=message&utm_medium=arlimtalk&utm_campaign=missed_call_biz',
-          url_pc: BUSINESS_URL + '/call-record?utm_source=message&utm_medium=arlimtalk&utm_campaign=missed_call_biz'
+          url_mobile: Main::Application::BUSINESS_URL + '/call-record?utm_source=message&utm_medium=arlimtalk&utm_campaign=missed_call_biz',
+          url_pc: Main::Application::BUSINESS_URL + '/call-record?utm_source=message&utm_medium=arlimtalk&utm_campaign=missed_call_biz'
         }
       ]
     }

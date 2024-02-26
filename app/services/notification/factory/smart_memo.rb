@@ -31,7 +31,7 @@ class Notification::Factory::SmartMemo < Notification::Factory::NotificationFact
 
   def create_message
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    link = "#{BUSINESS_URL}/smart-memo?#{utm}"
+    link = "#{Main::Application::BUSINESS_URL}/smart-memo?#{utm}"
     connected_at = @job_postings_connect.connected_at
     connected_at = DateTime.parse(connected_at.to_s)
     connected_at_text = [
