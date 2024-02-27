@@ -131,7 +131,7 @@ GEM
     date (3.3.4)
     declarative (0.0.20)
     diff-lcs (1.5.1)
-    dotenv (2.8.1)
+    dotenv (3.0.2)
     dsl_evaluator (0.3.1)
       activesupport
       memoist
@@ -154,7 +154,7 @@ GEM
     gems (1.2.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-apis-core (0.13.0)
+    google-apis-core (0.14.0)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (~> 1.9)
       httpclient (>= 2.8.1, < 3.a)
@@ -162,8 +162,8 @@ GEM
       representable (~> 3.0)
       retriable (>= 2.0, < 4.a)
       rexml
-    google-apis-indexing_v3 (0.15.0)
-      google-apis-core (>= 0.12.0, < 2.a)
+    google-apis-indexing_v3 (0.16.0)
+      google-apis-core (>= 0.14.0, < 2.a)
     google-cloud-env (2.1.1)
       faraday (>= 1.0, < 3.a)
     googleauth (1.11.0)
@@ -332,6 +332,7 @@ GEM
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
+    slack-notifier (2.4.0)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -377,6 +378,7 @@ DEPENDENCIES
   rspec
   sassc
   shotgun
+  slack-notifier
   sprockets-jets
   zeitwerk (>= 2.5.0)
 

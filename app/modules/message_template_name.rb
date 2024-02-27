@@ -99,4 +99,7 @@ module MessageTemplateName
 
   # 스마트 메모 홍보
   SMART_MEMO = 'smart_memo'.freeze
+
+  # 돌봄플러스 신청 알림
+  NONE_LTC_REQUEST = 'nonltc_01'.freeze
 end
