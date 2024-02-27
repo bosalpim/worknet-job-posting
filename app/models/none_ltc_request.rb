@@ -1,0 +1,3 @@
+class NoneLtcRequest < ApplicationRecord
+
+end
