@@ -21,6 +21,7 @@ gem "bcrypt", "~> 3.1.7"
 gem "connection_pool"
 gem "nokogiri", "~> 1.16", platforms: [:ruby]
 gem "authorizer", "~> 0.0.6"
+gem "slack-notifier"
 
 # development and test groups are not bundled as part of the deployment
 group :development, :test do

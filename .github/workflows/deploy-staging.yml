@@ -36,6 +36,7 @@ jobs:
           echo "AMPLITUDE_STAGING=$AMPLITUDE_STAGING" >> .env.staging
           echo "FCM_APP_PUSH_AUTHORIZATION=$FCM_APP_PUSH_AUTHORIZATION" >> .env.staging
           echo "BEX_API_URL=$BEX_STAGING_API_URL" >> .env.staging
+          echo "SLACK_DEV_ALERT_URL=$SLACK_DEV_ALERT_URL" >> .env.staging
         env:
           DB_HOST_STAGING: ${{ secrets.DB_HOST_STAGING }}
           DB_PASSWORD_STAGING: ${{ secrets.DB_PASSWORD_STAGING }}
@@ -51,6 +52,7 @@ jobs:
           AMPLITUDE_STAGING: ${{ secrets.AMPLITUDE_STAGING }}
           FCM_APP_PUSH_AUTHORIZATION: ${{ secrets.FCM_APP_PUSH_AUTHORIZATION }}
           BEX_STAGING_API_URL: ${{ secrets.BEX_STAGING_API_URL }}
+          SLACK_DEV_ALERT_URL: ${{ secrets.SLACK_DEV_ALERT_URL }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
