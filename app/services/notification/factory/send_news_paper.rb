@@ -25,7 +25,7 @@ class Notification::Factory::SendNewsPaper < Notification::Factory::Notification
             {
               title: "#{date} 우리동네 요양일자리 신문이 도착했어요!",
               body: "지금 바로 맞춤 일자리를 확인해보세요.",
-              link: "#{DEEP_LINK_SCHEME}#{path}"
+              link: "#{Main::Application::DEEP_LINK_SCHEME}#{path}"
             },
             template_params["target_public_id"],
             {

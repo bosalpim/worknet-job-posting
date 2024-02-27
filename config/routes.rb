@@ -57,9 +57,16 @@ Jets.application.routes.draw do
       post :new_contact_message
     end
   end
+  resources :none_ltc, only: [] do
+    collection do
+      post :new_none_ltc_request
+    end
+  end
 
   post '/notification', to: 'notification#send_message'
   post '/notification/ask_active', to: 'notification#ask_active'
   post '/point_histories/add_point_changed_active_user', to: 'point_histories#add_point_changed_active_user'
   post '/gamification/misson_complete', to: 'gamification#missionComplete'
 end
+
+# updated by jets upgrade

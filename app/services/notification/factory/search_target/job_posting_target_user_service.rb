@@ -18,7 +18,7 @@ class Notification::Factory::SearchTarget::JobPostingTargetUserService
          @lat,
          @lng
        )
-
+    
     users
   end
 end

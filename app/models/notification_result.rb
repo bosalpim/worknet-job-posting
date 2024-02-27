@@ -117,5 +117,6 @@ class NotificationResult < ApplicationRecord
     MessageTemplateName::TARGET_USER_JOB_POSTING => MessageTemplateName::TARGET_USER_JOB_POSTING,
     MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE => MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE,
     MessageTemplateName::TARGET_JOB_POSTING_AD => MessageTemplateName::TARGET_JOB_POSTING_AD,
+    MessageTemplateName::NONE_LTC_REQUEST => MessageTemplateName::NONE_LTC_REQUEST
   }
 end
