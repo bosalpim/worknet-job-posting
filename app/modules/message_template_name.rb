@@ -52,6 +52,9 @@ module MessageTemplateName
   TARGET_JOB_POSTING_AD = 'target_job_posting_ad'.freeze # 동네 광고 유도
   TARGET_JOB_POSTING_PERFORMANCE = 'target_job_posting_performance'.freeze # 동네광고 성과
 
+  #B2G 관련
+  JOB_SUPPORT_REQUEST_AGREEMENT= 'job_support_request_agreement'.freeze # 일자리 지원사업 요보사 동의 요청
+
   CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
   CAREPARTNER_PRESENT = 'carepartner_present'.freeze
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze

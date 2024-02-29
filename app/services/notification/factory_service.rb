@@ -24,7 +24,7 @@ class Notification::FactoryService
     when MessageTemplateName::JOB_APPLICATION
       return Notification::Factory::NewJobApplication.new(params[:id] || params["id"])
     when MessageTemplateName::CONTACT_MESSAGE
-      return Notification::Factory::NewContactMessage.new(params[:contact_message_id])
+      return Notification::Factory::NewContactMessage.new(params[:id] || params["id"])
     when MessageTemplateName::PROPOSAL_ACCEPT
       return Notification::Factory::ProposalAccepted.new(params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
@@ -40,7 +40,7 @@ class Notification::FactoryService
     when MessageTemplateName::JOB_ADS_ENDED
       return Notification::Factory::JobAdsMessageEnded.new(params[:job_posting_id])
     when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
-      return Notification::Factory::ConfirmCareerCertification.new(params[:career_certification_id])
+      return Notification::Factory::ConfirmCareerCertification.new(params[:id])
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
       return Notification::Factory::BusinessJobPostingComplete.new(params[:job_posting_id])
     when MessageTemplateName::SMART_MEMO
@@ -51,6 +51,8 @@ class Notification::FactoryService
       return Notification::Factory::TargetJobPostingAd.new(params)
     when MessageTemplateName::NONE_LTC_REQUEST
       return Notification::Factory::NewNoneLtcRequest.new(params)
+    when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
+      return Notification::Factory::JobSupportRequestAgreement.new(params)
     else
       puts "no template found"
       return []

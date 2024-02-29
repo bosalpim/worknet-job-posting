@@ -80,6 +80,25 @@ class NotificationController < ApplicationController
               count: params[:count]
             }
           }) unless Jets.env.development?
+      when JOB_SUPPORT_REQUEST_AGREEMENT
+        NotificationServiceJob.perform_now(
+          :notify,
+          {
+            message_template_id: JOB_SUPPORT_REQUEST_AGREEMENT,
+            params: {
+              job_posting_id: params[:job_posting_id],
+              user_id: params[:user_id]
+            }
+          }) if Jets.env.development?
+        NotificationServiceJob.perform_later(
+          :notify,
+          {
+            message_template_id: JOB_SUPPORT_REQUEST_AGREEMENT,
+            params: {
+              job_posting_id: params[:job_posting_id],
+              user_id: params[:user_id]
+            }
+          }) unless Jets.env.development?
       else
         Jets.logger.info "#{params} 요청 대응 case 추가 필요"
       end

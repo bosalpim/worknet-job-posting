@@ -109,6 +109,14 @@ module Main
                    else
                      "http://127.0.0.1"
                    end
+
+    CAREPARTNER_URL = if Jets.env.production?
+                        "http://www.carepartner.kr/"
+                      elsif Jets.env.staging?
+                        "http://www.dev-carepartner.kr/"
+                      else
+                        "http://127.0.0.1:3000/"
+                      end
   end
 
   HTTPS_BUSINESS_URL = if Jets.env.production?
