@@ -21,7 +21,7 @@ class JobPostingsController < ApplicationController
   end
 
   def job_ads_messages
-    event = { job_posting_id: params["job_posting_id"] }
+    event = { job_posting_id: params["id"] }
     JobPostingJob.perform_later(:first_message, event)
 
     render json: {
@@ -29,14 +29,8 @@ class JobPostingsController < ApplicationController
     }, status: :ok
   end
 
-  def call_interview_proposal
-    event = { proposal_id: params["proposal_id"] }
-    rsp = nil
-    rsp = SendCallInterviewProposal
-  end
-
   def new_satisfaction_survey
-    event = { job_posting_id: params["job_posting_id"] }
+    event = { job_posting_id: params["id"] }
     rsp = nil
     rsp = NewSatisfactionSurveyJob.perform_now(:dig, event) if Jets.env.development?
     NewSatisfactionSurveyJob.perform_later(:dig, event) unless Jets.env.development?
@@ -44,7 +38,7 @@ class JobPostingsController < ApplicationController
   end
 
   def new_user_satisfaction_survey
-    event = { job_posting_id: params["job_posting_id"], user_id: params["user_id"] }
+    event = { job_posting_id: params["id"], user_id: params["user_id"] }
     rsp = nil
     rsp = NewUserSatisfactionSurveyJob.perform_now(:dig, event) if Jets.env.development?
     NewUserSatisfactionSurveyJob.perform_later(:dig, event) unless Jets.env.development?
