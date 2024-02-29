@@ -22,7 +22,7 @@ class Notification::FactoryService
     when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
       return Notification::Factory::NotifyCloseFreeJobPosting.call_close(params[:job_postings])
     when MessageTemplateName::JOB_APPLICATION
-      return Notification::Factory::NewJobApplication.new(params[:job_application_id])
+      return Notification::Factory::NewJobApplication.new(params[:id] || params["id"])
     when MessageTemplateName::CONTACT_MESSAGE
       return Notification::Factory::NewContactMessage.new(params[:contact_message_id])
     when MessageTemplateName::PROPOSAL_ACCEPT
