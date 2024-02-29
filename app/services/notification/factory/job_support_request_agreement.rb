@@ -1,7 +1,7 @@
 class Notification::Factory::JobSupportRequestAgreement < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
   def initialize(params)
-    super(MessageTemplateName::TARGET_JOB_POSTING_AD)
+    super(MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT)
     @job_posting = JobPosting.find(params[:job_posting_id])
     @business = @job_posting.business
     @user = User.find(params[:user_id])

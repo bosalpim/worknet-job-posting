@@ -165,6 +165,8 @@ class KakaoTemplateService
       get_target_job_posting_ad_data(tem_params)
     when MessageTemplateName::NONE_LTC_REQUEST
       get_none_ltc_request(tem_params)
+    when MessageTemplateName:: JOB_SUPPORT_REQUEST_AGREEMENT
+      get_job_support_agreement(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -2204,6 +2206,27 @@ carepartner.kr#{path}
           name: "⚡ 상담원 연결	",
           url_mobile: link,
           url_pc: link,
+        }
+      ]
+    }
+  end
+
+  def get_job_support_agreement(tem_params)
+    center_name = tem_params[:center_name]
+    link = tem_params[:link]
+    {
+      title: "일자리지원사업 요보사 동의 요청",
+      message: "#{center_name} 채용담당자가 동의를 요청했어요.
+
+■ 요청내용
+한국노인인력개발원의 취업알선형 사업 신청에 동의와 확인이 필요한 내용이에요.
+
+아래 버튼을 눌러 요청 내용에 동의해 주세요.",
+      buttons: [
+        {
+          type: "WL",
+          name: "동의하기",
+          url_mobile: link,
         }
       ]
     }
