@@ -86,7 +86,7 @@ class Notification::Factory::ProposalAccepted < Notification::Factory::Notificat
   def create_bizm_message
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
     link = "#{Main::Application::BUSINESS_URL}/employment_management/proposals/#{@proposal_id}?#{utm}"
-    close_link = "#{Main::Application::HTTPS_BUSINESS_URL}/recruitment_management/#{@job_posting_id}/close?#{utm}"
+    close_link = "#{Main::HTTPS_BUSINESS_URL}/recruitment_management/#{@job_posting_id}/close?#{utm}"
 
     params = {
       target_public_id: @target_public_id,
