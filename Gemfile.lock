@@ -58,7 +58,7 @@ GEM
       thor
       zeitwerk
     aws-partitions (1.894.0)
-    aws-sdk-apigateway (1.91.0)
+    aws-sdk-apigateway (1.92.0)
       aws-sdk-core (~> 3, >= 3.191.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-cloudformation (1.99.0)
@@ -343,7 +343,7 @@ GEM
       sprockets (>= 3.0.0)
       zeitwerk
     text-table (1.2.4)
-    thor (1.3.0)
+    thor (1.3.1)
     timeout (0.4.1)
     trailblazer-option (0.1.2)
     tzinfo (2.0.6)
@@ -363,6 +363,7 @@ DEPENDENCIES
   byebug
   capybara
   connection_pool
+  dotenv (= 2.8.1)
   dynomite (~> 2.0.0)
   faraday
   google-apis-indexing_v3 (~> 0.1)
