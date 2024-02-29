@@ -40,7 +40,7 @@ class Notification::FactoryService
     when MessageTemplateName::JOB_ADS_ENDED
       return Notification::Factory::JobAdsMessageEnded.new(params[:job_posting_id])
     when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
-      return Notification::Factory::ConfirmCareerCertification.new(params[:career_certification_id])
+      return Notification::Factory::ConfirmCareerCertification.new(params[:id])
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
       return Notification::Factory::BusinessJobPostingComplete.new(params[:job_posting_id])
     when MessageTemplateName::SMART_MEMO
