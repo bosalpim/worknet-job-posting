@@ -37,7 +37,7 @@ class Notification::Factory::SendNewsPaper < Notification::Factory::Notification
           )
         )
       else
-        @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, message.phone_number, template_params, template_params["target_public_id"], "AI"))
+        @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, message.phone_number, template_params, template_params["target_public_id"], "AI", nil, [0]))
       end
     end
   end
