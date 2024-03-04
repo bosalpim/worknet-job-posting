@@ -1,10 +1,10 @@
 class Notification::Factory::SendMedium::BizmPrePayMessage < Notification::Factory::SendMedium::Abstract
   include NotificationRequestHelper
-  def initialize(message_template_id, message_type, phone, params, target_public_id)
+  def initialize(message_template_id, message_type, phone, params, target_public_id, alt_sms_btn_indexes = [])
     @message_template_id = message_template_id
     @params = params
     @target_public_id = target_public_id
-    @bizm_template_service = KakaoTemplateService.new(message_template_id, message_type, phone, nil)
+    @bizm_template_service = KakaoTemplateService.new(message_template_id, message_type, phone, nil, alt_sms_btn_indexes)
   end
 
   def send_request
