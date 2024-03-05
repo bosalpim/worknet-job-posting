@@ -8,7 +8,7 @@ class KakaoTemplateService
 
   attr_reader :template_id, :message_type
 
-  def initialize(template_id, message_type, phone, reserve_dt)
+  def initialize(template_id, message_type, phone, reserve_dt, alt_sms_btn_indexes = [])
     profile = ENV['KAKAO_BIZMSG_PROFILE']
     @template_id = template_id
     @message_type = message_type
@@ -16,6 +16,7 @@ class KakaoTemplateService
     set_phone(phone)
     @reserve_dt = get_reserve_dt(reserve_dt)
     @sender_number = "15885877"
+    @alt_sms_btn_indexes = alt_sms_btn_indexes
   end
 
   def get_final_request_params(tem_params, is_pre_pay = false, phone = nil)
@@ -26,9 +27,15 @@ class KakaoTemplateService
     if (items = template_data[:items])
       request_params[:items] = items
     end
+    sms_message = request_params[:message]
     if (buttons = template_data[:buttons])
       buttons.each_with_index do |btn, index|
         request_params["button#{index + 1}"] = btn
+        if @alt_sms_btn_indexes.include?(index)
+          sms_message += "\n\n"
+          sms_message += btn[:name] + "↓"
+          sms_message += "\n" + ShortUrl.build(btn[:url_mobile]).url
+        end
       end
     end
     if (quick_replies = template_data[:quick_replies])
@@ -36,6 +43,7 @@ class KakaoTemplateService
         request_params["quickReply#{index + 1}"] = quick_reply
       end
     end
+    request_params[:sms_message] = sms_message
     request_params
   end
 
@@ -230,7 +238,6 @@ class KakaoTemplateService
                receiver_num: @phone.to_s.gsub(/[^0-9]/, ""),
                message: message,
                reserved_time: @reserve_dt,
-               sms_message: message,
                sms_title: title,
                sms_kind: message&.bytesize&.to_i > 90 ? "L" : "S",
                sender_num: @sender_number,

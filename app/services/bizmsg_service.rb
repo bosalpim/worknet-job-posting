@@ -10,8 +10,8 @@ class BizmsgService
     ).call
   end
 
-  def initialize(template_id:, phone:, message_type:, reserve_dt:, template_params:)
-    @template_service = KakaoTemplateService.new(template_id, message_type, phone, reserve_dt)
+  def initialize(template_id:, phone:, message_type:, reserve_dt:, template_params:, alt_sms_btn_indexes: [])
+    @template_service = KakaoTemplateService.new(template_id, message_type, phone, reserve_dt, alt_sms_btn_indexes)
     @template_params = template_params
     @template_id = template_id
   end

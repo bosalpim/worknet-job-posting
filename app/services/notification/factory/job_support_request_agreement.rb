@@ -27,7 +27,9 @@ class Notification::Factory::JobSupportRequestAgreement < Notification::Factory:
         @message_template_id,
         @user.phone_number,
         params,
-        @user.public_id, 'AI'
+        @user.public_id, 'AI',
+        nil,
+        [0]
       ))
 
   end
