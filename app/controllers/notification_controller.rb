@@ -3,6 +3,26 @@
 class NotificationController < ApplicationController
   include MessageTemplateName
 
+  def sms
+    to = if Jets.env.production?
+           params[:to]
+         else
+           Main::Application::PHONE_NUMBER_WHITELIST.include?(params[:to]) ?
+             params[:to] : Main::Application::TEST_PHONE_NUMBER
+         end
+
+    message = params[:message]
+
+    response = SmsSender.call(
+      to: to,
+      message: message
+    )
+
+    render json: {
+      success: response.dig("result") == 'Y',
+    }, status: :ok
+  end
+
   def send_message
     begin
       case params[:template]
