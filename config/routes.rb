@@ -65,6 +65,7 @@ Jets.application.routes.draw do
 
   post '/notification', to: 'notification#send_message'
   post '/notification/ask_active', to: 'notification#ask_active'
+  post '/notification/sms', to: 'notification#sms'
   post '/point_histories/add_point_changed_active_user', to: 'point_histories#add_point_changed_active_user'
   post '/gamification/misson_complete', to: 'gamification#missionComplete'
 end
