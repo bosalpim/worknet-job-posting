@@ -53,6 +53,8 @@ class Notification::FactoryService
       return Notification::Factory::NewNoneLtcRequest.new(params)
     when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
       return Notification::Factory::JobSupportRequestAgreement.new(params)
+    when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
+      return Notification::Factory::TargetJobPostingAdApply.new(params)
     else
       puts "no template found"
       return []
