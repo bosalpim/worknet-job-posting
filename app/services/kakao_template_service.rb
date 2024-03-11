@@ -49,6 +49,8 @@ class KakaoTemplateService
 
   def get_template_data(tem_params)
     case @template_id
+    when MessageTemplateName::TARGET_USER_JOB_POSTING_V2
+      get_target_user_job_posting_v2_data(tem_params)
     when MessageTemplateName::PROPOSAL
       get_proposal_data(tem_params)
     when MessageTemplateName::NEW_JOB_POSTING_VISIT
@@ -173,7 +175,7 @@ class KakaoTemplateService
       get_target_job_posting_ad_data(tem_params)
     when MessageTemplateName::NONE_LTC_REQUEST
       get_none_ltc_request(tem_params)
-    when MessageTemplateName:: JOB_SUPPORT_REQUEST_AGREEMENT
+    when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
       get_job_support_agreement(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
@@ -259,6 +261,34 @@ class KakaoTemplateService
     end
 
     data
+  end
+
+  def get_target_user_job_posting_v2_data(tem_params)
+    view_link = tem_params[:view_link]
+    application_link = tem_params[:application_link]
+    contact_link = tem_params[:contact_link]
+
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '⚡️ 간편 지원하기',
+          type: 'WL',
+          url_mobile: application_link
+        },
+        {
+          name: '💬️ 문자 문의하기',
+          type: 'WL',
+          url_mobile: contact_link
+        },
+        {
+          name: '🔎 일자리 확인하기',
+          type: 'WL',
+          url_mobile: view_link
+        }
+      ]
+    }
   end
 
   def get_business_job_posting_complete(tem_params)
@@ -2076,7 +2106,7 @@ carepartner.kr#{path}
 간편지원 #{tem_params[:count][:job_applications]}명/ 문자문의 #{tem_params[:count][:contact_messages]}명/ 전화문의 #{tem_params[:count][:calls]}명
 
 ■ 지원자를 늘려 보세요
-광고를 받았지만 반응이 없는 요양보호사 #{tem_params[:count][:total]-tem_params[:count][:read]}명에게 전화면접 제안해 보세요.",
+광고를 받았지만 반응이 없는 요양보호사 #{tem_params[:count][:total] - tem_params[:count][:read]}명에게 전화면접 제안해 보세요.",
       buttons: [
         {
           name: '동네광고 성과 보기',
@@ -2188,7 +2218,6 @@ carepartner.kr#{path}
       ]
     }
   end
-
 
   def get_none_ltc_request(tem_params)
     service = tem_params[:service]
