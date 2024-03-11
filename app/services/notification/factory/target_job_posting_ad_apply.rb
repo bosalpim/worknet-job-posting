@@ -28,13 +28,13 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     dispatched_notifications.each do |notification|
       receiver_id = notification.receiver_id
 
-      job_applications_count += 1 if JobApplication.exists?(job_posting_id: job_posting.id, user_id: receiver_id)
-      contact_messages_count += 1 if ContactMessage.exists?(job_posting_id: job_posting.id, user_id: receiver_id)
-      user_saves_count += 1 if UserSavedJobPosting.exists?(job_posting_id: job_posting.id, user_id: receiver_id)
+      job_applications_count += 1 if JobApplication.exists?(job_posting_id: @job_posting.id, user_id: receiver_id)
+      contact_messages_count += 1 if ContactMessage.exists?(job_posting_id: @job_posting.id, user_id: receiver_id)
+      user_saves_count += 1 if UserSavedJobPosting.exists?(job_posting_id: @job_posting.id, user_id: receiver_id)
     end
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    link = "#{Main::Application::BUSINESS_URL}/recruitment_management/#{job_posting.public_id}/dashboard?#{utm}"
+    link = "#{Main::Application::BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/dashboard?#{utm}"
     params = {
       job_posting_id: @job_posting.id,
       user_info: user_info,
@@ -53,7 +53,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
       link: link
     }
     Jets.logger.info "전송 완료\n"
-    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, job_posting.manager_phone_number, params, job_posting.public_id, "AI", nil, [0]))
+    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, @job_posting.manager_phone_number, params, @job_posting.public_id, "AI", nil, [0]))
   end
 
   def extract_user_info

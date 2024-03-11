@@ -2124,7 +2124,7 @@ carepartner.kr#{path}
 ■ 광고성과
 간편지원 #{tem_params[:count][:job_applications]}명/ 문자문의 #{tem_params[:count][:contact_messages]}명/ 관심표시 #{tem_params[:count][:user_saves]}명
 
-지금바로 동네광고를 시작하여 #{tem_params[:user_name]} 외 #{tem_params[:count][:total]}의 지원·문의에 응답해 보세요!",
+지금바로 동네광고를 시작하여 #{tem_params[:user_name]} 외 #{tem_params[:count][:job_applications] + tem_params[:count][:contact_messages] + tem_params[:count][:user_saves] - 1}명의 지원·문의에 응답해 보세요!",
       buttons: [
         {
           name: '동네광고 시작하기',
