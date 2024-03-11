@@ -1,7 +1,7 @@
 class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
   def initialize(params)
-    super(MessageTemplateName::TARGET_JOB_POSTING_AD)
+    super(MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY)
     @job_posting = JobPosting.find(params[:job_posting_id])
     @business = @job_posting.business
     @client = @business.clients.first
