@@ -171,6 +171,8 @@ class KakaoTemplateService
       get_target_job_posting_performance_data(tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD
       get_target_job_posting_ad_data(tem_params)
+    when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
+      get_target_job_posting_ad_apply_data(tem_params)
     when MessageTemplateName::NONE_LTC_REQUEST
       get_none_ltc_request(tem_params)
     when MessageTemplateName:: JOB_SUPPORT_REQUEST_AGREEMENT
@@ -2103,6 +2105,29 @@ carepartner.kr#{path}
       buttons: [
         {
           name: '동네 광고하기',
+          type: 'WL',
+          url_pc: tem_params[:link],
+          url_mobile: tem_params[:link]
+        }
+      ]
+    }
+  end
+
+  def get_target_job_posting_ad_apply_data(tem_params)
+    {
+      title: "누군가 동네광고로 지원 및 문의했어요!",
+      message: "#{tem_params[:user_info]} 요양보호사가 동네광고를 보고 #{tem_params[:application_type]}했어요.
+
+■ 공고제목
+#{tem_params[:title]}
+
+■ 광고성과
+간편지원 #{tem_params[:count][:job_applications]}명/ 문자문의 #{tem_params[:count][:contact_messages]}명/ 관심표시 #{tem_params[:count][:user_saves]}명
+
+지금바로 동네광고를 시작하여 #{tem_params[:user_name]} 외 #{tem_params[:count][:total]}의 지원·문의에 응답해 보세요!",
+      buttons: [
+        {
+          name: '동네광고 시작하기',
           type: 'WL',
           url_pc: tem_params[:link],
           url_mobile: tem_params[:link]

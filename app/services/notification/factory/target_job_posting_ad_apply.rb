@@ -15,6 +15,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     Jets.logger.info "케어파트너 대상 공고 : #{@job_posting.public_id}\n"
 
     user_info = extract_user_info
+    application_type = extract_application_type_label
 
     dispatched_notifications = DispatchedNotification.where(notification_relate_instance_types_id: 3,
                                                             notification_relate_instance_id: @job_posting.id)
@@ -37,6 +38,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     params = {
       job_posting_id: @job_posting.id,
       user_info: user_info,
+      application_type: application_type,
       user_name: @user.name[0] + "**",
       center_name: @business.name,
       target_public_id: @job_posting.public_id,
@@ -51,7 +53,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
       link: link
     }
     Jets.logger.info "전송 완료\n"
-    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, job_posting.manager_phone_number, params, job_posting.public_id, "AI"))
+    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, job_posting.manager_phone_number, params, job_posting.public_id, "AI", nil, [0]))
   end
 
   def extract_user_info
@@ -60,5 +62,15 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     age = @job_posting.job_posting_customer.korean_age
 
     name + "/" + gender + "/" + age
+  end
+
+  def extract_application_type_label
+    if @application_type === "job_application"
+      "간편지원"
+    elsif @application_type === "contact_message"
+      "문자문의"
+    else
+      "관심표시"
+    end
   end
 end
