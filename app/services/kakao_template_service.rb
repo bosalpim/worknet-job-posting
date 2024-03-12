@@ -2127,10 +2127,16 @@ carepartner.kr#{path}
 지금바로 동네광고를 시작하여 #{tem_params[:user_name]} 외 #{tem_params[:count][:job_applications] + tem_params[:count][:contact_messages] + tem_params[:count][:user_saves] - 1}명의 지원·문의에 응답해 보세요!",
       buttons: [
         {
-          name: '동네광고 시작하기',
+          name: '지원 · 문의 확인하기',
           type: 'WL',
           url_pc: tem_params[:link],
           url_mobile: tem_params[:link]
+        },
+        {
+          name: '이미 채용했어요 (채용종료)',
+          type: 'WL',
+          url_pc: tem_params[:close_link],
+          url_mobile: tem_params[:close_link]
         }
       ]
     }

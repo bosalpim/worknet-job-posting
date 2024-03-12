@@ -769,9 +769,10 @@ module KakaoNotificationLoggingHelper
       "event_properties" => {
         "template" => template_id,
         "title" => "Target Message Ad Apply",
+        "TargetAd" => [:is_free],
         "center_name" => tem_params[:center_name],
         "job_posting_id" => tem_params[:job_posting_id],
-        "total_count" => tem_params[:count][:total],
+        "employee_id" => tem_params[:user_id],
       }
     }
   end

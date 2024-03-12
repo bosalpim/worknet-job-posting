@@ -7,6 +7,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     @client = @business.clients.first
     @user = User.find(params[:user_id])
     @application_type = params[:application_type]
+    @is_free = params[:is_free]
     create_message
   end
 
@@ -35,8 +36,10 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
     link = "#{Main::Application::BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/dashboard?#{utm}"
+    close_link = "#{Main::Application::BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/close#{utm}"
     params = {
       job_posting_id: @job_posting.id,
+      user_id: @user.id,
       user_info: user_info,
       application_type: application_type,
       user_name: @user.name[0] + "**",
@@ -50,7 +53,9 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
         contact_messages: contact_messages_count,
         user_saves: user_saves_count
       },
-      link: link
+      link: link,
+      close_link: close_link,
+      is_free: @is_free
     }
     Jets.logger.info "전송 완료\n"
     @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, @job_posting.manager_phone_number, params, @job_posting.public_id, "AI", nil, [0]))
