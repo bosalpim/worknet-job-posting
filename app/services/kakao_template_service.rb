@@ -173,7 +173,7 @@ class KakaoTemplateService
       get_target_job_posting_ad_data(tem_params)
     when MessageTemplateName::NONE_LTC_REQUEST
       get_none_ltc_request(tem_params)
-    when MessageTemplateName:: JOB_SUPPORT_REQUEST_AGREEMENT
+    when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
       get_job_support_agreement(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
@@ -2067,7 +2067,7 @@ carepartner.kr#{path}
   def get_target_job_posting_performance_data(tem_params)
     {
       title: "오늘의 동네 광고 성과 공유 드려요",
-      message: "지금까지 대치동에 거주하고 있는 요양보호사 #{tem_params[:count][:total]}명이 광고를 받았으며, 그 중 #{tem_params[:count][:read]}명이 광고를 클릭 했어요.
+      message: "지금까지 #{tem_params[:address]}에 거주하고 있는 요양보호사 #{tem_params[:count][:total]}명이 광고를 받았으며, 그 중 #{tem_params[:count][:read]}명이 광고를 클릭 했어요.
 
 ■ 공고제목
 #{tem_params[:title]}
@@ -2076,7 +2076,7 @@ carepartner.kr#{path}
 간편지원 #{tem_params[:count][:job_applications]}명/ 문자문의 #{tem_params[:count][:contact_messages]}명/ 전화문의 #{tem_params[:count][:calls]}명
 
 ■ 지원자를 늘려 보세요
-광고를 받았지만 반응이 없는 요양보호사 #{tem_params[:count][:total]-tem_params[:count][:read]}명에게 전화면접 제안해 보세요.",
+광고를 받았지만 반응이 없는 요양보호사 #{tem_params[:count][:total] - tem_params[:count][:read]}명에게 전화면접 제안해 보세요.",
       buttons: [
         {
           name: '동네광고 성과 보기',
@@ -2188,7 +2188,6 @@ carepartner.kr#{path}
       ]
     }
   end
-
 
   def get_none_ltc_request(tem_params)
     service = tem_params[:service]
