@@ -49,6 +49,8 @@ class KakaoTemplateService
 
   def get_template_data(tem_params)
     case @template_id
+    when MessageTemplateName::TARGET_USER_JOB_POSTING_V2
+      get_target_user_job_posting_v2_data(tem_params)
     when MessageTemplateName::PROPOSAL
       get_proposal_data(tem_params)
     when MessageTemplateName::NEW_JOB_POSTING_VISIT
@@ -259,6 +261,34 @@ class KakaoTemplateService
     end
 
     data
+  end
+
+  def get_target_user_job_posting_v2_data(tem_params)
+    view_link = tem_params[:view_link]
+    application_link = tem_params[:application_link]
+    contact_link = tem_params[:contact_link]
+
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '⚡️ 간편 지원하기',
+          type: 'WL',
+          url_mobile: application_link
+        },
+        {
+          name: '💬️ 문자 문의하기',
+          type: 'WL',
+          url_mobile: contact_link
+        },
+        {
+          name: '🔎 일자리 확인하기',
+          type: 'WL',
+          url_mobile: view_link
+        }
+      ]
+    }
   end
 
   def get_business_job_posting_complete(tem_params)
