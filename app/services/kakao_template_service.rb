@@ -2133,7 +2133,7 @@ carepartner.kr#{path}
           url_mobile: tem_params[:link]
         },
         {
-          name: '이미 채용했어요 (채용종료)',
+          name: '지원 그만받기 (채용종료)',
           type: 'WL',
           url_pc: tem_params[:close_link],
           url_mobile: tem_params[:close_link]
