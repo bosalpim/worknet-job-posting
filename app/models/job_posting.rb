@@ -153,6 +153,10 @@ class JobPosting < ApplicationRecord
     end
   end
 
+  def is_facility?
+    facility? || sanatorium? || day_care? || hospital?
+  end
+
   def check_closed?
     return true if closed?
 

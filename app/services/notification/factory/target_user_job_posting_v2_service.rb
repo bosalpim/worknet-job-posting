@@ -11,7 +11,7 @@ class Notification::Factory::TargetUserJobPostingV2Service < Notification::Facto
     @target_users = User
                       .receive_job_notifications
                       .within_radius(
-                        3000,
+                        @job_posting.is_facility? ? 5000 : 3000,
                         @job_posting.lat,
                         @job_posting.lng,
                       )
@@ -43,7 +43,7 @@ class Notification::Factory::TargetUserJobPostingV2Service < Notification::Facto
     view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}"
     application_link = "#{@base_url}/application?referral=target_notification&#{utm}"
     contact_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&action=contact_message&#{utm}"
-    
+
     BizmPostPayMessage.new(
       @message_template_id,
       user.phone_number,
