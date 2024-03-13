@@ -53,8 +53,8 @@ module MessageTemplateName
   TARGET_JOB_POSTING_PERFORMANCE = 'target_job_posting_performance'.freeze # 동네광고 성과
   TARGET_JOB_POSTING_AD_APPLY = 'target_job_posting_ad_apply_v2'.freeze # 동네광고 타겟 사용자의 지원시 기관 알림
 
-  #B2G 관련
-  JOB_SUPPORT_REQUEST_AGREEMENT= 'job_support_request_agreement'.freeze # 일자리 지원사업 요보사 동의 요청
+  # B2G 관련
+  JOB_SUPPORT_REQUEST_AGREEMENT = 'job_support_request_agreement'.freeze # 일자리 지원사업 요보사 동의 요청
 
   CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
   CAREPARTNER_PRESENT = 'carepartner_present'.freeze
@@ -106,4 +106,6 @@ module MessageTemplateName
 
   # 돌봄플러스 신청 알림
   NONE_LTC_REQUEST = 'nonltc_01'.freeze
+
+  TARGET_USER_JOB_POSTING_V3 = 'target_user_job_posting_V3'.freeze
 end
