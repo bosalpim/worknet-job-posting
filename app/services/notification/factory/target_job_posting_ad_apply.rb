@@ -1,5 +1,6 @@
 class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
+
   def initialize(params)
     super(MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY)
     @job_posting = JobPosting.find(params[:job_posting_id])
@@ -7,7 +8,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     @client = @business.clients.first
     @user = User.find(params[:user_id])
     @application_type = params[:application_type]
-    @is_free = params[:is_free]
+    @from = params[:from]
     create_message
   end
 
@@ -55,7 +56,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
       },
       link: link,
       close_link: close_link,
-      is_free: @is_free
+      from: from
     }
     Jets.logger.info "전송 완료\n"
     @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, @job_posting.manager_phone_number, params, @job_posting.public_id, "AI", nil, [0]))
