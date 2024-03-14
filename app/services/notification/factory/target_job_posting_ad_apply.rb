@@ -8,6 +8,9 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     @client = @business.clients.first
     @user = User.find(params[:user_id])
     @application_type = params[:application_type]
+    @job_application = JobApplication.find(params[:job_application_id]) if params[:job_application_id]
+    @contact_message = ContactMessage.find(params[:contact_message_id]) if params[:contact_message_id]
+    @user_saved_job_posting = UserSavedJobPosting.find(params[:user_saved_job_posting_id]) if params[:user_saved_job_posting_id]
     @from = params[:from]
     create_message
   end
@@ -36,8 +39,19 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     end
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    link = "#{Main::Application::BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/dashboard?#{utm}"
-    close_link = "#{Main::Application::BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/close#{utm}"
+    
+    link = if @application_type == 'job_application'
+             "#{Main::Application::BUSINESS_URL}/employment_management/job_applications/#{@job_application.public_id}?#{utm}"
+           elsif @application_type == 'contact_message'
+             "#{Main::Application::BUSINESS_URL}/employment_management/contact_messages/#{@contact_message.public_id}?#{utm}"
+           elsif @application_type == 'save'
+             "#{Main::Application::BUSINESS_URL}/employment_management/saved_user/#{@user_saved_job_posting.id}?auth_token=#{@user_saved_job_posting.auth_token}&#{utm}"
+           else
+             "#{Main::Application::BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/dashboard?#{utm}"
+           end
+
+    close_link = "#{Main::Application::BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/close?#{utm}"
+
     params = {
       job_posting_id: @job_posting.id,
       user_id: @user.id,
@@ -56,8 +70,10 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
       },
       link: link,
       close_link: close_link,
-      from: from
+      from: @from
     }
+
+    Jets.logger.info params
     Jets.logger.info "전송 완료\n"
     @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, @job_posting.manager_phone_number, params, @job_posting.public_id, "AI", nil, [0]))
   end
@@ -71,9 +87,9 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
   end
 
   def extract_application_type_label
-    if @application_type === "job_application"
+    if @application_type == "job_application"
       "간편지원"
-    elsif @application_type === "contact_message"
+    elsif @application_type == "contact_message"
       "문자문의"
     else
       "관심표시"
