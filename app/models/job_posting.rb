@@ -126,6 +126,10 @@ class JobPosting < ApplicationRecord
     self.published_at = DateTime.now if self.published_at.blank?
   end
 
+  def is_facility?
+    facility? || hospital? || day_care? || sanatorium?
+  end
+
   def update_closing_at
     base_date = self.created_at || DateTime.now
 
