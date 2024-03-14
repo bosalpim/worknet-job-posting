@@ -86,9 +86,7 @@ class NotificationController < ApplicationController
         meth = :notify
         event = {
           message_template_id: TARGET_USER_JOB_POSTING_V2,
-          params: {
-            job_posting_id: params[:job_posting_id]
-          }
+          params: params
         }
         Jets.env.development? ?
           NotificationServiceJob.perform_now(meth, event)
