@@ -87,7 +87,7 @@ class JobPosting < ApplicationRecord
   scope :facility_work,
         -> { where(work_type: %w[day_care sanatorium hospital facility]) }
   scope :active, -> { init.where("job_postings.published_at >= ? OR job_postings.id IN (SELECT DISTINCT job_posting_id FROM paid_job_posting_features)", DEFAULT_EXPIRATION_DATE.ago) }
-  scope :not_closed, -> { where('closing_at > ?', DateTime.now).or(where(closing_at: nil)) }
+  scope :not_closed, -> { where('closing_at > ?', DateTime.now) }
   scope :free_job_posting, -> {
     where("job_postings.id NOT IN (SELECT DISTINCT job_posting_id FROM paid_job_posting_features)")
   }
@@ -126,6 +126,10 @@ class JobPosting < ApplicationRecord
     self.published_at = DateTime.now if self.published_at.blank?
   end
 
+  def is_facility?
+    facility? || hospital? || day_care? || sanatorium?
+  end
+
   def update_closing_at
     base_date = self.created_at || DateTime.now
 
@@ -151,6 +155,10 @@ class JobPosting < ApplicationRecord
     unless can_has_customer?
       self.job_posting_customer.destroy if self.job_posting_customer.present?
     end
+  end
+
+  def is_facility?
+    facility? || sanatorium? || day_care? || hospital?
   end
 
   def check_closed?

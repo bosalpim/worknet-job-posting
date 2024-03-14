@@ -24,6 +24,7 @@ class NotificationController < ApplicationController
   end
 
   def send_message
+
     begin
       case params[:template]
       when BUSINESS_JOB_POSTING_COMPLETE
@@ -81,6 +82,17 @@ class NotificationController < ApplicationController
               job_posting_id: params[:job_posting_id],
             }
           }) unless Jets.env.development?
+      when TARGET_USER_JOB_POSTING_V2
+        meth = :notify
+        event = {
+          message_template_id: TARGET_USER_JOB_POSTING_V2,
+          params: {
+            job_posting_id: params[:job_posting_id]
+          }
+        }
+        Jets.env.development? ?
+          NotificationServiceJob.perform_now(meth, event)
+          : NotificationServiceJob.perform_later(meth, event)
       when TARGET_JOB_POSTING_AD
         NotificationServiceJob.perform_now(
           :notify,
@@ -120,7 +132,18 @@ class NotificationController < ApplicationController
             }
           }) unless Jets.env.development?
       else
-        Jets.logger.info "#{params} 요청 대응 case 추가 필요"
+        NotificationServiceJob.perform_now(
+          :notify,
+          {
+            message_template_id: params[:template],
+            params: params
+          }) if Jets.env.development?
+        NotificationServiceJob.perform_later(
+          :notify,
+          {
+            message_template_id: params[:template],
+            params: params
+          }) unless Jets.env.development?
       end
 
       render json: {
