@@ -32,9 +32,9 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     dispatched_notifications.each do |notification|
       receiver_id = notification.receiver_id
 
-      job_applications_count += 1 if JobApplication.exists?(job_posting_id: @job_posting.id, user_id: receiver_id)
-      contact_messages_count += 1 if ContactMessage.exists?(job_posting_id: @job_posting.id, user_id: receiver_id)
-      user_saves_count += 1 if UserSavedJobPosting.exists?(job_posting_id: @job_posting.id, user_id: receiver_id)
+      job_applications_count += 1 if JobApplication.where(job_posting_id: @job_posting.id, user_id: receiver_id).exists?
+      contact_messages_count += 1 if ContactMessage.where(job_posting_id: @job_posting.id, user_id: receiver_id).exists?
+      user_saves_count += 1 if UserSavedJobPosting.where(job_posting_id: @job_posting.id, user_id: receiver_id).exists?
     end
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
