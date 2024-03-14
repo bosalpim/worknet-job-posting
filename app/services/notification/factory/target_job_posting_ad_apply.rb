@@ -11,7 +11,6 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     @job_application = JobApplication.find(params[:job_application_id]) if params[:job_application_id]
     @contact_message = ContactMessage.find(params[:contact_message_id]) if params[:contact_message_id]
     @user_saved_job_posting = UserSavedJobPosting.find(params[:user_saved_job_posting_id]) if params[:user_saved_job_posting_id]
-    @from = params[:from]
     create_message
   end
 
@@ -39,7 +38,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     end
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    
+
     link = if @application_type == 'job_application'
              "#{Main::Application::BUSINESS_URL}/employment_management/job_applications/#{@job_application.public_id}?#{utm}"
            elsif @application_type == 'contact_message'
@@ -70,7 +69,6 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
       },
       link: link,
       close_link: close_link,
-      from: @from
     }
 
     Jets.logger.info params
