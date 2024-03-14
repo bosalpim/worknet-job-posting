@@ -10,8 +10,7 @@ class Fcm::FcmService
     response = self.class.post('/v1/projects/carepartner-app-v1/messages:send',
                                headers: { 'Authorization' => "Bearer #{@auth_token}", 'Content-Type' => 'application/json' },
                                body: message_body(token, message).to_json)
-
-    p response.body
+    
     if response.code == 401 # Unauthorized, possibly due to expired token
       authorize # Re-authorize and get a new token
       response = self.class.post('/v1/projects/carepartner-app-v1/messages:send', # Retry the request with the new token
