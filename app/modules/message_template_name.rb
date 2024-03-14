@@ -51,6 +51,7 @@ module MessageTemplateName
   TARGET_USER_JOB_POSTING = 'target_user_job_posting'.freeze # 신규일자리 알림을 타겟 사용자에게 전송
   TARGET_JOB_POSTING_AD = 'target_job_posting_ad'.freeze # 동네 광고 유도
   TARGET_JOB_POSTING_PERFORMANCE = 'target_job_posting_performance'.freeze # 동네광고 성과
+  TARGET_JOB_POSTING_AD_APPLY = 'target_job_posting_ad_apply_v2'.freeze # 동네광고 타겟 사용자의 지원시 기관 알림
 
   # B2G 관련
   JOB_SUPPORT_REQUEST_AGREEMENT = 'job_support_request_agreement'.freeze # 일자리 지원사업 요보사 동의 요청
@@ -106,6 +107,6 @@ module MessageTemplateName
   # 돌봄플러스 신청 알림
   NONE_LTC_REQUEST = 'nonltc_01'.freeze
 
-  # 동네광고 신규일자리 알림 V2
+  TARGET_USER_JOB_POSTING_V3 = 'target_user_job_posting_V3'.freeze
   TARGET_USER_JOB_POSTING_V2 = 'target_user_job_posting_V2'.freeze
 end

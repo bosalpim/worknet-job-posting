@@ -173,6 +173,8 @@ class KakaoTemplateService
       get_target_job_posting_performance_data(tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD
       get_target_job_posting_ad_data(tem_params)
+    when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
+      get_target_job_posting_ad_apply_data(tem_params)
     when MessageTemplateName::NONE_LTC_REQUEST
       get_none_ltc_request(tem_params)
     when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
@@ -2136,6 +2138,56 @@ carepartner.kr#{path}
           type: 'WL',
           url_pc: tem_params[:link],
           url_mobile: tem_params[:link]
+        }
+      ]
+    }
+  end
+
+  def get_target_job_posting_ad_apply_data(tem_params)
+    {
+      title: "누군가 동네광고로 지원 및 문의했어요!",
+      message: "#{tem_params[:user_info]} 요양보호사가 동네광고를 보고 #{tem_params[:application_type]}했어요.
+
+■ 공고제목
+#{tem_params[:title]}
+
+■ 광고성과
+간편지원 #{tem_params[:count][:job_applications]}명/ 문자문의 #{tem_params[:count][:contact_messages]}명/ 관심표시 #{tem_params[:count][:user_saves]}명
+
+지금바로 동네광고를 시작하여 #{tem_params[:user_name]} 외 #{tem_params[:count][:job_applications] + tem_params[:count][:contact_messages] + tem_params[:count][:user_saves] - 1}명의 지원·문의에 응답해 보세요!",
+      buttons: [
+        {
+          name: '지원 · 문의 확인하기',
+          type: 'WL',
+          url_pc: tem_params[:link],
+          url_mobile: tem_params[:link]
+        },
+        {
+          name: '지원 그만받기 (채용종료)',
+          type: 'WL',
+          url_pc: tem_params[:close_link],
+          url_mobile: tem_params[:close_link]
+        }
+      ]
+    }
+  end
+
+  def get_target_user_job_posting_v3(tem_params)
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '🔎 일자리 확인하기',
+          type: 'WL',
+          url_pc: tem_params[:link],
+          url_mobile: tem_params[:link]
+        },
+        {
+          name: '그만 받을래요',
+          type: 'WL',
+          url_pc: tem_params[:mute_link],
+          url_mobile: tem_params[:mute_link]
         }
       ]
     }
