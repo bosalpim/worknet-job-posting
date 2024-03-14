@@ -15,8 +15,6 @@ class Notification::Factory::TargetUserJobPostingV2Service < Notification::Facto
                         @job_posting.lat,
                         @job_posting.lng,
                       )
-                      .limit(1)
-
     create_message
   end
 
