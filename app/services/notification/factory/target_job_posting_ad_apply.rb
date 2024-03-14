@@ -44,7 +44,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
            elsif @application_type == 'contact_message'
              "#{Main::Application::BUSINESS_URL}/employment_management/contact_messages/#{@contact_message.public_id}?#{utm}"
            elsif @application_type == 'save'
-             "#{Main::Application::BUSINESS_URL}/employment_management/saved_user/#{@user_saved_job_posting.id}?auth_token=#{@user_saved_job_posting.auth_token}&#{utm}"
+             "#{Main::Application::BUSINESS_URL}/employment_management/saved_users/#{@user_saved_job_posting.id}?auth_token=#{@user_saved_job_posting.auth_token}&#{utm}"
            else
              "#{Main::Application::BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/dashboard?#{utm}"
            end
