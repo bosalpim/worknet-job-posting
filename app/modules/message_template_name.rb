@@ -108,4 +108,5 @@ module MessageTemplateName
   NONE_LTC_REQUEST = 'nonltc_01'.freeze
 
   TARGET_USER_JOB_POSTING_V3 = 'target_user_job_posting_V3'.freeze
+  TARGET_USER_JOB_POSTING_V2 = 'target_user_job_posting_V2'.freeze
 end
