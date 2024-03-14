@@ -40,7 +40,7 @@ class Notification::Factory::TargetUserJobPostingV2Service < Notification::Facto
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
     view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}"
     application_link = "#{@base_url}/application?referral=target_notification&#{utm}"
-    contact_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&action=contact_message&#{utm}"
+    contact_link = "#{@base_url}/contact-messages?referral=target_notification&#{utm}"
 
     BizmPostPayMessage.new(
       @message_template_id,
