@@ -46,11 +46,15 @@ class Notification::Factory::TargetUserJobPostingV2Service < Notification::Facto
       @message_template_id,
       user.phone_number,
       {
-        title: '일자리 동네 광고',
+        title: @job_posting.title,
         message: generate_message_content(user),
         view_link: view_link,
         application_link: application_link,
         contact_link: contact_link,
+        job_posting_id: @job_posting.id,
+        job_posting_public_id: @job_posting.public_id,
+        business_name: @job_posting.business.name,
+        job_posting_type: @job_posting.work_type,
       },
       user.public_id,
       "AI"
