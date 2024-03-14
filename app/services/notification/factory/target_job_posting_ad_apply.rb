@@ -56,7 +56,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
       user_id: @user.id,
       user_info: user_info,
       application_type: application_type,
-      user_name: @user.name[0] + "**",
+      user_name: @user.name.present? ? (@user.name + "**") : "**",
       center_name: @business.name,
       target_public_id: @job_posting.public_id,
       title: @job_posting.title,
