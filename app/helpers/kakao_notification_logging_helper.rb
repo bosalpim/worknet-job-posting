@@ -134,6 +134,8 @@ module KakaoNotificationLoggingHelper
       return get_smart_memo_logging_data(tem_params)
     when MessageTemplateName::TARGET_USER_JOB_POSTING
       return get_target_message_logging_data(template_id, tem_params)
+    when MessageTemplateName::TARGET_USER_JOB_POSTING_V3
+      return get_target_message_logging_data(template_id, tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE
       return get_target_job_posting_performance_logging_data(template_id, tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD
@@ -769,9 +771,8 @@ module KakaoNotificationLoggingHelper
       "event_properties" => {
         "template" => template_id,
         "title" => "Target Message Ad Apply",
-        "TargetAd" => tem_params[:from] == 'target_notification',
         "center_name" => tem_params[:center_name],
-        "job_posting_id" => tem_params[:job_posting_id],
+        "jobPostingId" => tem_params[:job_posting_id],
         "employee_id" => tem_params[:user_id],
       }
     }
