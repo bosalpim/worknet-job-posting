@@ -151,6 +151,11 @@ class NotificationController < ApplicationController
             message_template_id: TARGET_JOB_POSTING_AD_APPLY,
             params: {
               job_posting_id: params[:job_posting_id],
+              user_id: params[:user_id],
+              application_type: params[:application_type],
+              job_application_id: params[:job_application_id],
+              contact_message_id: params[:contact_message_id],
+              user_saved_job_posting_id: params[:user_saved_job_posting_id],
             }
           }) unless Jets.env.development?
       else
