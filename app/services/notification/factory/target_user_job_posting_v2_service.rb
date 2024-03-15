@@ -2,6 +2,7 @@
 
 class Notification::Factory::TargetUserJobPostingV2Service < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
+  include DispatchedNotificationsHelper
 
   DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
 
