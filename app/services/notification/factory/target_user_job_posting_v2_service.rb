@@ -14,7 +14,7 @@ class Notification::Factory::TargetUserJobPostingV2Service < Notification::Facto
                         @job_posting.is_facility? ? 5000 : 3000,
                         @job_posting.lat,
                         @job_posting.lng,
-                      )
+                      ).where.not(phone_number: nil)
     create_message
   end
 
