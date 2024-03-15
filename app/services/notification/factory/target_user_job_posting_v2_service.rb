@@ -32,7 +32,7 @@ class Notification::Factory::TargetUserJobPostingV2Service < Notification::Facto
         user
       )
 
-      @ bizm_post_pay_list.push(message) if message.present?
+      @bizm_post_pay_list.push(message) if message.present?
     end
   end
 
