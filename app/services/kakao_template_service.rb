@@ -2123,7 +2123,7 @@ carepartner.kr#{path}
   def get_target_job_posting_ad_data(tem_params)
     {
       title: "동네 광고로 지원을 늘려보세요",
-      message: "공고에 언제 지원이 올지 걱정인가요? 동네광고를 사용하면 즉시 카카오톡으로 광고할 수 있어요!
+      message: "동네광고를 사용하면 광고를 통한 지원자에게 바로 연락할 수 있어요!
 
 ■ 공고제목
 #{tem_params[:title]}
