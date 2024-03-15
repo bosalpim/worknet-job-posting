@@ -11,19 +11,19 @@ class Notification::Factory::TargetUserJobPostingV2Service < Notification::Facto
     @job_posting = JobPosting.find(params[:job_posting_id])
     @base_url = "#{Main::Application::CAREPARTNER_URL}/jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
-    @target_users = User
-                      .receive_job_notifications
-                      .within_radius(
-                        @job_posting.is_facility? ? 5000 : 3000,
-                        @job_posting.lat,
-                        @job_posting.lng,
-                      ).where.not(phone_number: nil)
+    @list = User
+              .receive_job_notifications
+              .within_radius(
+                @job_posting.is_facility? ? 5000 : 3000,
+                @job_posting.lat,
+                @job_posting.lng,
+              ).where.not(phone_number: nil)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
   end
 
   def create_message
-    @target_users.each do |user|
+    @list.each do |user|
       unless user.is_a?(User)
         next
       end
@@ -32,7 +32,7 @@ class Notification::Factory::TargetUserJobPostingV2Service < Notification::Facto
         user
       )
 
-      @bizm_post_pay_list.push(message) if message.present?
+      @ bizm_post_pay_list.push(message) if message.present?
     end
   end
 
