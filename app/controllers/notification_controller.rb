@@ -25,6 +25,9 @@ class NotificationController < ApplicationController
 
   def send_message
 
+    Jets.logger.info '---PARAMS---'
+    Jets.logger.info params
+    
     begin
       case params[:template]
       when BUSINESS_JOB_POSTING_COMPLETE
@@ -90,8 +93,7 @@ class NotificationController < ApplicationController
             job_posting_id: params[:job_posting_id],
           }
         }
-        Jets.env.development? ?
-          NotificationServiceJob.perform_now(meth, event)
+        Jets.env.development? ? NotificationServiceJob.perform_now(meth, event)
           : NotificationServiceJob.perform_later(meth, event)
       when TARGET_JOB_POSTING_AD
         NotificationServiceJob.perform_now(
