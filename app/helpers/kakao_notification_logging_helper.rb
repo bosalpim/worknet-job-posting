@@ -134,7 +134,7 @@ module KakaoNotificationLoggingHelper
       return get_smart_memo_logging_data(tem_params)
     when MessageTemplateName::TARGET_USER_JOB_POSTING
       return get_target_message_logging_data(template_id, tem_params)
-    when MessageTemplateName::TARGET_USER_JOB_POSTING_V3
+    when MessageTemplateName::TARGET_USER_JOB_POSTING_V2
       return get_target_message_logging_data(template_id, tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE
       return get_target_job_posting_performance_logging_data(template_id, tem_params)
@@ -727,7 +727,7 @@ module KakaoNotificationLoggingHelper
         "title" => tem_params[:job_posting_title],
         "centerName" => tem_params[:business_name],
         "job_posting_type" => tem_params[:job_posting_type],
-        "send_at" => tem_params[:send_at],
+        "send_at" => Time.current + (9 * 60 * 60)
       }
     }
   end

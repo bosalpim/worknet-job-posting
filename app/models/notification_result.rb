@@ -39,6 +39,8 @@ class NotificationResult < ApplicationRecord
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
   ROULETTE = 'roulette'.freeze
   NEWSPAPER_JOB_ALARM = 'newspaper_job_alarm'.freeze
+  TARGET_USER_JOB_POSTING_V2 = MessageTemplateName::TARGET_USER_JOB_POSTING_V2
+  TARGET_JOB_POSTING_AD_APPLY = MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
 
   # 신규일자리알림
   NEW_JOB_POSTING = 'new_job_posting'.freeze
@@ -72,6 +74,8 @@ class NotificationResult < ApplicationRecord
     PROPOSAL_ACCEPTED => "proposal_accepted",
     PROPOSAL_REJECTED => "proposal_refused",
     SATISFACTION_SURVEY => SATISFACTION_SURVEY,
+    TARGET_USER_JOB_POSTING_V2 => TARGET_USER_JOB_POSTING_V2,
+    TARGET_JOB_POSTING_AD_APPLY => TARGET_JOB_POSTING_AD_APPLY,
     USER_SATISFACTION_SURVEY => USER_SATISFACTION_SURVEY,
     USER_CALL_FAILURE_ALERT => USER_CALL_FAILURE_ALERT,
     BUSINESS_CALL_FAILURE_ALERT => BUSINESS_CALL_FAILURE_ALERT,
