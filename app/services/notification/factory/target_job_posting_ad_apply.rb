@@ -77,7 +77,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
   end
 
   def extract_user_info
-    name = @user.name[0] + "**"
+    name = @user.name.present? ? @user.name[0] + "**" : "***"
     gender = @user.gender === "male" ? "남성" : "여성"
     age = @job_posting.job_posting_customer.korean_age
 
