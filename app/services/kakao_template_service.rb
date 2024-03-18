@@ -2123,7 +2123,7 @@ carepartner.kr#{path}
   def get_target_job_posting_ad_data(tem_params)
     {
       title: "동네 광고로 지원을 늘려보세요",
-      message: "공고에 언제 지원이 올지 걱정인가요? 동네광고를 사용하면 즉시 카카오톡으로 광고할 수 있어요!
+      message: "동네광고를 사용하면 광고를 통한 지원자에게 바로 연락할 수 있어요
 
 ■ 공고제목
 #{tem_params[:title]}
@@ -2144,6 +2144,7 @@ carepartner.kr#{path}
   end
 
   def get_target_job_posting_ad_apply_data(tem_params)
+    others_count = tem_params[:count][:job_applications] + tem_params[:count][:contact_messages] + tem_params[:count][:user_saves] - 1
     {
       title: "누군가 동네광고로 지원 및 문의했어요!",
       message: "#{tem_params[:user_info]} 요양보호사가 동네광고를 보고 #{tem_params[:application_type]}했어요.
@@ -2154,7 +2155,7 @@ carepartner.kr#{path}
 ■ 광고성과
 간편지원 #{tem_params[:count][:job_applications]}명/ 문자문의 #{tem_params[:count][:contact_messages]}명/ 관심표시 #{tem_params[:count][:user_saves]}명
 
-지금바로 동네광고를 시작하여 #{tem_params[:user_name]} 외 #{tem_params[:count][:job_applications] + tem_params[:count][:contact_messages] + tem_params[:count][:user_saves] - 1}명의 지원·문의에 응답해 보세요!",
+지금바로 동네광고를 시작하여 #{tem_params[:user_name]} #{others_count > 0 ? "외 #{others_count}명의" : "요보사의"} 지원·문의에 응답해 보세요!",
       buttons: [
         {
           name: '지원 · 문의 확인하기',

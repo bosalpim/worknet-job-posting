@@ -11,7 +11,6 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
     @job_application = JobApplication.find(params[:job_application_id]) if params[:job_application_id]
     @contact_message = ContactMessage.find(params[:contact_message_id]) if params[:contact_message_id]
     @user_saved_job_posting = UserSavedJobPosting.find(params[:user_saved_job_posting_id]) if params[:user_saved_job_posting_id]
-    @from = params[:from]
     create_message
   end
 
@@ -35,17 +34,17 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
 
       job_applications_count += 1 if JobApplication.exists?(job_posting_id: @job_posting.id, user_id: receiver_id)
       contact_messages_count += 1 if ContactMessage.exists?(job_posting_id: @job_posting.id, user_id: receiver_id)
-      user_saves_count += 1 if UserSavedJobPosting.exists?(job_posting_id: @job_posting.id, user_id: receiver_id)
+      user_saves_count += 1 if CallFeedback.exists?(job_posting_id: @job_posting.id, user_id: receiver_id)
     end
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    
+
     link = if @application_type == 'job_application'
              "#{Main::Application::BUSINESS_URL}/employment_management/job_applications/#{@job_application.public_id}?#{utm}"
            elsif @application_type == 'contact_message'
              "#{Main::Application::BUSINESS_URL}/employment_management/contact_messages/#{@contact_message.public_id}?#{utm}"
            elsif @application_type == 'save'
-             "#{Main::Application::BUSINESS_URL}/employment_management/saved_user/#{@user_saved_job_posting.id}?auth_token=#{@user_saved_job_posting.auth_token}&#{utm}"
+             "#{Main::Application::BUSINESS_URL}/employment_management/saved_users/#{@user_saved_job_posting.id}?auth_token=#{@user_saved_job_posting.auth_token}&#{utm}"
            else
              "#{Main::Application::BUSINESS_URL}/recruitment_management/#{@job_posting.public_id}/dashboard?#{utm}"
            end
@@ -57,7 +56,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
       user_id: @user.id,
       user_info: user_info,
       application_type: application_type,
-      user_name: @user.name[0] + "**",
+      user_name: @user.name.present? ? (@user.name + "**") : "**",
       center_name: @business.name,
       target_public_id: @job_posting.public_id,
       title: @job_posting.title,
@@ -70,7 +69,6 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
       },
       link: link,
       close_link: close_link,
-      from: @from
     }
 
     Jets.logger.info params
