@@ -58,7 +58,7 @@ class Notification::Factory::TargetJobPostingAdApply < Notification::Factory::No
       application_type: application_type,
       user_name: @user.name.present? ? (@user.name + "**") : "**",
       center_name: @business.name,
-      target_public_id: @job_posting.public_id,
+      target_public_id: @client.public_id,
       title: @job_posting.title,
       address: get_dong_name_by_address(@job_posting.address),
       count: {
