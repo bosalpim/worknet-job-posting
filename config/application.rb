@@ -1,7 +1,3 @@
-Jets.application.configure do
-
-end
-
 module Main
   class Application < Jets::Application
     config.project_name = "worknet-job-posting"
