@@ -7,14 +7,8 @@ class SendNewspaperJob < ApplicationJob
 
     Jets.logger.info "#{JSON.dump(@sqs_event_payload)}"
 
-    message = event[0]
-
-    if message.nil?
-
-    end
-
-    date = message[:date]
-    group = message[:group]
+    group = @sqs_event_payload.dig(:group)
+    date = @sqs_event_payload.dig(:date)
 
     newspapers = Newspaper
                    .where(
