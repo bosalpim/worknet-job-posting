@@ -4,11 +4,14 @@ class SendNewspaperJob < ApplicationJob
   sqs_event "newspaper_job_queue"
 
   def execute
+    Jets.logger.info "#{JSON.dump(event)}"
+    
+    payload = sqs_event_payload
 
-    Jets.logger.info "#{JSON.dump(@sqs_event_payload)}"
+    Jets.logger.info "#{payload}"
 
-    group = @sqs_event_payload.dig(:group)
-    date = @sqs_event_payload.dig(:date)
+    group = payload.dig(:group)
+    date = payload.dig(:date)
 
     newspapers = Newspaper
                    .where(
