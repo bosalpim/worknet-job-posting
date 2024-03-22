@@ -1,3 +1,7 @@
+Jets.application.configure do
+
+end
+
 module Main
   class Application < Jets::Application
     config.project_name = "worknet-job-posting"
@@ -9,7 +13,6 @@ module Main
       backend-staging-wemrofzktq-du.a.run.app
       backend-production-wemrofzktq-du.a.run.app
     ].join(",")
-
     config.retry_attempts = 0
     config.prewarm.enable = true # default is truec
     # config.prewarm.rate = '30 minutes' # default is '30 minutes'

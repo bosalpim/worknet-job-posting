@@ -1,11 +1,7 @@
 class SendNewspaperJob < ApplicationJob
   include Jets::AwsServices
 
-  class_timeout 900
-
-  depends_on :newspaper_stack
-
-  sqs_event ref(:newspaper_job_queue)
+  sqs_event "newspaper_job_queue"
 
   def execute
 
