@@ -1,7 +1,7 @@
 class SendNewspaperJob < ApplicationJob
   include Jets::AwsServices
 
-  depends_on :newspaper
+  depends_on :newstest
 
   sqs_event ref(:newspaper_job_queue)
 
