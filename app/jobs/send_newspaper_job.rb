@@ -5,7 +5,7 @@ class SendNewspaperJob < ApplicationJob
 
   def execute
 
-    Jets.logger.info "#{JSON.dump(event)}"
+    Jets.logger.info "#{JSON.dump(@sqs_event_payload)}"
 
     message = event[0]
 
