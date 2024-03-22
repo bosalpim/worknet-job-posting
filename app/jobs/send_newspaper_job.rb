@@ -6,7 +6,7 @@ class SendNewspaperJob < ApplicationJob
 
   sqs_event ref(:newspaper_job_queue)
 
-  def send_monday_newspaper
+  def execute
     Jets.logger.info "#{JSON.dump(event)}"
   end
 end
