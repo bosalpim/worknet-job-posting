@@ -57,6 +57,8 @@ class Notification::FactoryService
       return Notification::Factory::JobSupportRequestAgreement.new(params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
       return Notification::Factory::TargetJobPostingAdApply.new(params)
+    when MessageTemplateName::TARGET_USER_JOB_POSTING_V2
+      return Notification::Factory::TargetUserJobPostingV2Service.new(params)
     else
       puts "no template found"
       return []
