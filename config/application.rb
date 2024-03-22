@@ -126,5 +126,5 @@ module Main
                          "https://127.0.0.1"
                        end
 
-  p ENV
+  NEWSPAPER_JOB_QUEUE_URL = ENV['NEWSPAPER_JOB_QUEUE_URL']
 end
