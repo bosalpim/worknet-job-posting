@@ -34,7 +34,8 @@ class KakaoTemplateService
         if @alt_sms_btn_indexes.include?(index)
           sms_message += "\n\n"
           sms_message += btn[:name] + "↓"
-          sms_message += "\n" + btn[:url_mobile]
+          sms_message += "\n"
+          sms_message += @template_id === MessageTemplateName::NEWSPAPER_V2 ? btn[:url_mobile] : ShortUrl.build(btn[:url_mobile]).url
         end
       end
     end
