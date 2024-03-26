@@ -2,7 +2,7 @@ class SendNewspaperJob < ApplicationJob
   include Jets::AwsServices
   include MessageTemplateName
 
-  sqs_event "newspaper_job_queue"
+  sqs_event Jets.env.production? ? "newspaper_job_queue.fifo" : "newspaper_job_queue_stag.fifo"
 
   def execute
     Jets.logger.info "#{JSON.dump(event)}"
