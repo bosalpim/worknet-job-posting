@@ -1,4 +1,5 @@
 class Fcm::FcmService
+  include Singleton
   include HTTParty
   base_uri 'https://fcm.googleapis.com'
 
@@ -10,14 +11,17 @@ class Fcm::FcmService
     response = self.class.post('/v1/projects/carepartner-app-v1/messages:send',
                                headers: { 'Authorization' => "Bearer #{@auth_token}", 'Content-Type' => 'application/json' },
                                body: message_body(token, message).to_json)
-    
+
     if response.code == 401 # Unauthorized, possibly due to expired token
       authorize # Re-authorize and get a new token
       response = self.class.post('/v1/projects/carepartner-app-v1/messages:send', # Retry the request with the new token
                                  headers: { 'Authorization' => "Bearer #{@auth_token}", 'Content-Type' => 'application/json' },
                                  body: message_body(token, message).to_json)
     end
-    response
+
+    result = { success: response.code == 200 }
+    result["errorCode"] = response['error']['details'].first['errorCode'] if response.code != 200
+    result
   end
 
   private
