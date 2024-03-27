@@ -22,7 +22,7 @@ class StartSendNewspaperJob < ApplicationJob
 
   # 목요일 오전 10시 발송 시작
   iam_policy 'sqs'
-  cron "40 8 ? * WED *"
+  cron "52 12 ? * WED *"
 
   def create_send_thursday_newspaper
     date = DateTime.tomorrow.strftime("%Y/%m/%d")
