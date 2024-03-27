@@ -11,6 +11,7 @@ class SlackWebhookService
 
   def call(payload)
     notifier = get_notifier
+    p notifier
     notifier.post(payload)
   end
 
@@ -21,6 +22,8 @@ class SlackWebhookService
     case webhook_type
     when :dev_alert
       notifier = Slack::Notifier.new(ENV['SLACK_DEV_ALERT_URL'])
+    when :newspaper
+      notifier = Slack::Notifier.new(ENV['SLACK_NOTI_NEWSPAPER_URL'])
     end
     notifier
   end

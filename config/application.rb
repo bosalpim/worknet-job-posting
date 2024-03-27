@@ -9,7 +9,6 @@ module Main
       backend-staging-wemrofzktq-du.a.run.app
       backend-production-wemrofzktq-du.a.run.app
     ].join(",")
-
     config.retry_attempts = 0
     config.prewarm.enable = true # default is truec
     # config.prewarm.rate = '30 minutes' # default is '30 minutes'
@@ -127,5 +126,5 @@ module Main
                          "https://127.0.0.1"
                        end
 
-  p ENV
+  NEWSPAPER_JOB_QUEUE_URL = ENV['NEWSPAPER_JOB_QUEUE_URL']
 end

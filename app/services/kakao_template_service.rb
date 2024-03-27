@@ -1632,7 +1632,7 @@ carepartner.kr#{path}
 
   def get_newspaper_v2(tem_params)
     today = NewsPaper.get_today
-    url = "https://www.carepartner.kr/newspaper?lat=#{tem_params["lat"]}&lng=#{tem_params["lng"]}&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
+    url = tem_params[:link]
     mute_url = "https://www.carepartner.kr/me/notification/off?type=job&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
     {
       title: '아직 일자리를 찾고 있나요?',
