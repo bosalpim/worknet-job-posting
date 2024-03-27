@@ -16,6 +16,7 @@ gem "dynomite", "~> 2.0.0" # recommend upgrading
 gem "zeitwerk", ">= 2.5.0"
 gem "httparty"
 gem "google-apis-indexing_v3", "~> 0.1"
+gem "googleauth"
 gem "faraday"
 gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 gem "bcrypt", "~> 3.1.7"
