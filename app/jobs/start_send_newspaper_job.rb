@@ -6,7 +6,7 @@ class StartSendNewspaperJob < ApplicationJob
   cron "0 20 ? * SUN *"
 
   def start_send_monday_newspaper
-    date = DateTime.now.yesterday.strftime("%Y/%m/%d")
+    date = DateTime.tomorrow.strftime("%Y/%m/%d")
     group = 0
     sqs.send_message(
       queue_url: Main::NEWSPAPER_JOB_QUEUE_URL,
@@ -20,10 +20,10 @@ class StartSendNewspaperJob < ApplicationJob
   end
 
   # 목요일 오전 10시 발송 시작
-  cron "10 7 ? * WED *"
+  cron "40 8 ? * WED *"
 
   def create_send_thursday_newspaper
-    date = DateTime.now.yesterday.strftime("%Y/%m/%d")
+    date = DateTime.tomorrow.strftime("%Y/%m/%d")
     group = 0
     sqs.send_message(
       queue_url: Main::NEWSPAPER_JOB_QUEUE_URL,
