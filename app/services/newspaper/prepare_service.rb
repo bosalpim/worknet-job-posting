@@ -19,7 +19,7 @@ class Newspaper::PrepareService
         batch.each_slice(500) do |slice|
           Newspaper
             .insert_all(
-              slice.map { |user| { date: @date, group: index, status: 'pening', user_id: user.id } }
+              slice.map { |user| { date: @date, group: index, status: 'pending', user_id: user.id } }
             )
         end
       end
