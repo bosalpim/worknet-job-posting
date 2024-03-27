@@ -24,6 +24,7 @@ class Newspaper::PrepareService
               .insert_all(
                 slice.map { |user| { date: @date, group: index, status: 'pending', user_id: user.id, push_token: user.push_token.token } }
               )
+          end
         rescue => e
           Jets.logger.error e
         end
