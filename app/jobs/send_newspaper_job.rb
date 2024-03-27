@@ -44,13 +44,14 @@ class SendNewspaperJob < ApplicationJob
 
     Jets.logger.info "[DATE=#{date}, GROUP=#{group}] #{updated_count}건 처리 완료"
 
+    next_group = group + 1
     sqs.send_message(
       queue_url: Main::NEWSPAPER_JOB_QUEUE_URL,
       message_group_id: date,
-      message_deduplication_id: "#{date}-#{group}",
+      message_deduplication_id: "#{date}-#{next_group}",
       message_body: JSON.dump({
                                 date: date,
-                                group: group + 1
+                                group: next_group
                               })
     )
   end
