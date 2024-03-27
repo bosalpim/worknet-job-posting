@@ -1,4 +1,5 @@
 class NotificationServiceJob < ApplicationJob
+  include KakaoNotificationLoggingHelper
   def notify
     Jets.logger.info event
     process(event)
@@ -38,6 +39,27 @@ class NotificationServiceJob < ApplicationJob
 
   def target_job_posting_performance
     process({ message_template_id: MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE })
+  end
+
+  def test_app_push
+    app_push = Notification::Factory::SendMedium::AppPush.new(
+      "test",
+      UserPushToken.last.token,
+      nil,
+      {
+        title: "test",
+        body: "test",
+        link: "#{Main::Application::DEEP_LINK_SCHEME}"
+      },
+      User.last.public_id,
+      {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "template" => @message_template_id,
+        "type" => NOTIFICATION_TYPE_APP_PUSH
+      }
+    )
+    app_push.send_request
   end
 
   private
