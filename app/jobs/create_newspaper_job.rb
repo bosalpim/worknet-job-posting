@@ -13,7 +13,7 @@ class CreateNewspaperJob < ApplicationJob
     ).call
   end
 
-  cron "50 6 ? * WED *"
+  cron "52 6 ? * WED *"
 
   def create_thursday_newspaper
     Newspaper::PrepareService.new(
