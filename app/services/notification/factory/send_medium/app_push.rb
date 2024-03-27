@@ -13,13 +13,14 @@ class Notification::Factory::SendMedium::AppPush < Notification::Factory::SendMe
   # FCM
   def send_request
     begin
-      response = Fcm::FcmService.instance.send_message(@to, @notification)
-      if response.dig(:success)
+      response = request_app_push({ to: @to, collapse_key: @collapse_key, notification: @notification })
+      success = response["success"]
+      if success == 1
         amplitude_log unless @logging_properties.nil?
         return { status: 'success', response: response, target_public_id: @target_public_id }
       else
         begin
-          if response['errorCode'] == 'UNREGISTERED' || response['errorCode'] == 'INVALID_ARGUMENT'
+          if response["results"].first["error"] == 'NotRegistered'
             UserPushToken.find_by(token: @to).destroy rescue nil
             ClientPushToken.find_by(token: @to).destroy rescue nil
           end
@@ -27,7 +28,7 @@ class Notification::Factory::SendMedium::AppPush < Notification::Factory::SendMe
           Jets.logger.error e.full_message
         end
 
-        return { status: 'fail', response: response['errorCode'], target_public_id: @target_public_id }
+        return { status: 'fail', response: response.to_s, target_public_id: @target_public_id }
       end
     rescue Net::ReadTimeout
       return { status: 'fail', response: "NET::TIMEOUT", target_public_id: @target_public_id }
