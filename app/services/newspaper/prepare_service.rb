@@ -2,8 +2,12 @@
 
 class Newspaper::PrepareService
   def initialize(
-    date
+    date: DateTime.now,
+    limit: 500_000,
+    batch: 3000
   )
+    @limit = limit
+    @batch = batch
     @date = date.tomorrow.at_beginning_of_day.strftime('%Y/%m/%d')
     @users = fetch_users
     @count = @users.count
@@ -14,7 +18,7 @@ class Newspaper::PrepareService
       log start_message
 
       @users.find_in_batches(
-        batch_size: 3_000
+        batch_size: @batch
       ).each_with_index do |batch, index|
         batch.each_slice(500) do |slice|
           Newspaper
@@ -38,6 +42,7 @@ class Newspaper::PrepareService
       .receive_job_notifications
       .where
       .not(phone_number: nil)
+      .limit(@limit)
 
   end
 

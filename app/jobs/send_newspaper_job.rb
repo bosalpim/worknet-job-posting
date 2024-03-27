@@ -2,6 +2,7 @@ class SendNewspaperJob < ApplicationJob
   include Jets::AwsServices
   include MessageTemplateName
 
+  iam_policy 'sqs'
   sqs_event Jets.env.production? ? "newspaper_job_queue.fifo" : "newspaper_job_queue_stag.fifo"
 
   def execute

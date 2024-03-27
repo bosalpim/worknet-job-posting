@@ -3,6 +3,7 @@
 class StartSendNewspaperJob < ApplicationJob
   include Jets::AwsServices
   # 월요일 오전 10시 발송 시작
+  iam_policy 'sqs'
   cron "0 20 ? * SUN *"
 
   def start_send_monday_newspaper
@@ -20,6 +21,7 @@ class StartSendNewspaperJob < ApplicationJob
   end
 
   # 목요일 오전 10시 발송 시작
+  iam_policy 'sqs'
   cron "40 8 ? * WED *"
 
   def create_send_thursday_newspaper
