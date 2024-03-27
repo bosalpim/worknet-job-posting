@@ -3,10 +3,8 @@
 class Newspaper::PrepareService
   def initialize(
     date: DateTime.now,
-    limit: 500_000,
     batch: 3000
   )
-    @limit = limit
     @batch = batch
     @date = date.tomorrow.at_beginning_of_day.strftime('%Y/%m/%d')
     @users = fetch_users
@@ -26,9 +24,8 @@ class Newspaper::PrepareService
               .insert_all(
                 slice.map { |user| { date: @date, group: index, status: 'pending', user_id: user.id, push_token: user.push_token.token } }
               )
-          rescue => e
-            Jets.logger.error e
-          end
+        rescue => e
+          Jets.logger.error e
         end
 
       end
@@ -47,7 +44,6 @@ class Newspaper::PrepareService
       .receive_job_notifications
       .where
       .not(phone_number: nil)
-      .limit(@limit)
 
   end
 
