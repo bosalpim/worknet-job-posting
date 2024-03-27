@@ -11,7 +11,6 @@ class CreateNewspaperJob < ApplicationJob
     elsif Jets.env.staging?
       Newspaper::PrepareService.new(
         date: DateTime.now,
-        limit: 10,
         batch: 2
       ).call
     end
@@ -27,7 +26,6 @@ class CreateNewspaperJob < ApplicationJob
     elsif Jets.env.staging?
       Newspaper::PrepareService.new(
         date: DateTime.now,
-        limit: 10,
         batch: 2
       )
     end
