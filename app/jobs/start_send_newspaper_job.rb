@@ -2,11 +2,6 @@
 
 class StartSendNewspaperJob < ApplicationJob
   include Jets::AwsServices
-
-  # def initialize(event, context, meth)
-  #   super
-  # end
-
   # 월요일 오전 10시 발송 시작
   cron "0 20 ? * SUN *"
 

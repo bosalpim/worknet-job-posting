@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class CreateNewspaperJob < ApplicationJob
-  def initialize(event, context, meth)
-    super
-  end
-
   cron "0 20 ? * SUN *"
 
   def create_monday_newspaper
@@ -13,7 +9,7 @@ class CreateNewspaperJob < ApplicationJob
     ).call
   end
 
-  cron "05 7 ? * WED *"
+  cron "15 8 ? * WED *"
 
   def create_thursday_newspaper
     Newspaper::PrepareService.new(
