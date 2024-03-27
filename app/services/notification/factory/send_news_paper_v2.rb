@@ -45,7 +45,7 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
           )
         end
       elsif user.phone_number.present?
-        link = "#{Main::Application::CAREPARTNER_URL}#{base_path}&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
+        link = "https://www.carepartner.kr/#{base_path}&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
 
         Jets.logger.info "arlimtalk send"
 
