@@ -36,6 +36,8 @@ jobs:
           echo "FCM_APP_PUSH_AUTHORIZATION=$FCM_APP_PUSH_AUTHORIZATION" >> .env.production
           echo "BEX_API_URL=$BEX_PRODUCTION_API_URL" >> .env.production
           echo "SLACK_DEV_ALERT_URL=$SLACK_DEV_ALERT_URL" >> .env.production
+          echo "NEWSPAPER_JOB_QUEUE_URL=$NEWSPAPER_JOB_QUEUE_URL" >> .env.production
+          echo "SLACK_NOTI_NEWSPAPER_URL=$SLACK_NOTI_NEWSPAPER_URL" >> .env.production
 
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
@@ -53,6 +55,9 @@ jobs:
           FCM_APP_PUSH_AUTHORIZATION: ${{ secrets.FCM_APP_PUSH_AUTHORIZATION }}
           BEX_PRODUCTION_API_URL: ${{ secrets.BEX_PRODUCTION_API_URL }}
           SLACK_DEV_ALERT_URL: ${{ secrets.SLACK_DEV_ALERT_URL }}
+          NEWSPAPER_JOB_QUEUE_URL: ${{ secrets.NEWSPAPER_JOB_QUEUE_URL }}
+          SLACK_NOTI_NEWSPAPER_URL: ${{ secrets.SLACK_NOTI_NEWSPAPER_URL }}
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:

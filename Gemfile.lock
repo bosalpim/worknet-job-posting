@@ -367,6 +367,7 @@ DEPENDENCIES
   dynomite (~> 2.0.0)
   faraday
   google-apis-indexing_v3 (~> 0.1)
+  googleauth
   httparty
   importmap-jets
   jets (= 5.0.1)
