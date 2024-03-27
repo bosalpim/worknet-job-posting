@@ -21,13 +21,13 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
 
       base_path = "newspaper?lat=#{user.lat}&lng=#{user.lng}"
 
-      if user.is_sendable_app_push
+      if newspaper.push_token&.present?
         link = "#{base_path}&utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=newspaper_job_alarm"
         if Jets.env.production?
           @app_push_list.push(
             AppPush.new(
               @message_template_id,
-              user.push_token,
+              newspaper.push_token,
               nil,
               {
                 title: "우리동네 요양일자리 신문이 도착했어요!",
@@ -45,7 +45,7 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
           )
         end
       elsif user.phone_number.present?
-        link = "#{Main::Application::CAREPARTNER_URL}#{base_path}&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
+        link = "https://www.carepartner.kr/#{base_path}&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
 
         Jets.logger.info "arlimtalk send"
 
