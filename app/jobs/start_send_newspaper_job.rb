@@ -25,7 +25,7 @@ class StartSendNewspaperJob < ApplicationJob
   end
 
   # 목요일 오전 10시 발송 시작
-  cron "57 6 ? * WED *"
+  cron "10 7 ? * WED *"
 
   def create_send_thursday_newspaper
     date = DateTime.now.yesterday.strftime("%Y/%m/%d")
