@@ -46,9 +46,7 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
         end
       elsif user.phone_number.present?
         link = "https://www.carepartner.kr/#{base_path}&utm_source=message&utm_medium=arlimtalk&utm_campaign=newspaper_job_alarm"
-
-        Jets.logger.info "arlimtalk send"
-
+        
         if Jets.env.production?
           @bizm_post_pay_list.push(
             BizmPostPayMessage.new(
@@ -64,7 +62,7 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
             )
           )
         else
-          Jets.logger.info BizmPostPayMessage.new(
+          BizmPostPayMessage.new(
             @message_template_id,
             user.phone_number,
             {
