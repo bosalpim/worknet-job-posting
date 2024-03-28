@@ -16,9 +16,7 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
       if user&.lat.nil? || user&.lng.nil?
         next
       end
-
-      Jets.logger.info user
-
+      
       base_path = "newspaper?lat=#{user.lat}&lng=#{user.lng}"
 
       if newspaper.push_token&.present?
