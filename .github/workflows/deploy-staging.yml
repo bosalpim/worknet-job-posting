@@ -39,6 +39,8 @@ jobs:
           echo "SLACK_DEV_ALERT_URL=$SLACK_DEV_ALERT_URL" >> .env.staging
           echo "NEWSPAPER_JOB_QUEUE_URL=$NEWSPAPER_JOB_QUEUE_URL" >> .env.staging
           echo "SLACK_NOTI_NEWSPAPER_URL=$SLACK_NOTI_NEWSPAPER_URL" >> .env.staging
+          echo "FIREBASE_ADMIN_JSON" >> .eng.staging
+
         env:
           DB_HOST_STAGING: ${{ secrets.DB_HOST_STAGING }}
           DB_PASSWORD_STAGING: ${{ secrets.DB_PASSWORD_STAGING }}
@@ -57,6 +59,7 @@ jobs:
           SLACK_DEV_ALERT_URL: ${{ secrets.SLACK_DEV_ALERT_URL }}
           NEWSPAPER_JOB_QUEUE_URL: ${{ secrets.NEWSPAPER_JOB_QUEUE_STAG_URL }}
           SLACK_NOTI_NEWSPAPER_URL: ${{ secrets.SLACK_TEST_WEBHOOK_URL }}
+          FIREBASE_ADMIN_JSON: ${{ secrets.FIREBASE_ADMIN_JSON }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
