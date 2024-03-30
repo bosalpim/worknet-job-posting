@@ -27,11 +27,10 @@ class Fcm::FcmService
   private
 
   def authorize
-    file_path = File.join(Jets.root, 'config', 'carepartner-app-v1-firebase-admin.json')
-    file = File.open(file_path)
+    json = JSON.parse(ENV["FIREBASE_ADMIN_JSON"])
     scope = 'https://www.googleapis.com/auth/firebase.messaging'
     authorizer = Google::Auth::ServiceAccountCredentials.make_creds(
-      json_key_io: file,
+      json_key_io: StringIO.new(json.to_json),
       scope: scope
     )
     @auth_token = authorizer.fetch_access_token!['access_token']
