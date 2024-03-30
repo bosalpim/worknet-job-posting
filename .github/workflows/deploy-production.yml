@@ -38,6 +38,7 @@ jobs:
           echo "SLACK_DEV_ALERT_URL=$SLACK_DEV_ALERT_URL" >> .env.production
           echo "NEWSPAPER_JOB_QUEUE_URL=$NEWSPAPER_JOB_QUEUE_URL" >> .env.production
           echo "SLACK_NOTI_NEWSPAPER_URL=$SLACK_NOTI_NEWSPAPER_URL" >> .env.production
+          echo "FIREBASE_ADMIN_JSON" >> .env.production
 
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
@@ -57,6 +58,7 @@ jobs:
           SLACK_DEV_ALERT_URL: ${{ secrets.SLACK_DEV_ALERT_URL }}
           NEWSPAPER_JOB_QUEUE_URL: ${{ secrets.NEWSPAPER_JOB_QUEUE_URL }}
           SLACK_NOTI_NEWSPAPER_URL: ${{ secrets.SLACK_NOTI_NEWSPAPER_URL }}
+          FIREBASE_ADMIN_JSON: ${{ secrets.FIREBASE_ADMIN_JSON }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
