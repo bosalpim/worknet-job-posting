@@ -193,7 +193,11 @@ class KakaoTemplateService
              elsif Main::Application::PHONE_NUMBER_WHITELIST.is_a?(Array) && Main::Application::PHONE_NUMBER_WHITELIST.include?(phone)
                phone
              else
-               raise "스테이징 서버에 등록되지 않은 핸드폰 번호입니다. worknet-job-posting 프로젝트에 WhiteList에 추가해주세요"
+               # 동네광고 테스트를 위해 default로 테스트 핸드폰 번호 전송 반영 (dummy user 처리를 위한 것)
+               Main::Application::TEST_PHONE_NUMBER
+
+               # 동네광고 테스트 이후 Todo 아래 주석 부분으로 해당 분기 교체
+               # raise "스테이징 서버에 등록되지 않은 핸드폰 번호입니다. worknet-job-posting 프로젝트에 WhiteList에 추가해주세요"
              end
   end
 
