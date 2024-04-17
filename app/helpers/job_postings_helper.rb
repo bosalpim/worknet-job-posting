@@ -85,6 +85,21 @@ module JobPostingsHelper
     return DateTime.now.year - birth_year
   end
 
+  def cognitive_disorder_text(cognitive_disorder)
+    case cognitive_disorder
+    when "no_dementia"
+      return "치매 증상 없음"
+    when "early_stage_dementia"
+      return "치매 초기"
+    when "mid_stage_dementia"
+      return "치매 중기"
+    when "end_stage_dementia"
+      return "치매 말기"
+    else
+      return nil
+    end
+  end
+
   def format_consecutive_dates(object)
     week_days = {
       'monday': 1,
@@ -139,5 +154,13 @@ module JobPostingsHelper
   def get_dong_name_by_address(address)
     dong = address.split(' ')&.slice(2, 1).first
     dong.nil? ? "" : dong
+  end
+
+  def get_work_content(job_posting_customer)
+    [translate_type('job_posting_customer', job_posting_customer, :meal_assistances),
+     translate_type('job_posting_customer', job_posting_customer, :excretion_assistances),
+     translate_type('job_posting_customer', job_posting_customer, :housework_assistances),
+     translate_type('job_posting_customer', job_posting_customer, :movement_assistances)]
+      .join('\n')
   end
 end

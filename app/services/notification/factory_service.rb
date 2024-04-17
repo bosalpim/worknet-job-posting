@@ -19,6 +19,8 @@ class Notification::FactoryService
       return Notification::Factory::JobPostingTargetMessageService.new(params)
     when MessageTemplateName::TARGET_USER_JOB_POSTING_V2
       return Notification::Factory::TargetUserJobPostingV2Service.new(params)
+    when MessageTemplateName::TARGET_USER_RESIDENT_POSTING
+      return Notification::Factory::TargetUserResidentJobPostingService.new(params)
     when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
       return Notification::Factory::NotifyCloseFreeJobPosting.call_1day_ago
     when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
@@ -57,8 +59,6 @@ class Notification::FactoryService
       return Notification::Factory::JobSupportRequestAgreement.new(params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
       return Notification::Factory::TargetJobPostingAdApply.new(params)
-    when MessageTemplateName::TARGET_USER_JOB_POSTING_V2
-      return Notification::Factory::TargetUserJobPostingV2Service.new(params)
     else
       puts "no template found"
       return []
