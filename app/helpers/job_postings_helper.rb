@@ -157,10 +157,9 @@ module JobPostingsHelper
   end
 
   def get_work_content(job_posting_customer)
-    [translate_type('job_posting_customer', job_posting_customer, :meal_assistances),
-     translate_type('job_posting_customer', job_posting_customer, :excretion_assistances),
-     translate_type('job_posting_customer', job_posting_customer, :housework_assistances),
-     translate_type('job_posting_customer', job_posting_customer, :movement_assistances)]
-      .join('\n')
+    "#{translate_type('job_posting_customer', job_posting_customer, :meal_assistances)}
+#{translate_type('job_posting_customer', job_posting_customer, :excretion_assistances)}
+#{translate_type('job_posting_customer', job_posting_customer, :housework_assistances)}
+#{translate_type('job_posting_customer', job_posting_customer, :movement_assistances)}"
   end
 end

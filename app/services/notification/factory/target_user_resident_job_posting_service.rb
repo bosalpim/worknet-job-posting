@@ -7,9 +7,9 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
   DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
 
   def initialize(params)
-    super(MessageTemplateName::TARGET_USER_JOB_POSTING_V2)
+    super(MessageTemplateName::TARGET_USER_RESIDENT_POSTING)
     @job_posting = JobPosting.find(params[:job_posting_id])
-    @base_url = "#{Main::Application::CAREPARTNER_URL}/jobs/#{@job_posting.public_id}"
+    @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     @list = User
               .receive_job_notifications
@@ -94,13 +94,13 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
     basis_customer_info = "#{translate_type('job_posting_customer', job_posting_customer, :grade) || '등급없음'}, #{calculate_korean_age(job_posting_customer&.age) || '미상의연'}세, #{translate_type('job_posting_customer', job_posting_customer, :gender) || '성별미상'}"
     cognitive_disorder_value = cognitive_disorder_text(job_posting_customer.cognitive_disorder)
     basis_customer_info += "
-    #{cognitive_disorder_text(job_posting_customer.cognitive_disorder)}" unless cognitive_disorder_value.nil?
+#{cognitive_disorder_text(job_posting_customer.cognitive_disorder)}" unless cognitive_disorder_value.nil?
 
     basis_customer_info
   end
 
   def vacation_day_resident
     # array to 월,화,수,목,금
-    "#{translate_type('job_posting',nil, 'working_days', missing_days(@job_posting.working_days)).join("/")}"
+    translate_type('job_posting',nil, 'working_days', missing_days(@job_posting.working_days))
   end
 end
