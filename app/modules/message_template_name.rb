@@ -72,6 +72,8 @@ module MessageTemplateName
 
   # 전화면접 제안
   PROPOSAL = "proposal".freeze
+  # 입주요양 전화면접 제안
+  PROPOSAL_RESIDENT = "proposal_resident".freeze
 
   # 문자문의
   CONTACT_MESSAGE = 'contact_message (close_avail)'.freeze

@@ -1,4 +1,5 @@
 include TranslationHelper
+include DayHelper
 include ActionView::Helpers::NumberHelper
 
 module JobPostingsHelper
@@ -161,5 +162,19 @@ module JobPostingsHelper
 #{translate_type('job_posting_customer', job_posting_customer, :excretion_assistances)}
 #{translate_type('job_posting_customer', job_posting_customer, :housework_assistances)}
 #{translate_type('job_posting_customer', job_posting_customer, :movement_assistances)}"
+  end
+
+  def create_customer_info(job_posting_customer)
+    basis_customer_info = "#{translate_type('job_posting_customer', job_posting_customer, :grade) || '등급없음'}, #{calculate_korean_age(job_posting_customer&.age) || '미상의연'}세, #{translate_type('job_posting_customer', job_posting_customer, :gender) || '성별미상'}"
+    cognitive_disorder_value = cognitive_disorder_text(job_posting_customer.cognitive_disorder)
+    basis_customer_info += "
+    #{cognitive_disorder_text(job_posting_customer.cognitive_disorder)}" unless cognitive_disorder_value.nil?
+
+    basis_customer_info
+  end
+
+  def vacation_day_resident(job_posting)
+    # array to 월,화,수,목,금
+    translate_type('job_posting',nil, 'working_days', missing_days(job_posting.working_days))
   end
 end

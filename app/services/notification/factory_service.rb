@@ -31,6 +31,8 @@ class Notification::FactoryService
       return Notification::Factory::NewContactMessage.new(params[:id] || params["id"])
     when MessageTemplateName::PROPOSAL_ACCEPT
       return Notification::Factory::ProposalAccepted.new(params)
+    when MessageTemplateName::PROPOSAL_RESIDENT
+      return Notification::Factory::ProposalResident.new(params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       return Notification::Factory::UserSavedJobPosting.new(params)
     when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
