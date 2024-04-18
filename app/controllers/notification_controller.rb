@@ -159,6 +159,7 @@ class NotificationController < ApplicationController
             }
           }) unless Jets.env.development?
       else
+        Jets.logger.info "@@@ CALL ESLE #{params}"
         NotificationServiceJob.perform_now(
           :notify,
           {

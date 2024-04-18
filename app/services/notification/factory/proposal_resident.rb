@@ -7,12 +7,14 @@ class Notification::Factory::ProposalResident < Notification::Factory::Notificat
   DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
 
   def initialize(params)
+    Jets.logger.info "def initialize(params)"
     super(MessageTemplateName::PROPOSAL_RESIDENT)
     @job_posting = JobPosting.find_by(public_id: params[:job_posting_id])
     @receive_vn = params[:receive_vn]
     @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     @list = [User.find(params[:user_id])]
+    Jets.logger.info @list
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
   end
