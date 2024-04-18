@@ -1,5 +1,5 @@
 module DayHelper
-  include TranslationHelper
+
   ALL_DAYS = %w[monday tuesday wednesday thursday friday saturday sunday]
 
   def count_days(days)
