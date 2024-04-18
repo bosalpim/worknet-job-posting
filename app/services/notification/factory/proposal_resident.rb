@@ -8,6 +8,8 @@ class Notification::Factory::ProposalResident < Notification::Factory::Notificat
 
   def initialize(params)
     Jets.logger.info "def initialize(params)"
+    Jets.logger.info params[:job_posting_id]
+    Jets.logger.info "parsing success"
     super(MessageTemplateName::PROPOSAL_RESIDENT)
     @job_posting = JobPosting.find_by(public_id: params[:job_posting_id])
     @receive_vn = params[:receive_vn]
