@@ -75,7 +75,7 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
 
 ■ 근무 장소 : #{@job_posting.address}
 
-■ 근무 요일(입주) : 주 #{@job_posting.working_days.count}일 근무, #{vacation_day_resident(@job_posting)}요일 휴무
+■ 근무 요일(입주) : 주 #{@job_posting.working_days.count}일 근무#{vacation_day_resident(@job_posting)}
 
 이 메세지는 일자리알림을 신청한 분에게만 발송돼요
 

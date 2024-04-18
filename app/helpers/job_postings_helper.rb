@@ -173,7 +173,7 @@ module JobPostingsHelper
   end
 
   def vacation_day_resident(job_posting)
-    # array to 월/화/수/목/금/토/일
-    translate_type('job_posting',nil, 'working_days', missing_days(job_posting.working_days)).gsub(/[[:space:]]/, "").gsub(",", "/")
+    missing_day_text = translate_type('job_posting',nil, 'working_days', missing_days(job_posting.working_days))
+    missing_day_text.nil? ? "" : ", #{translate_type('job_posting',nil, 'working_days', missing_days(job_posting.working_days)).gsub(/[[:space:]]/, "").gsub(",", "/")}요일 휴무"
   end
 end
