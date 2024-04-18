@@ -10,8 +10,4 @@ module DayHelper
   def missing_days(days)
     ALL_DAYS - days
   end
-
-  def trim_days_to_text(days)
-    translate_type()
-  end
 end

@@ -69,20 +69,13 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
   def generate_message_content
     "#{@job_posting.title}
 
-■ 급여
-#{get_pay_text(@job_posting)}
+■ 급여 : #{get_pay_text(@job_posting)}
 
-■ 어르신 정보
-#{create_customer_info(@job_posting.job_posting_customer)}
+■ 어르신 정보 : #{create_customer_info(@job_posting.job_posting_customer)}
 
-■ 근무 장소
-#{@job_posting.address}
+■ 근무 장소 : #{@job_posting.address}
 
-■ 근무 요일(입주)
-주 #{@job_posting.working_days.count}일 근무, #{vacation_day_resident(@job_posting)}요일 휴무
-
-■ 근무 내용
-#{get_work_content(@job_posting.job_posting_customer)}
+■ 근무 요일(입주) : 주 #{@job_posting.working_days.count}일 근무, #{vacation_day_resident(@job_posting)}요일 휴무
 
 👇'일자리 확인하기' 버튼을 누르고 자세한 정보를 확인하세요👇"
   end
