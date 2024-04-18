@@ -104,6 +104,20 @@ class NotificationController < ApplicationController
         Jets.env.development? ?
           NotificationServiceJob.perform_now(meth, event)
           : NotificationServiceJob.perform_later(meth, event)
+      when PROPOSAL_RESIDENT
+        meth = :notify
+        event = {
+          message_template_id: PROPOSAL_RESIDENT,
+          params: {
+            job_posting_id: params[:job_posting_id],
+            user_id: params[:user_id],
+            client_message: params[:client_message],
+            receive_vn: params[:receive_vn],
+          }
+        }
+        Jets.env.development? ?
+          NotificationServiceJob.perform_now(meth, event)
+          : NotificationServiceJob.perform_later(meth, event)
       when TARGET_JOB_POSTING_AD
         NotificationServiceJob.perform_now(
           :notify,
