@@ -77,6 +77,8 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
 
 ■ 근무 요일(입주) : 주 #{@job_posting.working_days.count}일 근무, #{vacation_day_resident(@job_posting)}요일 휴무
 
+이 메세지는 일자리알림을 신청한 분에게만 발송돼요
+
 👇'일자리 확인하기' 버튼을 누르고 자세한 정보를 확인하세요👇"
   end
 end
