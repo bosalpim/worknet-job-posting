@@ -21,6 +21,7 @@ class KakaoTemplateService
 
   def get_final_request_params(tem_params, is_pre_pay = false, phone = nil)
     set_phone(phone) unless phone.nil?
+    return nil if @phone.nil?
 
     template_data = get_template_data(tem_params)
     request_params = get_default_request_params(template_id, template_data, is_pre_pay)
@@ -197,7 +198,7 @@ class KakaoTemplateService
              elsif Main::Application::PHONE_NUMBER_WHITELIST.is_a?(Array) && Main::Application::PHONE_NUMBER_WHITELIST.include?(phone)
                phone
              else
-               raise "스테이징 서버에 등록되지 않은 핸드폰 번호입니다. worknet-job-posting 프로젝트에 WhiteList에 추가해주세요"
+               return nil
              end
   end
 
