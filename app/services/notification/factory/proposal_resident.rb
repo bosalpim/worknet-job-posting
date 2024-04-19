@@ -44,7 +44,7 @@ class Notification::Factory::ProposalResident < Notification::Factory::Notificat
 
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}" + dispatched_notification_param + "&check_proposed_content=true"
+    view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}" + dispatched_notification_param + "&check_proposed_content=true&referral=proposal_resident"
     tel_link = "tel://#{@receive_vn}"
 
     BizmPostPayMessage.new(
