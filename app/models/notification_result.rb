@@ -123,6 +123,8 @@ class NotificationResult < ApplicationRecord
     MessageTemplateName::TARGET_JOB_POSTING_AD => MessageTemplateName::TARGET_JOB_POSTING_AD,
     MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY => MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY,
     MessageTemplateName::NONE_LTC_REQUEST => MessageTemplateName::NONE_LTC_REQUEST,
-    MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT => MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
+    MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT => MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT,
+    MessageTemplateName::TARGET_USER_RESIDENT_POSTING => MessageTemplateName::TARGET_USER_RESIDENT_POSTING,
+    MessageTemplateName::PROPOSAL_RESIDENT => MessageTemplateName::PROPOSAL_RESIDENT
   }
 end

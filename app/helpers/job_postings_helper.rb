@@ -1,4 +1,5 @@
 include TranslationHelper
+include DayHelper
 include ActionView::Helpers::NumberHelper
 
 module JobPostingsHelper
@@ -16,7 +17,7 @@ module JobPostingsHelper
         )
       elsif min_wage > 0
         return(
-          pay_type_text + number_to_currency(object.min_wage, precision: 0)
+          pay_type_text + " " + number_to_currency(object.min_wage, precision: 0)
         )
       else
         object.scraped_worknet_job_posting&.info&.dig('pay_text')
@@ -85,6 +86,21 @@ module JobPostingsHelper
     return DateTime.now.year - birth_year
   end
 
+  def cognitive_disorder_text(cognitive_disorder)
+    case cognitive_disorder
+    when "no_dementia"
+      return "치매 증상 없음"
+    when "early_stage_dementia"
+      return "치매 초기"
+    when "mid_stage_dementia"
+      return "치매 중기"
+    when "end_stage_dementia"
+      return "치매 말기"
+    else
+      return nil
+    end
+  end
+
   def format_consecutive_dates(object)
     week_days = {
       'monday': 1,
@@ -139,5 +155,25 @@ module JobPostingsHelper
   def get_dong_name_by_address(address)
     dong = address.split(' ')&.slice(2, 1).first
     dong.nil? ? "" : dong
+  end
+
+  def get_work_content(job_posting_customer)
+    "#{translate_type('job_posting_customer', job_posting_customer, :meal_assistances)}
+#{translate_type('job_posting_customer', job_posting_customer, :excretion_assistances)}
+#{translate_type('job_posting_customer', job_posting_customer, :housework_assistances)}
+#{translate_type('job_posting_customer', job_posting_customer, :movement_assistances)}"
+  end
+
+  def create_customer_info(job_posting_customer)
+    basis_customer_info = "#{translate_type('job_posting_customer', job_posting_customer, :grade) || '등급없음'}, #{calculate_korean_age(job_posting_customer&.age) || '미상의연'}세, #{translate_type('job_posting_customer', job_posting_customer, :gender) || '성별미상'}"
+    cognitive_disorder_value = cognitive_disorder_text(job_posting_customer.cognitive_disorder)
+    basis_customer_info += ", #{cognitive_disorder_text(job_posting_customer.cognitive_disorder)}" unless cognitive_disorder_value.nil?
+
+    basis_customer_info
+  end
+
+  def vacation_day_resident(job_posting)
+    missing_day_text = translate_type('job_posting',nil, 'working_days', missing_days(job_posting.working_days))
+    missing_day_text.nil? ? "" : ", #{translate_type('job_posting',nil, 'working_days', missing_days(job_posting.working_days)).gsub(/[[:space:]]/, "").gsub(",", "/")}요일 휴무"
   end
 end
