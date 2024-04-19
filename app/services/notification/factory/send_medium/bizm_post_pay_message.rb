@@ -10,6 +10,7 @@ class Notification::Factory::SendMedium::BizmPostPayMessage < Notification::Fact
 
   def send_request
     request_params = @bizm_template_service.get_final_request_params(@params, false)
+    { status: 'fail', response: "테스터 번호가 아닙니다.", target_public_id: @target_public_id } if request_params.nil? && !(Jets.env.production?)
     begin
       response = request_post_pay(request_params)
       response.class == Array ? response.first : response

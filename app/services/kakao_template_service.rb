@@ -21,6 +21,7 @@ class KakaoTemplateService
 
   def get_final_request_params(tem_params, is_pre_pay = false, phone = nil)
     set_phone(phone) unless phone.nil?
+    return nil if @phone.nil?
 
     template_data = get_template_data(tem_params)
     request_params = get_default_request_params(template_id, template_data, is_pre_pay)
@@ -52,6 +53,10 @@ class KakaoTemplateService
     case @template_id
     when MessageTemplateName::TARGET_USER_JOB_POSTING_V2
       get_target_user_job_posting_v2_data(tem_params)
+    when MessageTemplateName::TARGET_USER_RESIDENT_POSTING
+      get_target_user_resident_posting_data(tem_params)
+    when MessageTemplateName::PROPOSAL_RESIDENT
+      get_target_user_resident_proposal_data(tem_params)
     when MessageTemplateName::PROPOSAL
       get_proposal_data(tem_params)
     when MessageTemplateName::NEW_JOB_POSTING_VISIT
@@ -193,7 +198,7 @@ class KakaoTemplateService
              elsif Main::Application::PHONE_NUMBER_WHITELIST.is_a?(Array) && Main::Application::PHONE_NUMBER_WHITELIST.include?(phone)
                phone
              else
-               raise "스테이징 서버에 등록되지 않은 핸드폰 번호입니다. worknet-job-posting 프로젝트에 WhiteList에 추가해주세요"
+               return nil
              end
   end
 
@@ -289,6 +294,52 @@ class KakaoTemplateService
           name: '🔎 일자리 확인하기',
           type: 'WL',
           url_mobile: view_link
+        }
+      ]
+    }
+  end
+
+  def get_target_user_resident_proposal_data(tem_params)
+    view_link = tem_params[:view_link]
+    tel_link = tem_params[:tel_link]
+
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '제안 내용 확인하기',
+          type: 'WL',
+          url_mobile: view_link
+        },
+        {
+          name: '전화로 제안 수락하기',
+          type: 'AL',
+          scheme_ios: tel_link,
+          scheme_android: tel_link
+        }
+      ]
+    }
+  end
+
+  def get_target_user_resident_posting_data(tem_params)
+    view_link = tem_params[:view_link]
+    application_link = tem_params[:application_link]
+    contact_link = tem_params[:contact_link]
+
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '🔎 일자리 확인하기',
+          type: 'WL',
+          url_mobile: view_link
+        },
+        {
+          name: '⚡️ 간편 지원하기',
+          type: 'WL',
+          url_mobile: application_link
         }
       ]
     }
