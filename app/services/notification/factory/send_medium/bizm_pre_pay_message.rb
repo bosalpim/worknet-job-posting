@@ -9,6 +9,7 @@ class Notification::Factory::SendMedium::BizmPrePayMessage < Notification::Facto
 
   def send_request
     request_params = @bizm_template_service.get_final_request_params(@params, true)
+    { status: 'fail', response: "테스터 번호가 아닙니다.", target_public_id: @target_public_id } if request_params.nil? && !(Jets.env.production?)
     begin
       response = request_pre_pay(request_params)
       response.class == Array ? response.first : response
