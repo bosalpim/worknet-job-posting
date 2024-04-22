@@ -61,7 +61,7 @@ class GetWorknetJobService
 
     work_hour_type_text = job_posting_info.dig("workdayWorkhrCont")
 
-    work_type = get_work_type(title, description, job_info.dig("jobsCd"), work_hour_type_text)
+    work_type = get_work_type(title, description, job_info.dig("jobsCd"), job_name, work_hour_type_text)
     working_hours_type = get_working_hours_type(work_hour_type_text)
 
     work_start_time = nil
@@ -330,13 +330,15 @@ class GetWorknetJobService
     job_posting
   end
 
-  def get_work_type(title, description, jobs_code, work_hour_type_text)
-    if work_hour_type_text.match?(/입주/)
+  def get_work_type(title, description, jobs_code, jobs_name, work_hour_type_text)
+    if work_hour_type_text.match?(/입주/) || title.match?(/입주/) || description.match?(/입주/)
       "resident"
     elsif work_hour_type_text.match?(/데이케어/)
       "day_care"
     elsif title.match?(/방문목욕/) || description.match?(/방문목욕/)
       "bath_help"
+    elsif jobs_name.match?(/입주/)
+      "resident"
     else
       case jobs_code
       when "550100"

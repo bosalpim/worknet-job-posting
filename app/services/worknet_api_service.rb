@@ -14,6 +14,11 @@ class WorknetApiService
     "6010016": "요양보호사 2급",
   }.freeze
 
+  def self.common_code
+    target_url = 'http://openapi.work.go.kr/opi/commonCode/commonCode.do' + "?returnType=XML&target=CMCD&authKey=#{ENV['WORKNET_API_KEY']}&dtlGb=2"
+    HTTParty.get(target_url, verify: true, open_timeout: 120).parsed_response
+  end
+
   def self.call(
     start_page = 1,
     call_type = "L",
