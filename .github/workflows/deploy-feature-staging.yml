@@ -39,7 +39,7 @@ jobs:
           echo "SLACK_DEV_ALERT_URL=$SLACK_DEV_ALERT_URL" >> .env.staging
           echo "NEWSPAPER_JOB_QUEUE_URL=$NEWSPAPER_JOB_QUEUE_URL" >> .env.staging
           echo "SLACK_NOTI_NEWSPAPER_URL=$SLACK_NOTI_NEWSPAPER_URL" >> .env.staging
-          echo "FIREBASE_ADMIN_JSON" >> .eng.staging
+          echo "FIREBASE_ADMIN_JSON=$FIREBASE_ADMIN_JSON" >> .env.staging
 
         env:
           DB_HOST_STAGING: ${{ secrets.DB_HOST_STAGING }}
