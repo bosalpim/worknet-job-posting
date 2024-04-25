@@ -127,6 +127,4 @@ module Main
                        end
 
   NEWSPAPER_JOB_QUEUE_URL = ENV['NEWSPAPER_JOB_QUEUE_URL']
-
-  p ENV
 end

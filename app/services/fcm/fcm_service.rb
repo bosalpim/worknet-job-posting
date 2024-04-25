@@ -27,8 +27,6 @@ class Fcm::FcmService
   private
 
   def authorize
-    Jets.logger.info ENV["FIREBASE_ADMIN_JSON"]
-    Jets.logger.info JSON.parse(ENV["FIREBASE_ADMIN_JSON"]).nil? ? 'nil' : JSON.parse(ENV["FIREBASE_ADMIN_JSON"])
     json = JSON.parse(ENV["FIREBASE_ADMIN_JSON"])
     scope = 'https://www.googleapis.com/auth/firebase.messaging'
     authorizer = Google::Auth::ServiceAccountCredentials.make_creds(
