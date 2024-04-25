@@ -15,6 +15,6 @@ jobs:
 
       - name: Use Firebase Admin JSON
         run: |
-          echo "Firebase Admin JSON: $FIREBASE_ADMIN_JSON"
+          echo "Firebase Admin JSON: ${#FIREBASE_ADMIN_JSON}"
         env:
           FIREBASE_ADMIN_JSON: ${{ secrets.FIREBASE_ADMIN_JSON }}
