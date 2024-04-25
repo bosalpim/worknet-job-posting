@@ -48,6 +48,9 @@ class Fcm::FcmService
         notification: {
           title: message[:title],
           body: message[:body]
+        },
+        data: {
+          deeplink: message[:link]
         }
       }
     }
