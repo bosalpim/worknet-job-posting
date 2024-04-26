@@ -1,6 +1,7 @@
 class Notification::FactoryService
   # @param template_id : 메세지 Template
   # @params params : 각 template에 사용되는 변수
+  include AlimtalkMessage
   def self.create(template_id, params)
     case template_id
     when MessageTemplateName::CALL_SAVED_JOB_POSTING_V2
@@ -15,10 +16,6 @@ class Notification::FactoryService
       return Notification::Factory::AccumulatedPreparativeCbt.new
     when MessageTemplateName::NEW_JOB_POSTING
       return Notification::Factory::NewJobNotification.new(params[:job_posting_id])
-    when MessageTemplateName::TARGET_USER_JOB_POSTING
-      return Notification::Factory::JobPostingTargetMessageService.new(params)
-    when MessageTemplateName::TARGET_USER_JOB_POSTING_V2
-      return Notification::Factory::TargetUserJobPostingV2Service.new(params)
     when MessageTemplateName::TARGET_USER_RESIDENT_POSTING
       return Notification::Factory::TargetUserResidentJobPostingService.new(params)
     when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
@@ -61,8 +58,10 @@ class Notification::FactoryService
       return Notification::Factory::JobSupportRequestAgreement.new(params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
       return Notification::Factory::TargetJobPostingAdApply.new(params)
+    when MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING]
+      return Notification::Factory::TargetUserJobPostingService.new(params)
     else
-      puts "no template found"
+      p "no template found : #{template_id}"
       return []
     end
   end
