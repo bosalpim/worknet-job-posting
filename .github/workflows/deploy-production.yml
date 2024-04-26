@@ -38,7 +38,7 @@ jobs:
           echo "SLACK_DEV_ALERT_URL=$SLACK_DEV_ALERT_URL" >> .env.production
           echo "NEWSPAPER_JOB_QUEUE_URL=$NEWSPAPER_JOB_QUEUE_URL" >> .env.production
           echo "SLACK_NOTI_NEWSPAPER_URL=$SLACK_NOTI_NEWSPAPER_URL" >> .env.production
-          echo "FIREBASE_ADMIN_JSON=$FIREBASE_ADMIN_JSON" >> .env.production
+          echo "FIREBASE_ADMIN_JSON" >> .env.production
 
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
