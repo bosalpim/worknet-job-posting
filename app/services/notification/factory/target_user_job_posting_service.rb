@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
-class Notification::Factory::TargetUserJobPostingV2Service < Notification::Factory::NotificationFactoryClass
+class Notification::Factory::TargetUserJobPostingService < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
   include DispatchedNotificationsHelper
+  include AlimtalkMessage
 
   DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
 
   def initialize(params)
-    super(MessageTemplateName::TARGET_USER_JOB_POSTING_V2)
+    super(MessageTemplates::TEMPLATES[MessageNames::TARGET_USER_JOB_POSTING])
     @job_posting = JobPosting.find(params[:job_posting_id])
     @base_url = "#{Main::Application::CAREPARTNER_URL}/jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
@@ -18,6 +19,8 @@ class Notification::Factory::TargetUserJobPostingV2Service < Notification::Facto
                 @job_posting.lat,
                 @job_posting.lng,
               ).where.not(phone_number: nil)
+              .where(phone_number: '01049195808')
+
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
   end

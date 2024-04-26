@@ -38,7 +38,7 @@ module NotificationSaveResultHelper
     )
   end
 
-  def save_results_bizm_post_pay(results, template_id, job_posting_id)
+  def save_results_bizm_post_pay(results, template_id, job_posting_id, send_type)
     return if results.nil? || results.empty?
 
     success_count = 0
@@ -71,7 +71,7 @@ module NotificationSaveResultHelper
 
     current_date = DateTime.now
     NotificationResult.create!(
-      send_type: template_id,
+      send_type: send_type.nil? ? template_id : send_type,
       send_id: "#{current_date.year}/#{current_date.month}/#{current_date.day}#{template_id}",
       template_id: template_id,
       success_count: success_count,

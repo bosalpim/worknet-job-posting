@@ -1,6 +1,7 @@
 class KakaoTemplateService
   include ApplicationHelper
   include MessageTemplateName
+  include AlimtalkMessage
   DEFAULT_RESERVE_AT = "00000000000000".freeze
   MAX_ITEM_LIST_TEXT_LENGTH = 19.freeze
   SETTING_ALARM_LINK = "https://www.carepartner.kr/users/edit?utm_source=message&utm_medium=arlimtalk&utm_campaign="
@@ -51,8 +52,6 @@ class KakaoTemplateService
 
   def get_template_data(tem_params)
     case @template_id
-    when MessageTemplateName::TARGET_USER_JOB_POSTING_V2
-      get_target_user_job_posting_v2_data(tem_params)
     when MessageTemplateName::TARGET_USER_RESIDENT_POSTING
       get_target_user_resident_posting_data(tem_params)
     when MessageTemplateName::PROPOSAL_RESIDENT
@@ -185,6 +184,8 @@ class KakaoTemplateService
       get_none_ltc_request(tem_params)
     when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
       get_job_support_agreement(tem_params)
+    when MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING]
+      get_target_user_job_posting_v2_data(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
