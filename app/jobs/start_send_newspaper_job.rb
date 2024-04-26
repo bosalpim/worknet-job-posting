@@ -37,8 +37,4 @@ class StartSendNewspaperJob < ApplicationJob
                               })
     )
   end
-
-  def news_paper_test_call
-    CreateNewsPaperActivelyCommonMessageService.test_call
-  end
 end
