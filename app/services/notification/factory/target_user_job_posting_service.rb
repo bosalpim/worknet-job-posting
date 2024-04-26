@@ -20,10 +20,6 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
                 @job_posting.lat,
                 @job_posting.lng,
               ).where.not(phone_number: nil)
-              .where(
-                'preferred_work_types::jsonb ? :type',
-                type: prefer_work_type,
-                )
 
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
