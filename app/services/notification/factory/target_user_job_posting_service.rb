@@ -12,6 +12,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     @job_posting = JobPosting.find(params[:job_posting_id])
     @base_url = "#{Main::Application::CAREPARTNER_URL}/jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
+    prefer_work_type = @job_posting.work_type == 'hospital' ? 'etc' : @job_posting.work_type
     @list = User
               .receive_job_notifications
               .within_radius(
@@ -19,7 +20,10 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
                 @job_posting.lat,
                 @job_posting.lng,
               ).where.not(phone_number: nil)
-              .where(phone_number: '01049195808')
+              .where(
+                'preferred_work_types::jsonb ? :type',
+                type: prefer_work_type,
+                )
 
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
@@ -75,18 +79,17 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
   def generate_message_content(user)
     "#{@job_posting.title}
 
-■ 근무지
-#{@job_posting.address}
+■ 급여: #{get_pay_text(@job_posting)}
 
-■ 예상 통근거리
-#{user.simple_distance_from_ko(@job_posting)}
+■ 근무 장소: #{@job_posting.address}
+- #{user.simple_distance_from_ko(@job_posting)}
 
-■ 근무시간
-#{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
+■ 근무 시간: #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
 
-■ 급여
-#{get_pay_text(@job_posting)}
+■ 어르신 정보: #{create_customer_info(@job_posting.job_posting_customer)}
 
-아래 버튼을 눌러 지원하거나 일자리 정보를 자세히 확인해 보세요!"
+이 메세지는 일자리알림을 신청한 분에게만 발송돼요
+
+👇'일자리 확인하기' 버튼을 누르고 자세한 정보를 확인하세요👇"
   end
 end

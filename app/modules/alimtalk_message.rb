@@ -9,7 +9,7 @@ module AlimtalkMessage
 
   module MessageTemplates
     TEMPLATES = {
-      MessageNames::TARGET_USER_JOB_POSTING => "target_user_job_posting_v2"
+      MessageNames::TARGET_USER_JOB_POSTING => "target_user_job_posting_v4"
     }.freeze
 
     def self.[](message_name)

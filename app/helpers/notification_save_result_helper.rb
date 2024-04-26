@@ -13,7 +13,7 @@ module NotificationSaveResultHelper
       response = result.dig(:response)
 
       if status == "success"
-        if response.dig("message") == "K000" || "R000"
+        if response.dig("message") == "K000" || response.dig("code") == "R000"
           success_count += 1
         else
           tms_success_count += 1
@@ -38,7 +38,7 @@ module NotificationSaveResultHelper
     )
   end
 
-  def save_results_bizm_post_pay(results, template_id, job_posting_id, send_type)
+  def save_results_bizm_post_pay(results, template_id, job_posting_id)
     return if results.nil? || results.empty?
 
     success_count = 0
@@ -56,7 +56,7 @@ module NotificationSaveResultHelper
         fail_reasons.push("target_public_id : #{target_public_id} #{response}")
       else
         if response.dig("result") == "Y"
-          if response.dig("code") == "K000" || "R000"
+          if response.dig("code") == "K000" || response.dig("code") == "R000"
             success_count += 1
           else
             fail_reasons.push("target_public_id : #{target_public_id}, error: #{response.dig("error")}")
@@ -71,7 +71,7 @@ module NotificationSaveResultHelper
 
     current_date = DateTime.now
     NotificationResult.create!(
-      send_type: send_type.nil? ? template_id : send_type,
+      send_type: template_id,
       send_id: "#{current_date.year}/#{current_date.month}/#{current_date.day}#{template_id}",
       template_id: template_id,
       success_count: success_count,

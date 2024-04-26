@@ -77,8 +77,7 @@ module JobMatchHelper
         day_match: @day_match,
         distance_match: @distance_match,
         type_match: @type_match,
-        grade_match: @grade_match,
-        distance_match: @distance_match
+        grade_match: @grade_match
       }
     end
   end

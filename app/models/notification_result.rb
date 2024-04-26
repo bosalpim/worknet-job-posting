@@ -1,5 +1,5 @@
 class NotificationResult < ApplicationRecord
-
+  include AlimtalkMessage
   PROPOSAL = "proposal".freeze
   PROPOSAL_ACCEPT = "proposal_accept (close_avail)".freeze
   PERSONALIZED = "personalized_notification".freeze
@@ -11,7 +11,6 @@ class NotificationResult < ApplicationRecord
   USER_CALL_FAILURE_ALERT = "user_calls_failure_alert".freeze
   BUSINESS_CALL_FAILURE_ALERT = "business_calls_failure_alert".freeze
   BUSINESS_CALL_APPLY_USER_FAILURE_ALERT = "business_call_apply_user_failure_alert".freeze
-  CALL_INTERVIEW_ACCEPTED = "call_interview_proposal_accept".freeze
   CALL_REQUEST_ALARM = "call_request_alarm".freeze
   NEWS_PAPER = 'news_paper'.freeze
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze
@@ -125,6 +124,7 @@ class NotificationResult < ApplicationRecord
     MessageTemplateName::NONE_LTC_REQUEST => MessageTemplateName::NONE_LTC_REQUEST,
     MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT => MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT,
     MessageTemplateName::TARGET_USER_RESIDENT_POSTING => MessageTemplateName::TARGET_USER_RESIDENT_POSTING,
-    MessageTemplateName::PROPOSAL_RESIDENT => MessageTemplateName::PROPOSAL_RESIDENT
+    MessageTemplateName::PROPOSAL_RESIDENT => MessageTemplateName::PROPOSAL_RESIDENT,
+    MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING] => MessageNames::TARGET_USER_JOB_POSTING
   }
 end
