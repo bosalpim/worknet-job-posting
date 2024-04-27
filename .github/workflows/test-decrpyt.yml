@@ -24,12 +24,12 @@ jobs:
         run: chmod +x ./config/decrypt_secret.sh
 
       - name: Decrypt FB Secrets
-        run: $HOME/config/decrypt_secret.sh
+        run: ./config/decrypt_secret.sh
         env:
           FB_ADMIN_JSON_SECRET_PASSPHRASE: ${{ secrets.FB_ADMIN_JSON_SECRET_PASSPHRASE }}
 
       - name: Test printing your secret (Remove this step in production)
-        run: cat $HOME/config/FB_ADMIN_JSON.json
+        run: cat ./config/FB_ADMIN_JSON.json
 
 #      - name: Generate Environment Variables File for Staging
 #        run: |
