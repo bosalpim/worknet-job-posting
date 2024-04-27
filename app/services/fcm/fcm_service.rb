@@ -27,12 +27,20 @@ class Fcm::FcmService
   private
 
   def authorize
-    json = JSON.parse(ENV["FIREBASE_ADMIN_JSON"])
+    json = nil
+    if Jets.env.development?
+      json = StringIO.new(JSON.parse(ENV["FIREBASE_ADMIN_JSON"]).to_json)
+    else
+      file_path = File.join(Jets.root, 'config', 'FB_ADMIN_JSON.json')
+      json = File.open(file_path)
+    end
+
     scope = 'https://www.googleapis.com/auth/firebase.messaging'
     authorizer = Google::Auth::ServiceAccountCredentials.make_creds(
-      json_key_io: StringIO.new(json.to_json),
+      json_key_io: json,
       scope: scope
     )
+
     @auth_token = authorizer.fetch_access_token!['access_token']
     @token_issued_time = Time.now
   end
@@ -48,6 +56,9 @@ class Fcm::FcmService
         notification: {
           title: message[:title],
           body: message[:body]
+        },
+        data: {
+          deeplink: message[:link]
         }
       }
     }
