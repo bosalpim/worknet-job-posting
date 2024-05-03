@@ -19,6 +19,14 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
+      - name: Set Up FB Secrets Decrypt Shell Permissions
+        run: chmod +x ./config/decrypt_secret.sh
+
+      - name: Decrypt FB Secrets
+        run: ./config/decrypt_secret.sh
+        env:
+          FB_ADMIN_JSON_SECRET_PASSPHRASE: ${{ secrets.FB_ADMIN_JSON_SECRET_PASSPHRASE }}
+
       - name: Generate Environment Variables File for Production
         run: |
           echo "DB_HOST_PRODUCTION=$DB_HOST_PRODUCTION" >> .env.production
@@ -38,7 +46,6 @@ jobs:
           echo "SLACK_DEV_ALERT_URL=$SLACK_DEV_ALERT_URL" >> .env.production
           echo "NEWSPAPER_JOB_QUEUE_URL=$NEWSPAPER_JOB_QUEUE_URL" >> .env.production
           echo "SLACK_NOTI_NEWSPAPER_URL=$SLACK_NOTI_NEWSPAPER_URL" >> .env.production
-          echo "FIREBASE_ADMIN_JSON" >> .env.production
 
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
@@ -58,7 +65,6 @@ jobs:
           SLACK_DEV_ALERT_URL: ${{ secrets.SLACK_DEV_ALERT_URL }}
           NEWSPAPER_JOB_QUEUE_URL: ${{ secrets.NEWSPAPER_JOB_QUEUE_URL }}
           SLACK_NOTI_NEWSPAPER_URL: ${{ secrets.SLACK_NOTI_NEWSPAPER_URL }}
-          FIREBASE_ADMIN_JSON: ${{ secrets.FIREBASE_ADMIN_JSON }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
