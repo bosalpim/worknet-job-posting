@@ -14,7 +14,11 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     prefer_work_type = @job_posting.work_type == 'hospital' ? 'etc' : @job_posting.work_type
     begin
-      @radius = params[:radius] ? Integer(params[:radius]) : (@job_posting.is_facility? ? 5000 : 3000)
+      @radius = if params[:radius]
+                  Integer(params[:radius])
+                else
+                  @job_posting.is_facility? ? 5000 : 3000
+                end
     rescue ArgumentError, TypeError
       @radius = @job_posting.is_facility? ? 5000 : 3000
     end
