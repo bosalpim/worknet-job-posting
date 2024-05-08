@@ -13,10 +13,19 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     @base_url = "#{Main::Application::CAREPARTNER_URL}/jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     prefer_work_type = @job_posting.work_type == 'hospital' ? 'etc' : @job_posting.work_type
+    begin
+      @radius = if params[:radius]
+                  Integer(params[:radius])
+                else
+                  @job_posting.is_facility? ? 5000 : 3000
+                end
+    rescue ArgumentError, TypeError
+      @radius = @job_posting.is_facility? ? 5000 : 3000
+    end
     @list = User
               .receive_job_notifications
               .within_radius(
-                @job_posting.is_facility? ? 5000 : 3000,
+                @radius,
                 @job_posting.lat,
                 @job_posting.lng,
               ).where.not(phone_number: nil)
