@@ -11,11 +11,12 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
     @job_posting = JobPosting.find(params[:job_posting_id])
     @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
+    radius = params[:radius].nil? ? 15000 : params[:radius]
     @list = User
               .receive_job_notifications
               .selected_resident
               .within_radius(
-                15000,
+                radius,
                 @job_posting.lat,
                 @job_posting.lng,
                 ).where.not(phone_number: nil)
