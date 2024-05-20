@@ -17,7 +17,6 @@ class Notification::Factory::JobAdsThirdMessage < Notification::Factory::Notific
     @retarget_users = target.dig(:retarget_users)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "job_posting", @job_posting.id, "yobosa")
     @notification_create_service = NotificationCreateService.call(@message_template_id, "조건에 딱 맞는 일자리가 도착했어요.", @job_posting.title, @end_point, "yobosa")
-    @job_posting_id_for_notification_results = job_posting.id
     create_message
   end
 

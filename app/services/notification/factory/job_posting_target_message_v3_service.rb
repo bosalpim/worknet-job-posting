@@ -14,7 +14,6 @@ class Notification::Factory::JobPostingTargetMessageV3Service < Notification::Fa
 
     @job_posting = JobPosting.find(params[:job_posting_id])
     @end_point = "/jobs/#{@job_posting.public_id}"
-    @job_posting_id_for_notification_results = job_posting.id
     @distance = @job_posting.is_facility? ? 5_000 : 3_000
     @list = User.receive_job_notifications.within_radius(@distance, @job_posting.lat, @job_posting.lng)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
