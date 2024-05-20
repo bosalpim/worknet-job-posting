@@ -23,13 +23,13 @@ class Notification::Factory::DispatchedNotifications::Service
         next if result[:status] != 'success'
         target_public_id = result[:target_public_id]
         receiver_id = find_receiver_id(target_public_id)
-        DispatchedNotification.create({
+        DispatchedNotification.upsert({
                                         message_template_name: @template_name,
                                         notification_relate_instance_types_id: NotificationRelateInstanceType.find_by(type_name: @relate_instance_type).id,
                                         notification_relate_instance_id: @relate_instance_id,
                                         receiver_type: @receiver_type,
                                         receiver_id: receiver_id
-                                      })
+                                      }, unique_by: ["message_template_name", "notification_relate_instance_id", "notification_relate_instance_types_id", "receiver_type", "receiver_id"])
       rescue => e
         Jets.logger.info "SET DISPATCHED ERROR : #{e.message}, template: #{@template_name}, instance_type: #{@relate_instance_type}, instance: #{@relate_instance_id}"
       end
