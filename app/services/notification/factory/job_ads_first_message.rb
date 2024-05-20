@@ -15,7 +15,6 @@ class Notification::Factory::JobAdsFirstMessage < Notification::Factory::Notific
     @list = Notification::Factory::SearchTarget::JobAdsFirstTargetService.call(job_posting)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "job_posting", @job_posting.id, "yobosa")
     @notification_create_service = NotificationCreateService.call(@message_template_id, "급구 일자리 지금 확인해보세요!", @job_posting.title, @end_point, "yobosa")
-    @job_posting_id_for_notification_results = job_posting.id
     create_message
   end
 

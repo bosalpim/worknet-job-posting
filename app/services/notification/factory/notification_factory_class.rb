@@ -30,9 +30,10 @@ class Notification::Factory::NotificationFactoryClass
     @notification_create_service = nil
     @message_template_id = message_template_id
 
-    # 어떤 공고를 통해 발생한 것인지, 파악하기 위한 Id를 받는 변수
-    # 각 서브클래스에서 주입
-    @job_posting_id_for_notification_results = nil
+    # 어떤 공고를 통해 발생한 것인지, 파악하기 위한 공고 객체를 받는 변수
+    # 각 서브클래스에서 공고를 가져올 때 주입
+    @job_posting = nil
+
     @fail_alert_message_payload = nil
 
     message_template = MessageTemplate.find_by(name: message_template_id)
@@ -68,11 +69,11 @@ class Notification::Factory::NotificationFactoryClass
   def save_result
     Jets.logger.info "전체 발송 대상자 : #{@list.nil? ? 0 : @list.count} 명 발송처리 완료"
     # app push 결과 처리
-    save_results_app_push(@app_push_result, @message_template_id, @job_posting_id_for_notification_results)
+    save_results_app_push(@app_push_result, @message_template_id, @job_posting ? @job_posting.id : nil)
     # post_pay 결과 처리
-    save_results_bizm_post_pay(@bizm_post_pay_result, @message_template_id, @job_posting_id_for_notification_results)
+    save_results_bizm_post_pay(@bizm_post_pay_result, @message_template_id, @job_posting ? @job_posting.id : nil)
     # pre_pay 결과 처리
-    save_results_bizm_pre_pay(@bizm_pre_pay_result, @message_template_id, @job_posting_id_for_notification_results)
+    save_results_bizm_pre_pay(@bizm_pre_pay_result, @message_template_id, @job_posting ? @job_posting.id : nil)
   end
 
   private
