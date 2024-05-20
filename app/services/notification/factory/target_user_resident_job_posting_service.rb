@@ -64,9 +64,7 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
         job_posting_type: @job_posting.work_type,
       },
       user.public_id,
-      "AI",
-      nil,
-      [0]
+      "AI"
     )
   end
   def generate_message_content

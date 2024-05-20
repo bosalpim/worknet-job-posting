@@ -77,9 +77,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
         job_posting_type: @job_posting.work_type,
       },
       user.public_id,
-      "AI",
-      nil,
-      [0]
+      "AI"
     )
   end
 
