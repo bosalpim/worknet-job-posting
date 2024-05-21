@@ -1,4 +1,4 @@
-class NoneLtcConsultingAlert < ApplicationJob
+class NoneLtcConsultingAlertJob < ApplicationJob
   cron "40 1 * * ? *"
   def morning_job
     process
