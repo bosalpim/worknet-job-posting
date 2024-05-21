@@ -24,6 +24,8 @@ class SlackWebhookService
       notifier = Slack::Notifier.new(ENV['SLACK_DEV_ALERT_URL'])
     when :newspaper
       notifier = Slack::Notifier.new(ENV['SLACK_NOTI_NEWSPAPER_URL'])
+    when :none_ltc_consulting_alert
+      notifier = Slack::Notifier.new(ENV['SLACK_NOTI_NONE_LTC_CONSULTING_ALERT'])
     end
     notifier
   end
