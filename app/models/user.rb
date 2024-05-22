@@ -43,7 +43,7 @@ class User < ApplicationRecord
 
   scope :receive_marketing, -> { where.not(marketing_agree: nil) }
   scope :receive_notifications, -> { where(notification_enabled: true) }
-  scope :receive_job_notifications, -> { where(job_notification_enabled: true).where(has_certification: true).active }
+  scope :receive_job_notifications, -> { where(job_notification_enabled: true).where(has_certification: true).active.where('last_used_at >= ? OR last_sign_in_at >= ?', 60.days.ago, 60.days.ago) }
   scope :receive_proposal_notifications, -> { where(proposal_notification_enabled: true).where(has_certification: true).active }
   scope :within_last_3_days, -> { where('last_used_at >= ?', 3.days.ago) }
   scope :within_last_7_days, -> { where('last_used_at >= ?', 7.days.ago) }
