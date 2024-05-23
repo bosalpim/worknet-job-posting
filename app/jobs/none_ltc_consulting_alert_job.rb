@@ -1,10 +1,10 @@
 class NoneLtcConsultingAlertJob < ApplicationJob
-  cron "40 1 * * ? *"
+  cron "0 1 * * ? *"
   def morning_job
     process
   end
 
-  cron "40 6 * * ? *"
+  cron "0 6 * * ? *"
   def afternoon_job
     process
   end
