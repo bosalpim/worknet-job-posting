@@ -91,7 +91,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
 
 ■ 근무 시간: #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
 
-■ 어르신 정보: #{create_customer_info(@job_posting.job_posting_customer)}
+■ 어르신 정보: #{@job_posting.job_posting_customer ? create_customer_info(@job_posting.job_posting_customer) : ""}
 
 이 메세지는 일자리알림을 신청한 분에게만 발송돼요
 
