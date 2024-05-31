@@ -23,6 +23,8 @@ module MessageTemplateName
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze # 식물키우기 미션달성 메세지 발송
   CAREER_CERTIFICATION = 'career_certification' # 경력 인증 알림톡
   CAREER_CERTIFICATION_V2 = 'career_certification_v2' # 취업인증 개선 알림톡
+  CAREER_CERTIFICATION_V3 = 'career_certification_v3' # 취업확인 알림톡
+
   CONNECT_RESULT_USER_SURVEY_A = 'connect_result_user_survey A' # 취업 인증 (상품권)
   CONNECT_RESULT_USER_SURVEY_B = 'connect_result_user_survey B' # 취업 인증 (급여확인)
   CLOSE_JOB_POSTING_NOTIFICATION = 'close_job_posting_notification'.freeze # 공고 종료 알림톡
