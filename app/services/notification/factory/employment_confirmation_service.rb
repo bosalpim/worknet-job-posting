@@ -18,7 +18,7 @@ class Notification::Factory::EmploymentConfirmationService < Notification::Facto
 
   def parse_params(params)
     # params 내부의 JSON 문자열을 해시로 파싱
-    parsed_inner_params = JSON.parse(params["params"].gsub("=>", ":"))
+    parsed_inner_params = JSON.parse(params.gsub("=>", ":"))
     parsed_inner_params.transform_keys(&:to_sym)
   end
 
