@@ -5,9 +5,9 @@ class Notification::Factory::EmploymentConfirmationService < Notification::Facto
 
   def initialize(params)
     super(MessageTemplateName::CAREER_CERTIFICATION_V3)
-    puts "params: ", params
-    puts "user_id symbol: ", params[:user_id]
-    puts "user_id access: ", params["user_id"]
+    Jets.logger.info "params: ", params
+    Jets.logger.info "user_id symbol: ", params[:user_id]
+    Jets.logger.info "user_id access: ", params["user_id"]
 
     @user = User.find(params[:user_id])
     @job_posting = JobPosting.find(params[:job_posting_id])
