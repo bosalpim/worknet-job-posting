@@ -5,11 +5,19 @@ class Notification::Factory::EmploymentConfirmationService < Notification::Facto
 
   def initialize(params)
     super(MessageTemplateName::CAREER_CERTIFICATION_V3)
-    @user = User.find(params[:user_id])
-    @job_posting = JobPosting.find(params[:job_posting_id])
+    @params = parse_params(params)
+
+    @user = User.find(@params[:user_id])
+    @job_posting = JobPosting.find(@params[:job_posting_id])
     @business = @job_posting.business
-    @link = params[:link]
+    @link = @params[:link]
     create_message
+  end
+
+  def parse_params(params)
+    # params 내부의 JSON 문자열을 해시로 파싱
+    parsed_inner_params = JSON.parse(params.gsub("=>", ":"))
+    parsed_inner_params.transform_keys(&:to_sym)
   end
 
   def create_message
