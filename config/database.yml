@@ -33,7 +33,7 @@ staging:
   # [END cloud_sql_mysql_activerecord_create_socket]
   pool: 10
   timeout: 5000
-  database: backend_production
+  database: backend_staging
   username: rails_user
   password: <%= ENV['DB_PASSWORD_STAGING'] %>
   host: <%= ENV['DB_HOST_STAGING'] %>
