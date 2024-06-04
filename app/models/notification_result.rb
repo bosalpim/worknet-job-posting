@@ -16,6 +16,7 @@ class NotificationResult < ApplicationRecord
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze
   CAREER_CERTIFICATION = 'career_certification'.freeze
   CAREER_CERTIFICATION_V2 = 'career_certification_v2'.freeze
+  CAREER_CERTIFICATION_V3 = 'career_certification_v3'.freeze
   JOB_CERTIFICATION = 'job_certification'.freeze
   NOTIFY_MATCHED_USER = 'notify_matched_user'.freeze
   SIGNUP_COMPLETE_GUIDE = 'sign_up_complete_guide'.freeze
@@ -84,6 +85,7 @@ class NotificationResult < ApplicationRecord
     GAMIFICATION_MISSION_COMPLETE => GAMIFICATION_MISSION_COMPLETE,
     CAREER_CERTIFICATION => CAREER_CERTIFICATION,
     CAREER_CERTIFICATION_V2 => CAREER_CERTIFICATION_V2,
+    CAREER_CERTIFICATION_V3 => CAREER_CERTIFICATION_V3,
     JOB_CERTIFICATION => JOB_CERTIFICATION,
     NOTIFY_MATCHED_USER => NOTIFY_MATCHED_USER,
     SIGNUP_COMPLETE_GUIDE => SIGNUP_COMPLETE_GUIDE,
