@@ -14,14 +14,14 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
     @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     radius = params[:radius].nil? ? 15000 : params[:radius]
-    @list = Jets.env.production? ? User
+    @list = User
               .receive_job_notifications
               .selected_resident
               .within_radius(
                 radius,
                 @job_posting.lat,
                 @job_posting.lng,
-                ).where.not(phone_number: nil) : User.where(phone_number: '01094659404')
+                ).where.not(phone_number: nil)
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
   end
