@@ -70,7 +70,8 @@ class NotificationController < ApplicationController
           message_template_id: TARGET_USER_RESIDENT_POSTING,
           params: {
             job_posting_id: params[:job_posting_id],
-            radius: params[:radius]
+            radius: params[:radius],
+            is_free: params[:is_free]
           }
         }
         Jets.env.development? ?
@@ -161,7 +162,8 @@ class NotificationController < ApplicationController
           message_template_id: MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING],
           params: {
             job_posting_id: params[:job_posting_id],
-            radius: params[:radius]
+            radius: params[:radius],
+            is_free: params[:is_free]
           }
         }
         Jets.env.development? ?
