@@ -1,5 +1,7 @@
 module KakaoNotificationLoggingHelper
   include MessageTemplateName
+  include AlimtalkMessage
+
   NOTIFICATION_EVENT_NAME = '[Action] Receive Notification'
   NOTIFICATION_EVENT_NAME2 = '[Action] Receive Notification2'
 
@@ -114,16 +116,6 @@ module KakaoNotificationLoggingHelper
       return get_career_certification_v2(template_id, tem_params)
     when CONTACT_MESSAGE
       return get_contact_message(template_id, tem_params)
-    when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
-      return get_job_ads_message_logging_data(tem_params, template_id)
-    when MessageTemplateName::JOB_ADS_MESSAGE_SECOND
-      return get_job_ads_message_logging_data(tem_params, template_id)
-    when MessageTemplateName::JOB_ADS_MESSAGE_THIRD
-      return get_job_ads_message_logging_data(tem_params, template_id)
-    when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
-      return get_job_ads_etc(tem_params, template_id)
-    when MessageTemplateName::JOB_ADS_ENDED
-      return get_job_ads_etc(tem_params, template_id)
     when MessageTemplateName::SATISFACTION_SURVEY
       return get_satisfaction_survey(tem_params, template_id)
     when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
@@ -148,6 +140,10 @@ module KakaoNotificationLoggingHelper
       return get_target_resident_posting_message_logging_data(template_id, tem_params)
     when MessageTemplateName::PROPOSAL_RESIDENT
       return get_proposal_resident_logging_data(template_id, tem_params)
+    when MessageTemplateName::CAREER_CERTIFICATION_V3
+      return get_employment_confirmation_logging_data(template_id, tem_params)
+    when MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING]
+      return get_target_user_job_posting_logging_data(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -192,25 +188,6 @@ module KakaoNotificationLoggingHelper
     }
   end
 
-  def self.get_job_ads_etc(tem_params, template_id)
-    target_public_id = tem_params.dig(:target_public_id)
-    job_posting_public_id = tem_params.dig(:job_posting_public_id)
-    title = tem_params.dig(:job_posting_title)
-
-    return {
-      "user_id" => target_public_id,
-      "event_type" => NOTIFICATION_EVENT_NAME,
-      "event_properties" => {
-        "sender_type" => SENDER_TYPE_CAREPARTNER,
-        "receiver_type" => RECEIVER_TYPE_BUSINESS,
-        "template" => template_id,
-        "jobPostingId" => job_posting_public_id,
-        "title" => title,
-        "send_at" => Time.current + (9 * 60 * 60)
-      }
-    }
-  end
-
   def self.get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
     job_posting_public_id = tem_params.dig(:job_posting_public_id)
     title = tem_params.dig(:title)
@@ -243,33 +220,6 @@ module KakaoNotificationLoggingHelper
         "jobPostingId" => job_posting_public_id,
         "title" => title,
         "send_at" => Time.current + (9 * 60 * 60)
-      }
-    }
-  end
-
-  def self.get_job_ads_message_logging_data(template_params, template_id)
-    target_public_id = template_params.dig(:target_public_id)
-    job_posting_public_id = template_params.dig(:job_posting_public_id)
-    job_posting_title = template_params.dig(:job_posting_title)
-    business_name = template_params.dig(:business_name)
-    work_type_ko = template_params.dig(:work_type_ko)
-    is_retarget_user = template_params.dig(:is_retarget_user)
-    last_used_under_three_day = template_params.dig(:last_used_under_three_day)
-
-    return {
-      "user_id" => target_public_id,
-      "event_type" => NOTIFICATION_EVENT_NAME,
-      "event_properties" => {
-        "sender_type" => SENDER_TYPE_CAREPARTNER,
-        "receiver_type" => RECEIVER_TYPE_USER,
-        "template" => template_id,
-        "jobPostingId" => job_posting_public_id,
-        "title" => job_posting_title,
-        "job_posting_type" => work_type_ko,
-        "centerName" => business_name,
-        "send_at" => Time.current + (9 * 60 * 60),
-        "is_retarget_user" => is_retarget_user.nil? ? false : is_retarget_user,
-        "last_used_under_three_day" => last_used_under_three_day,
       }
     }
   end
@@ -440,6 +390,16 @@ module KakaoNotificationLoggingHelper
         "jobPostingId" => tem_params[:job_posting_id],
         "jobPostingPublicId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:job_posting_title],
+      }
+    }
+  end
+
+  def self.get_employment_confirmation_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
       }
     }
   end
@@ -739,7 +699,7 @@ module KakaoNotificationLoggingHelper
       "user_id" => tem_params[:target_public_id],
       "event_type" => NOTIFICATION_EVENT_NAME,
       "event_properties" => {
-        "template" => template_id,
+        "template" => tem_params[:is_free] ? 'free_user_resident_posting' : template_id,
         "jobPostingId" => tem_params[:job_posting_id],
         "jobPostingPublicId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:job_posting_title],
@@ -823,6 +783,22 @@ module KakaoNotificationLoggingHelper
         "employee_id" => tem_params[:employee_id],
         "center_name" => tem_params[:center_name],
         "job_posting_id" => tem_params[:job_posting_id],
+      }
+    }
+  end
+
+  def self.get_target_user_job_posting_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => tem_params[:is_free] ? 'free_user_job_posting' : template_id,
+        "jobPostingId" => tem_params[:job_posting_id],
+        "jobPostingPublicId" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:title],
+        "centerName" => tem_params[:business_name],
+        "job_posting_type" => tem_params[:job_posting_type],
+        "send_at" => Time.current + (9 * 60 * 60)
       }
     }
   end

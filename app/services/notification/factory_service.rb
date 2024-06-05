@@ -32,16 +32,6 @@ class Notification::FactoryService
       return Notification::Factory::ProposalResident.new(params)
     when MessageTemplateName::CALL_SAVED_JOB_CAREGIVER
       return Notification::Factory::UserSavedJobPosting.new(params)
-    when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
-      return Notification::Factory::JobAdsFirstMessage.new(params[:job_posting_id])
-    when MessageTemplateName::JOB_ADS_MESSAGE_SECOND
-      return Notification::Factory::JobAdsSecondMessage.new(params[:job_posting_id])
-    when MessageTemplateName::JOB_ADS_MESSAGE_THIRD
-      return Notification::Factory::JobAdsThirdMessage.new(params[:job_posting_id])
-    when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
-      return Notification::Factory::JobAdsMessageReserve.new(params[:job_posting_id], params[:times], params[:scheduled_at_text])
-    when MessageTemplateName::JOB_ADS_ENDED
-      return Notification::Factory::JobAdsMessageEnded.new(params[:job_posting_id])
     when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
       return Notification::Factory::ConfirmCareerCertification.new(params[:id])
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
@@ -60,6 +50,8 @@ class Notification::FactoryService
       return Notification::Factory::TargetJobPostingAdApply.new(params)
     when MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING]
       return Notification::Factory::TargetUserJobPostingService.new(params)
+    when MessageTemplateName::CAREER_CERTIFICATION_V3
+      return Notification::Factory::EmploymentConfirmationService.new(params)
     else
       p "no template found : #{template_id}"
       return []

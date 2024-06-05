@@ -156,18 +156,6 @@ class KakaoTemplateService
       get_roulette_ticket_receive(tem_params)
     when MessageTemplateName::CONTACT_MESSAGE
       get_contact_message(tem_params)
-    when MessageTemplateName::JOB_ADS_MESSAGE_FIRST
-      get_job_ads_message(tem_params)
-    when MessageTemplateName::JOB_ADS_MESSAGE_SECOND
-      get_job_ads_message(tem_params)
-    when MessageTemplateName::JOB_ADS_MESSAGE_THIRD
-      get_job_ads_message(tem_params)
-    when MessageTemplateName::TARGET_USER_JOB_POSTING
-      get_job_ads_message(tem_params)
-    when MessageTemplateName::JOB_ADS_MESSAGE_RESERVE
-      get_job_ads_message_reserve(tem_params)
-    when MessageTemplateName::JOB_ADS_ENDED
-      get_job_ads_ended(tem_params)
     when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
       get_confirm_career_certification_message(tem_params)
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
@@ -186,6 +174,8 @@ class KakaoTemplateService
       get_job_support_agreement(tem_params)
     when MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING]
       get_target_user_job_posting_v2_data(tem_params)
+    when MessageTemplateName::CAREER_CERTIFICATION_V3
+      get_employment_confirmation_alarm(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -963,6 +953,30 @@ class KakaoTemplateService
           type: 'WL',
           url_mobile: tem_params[:link],
           url_pc: tem_params[:link],
+        }
+      ]
+    }
+  end
+
+  def get_employment_confirmation_alarm(tem_params)
+    {
+      title: "취업결과 알려주고 커피쿠폰 받아가세요",
+      message: "≫ 공고
+#{tem_params[:job_posting_title]}
+
+≫ 기관
+#{tem_params[:center_name]}
+
+≫ [취업 확인]이란?
+이전에 지원하신 기관에 취업 여부를 확인하고 있어요.
+
+- 취업에 성공하셨다면, 취업 축하로 커피기프티콘 증정!
+- 아직 구직중이시라면, 더 많은 일자리를 추천 드려요",
+      buttons: [
+        {
+          name: '취업 인증하기',
+          type: 'WL',
+          url_mobile: tem_params[:link],
         }
       ]
     }
@@ -2057,68 +2071,6 @@ carepartner.kr#{path}
       ]
     }
   end
-
-  def get_job_ads_message(tem_params)
-    {
-      title: tem_params[:title],
-      message: tem_params[:message],
-      buttons: [
-        {
-          name: '⚡️ 간편 지원하기',
-          type: 'WL',
-          url_mobile: tem_params[:application_url]
-        },
-        {
-          name: '🔎 일자리 확인하기',
-          type: 'WL',
-          url_mobile: tem_params[:origin_url]
-        }
-      ]
-    }
-  end
-
-  def get_job_ads_ended(tem_params)
-    {
-      title: tem_params[:title],
-      message: tem_params[:message],
-      buttons: [
-        {
-          name: '채용 종료하기',
-          type: 'WL',
-          url_pc: tem_params[:close_link],
-          url_mobile: tem_params[:close_link]
-        },
-        {
-          name: '발송 결과보기',
-          type: 'WL',
-          url_pc: tem_params[:result_link],
-          url_mobile: tem_params[:result_link]
-        }
-      ]
-    }
-  end
-
-  def get_job_ads_message_reserve(tem_params)
-    {
-      title: tem_params[:title],
-      message: tem_params[:message],
-      buttons: [
-        {
-          name: '채용했어요 (발송취소)',
-          type: 'WL',
-          url_pc: tem_params[:cancel_message_link],
-          url_mobile: tem_params[:cancel_message_link]
-        },
-        {
-          name: '발송 결과보기',
-          type: 'WL',
-          url_pc: tem_params[:result_link],
-          url_mobile: tem_params[:result_link]
-        }
-      ]
-    }
-  end
-
   def get_smart_memo_data(tem_params)
     {
       title: "중요 통화 내용 대신 메모해드려요",

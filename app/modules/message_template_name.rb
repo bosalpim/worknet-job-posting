@@ -23,6 +23,8 @@ module MessageTemplateName
   GAMIFICATION_MISSION_COMPLETE = 'plant_mission_complete'.freeze # 식물키우기 미션달성 메세지 발송
   CAREER_CERTIFICATION = 'career_certification' # 경력 인증 알림톡
   CAREER_CERTIFICATION_V2 = 'career_certification_v2' # 취업인증 개선 알림톡
+  CAREER_CERTIFICATION_V3 = 'career_certification_v3' # 취업확인 알림톡
+
   CONNECT_RESULT_USER_SURVEY_A = 'connect_result_user_survey A' # 취업 인증 (상품권)
   CONNECT_RESULT_USER_SURVEY_B = 'connect_result_user_survey B' # 취업 인증 (급여확인)
   CLOSE_JOB_POSTING_NOTIFICATION = 'close_job_posting_notification'.freeze # 공고 종료 알림톡
@@ -77,22 +79,6 @@ module MessageTemplateName
 
   # 문자문의
   CONTACT_MESSAGE = 'contact_message (close_avail)'.freeze
-
-  # 구인광고 메세지 > 요양보호사 1차
-  # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1386%3A5741&mode=dev
-  JOB_ADS_MESSAGE_FIRST = 'job_ads_message_first'.freeze
-  # 구인광고 메세지 > 2차 발송 예약 기관 알림톡
-  # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1285%3A1896&mode=dev
-  JOB_ADS_MESSAGE_RESERVE = 'job_ads_message_reserve'.freeze
-  # 구인광고 메세지 > 요양보호사 2차
-  # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1386%3A5768&mode=dev
-  JOB_ADS_MESSAGE_SECOND = 'job_ads_message_second'.freeze
-  # 구인광고 메세지 > 요양보호사 3차
-  # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1386%3A5785&mode=dev
-  JOB_ADS_MESSAGE_THIRD = 'job_ads_message_third'.freeze
-  # 구인광고 메세지 > 전체 발송 완료
-  # https://www.figma.com/file/ABcbdbNWvmM8LcLiSGQWA6/Pipe-Squad-(Y23-Q4)?node-id=1308%3A6117&mode=dev
-  JOB_ADS_ENDED = 'job_ads_last_end'.freeze
 
   # 제안 수락 알림 메시지
   PROPOSAL_ACCEPT = 'proposal_accept (close_avail)'.freeze
