@@ -9,8 +9,9 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
 
   def initialize(params)
     super(MessageTemplates::TEMPLATES[MessageNames::TARGET_USER_JOB_POSTING])
-    @is_free = params[:is_free]
     @job_posting = JobPosting.find(params[:job_posting_id])
+    paid_job_posting = PaidJobPostingFeature.find_by_job_posting_id(params[:job_posting_id])
+    @is_free = paid_job_posting.nil? ? true : false
     @base_url = "#{Main::Application::CAREPARTNER_URL}/jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     prefer_work_type = @job_posting.work_type == 'hospital' ? 'etc' : @job_posting.work_type
@@ -76,7 +77,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
         job_posting_public_id: @job_posting.public_id,
         business_name: @job_posting.business.name,
         job_posting_type: @job_posting.work_type,
-        is_free: @is_free.nil? ? false : @is_free
+        is_free: @is_free
       },
       user.public_id,
       "AI"

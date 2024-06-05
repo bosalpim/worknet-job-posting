@@ -8,19 +8,20 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
 
   def initialize(params)
     super(MessageTemplateName::TARGET_USER_RESIDENT_POSTING)
-    @is_free = params[:is_free]
     @job_posting = JobPosting.find(params[:job_posting_id])
+    paid_job_posting = PaidJobPostingFeature.find_by_job_posting_id(params[:job_posting_id])
+    @is_free = paid_job_posting.nil? ? true : false
     @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     radius = params[:radius].nil? ? 15000 : params[:radius]
-    @list = User
+    @list = Jets.env.production? ? User
               .receive_job_notifications
               .selected_resident
               .within_radius(
                 radius,
                 @job_posting.lat,
                 @job_posting.lng,
-                ).where.not(phone_number: nil)
+                ).where.not(phone_number: nil) : User.where(phone_number: '01094659404')
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
   end
@@ -63,7 +64,7 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
         job_posting_public_id: @job_posting.public_id,
         business_name: @job_posting.business.name,
         job_posting_type: @job_posting.work_type,
-        is_free: @is_free.nil? ? false : @is_free
+        is_free: @is_free
       },
       user.public_id,
       "AI"
