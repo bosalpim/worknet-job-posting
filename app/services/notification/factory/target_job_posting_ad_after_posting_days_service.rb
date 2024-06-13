@@ -19,7 +19,7 @@ class Notification::Factory::TargetJobPostingAdAfterPostingDaysService < Notific
       address = get_dong_name_by_address(job_posting.address)
       count = JobPostingTargetUserService.call(job_posting.lat, job_posting.lng).length
 
-      if count > 100
+      if count > 100 and job_posting.scraped_worknet_job_posting_id.nil?
         Jets.logger.info "대상자 100명 이상이기에 발송\n"
 
         params = {
