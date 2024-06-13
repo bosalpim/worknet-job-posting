@@ -11,5 +11,5 @@ coverage
 pkg
 tmp
 .idea
-.gitmessage.txt
+.gitCmessage.txt
 /public/assets
