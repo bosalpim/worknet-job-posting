@@ -40,6 +40,13 @@ class NotificationServiceJob < ApplicationJob
     process({ message_template_id: MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE })
   end
 
+
+  cron "0 4 ? * * *"
+
+  def target_job_posting_ads_after_posting_3days
+    process( { message_template_id: MessageTemplateName::TARGET_JOB_POSTING_AD_2 })
+  end
+
   private
 
   def process(event)
