@@ -4,7 +4,7 @@ class Notification::Factory::TargetJobPostingAdAfterPostingDaysService < Notific
   JobPostingTargetUserService = Notification::Factory::SearchTarget::JobPostingTargetUserService
   def initialize(params)
     super(MessageTemplateName::TARGET_JOB_POSTING_AD_2)
-    @list = TargetAdAfterPostingSubjectFilterService.filter
+    @list = TargetAdAfterPostingSubjectFilterService.call
     create_message
   end
 
