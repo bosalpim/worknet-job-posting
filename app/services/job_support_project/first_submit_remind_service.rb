@@ -18,8 +18,7 @@ class JobSupportProject::FirstSubmitRemindService
       today_date = Time.now.in_time_zone('Asia/Seoul').strftime('%m.%d')
 
       if business_registrations.empty?
-        message = <<~TEXT
-          안녕하세요 케어파트너입니다. 채용 지원금 서류 제출 기한이 오늘까지 입니다. 확인 후 제출해주세요.
+        message = "안녕하세요 케어파트너입니다. 채용 지원금 서류 제출 기한이 오늘까지 입니다. 확인 후 제출해주세요.
 
           [제출 서류]
 
@@ -36,11 +35,10 @@ class JobSupportProject::FirstSubmitRemindService
           Fax : 07080157158
 
           제출 기한: **#{today_date}**까지
-        TEXT
+        "
         Notification::Lms(job_support_project_participant.job_posting.manager_phone_number, message).send
       else
-        message = <<~TEXT
-          안녕하세요 케어파트너입니다. 채용 지원금 서류 제출 기한이 오늘까지 입니다. 확인 후 제출해주세요.
+        message = "안녕하세요 케어파트너입니다. 채용 지원금 서류 제출 기한이 오늘까지 입니다. 확인 후 제출해주세요.
 
           [제출 서류]
 
@@ -55,7 +53,7 @@ class JobSupportProject::FirstSubmitRemindService
           Fax : 07080157158
 
           제출 기한: **#{today_date}**까지
-        TEXT
+        "
         Notification::Lms(job_support_project_participant.job_posting.manager_phone_number, message).send
       end
     end
