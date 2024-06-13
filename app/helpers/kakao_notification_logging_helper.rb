@@ -132,6 +132,8 @@ module KakaoNotificationLoggingHelper
       return get_target_job_posting_performance_logging_data(template_id, tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD
       return get_target_job_posting_ad_logging_data(template_id, tem_params)
+    when MessageTemplateName::TARGET_JOB_POSTING_AD_2
+      return get_target_job_posting_ad_2_logging_data(template_id, tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
       return get_target_job_posting_ad_apply_logging_data(template_id, tem_params)
     when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
@@ -754,6 +756,17 @@ module KakaoNotificationLoggingHelper
         "center_name" => tem_params[:center_name],
         "job_posting_id" => tem_params[:job_posting_id],
         "target_num" => tem_params[:count],
+      }
+    }
+  end
+
+  def self.get_target_job_posting_ad_2_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => "Target Message Ad 2",
       }
     }
   end
