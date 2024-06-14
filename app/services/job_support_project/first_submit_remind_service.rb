@@ -12,6 +12,7 @@ class JobSupportProject::FirstSubmitRemindService
   end
 
   def call
+    Jets.logger.info "-------------- FirstSubmitRemind START --------------\n"
     @job_support_project_participants.each do |job_support_project_participant|
       Jets.logger.info "-------------- INFO START --------------\n"
       Jets.logger.info "#{job_support_project_participant.id} 대상 1차 리마인드 발송\n"
