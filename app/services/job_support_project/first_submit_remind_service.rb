@@ -2,8 +2,8 @@ class JobSupportProject::FirstSubmitRemindService
   def initialize
     # DB가 UTC 시간을 사용하고 있으므로 한국 시간(KST)을 기준으로 변경
     kst_now = Time.now.in_time_zone('Asia/Seoul')
-    start_time = (kst_now - 3.days).beginning_of_day
-    end_time = (kst_now - 2.days).beginning_of_day
+    start_time = (kst_now - 2.days).beginning_of_day
+    end_time = (kst_now - 1.days).beginning_of_day
 
     @job_support_project_participants = JobSupportProjectParticipant
                                           .where('created_at >= ? AND created_at < ?', start_time.utc, end_time.utc)
