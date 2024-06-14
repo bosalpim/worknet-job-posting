@@ -13,11 +13,15 @@ class JobSupportProject::FirstSubmitRemindService
 
   def call
     @job_support_project_participants.each do |job_support_project_participant|
+      Jets.logger.info "-------------- INFO START --------------\n"
+      Jets.logger.info "#{job_support_project_participant.id} 대상 1차 리마인드 발송\n"
+
       business_registrations = job_support_project_participant.job_posting.business.business_registrations
       user_name = job_support_project_participant.user.name
       today_date = Time.now.in_time_zone('Asia/Seoul').strftime('%m.%d')
 
       if business_registrations.empty?
+        Jets.logger.info "사업자 등록증 없는 경우"
         message = "안녕하세요 케어파트너입니다. 채용 지원금 서류 제출 기한이 오늘까지 입니다. 확인 후 제출해주세요.
 
           [제출 서류]
@@ -38,6 +42,7 @@ class JobSupportProject::FirstSubmitRemindService
         "
         Notification::Lms(job_support_project_participant.job_posting.manager_phone_number, message).send
       else
+        Jets.logger.info "사업자 등록증 있는 경우\n"
         message = "안녕하세요 케어파트너입니다. 채용 지원금 서류 제출 기한이 오늘까지 입니다. 확인 후 제출해주세요.
 
           [제출 서류]
@@ -56,6 +61,7 @@ class JobSupportProject::FirstSubmitRemindService
         "
         Notification::Lms(job_support_project_participant.job_posting.manager_phone_number, message).send
       end
+      Jets.logger.info "-------------- INFO END --------------\n"
     end
   end
 end
