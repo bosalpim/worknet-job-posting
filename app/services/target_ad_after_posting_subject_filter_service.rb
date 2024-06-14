@@ -12,5 +12,6 @@ class TargetAdAfterPostingSubjectFilterService
       .where('job_postings.created_at < ?', 2.days.ago.beginning_of_day)
       .left_joins(:paid_job_posting_features)
       .where(paid_job_posting_features: { id: nil })
+      .where(scraped_worknet_job_posting_id: nil)
   end
 end
