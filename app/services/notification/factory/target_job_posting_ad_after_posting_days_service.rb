@@ -1,9 +1,10 @@
 class Notification::Factory::TargetJobPostingAdAfterPostingDaysService < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
+  include AlimtalkMessage
 
   JobPostingTargetUserService = Notification::Factory::SearchTarget::JobPostingTargetUserService
   def initialize(params)
-    super(MessageTemplates[MessageNames::TARGET_JOB_POSTING_AD_2])
+    super(MessageTemplates::TEMPLATES[MessageNames::TARGET_JOB_POSTING_AD_2])
     @list = TargetAdAfterPostingSubjectFilterService.call
     create_message
   end
@@ -19,7 +20,7 @@ class Notification::Factory::TargetJobPostingAdAfterPostingDaysService < Notific
       address = get_dong_name_by_address(job_posting.address)
       count = JobPostingTargetUserService.call(job_posting.lat, job_posting.lng).length
 
-      if count > 100 and job_posting.scraped_worknet_job_posting_id.nil?
+      if count > 5 and job_posting.scraped_worknet_job_posting_id.nil?
         Jets.logger.info "대상자 100명 이상이기에 발송\n"
 
         params = {

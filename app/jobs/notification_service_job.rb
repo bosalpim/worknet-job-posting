@@ -1,4 +1,5 @@
 class NotificationServiceJob < ApplicationJob
+  include AlimtalkMessage
   def notify
     Jets.logger.info event
     process(event)
@@ -44,7 +45,7 @@ class NotificationServiceJob < ApplicationJob
   cron "0 4 ? * * *"
 
   def target_job_posting_ads_after_posting_3days
-    process( { message_template_id: MessageTemplates[MessageNames::TARGET_JOB_POSTING_AD_2] })
+    process( { message_template_id: MessageTemplates::TEMPLATES[MessageNames::TARGET_JOB_POSTING_AD_2] })
   end
 
   private
