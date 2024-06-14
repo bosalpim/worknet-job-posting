@@ -7,6 +7,7 @@ class JobSupportProjectRemindJob < ApplicationJob
 
   cron "0 4 ? * * *"
   def second_submit_remind
+    JobSupportProject::SecondSubmitRemindService.new.call
   end
 
 end
