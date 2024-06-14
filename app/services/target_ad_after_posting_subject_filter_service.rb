@@ -3,9 +3,6 @@ class TargetAdAfterPostingSubjectFilterService
     new.call
   end
 
-  def initialize
-  end
-
   def call
     JobPosting
       .where('job_postings.created_at >= ?', 3.days.ago.beginning_of_day)
