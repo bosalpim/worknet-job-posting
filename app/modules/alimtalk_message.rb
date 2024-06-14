@@ -5,11 +5,13 @@ module AlimtalkMessage
   module MessageNames
     # 신규 공고 알림톡
     TARGET_USER_JOB_POSTING = "target_user_job_posting"
+    TARGET_JOB_POSTING_AD_2 = "target_job_posting_ad_2"
   end
 
   module MessageTemplates
     TEMPLATES = {
-      MessageNames::TARGET_USER_JOB_POSTING => "target_user_job_posting_v4"
+      MessageNames::TARGET_USER_JOB_POSTING => "target_user_job_posting_v4",
+      MessageNames::TARGET_JOB_POSTING_AD_2 => "target_job_posting_ad_2"
     }.freeze
 
     def self.[](message_name)

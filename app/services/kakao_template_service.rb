@@ -166,7 +166,7 @@ class KakaoTemplateService
       get_target_job_posting_performance_data(tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD
       get_target_job_posting_ad_data(tem_params)
-    when MessageTemplateName::TARGET_JOB_POSTING_AD_2
+    when MessageTemplates[MessageNames::TARGET_JOB_POSTING_AD_2]
       get_target_job_posting_ad_2_data(tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
       get_target_job_posting_ad_apply_data(tem_params)
