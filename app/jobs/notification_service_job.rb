@@ -40,6 +40,11 @@ class NotificationServiceJob < ApplicationJob
     process({ message_template_id: MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE })
   end
 
+  cron "0 4 ? * * *"
+  def test_job_for_deploy_v10
+    puts "test"
+  end
+
   private
 
   def process(event)
@@ -50,7 +55,6 @@ class NotificationServiceJob < ApplicationJob
       notification = Notification::FactoryService.create(event[:message_template_id], event[:params])
       notification.process
     rescue => e
-      SlackWebhookService.call(:dev_alert, @fail_alert_message_payload) unless @fail_alert_message_payload.nil?
       Jets.logger.info e.full_message
     end
   end
