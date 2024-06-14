@@ -110,7 +110,7 @@ class NotificationResult < ApplicationRecord
     MessageTemplateName::TARGET_USER_JOB_POSTING => MessageTemplateName::TARGET_USER_JOB_POSTING,
     MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE => MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE,
     MessageTemplateName::TARGET_JOB_POSTING_AD => MessageTemplateName::TARGET_JOB_POSTING_AD,
-    MessageTemplates[MessageNames::TARGET_JOB_POSTING_AD_2] => MessageNames::TARGET_JOB_POSTING_AD_2,
+    MessageTemplateName::TARGET_JOB_POSTING_AD_2 => MessageTemplateName::TARGET_JOB_POSTING_AD_2,
     MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY => MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY,
     MessageTemplateName::NONE_LTC_REQUEST => MessageTemplateName::NONE_LTC_REQUEST,
     MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT => MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT,

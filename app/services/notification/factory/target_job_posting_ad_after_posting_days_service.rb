@@ -1,10 +1,9 @@
 class Notification::Factory::TargetJobPostingAdAfterPostingDaysService < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
-  include AlimtalkMessage
 
   JobPostingTargetUserService = Notification::Factory::SearchTarget::JobPostingTargetUserService
   def initialize(params)
-    super(MessageTemplates::TEMPLATES[MessageNames::TARGET_JOB_POSTING_AD_2])
+    super(MessageTemplateName::TARGET_JOB_POSTING_AD_2)
     @list = TargetAdAfterPostingSubjectFilterService.call
     create_message
   end

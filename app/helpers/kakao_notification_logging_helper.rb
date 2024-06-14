@@ -132,7 +132,7 @@ module KakaoNotificationLoggingHelper
       return get_target_job_posting_performance_logging_data(template_id, tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD
       return get_target_job_posting_ad_logging_data(template_id, tem_params)
-    when MessageTemplates[MessageNames::TARGET_JOB_POSTING_AD_2]
+    when MessageTemplateName::TARGET_JOB_POSTING_AD_2
       return get_target_job_posting_ad_2_logging_data(template_id, tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
       return get_target_job_posting_ad_apply_logging_data(template_id, tem_params)
