@@ -8,7 +8,7 @@ class JobSupportProject::FirstSubmitRemindService
     @job_support_project_participants = JobSupportProjectParticipant
                                           .where('created_at >= ? AND created_at < ?', start_time.utc, end_time.utc)
                                           .where(is_done: false, method: ['sms', 'fax'])
-                                          .includes(job_posting: { business: :business_registrations })
+                                          .includes(job_posting: { business: :business_registration })
   end
 
   def call
@@ -17,11 +17,11 @@ class JobSupportProject::FirstSubmitRemindService
       Jets.logger.info "-------------- INFO START --------------\n"
       Jets.logger.info "#{job_support_project_participant.id} 대상 1차 리마인드 발송\n"
 
-      business_registrations = job_support_project_participant.job_posting.business.business_registrations
+      business_registration = job_support_project_participant.job_posting.business.business_registration
       user_name = job_support_project_participant.user.name
       today_date = Time.now.in_time_zone('Asia/Seoul').strftime('%m.%d')
 
-      if business_registrations.empty?
+      if business_registration.nil?
         Jets.logger.info "사업자 등록증 없는 경우"
         message = "안녕하세요 케어파트너입니다. 채용 지원금 서류 제출 기한이 오늘까지 입니다. 확인 후 제출해주세요.
 
@@ -41,7 +41,7 @@ class JobSupportProject::FirstSubmitRemindService
 
           제출 기한: **#{today_date}**까지
         "
-        Notification::Lms(job_support_project_participant.job_posting.manager_phone_number, message).send
+        Notification::Lms.new(phone_number: job_support_project_participant.job_posting.manager_phone_number, message: message).send
       else
         Jets.logger.info "사업자 등록증 있는 경우\n"
         message = "안녕하세요 케어파트너입니다. 채용 지원금 서류 제출 기한이 오늘까지 입니다. 확인 후 제출해주세요.
@@ -60,7 +60,7 @@ class JobSupportProject::FirstSubmitRemindService
 
           제출 기한: **#{today_date}**까지
         "
-        Notification::Lms(job_support_project_participant.job_posting.manager_phone_number, message).send
+        Notification::Lms.new(phone_number: job_support_project_participant.job_posting.manager_phone_number, message: message).send
       end
       Jets.logger.info "-------------- INFO END --------------\n"
     end
