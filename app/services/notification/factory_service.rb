@@ -52,6 +52,8 @@ class Notification::FactoryService
       return Notification::Factory::TargetUserJobPostingService.new(params)
     when MessageTemplateName::CAREER_CERTIFICATION_V3
       return Notification::Factory::EmploymentConfirmationService.new(params)
+    when MessageTemplates[MessageNames::TARGET_JOB_POSTING_AD_2]
+      return Notification::Factory::TargetJobPostingAdAfterPostingDaysService.new(params)
     else
       p "no template found : #{template_id}"
       return []
