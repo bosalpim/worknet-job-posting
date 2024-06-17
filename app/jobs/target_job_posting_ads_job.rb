@@ -2,7 +2,7 @@ class TargetJobPostingAdsJob < ApplicationJob
   include AlimtalkMessage
 
   cron "0 4 ? * * *"
-  def target_job_posting_ads_after_posting_3days
+  def target_posting_ads_after_3days
     begin
       Jets.logger.info event
 
