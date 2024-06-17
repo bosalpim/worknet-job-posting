@@ -1,4 +1,5 @@
 class NotificationServiceJob < ApplicationJob
+  include AlimtalkMessage
   def notify
     Jets.logger.info event
     process(event)

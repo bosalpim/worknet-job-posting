@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-class Notification::Lms < NotificationType::Base
-  def initialize(
-    phone_number:,
-    message:
-  )
+class Notification::Lms
+  def initialize(phone_number:, message:)
     @phone_number = phone_number
     @message = message
   end
@@ -43,4 +40,3 @@ class Notification::Lms < NotificationType::Base
     end
   end
 end
-

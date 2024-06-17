@@ -166,6 +166,8 @@ class KakaoTemplateService
       get_target_job_posting_performance_data(tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD
       get_target_job_posting_ad_data(tem_params)
+    when MessageTemplates[MessageNames::TARGET_JOB_POSTING_AD_2]
+      get_target_job_posting_ad_2_data(tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
       get_target_job_posting_ad_apply_data(tem_params)
     when MessageTemplateName::NONE_LTC_REQUEST
@@ -2136,6 +2138,36 @@ carepartner.kr#{path}
           name: '동네 광고하기',
           type: 'WL',
           url_pc: tem_params[:link],
+          url_mobile: tem_params[:link]
+        }
+      ]
+    }
+  end
+
+  def get_target_job_posting_ad_2_data(tem_params)
+    {
+      title: "동네 광고로 지원을 늘려보세요",
+      message: "요양보호사 지원을
+빠르게 더 받고 싶으신가요?
+
+‘동네광고’로 [#{tem_params[:count]}명]의
+구직 중인 요양보호사에게
+카카오톡으로 광고 할 수 있어요
+
+■ 공고 제목
+- #{tem_params[:title]}
+
+■ 예상 발송 대상
+- ‘#{tem_params[:address]} 거주 요양보호사 #{tem_params[:count]}명
+
+더 많은 요양보호사 지원
+지금 빠르게 받고 싶으시다면?
+
+아래 [동네 광고하기]를 눌러주세요.",
+      buttons: [
+        {
+          name: '동네 광고하기',
+          type: 'WL',
           url_mobile: tem_params[:link]
         }
       ]
