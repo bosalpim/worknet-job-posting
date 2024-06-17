@@ -2,7 +2,7 @@ class TargetJobPostingAdsJob < ApplicationJob
   include AlimtalkMessage
 
   cron "0 4 ? * * *"
-  def target_job_posting_ads_after_posting_3days
+  def target_posting_ads_after_3days
     JobSupportProject::SubmitRemindService.new(3, '안녕하세요 케어파트너입니다. 채용지원금 신청 서류 제출 일자가 지나 다시 연락드렸습니다.', 1).call
     # begin
     #   Jets.logger.info event
