@@ -26,30 +26,36 @@ class JobSupportProject::SubmitRemindService
 
       if business_registration.nil?
         Jets.logger.info "사업자 등록증 없는 경우"
-        message = "#{@title}
+        message = "안녕하세요 #{job_support_project_participant.job_posting.business.name} 담당자님 케어파트너입니다.
+#{@title}
 
 [제출 서류]
 1. 고유번호증 또는 사업자등록증 사업 참여 첫 1회만 제출
 2. #{user_name}님 근로계약서 (주소, 주민등록번호 전체 포함)
 
 [서류 제출 방법]
-아래 방법 중 하나로 제출 해주세요
+아래 방법 중 하나로 제출 해주세요 (세 가지 중 택 1)
 ■ 1588-5877로 문자 제출
 ■ Fax : 07080157158
+■ https://business.carepartner.kr/jspp에서 바로 제출
 
 제출 기한: #{due_date}까지"
         Notification::Lms.new(phone_number: job_support_project_participant.job_posting.manager_phone_number, message: message).send
       else
         Jets.logger.info "사업자 등록증 있는 경우\n"
-        message = "#{@title}
+        message = "안녕하세요 #{job_support_project_participant.job_posting.business.name} 담당자님 케어파트너입니다.
+#{@title}
 
 [제출 서류]
-■ #{user_name}님 근로계약서 (주소, 주민등록번호 전체 포함)
+■ #{user_name}님 근로계약서
+(주소, 주민등록번호 전체 포함)
 
 [서류 제출 방법]
 아래 방법 중 하나로 제출 해주세요
+(세 가지 중 택 1)
 ■ 1588-5877로 문자 제출
 ■ Fax : 07080157158
+■ https://business.carepartner.kr/jspp에서 바로 제출
 
 제출 기한: #{due_date}까지"
         Notification::Lms.new(phone_number: job_support_project_participant.job_posting.manager_phone_number, message: message).send
