@@ -7,7 +7,7 @@ class JobSupportProjectRemindJob < ApplicationJob
 
   cron "0 4 ? * * *"
   def second_submit_remind
-    JobSupportProject::SubmitRemindService.new(3, '안녕하세요 케어파트너입니다. 채용지원금 신청 서류 제출 일자가 지나 다시 연락드렸습니다.', 1).call
+    JobSupportProject::SubmitRemindService.new(3, '안녕하세요 케어파트너입니다. 채용지원금 신청 서류 제출 일자가 지나 다시 연락드렸습니다.', 0).call
   end
 
 end
