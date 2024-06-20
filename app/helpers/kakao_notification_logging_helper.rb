@@ -44,8 +44,6 @@ module KakaoNotificationLoggingHelper
     end
 
     case template_id
-    when MessageTemplateName::NEW_JOB_POSTING
-      return get_new_job_posting_logging_data(tem_params, template_id)
     when MessageTemplateName::NEWSPAPER_V2
       return get_news_paper_logging_data(template_id, target_public_id)
     when MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION
@@ -221,29 +219,6 @@ module KakaoNotificationLoggingHelper
         "template" => template_id,
         "jobPostingId" => job_posting_public_id,
         "title" => title,
-        "send_at" => Time.current + (9 * 60 * 60)
-      }
-    }
-  end
-
-  def self.get_new_job_posting_logging_data(template_params, template_id)
-    target_public_id = template_params.dig(:target_public_id)
-    job_posting_public_id = template_params.dig(:job_posting_public_id)
-    job_posting_title = template_params.dig(:job_posting_title)
-    business_name = template_params.dig(:business_name)
-    work_type_ko = template_params.dig(:work_type_ko)
-
-    return {
-      "user_id" => target_public_id,
-      "event_type" => NOTIFICATION_EVENT_NAME,
-      "event_properties" => {
-        "sender_type" => SENDER_TYPE_CAREPARTNER,
-        "receiver_type" => RECEIVER_TYPE_USER,
-        "template" => template_id,
-        "jobPostingId" => job_posting_public_id,
-        "title" => job_posting_title,
-        "job_posting_type" => work_type_ko,
-        "centerName" => business_name,
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }

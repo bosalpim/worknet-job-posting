@@ -14,8 +14,6 @@ class Notification::FactoryService
       return Notification::Factory::AccumulatedDraft.new
     when MessageTemplateName::ACCUMULATED_PREPARATIVE
       return Notification::Factory::AccumulatedPreparativeCbt.new
-    when MessageTemplateName::NEW_JOB_POSTING
-      return Notification::Factory::NewJobNotification.new(params[:job_posting_id])
     when MessageTemplateName::TARGET_USER_RESIDENT_POSTING
       return Notification::Factory::TargetUserResidentJobPostingService.new(params)
     when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
