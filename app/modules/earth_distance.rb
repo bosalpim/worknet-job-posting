@@ -39,12 +39,17 @@ module EarthDistance
           )
       end
 
-      def within_radius(radius, lat, lng)
+      def within_radius(max_radius, lat, lng, min_radius = 0)
         acts_as_geolocated
-        radius = radius.try(:*, MILES_TO_METERS_FACTOR) if distance_unit === :miles
+        min_radius = min_radius.try(:*, MILES_TO_METERS_FACTOR) if distance_unit == :miles
+        max_radius = max_radius.try(:*, MILES_TO_METERS_FACTOR) if distance_unit == :miles
         earth_distance = Utils.earth_distance(through_table_klass, lat, lng)
-        within_box(radius, lat, lng)
-          .where(Arel::Nodes::InfixOperation.new("<=", earth_distance, Utils.quote_value(radius)))
+
+        puts "min radius: #{min_radius}, max radius: #{max_radius}"
+
+        within_box(max_radius, lat, lng)
+          .where(Arel::Nodes::InfixOperation.new(">=", earth_distance, Utils.quote_value(min_radius)))
+          .where(Arel::Nodes::InfixOperation.new("<=", earth_distance, Utils.quote_value(max_radius)))
       end
 
       def order_by_distance(lat, lng, order = "ASC")
