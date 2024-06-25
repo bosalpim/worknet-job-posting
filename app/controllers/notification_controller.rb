@@ -161,7 +161,8 @@ class NotificationController < ApplicationController
           message_template_id: MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING],
           params: {
             job_posting_id: params[:job_posting_id],
-            radius: params[:radius]
+            radius: params[:radius],
+            min_radius: params[:min_radius]
           }
         }
         Jets.env.development? ?

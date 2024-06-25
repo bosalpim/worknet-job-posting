@@ -41,11 +41,16 @@ module EarthDistance
 
       def within_radius(max_radius, lat, lng, min_radius = 0)
         acts_as_geolocated
-        min_radius = min_radius.try(:*, MILES_TO_METERS_FACTOR) if distance_unit == :miles
-        max_radius = max_radius.try(:*, MILES_TO_METERS_FACTOR) if distance_unit == :miles
-        earth_distance = Utils.earth_distance(through_table_klass, lat, lng)
 
-        puts "min radius: #{min_radius}, max radius: #{max_radius}"
+        # nil 체크 및 기본값 설정
+        min_radius ||= 0
+        max_radius ||= 0
+
+        # 마일 단위로 변환
+        min_radius *= MILES_TO_METERS_FACTOR if distance_unit == :miles
+        max_radius *= MILES_TO_METERS_FACTOR if distance_unit == :miles
+
+        earth_distance = Utils.earth_distance(through_table_klass, lat, lng)
 
         within_box(max_radius, lat, lng)
           .where(Arel::Nodes::InfixOperation.new(">=", earth_distance, Utils.quote_value(min_radius)))
