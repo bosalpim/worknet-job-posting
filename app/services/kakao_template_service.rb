@@ -132,8 +132,6 @@ class KakaoTemplateService
       get_new_job_facility_v2(tem_params)
     when MessageTemplateName::NEWSPAPER_V2
       get_newspaper_v2(tem_params)
-    when MessageTemplateName::NEW_JOB_POSTING
-      get_new_job_posting(tem_params)
     when MessageTemplateName::CBT_DRAFT
       get_cbt_draft(tem_params)
     when MessageTemplateName::CAREPARTNER_PRESENT
@@ -254,7 +252,6 @@ class KakaoTemplateService
       MessageTemplateName::NEW_JOB_POSTING_FACILITY,
       MessageTemplateName::NEW_JOB_VISIT_V2,
       MessageTemplateName::NEW_JOB_FACILITY_V2,
-      MessageTemplateName::NEW_JOB_POSTING
     ]
 
     if title_required_templates.include?(template_id)
@@ -1658,35 +1655,6 @@ carepartner.kr#{path}
           type: "WL",
           url_mobile: mute_url,
           url_pc: mute_url
-        }
-      ]
-    }
-  end
-
-  def get_new_job_posting(tem_params)
-    alarm_setting_url = "https://www.carepartner.kr/me?utm_source=message&utm_medium=arlimtalk&utm_campaign=new_job_posting"
-
-    {
-      title: tem_params[:title],
-      message: tem_params[:message],
-      buttons: [
-        {
-          name: '🔎 일자리 확인하기',
-          type: 'WL',
-          url_pc: tem_params[:origin_url],
-          url_mobile: tem_params[:origin_url]
-        },
-        {
-          name: '❌ 그만 받을래요',
-          type: 'WL',
-          url_pc: tem_params[:mute_url],
-          url_mobile: tem_params[:mute_url]
-        },
-        {
-          name: '🔔 알림 지역 설정',
-          type: 'WL',
-          url_pc: alarm_setting_url,
-          url_mobile: alarm_setting_url
         }
       ]
     }
