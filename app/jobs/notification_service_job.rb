@@ -20,7 +20,7 @@ class NotificationServiceJob < ApplicationJob
   cron "0 7 ? * * *"
 
   def notify_draft_new_user
-    process({ message_template_id: MessageTemplateName::CAREPARTNER_PRESENT })
+    process({ message_template_id: MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM] })
   end
 
   cron "0 7 ? * 6 *"

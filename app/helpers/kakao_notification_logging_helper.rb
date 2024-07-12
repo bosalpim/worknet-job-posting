@@ -94,7 +94,7 @@ module KakaoNotificationLoggingHelper
       return get_ask_active_logging_data(template_id, tem_params)
     when MessageTemplateName::CBT_DRAFT
       return get_cbt_logging_data(template_id, tem_params)
-    when MessageTemplateName::CAREPARTNER_PRESENT
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM]
       return carepartner_null_certification_logging_data(template_id, tem_params)
     when MessageTemplateName::ACCUMULATED_DRAFT
       return get_accumulate_draft_logging_data(template_id, tem_params)

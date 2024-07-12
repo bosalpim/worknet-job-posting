@@ -134,7 +134,7 @@ class KakaoTemplateService
       get_newspaper_v2(tem_params)
     when MessageTemplateName::CBT_DRAFT
       get_cbt_draft(tem_params)
-    when MessageTemplateName::CAREPARTNER_PRESENT
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM]
       get_carepartner_draft(tem_params)
     when MessageTemplateName::ACCUMULATED_DRAFT
       get_accumulated_draft(tem_params)

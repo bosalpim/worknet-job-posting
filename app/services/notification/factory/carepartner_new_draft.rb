@@ -1,7 +1,7 @@
 class Notification::Factory::CarepartnerNewDraft < Notification::Factory::NotificationFactoryClass
-
+  include AlimtalkMessage
   def initialize
-    super(MessageTemplateName::CAREPARTNER_PRESENT)
+    super(MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM])
     @list = SearchNewCarepartnerDraftUsersService.call(1)
     create_message
   end

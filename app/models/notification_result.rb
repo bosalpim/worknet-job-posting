@@ -31,7 +31,6 @@ class NotificationResult < ApplicationRecord
   NEW_JOB_FACILITY_V2 = 'new_job_facility(23-09-2w)'.freeze
   NEWSPAPER_V2 = 'newspaper_v2'.freeze
   CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
-  CAREPARTNER_PRESENT = 'carepartner_present'.freeze
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
   ROULETTE = 'roulette'.freeze
@@ -86,7 +85,6 @@ class NotificationResult < ApplicationRecord
     NEW_JOB_FACILITY_V2 => NEW_JOB_FACILITY_V2,
     ASK_ACTIVE => ASK_ACTIVE,
     CBT_DRAFT => CBT_DRAFT,
-    CAREPARTNER_PRESENT => CAREPARTNER_PRESENT,
     ACCUMULATED_DRAFT => ACCUMULATED_DRAFT,
     ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE,
     NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO => NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO,
@@ -108,6 +106,7 @@ class NotificationResult < ApplicationRecord
     MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING] => MessageNames::TARGET_USER_JOB_POSTING,
     MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM] => MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM,
     MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM] => MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM,
-    MessageTemplates[MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM] => MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM
+    MessageTemplates[MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM] => MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM,
+    MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM] => MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM
   }
 end

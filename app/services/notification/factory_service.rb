@@ -8,7 +8,7 @@ class Notification::FactoryService
       return Notification::Factory::CallSavedJobPostingV2.new
     when MessageTemplateName::CBT_DRAFT
       return Notification::Factory::CbtDraft.new
-    when MessageTemplateName::CAREPARTNER_PRESENT
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM]
       return Notification::Factory::CarepartnerNewDraft.new
     when MessageTemplateName::ACCUMULATED_DRAFT
       return Notification::Factory::AccumulatedDraft.new
