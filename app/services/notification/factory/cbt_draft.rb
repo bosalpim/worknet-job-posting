@@ -3,8 +3,7 @@ class Notification::Factory::CbtDraft < Notification::Factory::NotificationFacto
   include AlimtalkMessage
   def initialize
     super(MessageTemplates[MessageNames::CBT_DRAFT_CRM])
-    @list = User.where(phone_number: '01094659404')
-    # @list = SearchNewCbtDraftUsersService.call(3)
+    @list = SearchNewCbtDraftUsersService.call(3)
     create_message
   end
 
