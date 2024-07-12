@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveOldJobPostingViewsJob < ApplicationJob
+class RemoveJpvJob < ApplicationJob
   cron "0 0 * * *" # 매일 자정에 실행
 
   def run
