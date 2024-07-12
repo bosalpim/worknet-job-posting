@@ -20,7 +20,6 @@ class NotificationResult < ApplicationRecord
   JOB_CERTIFICATION = 'job_certification'.freeze
   NOTIFY_MATCHED_USER = 'notify_matched_user'.freeze
   SIGNUP_COMPLETE_GUIDE = 'sign_up_complete_guide'.freeze
-  HIGH_SALARY_JOB = 'high-salary-job-2'.freeze
   ENTER_LOCATION = 'enter-location'.freeze
   WELL_FITTED_JOB = 'well-fitted-job'.freeze
   CERTIFICATION_UPDATE = 'certification-update'.freeze
@@ -78,7 +77,6 @@ class NotificationResult < ApplicationRecord
     JOB_CERTIFICATION => JOB_CERTIFICATION,
     NOTIFY_MATCHED_USER => NOTIFY_MATCHED_USER,
     SIGNUP_COMPLETE_GUIDE => SIGNUP_COMPLETE_GUIDE,
-    HIGH_SALARY_JOB => HIGH_SALARY_JOB,
     ENTER_LOCATION => ENTER_LOCATION,
     WELL_FITTED_JOB => WELL_FITTED_JOB,
     CERTIFICATION_UPDATE => CERTIFICATION_UPDATE,
@@ -111,6 +109,7 @@ class NotificationResult < ApplicationRecord
     MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT => MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT,
     MessageTemplateName::TARGET_USER_RESIDENT_POSTING => MessageTemplateName::TARGET_USER_RESIDENT_POSTING,
     MessageTemplateName::PROPOSAL_RESIDENT => MessageTemplateName::PROPOSAL_RESIDENT,
-    MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING] => MessageNames::TARGET_USER_JOB_POSTING
+    MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING] => MessageNames::TARGET_USER_JOB_POSTING,
+    MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM] => MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM
   }
 end

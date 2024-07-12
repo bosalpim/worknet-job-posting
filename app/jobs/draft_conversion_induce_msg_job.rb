@@ -1,7 +1,9 @@
 class DraftConversionInduceMsgJob < ApplicationJob
+  include AlimtalkMessage
+
   cron "0 7 ? * * *"
   def first_day_except_address
-    DraftConversionMessageService.call(MessageTemplateName::HIGH_SALARY_JOB)
+    DraftConversionMessageService.call(MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM])
   end
 
   cron "0 7 ? * * *"

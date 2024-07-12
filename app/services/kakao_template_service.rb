@@ -106,7 +106,7 @@ class KakaoTemplateService
       get_signup_complete_guide
     when MessageTemplateName::SIGNUP_COMPLETE_GUIDE3
       get_signup_complete_guide3
-    when MessageTemplateName::HIGH_SALARY_JOB
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM]
       get_high_salary_job(tem_params)
     when MessageTemplateName::ENTER_LOCATION
       get_enter_location(tem_params)
@@ -1119,7 +1119,7 @@ class KakaoTemplateService
 
   def get_high_salary_job(tem_params)
     link1 = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=high-salary-job-2"
-    link2 = "https://pf.kakao.com/_xjwfcb/chat"
+    link2 = "https://pf.kakao.com/_jixkfG"
 
     {
       title: "[케어파트너] Draft 자격증 소지자 1일차",

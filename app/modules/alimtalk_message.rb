@@ -6,12 +6,14 @@ module AlimtalkMessage
     # 신규 공고 알림톡
     TARGET_USER_JOB_POSTING = "target_user_job_posting"
     TARGET_JOB_POSTING_AD_2 = "target_job_posting_ad_2"
+    ONE_DAY_CAREPARTNER_DRAFT_CRM = 'one_day_carepartner_draft_crm'
   end
 
   module MessageTemplates
     TEMPLATES = {
       MessageNames::TARGET_USER_JOB_POSTING => "target_user_job_posting_v4",
-      MessageNames::TARGET_JOB_POSTING_AD_2 => "target_job_posting_ad_2"
+      MessageNames::TARGET_JOB_POSTING_AD_2 => "target_job_posting_ad_2",
+      MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM => "high-salary-job"
     }.freeze
 
     def self.[](message_name)

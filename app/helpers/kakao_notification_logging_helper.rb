@@ -68,7 +68,7 @@ module KakaoNotificationLoggingHelper
     when MessageTemplateName::PROPOSAL_ACCEPTED
       # 요보사가 일자리 제안을 수락했을 경우
       return get_proposal_accepted_logging_data(template_id, tem_params)
-    when MessageTemplateName::HIGH_SALARY_JOB
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM]
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when MessageTemplateName::WELL_FITTED_JOB
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
