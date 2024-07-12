@@ -74,7 +74,7 @@ class Notification::Factory::NewJobApplication < Notification::Factory::Notifica
     }
     @bizm_post_pay_list.push(BizmPostPayMessage.new(
       @message_template_id,
-      @job_posting.manager_phone_number, params, @client.public_id, 'AI'
+      @job_posting.manager_phone_number, params, @client.public_id, 'AI', nil, [0]
     ))
   end
 
