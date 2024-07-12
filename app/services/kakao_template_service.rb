@@ -110,7 +110,7 @@ class KakaoTemplateService
       get_high_salary_job(tem_params)
     when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM]
       get_enter_location(tem_params)
-    when MessageTemplateName::WELL_FITTED_JOB
+    when MessageTemplates[MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM]
       get_well_fitted_job(tem_params)
     when MessageTemplateName::CERTIFICATION_UPDATE
       get_certification_update(tem_params)
@@ -1149,7 +1149,7 @@ class KakaoTemplateService
 
   def get_enter_location(tem_params)
     link1 = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=enter-location"
-    link2 = "https://pf.kakao.com/_xjwfcb/chat"
+    link2 = "https://pf.kakao.com/_jixkfG"
 
     {
       title: "[케어파트너] Draft 자격증 소지자 1일차 주소입력 이탈",
@@ -1177,7 +1177,7 @@ class KakaoTemplateService
 
   def get_well_fitted_job(tem_params)
     link1 = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=well-fitted-job"
-    link2 = "https://pf.kakao.com/_xjwfcb/chat"
+    link2 = "https://pf.kakao.com/_jixkfG"
 
     {
       title: "[케어파트너] Draft 자격증 소지자 2일차",

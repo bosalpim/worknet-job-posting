@@ -70,7 +70,7 @@ module KakaoNotificationLoggingHelper
       return get_proposal_accepted_logging_data(template_id, tem_params)
     when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM]
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when MessageTemplateName::WELL_FITTED_JOB
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM]
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM]
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
