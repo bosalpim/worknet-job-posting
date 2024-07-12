@@ -132,7 +132,7 @@ class KakaoTemplateService
       get_new_job_facility_v2(tem_params)
     when MessageTemplateName::NEWSPAPER_V2
       get_newspaper_v2(tem_params)
-    when MessageTemplateName::CBT_DRAFT
+    when MessageTemplates[MessageNames::CBT_DRAFT_CRM]
       get_cbt_draft(tem_params)
     when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM]
       get_carepartner_draft(tem_params)
@@ -1690,7 +1690,7 @@ carepartner.kr#{path}
 
   def get_cbt_draft(tem_params)
     cbt_url = "https://cbt.carepartner.kr/delivery?utm_source=message&utm_medium=arlimtalk&utm_campaign=CBT-draft"
-    counselor_url = "https://pf.kakao.com/_xjwfcb"
+    counselor_url = "https://pf.kakao.com/_jixkfG"
     {
       title: "실전 모의고사 풀고 요양보호사 자격증 시험 합격하세요!",
       message: "#{tem_params[:name]} 선생님 요양보호사 자격증 시험 준비중이신가요?
@@ -1717,7 +1717,7 @@ carepartner.kr#{path}
 
   def get_carepartner_draft(tem_params)
     alarm_setting_url = "https://www.carepartner.kr/users/after_sign_up?utm_source=message&utm_medium=arlimtalk&utm_campaign=carepartner_present"
-    counselor_url = "https://pf.kakao.com/_xjwfcb"
+    counselor_url = "https://pf.kakao.com/_jixkfG"
 
     {
       title: "요양보호사 등록하면 혜택이 쏟아져요!",

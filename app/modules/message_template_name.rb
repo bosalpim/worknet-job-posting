@@ -54,7 +54,6 @@ module MessageTemplateName
   # B2G 관련
   JOB_SUPPORT_REQUEST_AGREEMENT = 'job_support_request_agreement'.freeze # 일자리 지원사업 요보사 동의 요청
 
-  CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
   # 간편 지원

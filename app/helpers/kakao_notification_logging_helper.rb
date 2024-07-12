@@ -92,7 +92,7 @@ module KakaoNotificationLoggingHelper
       return get_call_saved_job_caregiver2(template_id, tem_params)
     when MessageTemplateName::ASK_ACTIVE
       return get_ask_active_logging_data(template_id, tem_params)
-    when MessageTemplateName::CBT_DRAFT
+    when MessageTemplates[MessageNames::CBT_DRAFT_CRM]
       return get_cbt_logging_data(template_id, tem_params)
     when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM]
       return carepartner_null_certification_logging_data(template_id, tem_params)
