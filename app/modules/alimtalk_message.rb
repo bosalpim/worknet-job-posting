@@ -7,13 +7,15 @@ module AlimtalkMessage
     TARGET_USER_JOB_POSTING = "target_user_job_posting"
     TARGET_JOB_POSTING_AD_2 = "target_job_posting_ad_2"
     ONE_DAY_CAREPARTNER_DRAFT_CRM = 'one_day_carepartner_draft_crm'
+    ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM = 'one_day_carepartner_address_leak_crm'
   end
 
   module MessageTemplates
     TEMPLATES = {
       MessageNames::TARGET_USER_JOB_POSTING => "target_user_job_posting_v4",
       MessageNames::TARGET_JOB_POSTING_AD_2 => "target_job_posting_ad_2",
-      MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM => "high-salary-job"
+      MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM => "high-salary-job",
+      MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM => 'enter-location-1'
     }.freeze
 
     def self.[](message_name)

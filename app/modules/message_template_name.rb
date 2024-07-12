@@ -31,7 +31,6 @@ module MessageTemplateName
   CANDIDATE_RECOMMENDATION = 'candidate_recommendation'.freeze
   SIGNUP_COMPLETE_GUIDE = 'sign_up_complete_guide'.freeze # 가입(= 추가정보입력) 완료 알림톡
   SIGNUP_COMPLETE_GUIDE3 = 'sign_up_complete_guide3'.freeze # 가입(= 추가정보입력) 완료 알림톡
-  ENTER_LOCATION = 'enter-location'.freeze # 가입 1일차 draft, 자격증 소지자 중 주소입력 단계 이탈자
   WELL_FITTED_JOB = 'well-fitted-job'.freeze # 가입 2일차 draft, 자격증 소지자
   CERTIFICATION_UPDATE = 'certification-update'.freeze # 시험 예정일 3일/7일이 지난 자격증 미취득 유저에게 소지 전환 유도
   POST_COMMENT = 'post-comment'.freeze # 게시글 답변 알림톡

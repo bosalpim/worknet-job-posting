@@ -72,7 +72,7 @@ module KakaoNotificationLoggingHelper
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when MessageTemplateName::WELL_FITTED_JOB
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when MessageTemplateName::ENTER_LOCATION
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM]
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when MessageTemplateName::CERTIFICATION_UPDATE
       return get_draft_conversion_msg_logging_data(template_id, tem_params)

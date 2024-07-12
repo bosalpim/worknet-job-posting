@@ -108,7 +108,7 @@ class KakaoTemplateService
       get_signup_complete_guide3
     when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM]
       get_high_salary_job(tem_params)
-    when MessageTemplateName::ENTER_LOCATION
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM]
       get_enter_location(tem_params)
     when MessageTemplateName::WELL_FITTED_JOB
       get_well_fitted_job(tem_params)

@@ -8,7 +8,7 @@ class DraftConversionInduceMsgJob < ApplicationJob
 
   cron "0 7 ? * * *"
   def first_day_only_address
-    DraftConversionMessageService.call(MessageTemplateName::ENTER_LOCATION)
+    DraftConversionMessageService.call(MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM])
   end
 
   cron "0 7 ? * * *"

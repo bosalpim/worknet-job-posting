@@ -20,7 +20,6 @@ class NotificationResult < ApplicationRecord
   JOB_CERTIFICATION = 'job_certification'.freeze
   NOTIFY_MATCHED_USER = 'notify_matched_user'.freeze
   SIGNUP_COMPLETE_GUIDE = 'sign_up_complete_guide'.freeze
-  ENTER_LOCATION = 'enter-location'.freeze
   WELL_FITTED_JOB = 'well-fitted-job'.freeze
   CERTIFICATION_UPDATE = 'certification-update'.freeze
   POST_COMMENT = 'post-comment'.freeze # 게시글 답변 알림톡
@@ -77,7 +76,6 @@ class NotificationResult < ApplicationRecord
     JOB_CERTIFICATION => JOB_CERTIFICATION,
     NOTIFY_MATCHED_USER => NOTIFY_MATCHED_USER,
     SIGNUP_COMPLETE_GUIDE => SIGNUP_COMPLETE_GUIDE,
-    ENTER_LOCATION => ENTER_LOCATION,
     WELL_FITTED_JOB => WELL_FITTED_JOB,
     CERTIFICATION_UPDATE => CERTIFICATION_UPDATE,
     POST_COMMENT => POST_COMMENT,
@@ -110,6 +108,7 @@ class NotificationResult < ApplicationRecord
     MessageTemplateName::TARGET_USER_RESIDENT_POSTING => MessageTemplateName::TARGET_USER_RESIDENT_POSTING,
     MessageTemplateName::PROPOSAL_RESIDENT => MessageTemplateName::PROPOSAL_RESIDENT,
     MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING] => MessageNames::TARGET_USER_JOB_POSTING,
-    MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM] => MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM
+    MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM] => MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM,
+    MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM] => MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM
   }
 end
