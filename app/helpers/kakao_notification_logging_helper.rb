@@ -68,11 +68,11 @@ module KakaoNotificationLoggingHelper
     when MessageTemplateName::PROPOSAL_ACCEPTED
       # 요보사가 일자리 제안을 수락했을 경우
       return get_proposal_accepted_logging_data(template_id, tem_params)
-    when MessageTemplateName::HIGH_SALARY_JOB
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM]
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when MessageTemplateName::WELL_FITTED_JOB
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM]
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
-    when MessageTemplateName::ENTER_LOCATION
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM]
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when MessageTemplateName::CERTIFICATION_UPDATE
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
@@ -92,9 +92,9 @@ module KakaoNotificationLoggingHelper
       return get_call_saved_job_caregiver2(template_id, tem_params)
     when MessageTemplateName::ASK_ACTIVE
       return get_ask_active_logging_data(template_id, tem_params)
-    when MessageTemplateName::CBT_DRAFT
+    when MessageTemplates[MessageNames::CBT_DRAFT_CRM]
       return get_cbt_logging_data(template_id, tem_params)
-    when MessageTemplateName::CAREPARTNER_PRESENT
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM]
       return carepartner_null_certification_logging_data(template_id, tem_params)
     when MessageTemplateName::ACCUMULATED_DRAFT
       return get_accumulate_draft_logging_data(template_id, tem_params)
