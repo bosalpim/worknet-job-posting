@@ -31,9 +31,6 @@ module MessageTemplateName
   CANDIDATE_RECOMMENDATION = 'candidate_recommendation'.freeze
   SIGNUP_COMPLETE_GUIDE = 'sign_up_complete_guide'.freeze # 가입(= 추가정보입력) 완료 알림톡
   SIGNUP_COMPLETE_GUIDE3 = 'sign_up_complete_guide3'.freeze # 가입(= 추가정보입력) 완료 알림톡
-  HIGH_SALARY_JOB = 'high-salary-job-2'.freeze # 가입 1일차 draft, 자격증 소지자 (주소입력 제외하고)
-  ENTER_LOCATION = 'enter-location'.freeze # 가입 1일차 draft, 자격증 소지자 중 주소입력 단계 이탈자
-  WELL_FITTED_JOB = 'well-fitted-job'.freeze # 가입 2일차 draft, 자격증 소지자
   CERTIFICATION_UPDATE = 'certification-update'.freeze # 시험 예정일 3일/7일이 지난 자격증 미취득 유저에게 소지 전환 유도
   POST_COMMENT = 'post-comment'.freeze # 게시글 답변 알림톡
   CALL_INTERVIEW_PROPOSAL = 'call_interview_proposal'.freeze
@@ -57,8 +54,6 @@ module MessageTemplateName
   # B2G 관련
   JOB_SUPPORT_REQUEST_AGREEMENT = 'job_support_request_agreement'.freeze # 일자리 지원사업 요보사 동의 요청
 
-  CBT_DRAFT = 'CBT_draft2'.freeze # cbt 가입 draft 1일, 2일, 3일 뒤 대상
-  CAREPARTNER_PRESENT = 'carepartner_present'.freeze
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
   # 간편 지원

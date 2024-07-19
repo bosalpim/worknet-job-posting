@@ -1,7 +1,8 @@
 class Notification::Factory::CbtDraft < Notification::Factory::NotificationFactoryClass
   include RatioChopper
+  include AlimtalkMessage
   def initialize
-    super(MessageTemplateName::CBT_DRAFT)
+    super(MessageTemplates[MessageNames::CBT_DRAFT_CRM])
     @list = SearchNewCbtDraftUsersService.call(3)
     create_message
   end

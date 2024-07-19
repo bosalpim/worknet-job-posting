@@ -21,7 +21,7 @@ class DraftConversionMessageService
   private
   def find_target_user
     case @template_id
-    when MessageTemplateName::HIGH_SALARY_JOB
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM]
       start_time = Time.now.beginning_of_day # 오늘 날짜 00시
       end_time = 1.day.ago.beginning_of_day  # 어제 날짜 00시
       return User.where(created_at: end_time..start_time)
@@ -30,7 +30,7 @@ class DraftConversionMessageService
                  .where(status: 'draft')
                  .where(has_certification: true)
                  .where.not(draft_status: 'address')
-    when MessageTemplateName::ENTER_LOCATION
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM]
       start_time = Time.now.beginning_of_day # 오늘 날짜 00시
       end_time = 1.day.ago.beginning_of_day  # 어제 날짜 00시
       return User.where(created_at: end_time..start_time)
@@ -39,7 +39,7 @@ class DraftConversionMessageService
                  .where(status: 'draft')
                  .where(has_certification: true)
                  .where(draft_status: 'address')
-    when MessageTemplateName::WELL_FITTED_JOB
+    when MessageTemplates[MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM]
       start_time = 1.day.ago.beginning_of_day# 1일전 날짜 00시
       end_time = 2.day.ago.beginning_of_day  # 2일전 날짜 00시
       return User.where(created_at: (end_time..start_time))
@@ -108,12 +108,12 @@ class DraftConversionMessageService
 
   def get_send_type
     case @template_id
-    when MessageTemplateName::HIGH_SALARY_JOB
-      NotificationResult::HIGH_SALARY_JOB
-    when MessageTemplateName::ENTER_LOCATION
-      NotificationResult::ENTER_LOCATION
-    when MessageTemplateName::WELL_FITTED_JOB
-      NotificationResult::WELL_FITTED_JOB
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM]
+      MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM
+    when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM]
+      MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM
+    when MessageTemplates[MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM]
+      MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM
     when MessageTemplateName::CERTIFICATION_UPDATE
       NotificationResult::CERTIFICATION_UPDATE
     else
