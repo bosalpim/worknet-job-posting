@@ -37,7 +37,10 @@ class KakaoTemplateService
           sms_message += "\n\n"
           sms_message += btn[:name] + "↓"
           sms_message += "\n"
-          sms_message += @template_id === MessageTemplateName::NEWSPAPER_V2 ? btn[:url_mobile] : ShortUrl.build(btn[:url_mobile]).url
+          sms_message += (@template_id === MessageTemplateName::NEWSPAPER_V2 ||
+                          @template_id === MessageTemplates::TEMPLATES[MessageNames::TARGET_USER_JOB_POSTING]) ?
+                           btn[:url_mobile] :
+                           ShortUrl.build(btn[:url_mobile]).url
         end
       end
     end
