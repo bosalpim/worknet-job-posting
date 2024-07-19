@@ -82,7 +82,9 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
         is_free: @is_free
       },
       user.public_id,
-      "AI"
+      "AI",
+      nil,
+      [0]
     )
   end
 
