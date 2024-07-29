@@ -1,10 +1,12 @@
 class DraftConversionMessageService
   include AlimtalkMessage
+  include MessageTemplateName
   def self.call(template_id)
     new.call(template_id)
   end
 
   def call(template_id)
+    # 오후 4시에 준혁님한테 매일 쏘도록 변경
     return if Jets.env != "production"
 
     @template_id = template_id
