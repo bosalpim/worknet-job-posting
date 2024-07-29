@@ -1,4 +1,5 @@
 class DraftConversionMessageService
+  include AlimtalkMessage
   def self.call(template_id)
     new.call(template_id)
   end
