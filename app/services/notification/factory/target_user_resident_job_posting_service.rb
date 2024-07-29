@@ -13,7 +13,7 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
     @is_free = paid_job_posting.nil? ? true : false
     @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
-    radius = params[:radius].nil? ? 15000 : params[:radius]
+    radius = params[:radius].nil? ? 7000 : params[:radius]
     min_radius = params[:min_radius].nil? ? nil : params[:min_radius]
     @list = User
               .receive_job_notifications
