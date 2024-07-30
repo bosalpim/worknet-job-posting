@@ -81,6 +81,8 @@ class JobPosting < ApplicationRecord
   has_many :paid_job_posting_features, dependent: :destroy
   has_many :user_saved_job_postings
   has_one :job_posting_customer
+  has_many :job_postings_connect
+  has_many :job_support_project_participants
 
   scope :commute_work, -> { where(work_type: %w[commute bath_help]) }
   scope :resident_work, -> { where(work_type: 'resident') }
