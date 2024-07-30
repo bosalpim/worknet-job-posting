@@ -11,13 +11,13 @@ class NotificationServiceJob < ApplicationJob
     process({ message_template_id: MessageTemplateName::CALL_SAVED_JOB_POSTING_V2 })
   end
 
-  cron "0 7 ? * * *"
+  cron "0 7 ? * MON-THU,SAT-SUN *"
 
   def cbt_draft_until_3day
     process({ message_template_id: MessageTemplates[MessageNames::CBT_DRAFT_CRM] })
   end
 
-  cron "0 7 ? * * *"
+  cron "0 7 ? * MON-THU,SAT-SUN *"
 
   def notify_draft_new_user
     process({ message_template_id: MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM] })
