@@ -8,25 +8,28 @@ class JobSupportProject::SubmitRemindService
     @title = title
     @due_day = due_day
 
-    @job_support_project_participants = JobSupportProjectParticipant
-                                          .where('created_at >= ? AND created_at < ?', start_time.utc, end_time.utc)
-                                          .where(is_done: false, method: ['sms', 'fax'])
-                                          .includes(job_posting: { business: :business_registration })
+    @job_posting_results = JobPostingResult
+                             .where('job_posting_results.created_at >= ? AND job_posting_results.created_at < ?', start_time.utc, end_time.utc)
+                             .where(result_type: 'success')
+                             .joins(job_posting: { job_postings_connect: :user })
+                             .where('users.birth_year <= ?', Time.now.year - 60)
+                             .left_joins(job_posting: :job_support_project_participants)
+                             .where('job_support_project_participants.id IS NULL OR job_support_project_participants.is_done = ?', false)
   end
 
   def call
     Jets.logger.info "-------------- FirstSubmitRemind START --------------\n"
-    @job_support_project_participants.each do |job_support_project_participant|
+    @job_posting_results.each do |job_posting_result|
       Jets.logger.info "-------------- INFO START --------------\n"
-      Jets.logger.info "#{job_support_project_participant.id} 대상 리마인드 발송\n"
+      Jets.logger.info "#{job_posting_result.id} 대상 리마인드 발송\n"
 
-      business_registration = job_support_project_participant.job_posting.business.business_registration
-      user_name = job_support_project_participant.user.name
+      business_registration = job_posting_result.job_posting.business.business_registration
+      user_name = job_posting_result.job_postings_connect.user.name
       due_date = (@kst_now + @due_day.days).in_time_zone('Asia/Seoul').strftime('%m.%d')
 
       if business_registration.nil?
         Jets.logger.info "사업자 등록증 없는 경우"
-        message = "안녕하세요 #{job_support_project_participant.job_posting.business.name} 담당자님 케어파트너입니다.
+        message = "안녕하세요 #{job_posting_result.job_posting.business.name} 담당자님 케어파트너입니다.
 #{@title}
 
 [제출 서류]
@@ -40,10 +43,10 @@ class JobSupportProject::SubmitRemindService
 ■ https://business.carepartner.kr/jspp에서 바로 제출
 
 제출 기한: #{due_date}까지"
-        Notification::Lms.new(phone_number: job_support_project_participant.job_posting.manager_phone_number, message: message).send
+        Notification::Lms.new(phone_number: job_posting_result.job_posting.manager_phone_number, message: message).send
       else
         Jets.logger.info "사업자 등록증 있는 경우\n"
-        message = "안녕하세요 #{job_support_project_participant.job_posting.business.name} 담당자님 케어파트너입니다.
+        message = "안녕하세요 #{job_posting_result.job_posting.business.name} 담당자님 케어파트너입니다.
 #{@title}
 
 [제출 서류]
@@ -58,7 +61,7 @@ class JobSupportProject::SubmitRemindService
 ■ https://business.carepartner.kr/jspp에서 바로 제출
 
 제출 기한: #{due_date}까지"
-        Notification::Lms.new(phone_number: job_support_project_participant.job_posting.manager_phone_number, message: message).send
+        Notification::Lms.new(phone_number: job_posting_result.job_posting.manager_phone_number, message: message).send
       end
       Jets.logger.info "-------------- INFO END --------------\n"
     end
