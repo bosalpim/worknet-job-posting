@@ -8,13 +8,18 @@ class JobSupportProject::SubmitRemindService
     @title = title
     @due_day = due_day
 
+    current_year_start = Time.now.beginning_of_year
+    current_year_end = Time.now.end_of_year
+
     @job_posting_results = JobPostingResult
                              .where('job_posting_results.created_at >= ? AND job_posting_results.created_at < ?', start_time.utc, end_time.utc)
                              .where(result_type: 'success')
-                             .joins(job_posting: { job_postings_connect: :user })
+                             .joins(job_postings_connect: :user )
                              .where('users.birth_year <= ?', Time.now.year - 60)
                              .left_joins(job_posting: :job_support_project_participants)
                              .where('job_support_project_participants.id IS NULL OR job_support_project_participants.is_done = ?', false)
+                             .joins("LEFT JOIN job_support_project_participants AS jsp ON job_postings_connects.user_id = jsp.user_id AND jsp.is_done = TRUE AND jsp.created_at BETWEEN '#{current_year_start.utc}' AND '#{current_year_end.utc}'")
+                             .where('jsp.id IS NULL')
   end
 
   def call
