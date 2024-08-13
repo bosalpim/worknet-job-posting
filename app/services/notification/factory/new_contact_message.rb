@@ -89,7 +89,7 @@ class Notification::Factory::NewContactMessage < Notification::Factory::Notifica
         @job_posting.manager_phone_number,
         params,
         @client.public_id,
-        "AI"
+        "AI", nil, [0]
       )
     )
   end
