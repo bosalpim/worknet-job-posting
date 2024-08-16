@@ -25,7 +25,14 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
       @radius = @job_posting.is_facility? ? 5000 : 3000
     end
     min_radius = params[:min_radius].nil? ? nil : params[:min_radius]
-    @list = User.where(phone_number: '01094659404')
+    @list = User
+              .receive_job_notifications
+              .within_radius(
+                @radius,
+                @job_posting.lat,
+                @job_posting.lng,
+                min_radius
+              ).where.not(phone_number: nil)
 
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
