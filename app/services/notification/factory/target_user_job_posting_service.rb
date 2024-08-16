@@ -12,7 +12,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     @job_posting = JobPosting.find(params[:job_posting_id])
     paid_job_posting = PaidJobPostingFeature.find_by_job_posting_id(params[:job_posting_id])
     @is_free = paid_job_posting.nil? ? true : false
-    @base_url = "#{Main::Application::CAREPARTNER_URL}/jobs/#{@job_posting.public_id}"
+    @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     prefer_work_type = @job_posting.work_type == 'hospital' ? 'etc' : @job_posting.work_type
     begin
@@ -65,6 +65,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}" + dispatched_notification_param
     application_link = "#{@base_url}/application?referral=target_notification&#{utm}" + application_notification_param
     contact_link = "#{@base_url}/contact-messages?referral=target_notification&#{utm}" + contact_notification_param
+    share_link = "#{@base_url}/share?#{utm}"
 
     BizmPostPayMessage.new(
       @message_template_id,
@@ -75,6 +76,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
         view_link: view_link,
         application_link: application_link,
         contact_link: contact_link,
+        share_link: share_link,
         job_posting_id: @job_posting.id,
         job_posting_public_id: @job_posting.public_id,
         business_name: @job_posting.business.name,
