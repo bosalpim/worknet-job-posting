@@ -50,15 +50,15 @@ class Newspaper::PrepareAlldayService
       .not(phone_number: nil)
       .where('id % 2 = 0') # 짝수 ID만 선택
       .select do |user|
-      preferred_work_types = user.preferred_work_types
+        preferred_work_types = user.preferred_work_types
 
-      job_postings = JobPosting
-                       .where('created_at >= ? AND created_at <= ?', yesterday_start, yesterday_end)
-                       .within_radius(3000, user.lat, user.lng)
-                       .where(work_type: preferred_work_types)
+        job_postings = JobPosting
+                         .where('created_at >= ? AND created_at <= ?', yesterday_start, yesterday_end)
+                         .within_radius(3000, user.lat, user.lng)
+                         .where(work_type: preferred_work_types)
 
-      job_postings.exists?
-    end
+        job_postings.exists?
+      end
   end
 
   def log(message)
