@@ -41,12 +41,22 @@ class Newspaper::PrepareAlldayService
   private
 
   def fetch_users
+    yesterday_start = DateTime.now.yesterday.beginning_of_day
+    yesterday_end = DateTime.now.yesterday.end_of_day
+
+    # 어제 생성된 job_postings를 필터링
+    job_postings = JobPosting
+                     .where('created_at >= ? AND created_at <= ?', yesterday_start, yesterday_end)
+
     User
       .receive_job_notifications
       .where
       .not(phone_number: nil)
-      .where('id % 2 = 0') # 신문 매일 전송 실험을 위한 추가. 짝수 ID만 선택. 홀수는 매일 보내는 것 x
-
+      .where('id % 2 = 0') # 짝수 ID만 선택
+      .select do |user|
+        within_radius_count = job_postings.within_radius(3000, user.lat, user.lng).count
+        within_radius_count > 0
+        end
   end
 
   def log(message)
