@@ -17,7 +17,7 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
         next
       end
       
-      base_path = "newspaper?lat=#{user.lat}&lng=#{user.lng}"
+      base_path = "newspaper?lat=#{user.lat}&lng=#{user.lng}&userId=#{user.public_id}"
 
       if newspaper.push_token&.present?
         link = "#{base_path}&utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=newspaper_job_alarm"
