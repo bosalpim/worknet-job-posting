@@ -42,7 +42,7 @@ class CreateNewspaperJob < ApplicationJob
       Newspaper::PrepareAlldayService.new(
         date: DateTime.now,
         batch: 2
-      )
+      ).call
     end
   end
 end
