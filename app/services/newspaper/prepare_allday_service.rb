@@ -15,27 +15,26 @@ class Newspaper::PrepareAlldayService
     begin
       log start_message
 
-      @users.find_in_batches(
-        batch_size: @batch
-      ).each_with_index do |batch, index|
-        begin
-          batch.each_slice(500) do |slice|
-            Newspaper
-              .insert_all(
-                slice.map { |user| { date: @date, group: index, status: 'pending', user_id: user.id, push_token: user.push_token&.token } }
-              )
-          end
-        rescue => e
-          Jets.logger.error e
-        end
+      total_users = @users.size
+      batch_size = @batch
 
+      (0...total_users).step(batch_size) do |offset|
+        batch = @users[offset, batch_size]
+        batch.each_slice(500) do |slice|
+          begin
+            Newspaper.insert_all(
+              slice.map { |user| { date: @date, group: offset / batch_size, status: 'pending', user_id: user.id, push_token: user.push_token&.token } }
+            )
+          rescue => e
+            Jets.logger.error e
+          end
+        end
       end
 
       log end_message
     rescue => e
       log error_message e
     end
-
   end
 
   private
