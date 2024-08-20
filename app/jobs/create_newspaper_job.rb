@@ -31,7 +31,7 @@ class CreateNewspaperJob < ApplicationJob
     end
   end
 
-  cron "0 2 ? * MON,TUE,THU *"
+  cron "0 5 ? * MON,TUE,THU *"
 
   def create_allday_newspaper
     if Jets.env.production?
