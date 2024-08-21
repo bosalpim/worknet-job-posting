@@ -47,22 +47,8 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
 
         Jets.logger.info "arlimtalk send"
 
-        if Jets.env.production?
-          @bizm_post_pay_list.push(
-            BizmPostPayMessage.new(
-              @message_template_id,
-              user.phone_number,
-              {
-                link: link
-              },
-              user.public_id,
-              "AI",
-              nil,
-              [0]
-            )
-          )
-        else
-          Jets.logger.info BizmPostPayMessage.new(
+        @bizm_post_pay_list.push(
+          BizmPostPayMessage.new(
             @message_template_id,
             user.phone_number,
             {
@@ -73,7 +59,35 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
             nil,
             [0]
           )
-        end
+        )
+
+        # if Jets.env.production?
+        #   @bizm_post_pay_list.push(
+        #     BizmPostPayMessage.new(
+        #       @message_template_id,
+        #       user.phone_number,
+        #       {
+        #         link: link
+        #       },
+        #       user.public_id,
+        #       "AI",
+        #       nil,
+        #       [0]
+        #     )
+        #   )
+        # else
+        #   Jets.logger.info BizmPostPayMessage.new(
+        #     @message_template_id,
+        #     user.phone_number,
+        #     {
+        #       link: link
+        #     },
+        #     user.public_id,
+        #     "AI",
+        #     nil,
+        #     [0]
+        #   )
+        # end
       end
     end
   end
