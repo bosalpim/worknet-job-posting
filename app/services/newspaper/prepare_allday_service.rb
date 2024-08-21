@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Newspaper::PrepareService
+class Newspaper::PrepareAlldayService
   def initialize(
     date: DateTime.now,
     batch: 3000
@@ -43,25 +43,21 @@ class Newspaper::PrepareService
     yesterday_start = DateTime.now.yesterday.beginning_of_day
     yesterday_end = DateTime.now.yesterday.end_of_day
 
-    base_query = User
-                   .receive_job_notifications
-                   .where.not(phone_number: nil)
+    User
+      .receive_job_notifications
+      .where
+      .not(phone_number: nil)
+      .where('id % 2 = 0') # 짝수 ID만 선택
+      .select do |user|
+        preferred_work_types = user.preferred_work_types
 
-    # 실험을 위해 짝수 홀수로 집단을 분리
-    odd_users = base_query.where('id % 2 != 0').where('id = 89089')
+        job_postings = JobPosting
+                         .where('created_at >= ? AND created_at <= ?', yesterday_start, yesterday_end)
+                         .within_radius(3000, user.lat, user.lng)
+                         .where(work_type: preferred_work_types)
 
-    even_users = base_query.where('id % 2 = 0').select do |user|
-      preferred_work_types = user.preferred_work_types
-
-      job_postings = JobPosting
-                       .where('created_at >= ? AND created_at <= ?', yesterday_start, yesterday_end)
-                       .within_radius(3000, user.lat, user.lng)
-                       .where(work_type: preferred_work_types)
-
-      job_postings.exists?
-    end
-
-    odd_users + even_users
+        job_postings.exists?
+      end
   end
 
   def log(message)
