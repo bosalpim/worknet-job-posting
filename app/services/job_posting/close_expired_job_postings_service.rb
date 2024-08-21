@@ -31,10 +31,15 @@ class JobPosting::CloseExpiredJobPostingsService
       notification.save_result
     end
 
-    job_postings.each do |job_posting|
-      AmplitudeService.instance.log_array([user_id: job_posting.client.public_id, event_type: "[Action] Close Job Posting",
-                                           event_properties: { by_auto: "true" } ])
+    client_events = job_postings.map do |job_posting|
+      {
+        user_id: job_posting.client.public_id,
+        event_type: "[Action] Close Job Posting",
+        event_properties: { by_auto: "true" }
+      }
     end
+
+    AmplitudeService.instance.log_array(client_events)
 
     job_postings.update_all(status: 'closed')
   end
