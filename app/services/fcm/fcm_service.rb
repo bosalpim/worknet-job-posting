@@ -29,7 +29,8 @@ class Fcm::FcmService
   def authorize
     json = nil
     if Jets.env.development?
-      json = StringIO.new(JSON.parse(ENV["FIREBASE_ADMIN_JSON"]).to_json)
+      file_path = File.join(Jets.root, 'FIREBASE_ADMIN_JSON.json')
+      json = File.open(file_path)
     else
       file_path = File.join(Jets.root, 'config', 'FB_ADMIN_JSON.json')
       json = File.open(file_path)
