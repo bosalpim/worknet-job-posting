@@ -14,7 +14,6 @@ class JobPosting::CloseExpiredJobPostingsService
     job_postings = JobPosting
                      .where(status: 'init')
                      .where(scraped_worknet_job_posting_id: nil)
-                     .free_job_posting
                      .where('closing_at < ?', @date)
 
     Jets.logger.info "종료대상 공고정보 : #{job_postings.pluck(:public_id)}"
@@ -30,6 +29,11 @@ class JobPosting::CloseExpiredJobPostingsService
       notification.notify
       # 발송결과 DB 저장 (사후 처리 대상 구분되도록 DB 내역을 생성해야합니다.)
       notification.save_result
+    end
+
+    job_postings.each do |job_posting|
+      AmplitudeService.instance.log_array([user_id: job_posting.client.public_id, event_type: "[Action] Close Job Posting",
+                                           event_properties: { by_auto: "true" } ])
     end
 
     job_postings.update_all(status: 'closed')
