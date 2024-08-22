@@ -4,11 +4,11 @@ class StartSendNewspaperJob < ApplicationJob
   include Jets::AwsServices
   # 월요일 오전 10시 발송 시작
   iam_policy 'sqs'
-  cron "47 6 ? * MON,TUE,THU *"
+  cron "59 6 ? * MON,TUE,THU *"
 
   def start_send_monday_newspaper
     date = DateTime.now.strftime("%Y/%m/%d")
-    group = 0
+    group = 20
     sqs.send_message(
       queue_url: Main::NEWSPAPER_JOB_QUEUE_URL,
       message_group_id: date,
