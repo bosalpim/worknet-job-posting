@@ -53,7 +53,7 @@ class Newspaper::PrepareService
                    .where.not(phone_number: nil)
 
     # 실험을 위해 짝수 홀수로 집단을 분리
-    odd_users = base_query.where('id % 2 != 0').where('id = 89089')
+    odd_users = base_query.where('id % 2 != 0')
 
     even_users = base_query.where('id % 2 = 0').select do |user|
       preferred_work_types = user.preferred_work_types
