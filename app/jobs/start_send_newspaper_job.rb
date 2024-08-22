@@ -58,7 +58,7 @@ class StartSendNewspaperJob < ApplicationJob
 
   # 재발송을 위한 임시 발송
   iam_policy 'sqs'
-  cron "30 3 ? * THU *"
+  cron "0 4 ? * THU *"
 
   def create_temp_retry_newspaper
     date = DateTime.now.strftime("%Y/%m/%d")

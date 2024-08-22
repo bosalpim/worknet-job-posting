@@ -46,7 +46,7 @@ class CreateNewspaperJob < ApplicationJob
     end
   end
 
-  cron "0 3 ? * THU *"
+  cron "10 3 ? * THU *"
 
   def create_temp_newspaper
     if Jets.env.production?
