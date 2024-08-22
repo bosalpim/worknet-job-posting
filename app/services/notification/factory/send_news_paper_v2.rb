@@ -16,6 +16,13 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
       if user&.lat.nil? || user&.lng.nil?
         next
       end
+
+      # 신문 매일발송 그룹 나누기 위한 property 상수. 짝수면 실험군, 홀수면 대조군.
+      allday_news_exp_group = if user.id.even?
+                                "B"
+                              else
+                                "A"
+                              end
       
       base_path = "newspaper?lat=#{user.lat}&lng=#{user.lng}&userId=#{user.public_id}"
 
@@ -37,7 +44,8 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
                 "sender_type" => SENDER_TYPE_CAREPARTNER,
                 "receiver_type" => RECEIVER_TYPE_USER,
                 "template" => @message_template_id,
-                "type" => NOTIFICATION_TYPE_APP_PUSH
+                "type" => NOTIFICATION_TYPE_APP_PUSH,
+                "allday_news_exp_group" => allday_news_exp_group,
               }
             )
           )
@@ -66,7 +74,8 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
             @message_template_id,
             user.phone_number,
             {
-              link: link
+              link: link,
+              allday_news_exp_group: allday_news_exp_group
             },
             user.public_id,
             "AI",
