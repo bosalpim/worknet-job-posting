@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CreateNewspaperJob < ApplicationJob
-  cron "0 20 ? * SUN *"
+  cron "5 6 ? * MON,TUE,THU *"
 
   def create_monday_newspaper
     if Jets.env.production?
