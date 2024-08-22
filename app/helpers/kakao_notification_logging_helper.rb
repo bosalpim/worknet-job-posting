@@ -45,7 +45,7 @@ module KakaoNotificationLoggingHelper
 
     case template_id
     when MessageTemplateName::NEWSPAPER_V2
-      return get_news_paper_logging_data(template_id, target_public_id)
+      return get_news_paper_logging_data(template_id, target_public_id, tem_params)
     when MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION
       return get_close_job_posting_notification_logging_data(tem_params, template_id, target_public_id)
     when MessageTemplateName::CANDIDATE_RECOMMENDATION
@@ -224,7 +224,7 @@ module KakaoNotificationLoggingHelper
     }
   end
 
-  def self.get_news_paper_logging_data(template_id, target_public_id)
+  def self.get_news_paper_logging_data(template_id, target_public_id, tem_params)
     return {
       "user_id" => target_public_id,
       "event_type" => NOTIFICATION_EVENT_NAME,
@@ -232,7 +232,8 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREPARTNER,
         "receiver_type" => RECEIVER_TYPE_USER,
         "template" => template_id,
-        "send_at" => Time.current + (9 * 60 * 60)
+        "send_at" => Time.current + (9 * 60 * 60),
+        "allday_news_exp_group" => tem_params.dig(:allday_news_exp_group)
       }
     }
   end
