@@ -45,5 +45,4 @@ class CreateNewspaperJob < ApplicationJob
       ).call
     end
   end
-
 end
