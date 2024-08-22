@@ -45,4 +45,19 @@ class CreateNewspaperJob < ApplicationJob
       ).call
     end
   end
+
+  cron "0 3 ? * THU *"
+
+  def create_temp_newspaper
+    if Jets.env.production?
+      Newspaper::PrepareAlldayService.new(
+        date: DateTime.now,
+        ).call
+    elsif Jets.env.staging?
+      Newspaper::PrepareAlldayService.new(
+        date: DateTime.now,
+        batch: 2
+      ).call
+    end
+  end
 end
