@@ -4,7 +4,7 @@ class StartSendNewspaperJob < ApplicationJob
   include Jets::AwsServices
   # 월요일 오전 10시 발송 시작
   iam_policy 'sqs'
-  cron "36 6 ? * MON,TUE,THU *"
+  cron "47 6 ? * MON,TUE,THU *"
 
   def start_send_monday_newspaper
     date = DateTime.now.strftime("%Y/%m/%d")
