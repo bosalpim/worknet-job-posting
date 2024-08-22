@@ -50,11 +50,11 @@ class CreateNewspaperJob < ApplicationJob
 
   def create_temp_newspaper
     if Jets.env.production?
-      Newspaper::PrepareAlldayService.new(
+      Newspaper::PrepareTempService.new(
         date: DateTime.now,
         ).call
     elsif Jets.env.staging?
-      Newspaper::PrepareAlldayService.new(
+      Newspaper::PrepareTempService.new(
         date: DateTime.now,
         batch: 2
       ).call
