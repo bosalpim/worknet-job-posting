@@ -61,7 +61,8 @@ class Notification::Factory::SendNewsPaperV2 < Notification::Factory::Notificati
               @message_template_id,
               user.phone_number,
               {
-                link: link
+                link: link,
+                allday_news_exp_group: allday_news_exp_group
               },
               user.public_id,
               "AI",
