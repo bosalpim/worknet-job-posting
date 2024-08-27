@@ -106,6 +106,7 @@ class NotificationResult < ApplicationRecord
     MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM] => MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM,
     MessageTemplates[MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM] => MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM,
     MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM] => MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM,
-    MessageTemplates[MessageNames::CBT_DRAFT_CRM] => MessageNames::CBT_DRAFT_CRM
+    MessageTemplates[MessageNames::CBT_DRAFT_CRM] => MessageNames::CBT_DRAFT_CRM,
+    MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS] => MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
   }
 end

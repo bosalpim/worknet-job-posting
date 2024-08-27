@@ -144,6 +144,8 @@ module KakaoNotificationLoggingHelper
       return get_employment_confirmation_logging_data(template_id, tem_params)
     when MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING]
       return get_target_user_job_posting_logging_data(template_id, tem_params)
+    when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
+      return get_target_business_free_trials(template_id, tem_params)
     else
       puts "WARNING: Amplitude Logging Missing else case!"
     end
@@ -782,6 +784,21 @@ module KakaoNotificationLoggingHelper
       "event_type" => NOTIFICATION_EVENT_NAME,
       "event_properties" => {
         "template" => tem_params[:is_free] ? 'free_user_job_posting' : template_id,
+        "jobPostingId" => tem_params[:job_posting_id],
+        "jobPostingPublicId" => tem_params[:job_posting_public_id],
+        "title" => tem_params[:title],
+        "centerName" => tem_params[:business_name],
+        "job_posting_type" => tem_params[:job_posting_type],
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
+  def self.get_target_business_free_trials(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
         "jobPostingId" => tem_params[:job_posting_id],
         "jobPostingPublicId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:title],
