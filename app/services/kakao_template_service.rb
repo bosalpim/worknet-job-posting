@@ -179,6 +179,8 @@ class KakaoTemplateService
       get_target_user_job_posting_v2_data(tem_params)
     when MessageTemplateName::CAREER_CERTIFICATION_V3
       get_employment_confirmation_alarm(tem_params)
+    when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
+      get_target_business_free_trials_data(tem_params)
     else
       Jets.logger.info "존재하지 않는 메시지 템플릿 요청입니다: template_id: #{template_id}, tem_params: #{tem_params.to_json}"
     end
@@ -262,6 +264,22 @@ class KakaoTemplateService
     end
 
     data
+  end
+
+  def get_target_business_free_trials_data(tem_params)
+    view_link = tem_params[:view_link]
+
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '🔎 일자리 확인하기',
+          type: 'WL',
+          url_mobile: view_link
+        }
+      ]
+    }
   end
 
   def get_target_user_job_posting_v2_data(tem_params)
