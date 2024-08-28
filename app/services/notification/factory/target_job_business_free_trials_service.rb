@@ -58,6 +58,8 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
     )
   end
   def generate_message_content
+    grade_info = translate_type('job_posting_customer', @job_posting, 'grade') || '등급 정보 없음'
+    gender_info = translate_type('job_posting_customer', @job_posting, 'gender') || '성별 정보 없음'
     "#{@job_posting.title}
 
 ■ 급여 : #{@job_posting.scraped_worknet_job_posting&.info&.dig('pay_text') || '급여정보 없음'}
@@ -66,7 +68,7 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
 
 ■ 근무 시간 : #{@job_posting.scraped_worknet_job_posting&.info&.dig('origin_hours_text') || '시간정보 없음'}
 
-■ 어르신 정보 : #{translate_type('job_posting_customer',@job_posting.grade, 'grade') || '등급 정보 없음' + ', ' + translate_type('job_posting_customer', @job_posting,'gender') || '성별 정보 없음' }
+■ 어르신 정보 : #{grade_info + ', ' + gender_info || '성별 정보 없음' }
 
 이 메세지는 일자리알림을 신청한 분에게만 발송돼요
 
