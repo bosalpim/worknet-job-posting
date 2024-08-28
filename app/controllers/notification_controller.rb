@@ -168,7 +168,7 @@ class NotificationController < ApplicationController
         Jets.env.development? ?
           NotificationServiceJob.perform_now(meth, event)
           : NotificationServiceJob.perform_later(meth, event)
-      when MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS
+      when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
         meth = :notify
         event = {
           message_template_id: MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS],
