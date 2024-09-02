@@ -25,8 +25,8 @@ class JobPosting::CloseExpiredJobPostingsService
     client_events = job_postings.map do |job_posting|
       {
         user_id: job_posting.client.public_id,
-        event_type: "[Action] Close Job Posting",
-        event_properties: { by_auto: "true" }
+        event_type: "[Action] Close Job Posting By Auto",
+        event_properties: { jobPostingId: job_posting.public_id }
       }
     end
 
