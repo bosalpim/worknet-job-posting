@@ -35,14 +35,14 @@ class CreateNewspaperJob < ApplicationJob
 
   def create_allday_newspaper
     if Jets.env.production?
-      Newspaper::PrepareAlldayService.new(
+      Newspaper::PrepareService.new(
         date: DateTime.now,
         ).call
     elsif Jets.env.staging?
-      Newspaper::PrepareAlldayService.new(
+      Newspaper::PrepareService.new(
         date: DateTime.now,
         batch: 2
-      ).call
+      )
     end
   end
 end
