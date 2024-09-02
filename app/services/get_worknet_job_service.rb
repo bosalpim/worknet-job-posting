@@ -1,4 +1,5 @@
 class GetWorknetJobService
+  include AlimtalkMessage
   def self.call
     new.call
   end
@@ -327,6 +328,14 @@ class GetWorknetJobService
       },
     )
     search_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" && search_api_service.present?
+
+    if job_posting.lat.present? && job_posting.lng.present?
+      registered_business = BusinessClient.find_by(business_id: business.id)
+      if registered_business.nil? # 가입되지 않은 기관에게만 실행
+        crm_target_worknet_process(job_posting)
+      end
+    end
+
     job_posting
   end
 
@@ -465,6 +474,46 @@ class GetWorknetJobService
       &.gsub("&quot;", '"')
       &.gsub("&#035;", '#')
       &.gsub("&#039;", "'")
+  end
+
+  def crm_target_worknet_process(worknet_job_posting)
+    # 0.03 기준 버림 처리
+    rounded_worknet_job_lng = ((worknet_job_posting.lng/0.03).floor * 0.03).round(2)
+    rounded_worknet_job_lat = ((worknet_job_posting.lat/0.03).floor * 0.03).round(2)
+    matching_record = BusinessFreeTrialTargetPosition.find_by(lat: rounded_worknet_job_lat, lng: rounded_worknet_job_lng)
+
+    if matching_record.nil?
+      return
+    end
+
+    Jets.logger.info("CRM TARGET : MATCH LAT/LNG : #{matching_record.lat}, #{matching_record.lng}, JOB_POSTING_PUBLICID : #{worknet_job_posting.public_id}")
+
+    # 핸드폰 번호 크롤링 요청
+    phone_number = WorknetPhoneNumberCrawler.get_phone_number(worknet_job_posting.scraped_worknet_job_posting.url)
+    if phone_number.nil?
+      Jets.logger.info("CRM TARGET : UNEXIST PHONENUMBER URL : #{worknet_job_posting.scraped_worknet_job_posting.url}")
+      return
+    end
+
+    trials = BusinessFreeTrial.create!(
+      business_id: worknet_job_posting.business_id,
+      job_posting_id: worknet_job_posting.id,
+      phone_number: phone_number,
+      public_id: worknet_job_posting.public_id,
+    ) rescue nil
+
+    Jets.logger.info("CRM TARGET : CREATE FREE TRIALS PUBLICID : #{trials.public_id}")
+
+    NotificationServiceJob.perform_later(:notify, {
+      message_template_id: MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS],
+      params: {
+        job_posting_id: worknet_job_posting.id,
+        radius: 3000,
+      }
+    }) rescue nil
+    Jets.logger.info("CRM TARGET : MESSAGE COMPLETE FREE TRIALS PUBLICID : #{trials.public_id}")
+
+    notifier = Slack::Notifier.new ENV['SLACK_CUSTOMER_SERVICE_URL']
   end
 
   # def extract_time(raw_hours_text)

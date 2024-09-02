@@ -1,0 +1,2 @@
+class BusinessFreeTrialTargetPosition < ApplicationRecord
+end
