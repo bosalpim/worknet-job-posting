@@ -5,7 +5,7 @@ class WorknetPhoneNumberCrawler
         ENV["WORKNET_CRAWLER_API"] + '/api/worknet-phone-number',
         body: { url: url },
         timeout: 20
-      )
+      ).parsed_response
     rescue Net::ReadTimeout, Net::OpenTimeout => e
       # 타임아웃 예외가 발생하면 로그를 기록합니다.
       Jets.logger.error("CRM TARGET : Timeout occurred while fetching phone number: #{e.message}")
@@ -15,15 +15,13 @@ class WorknetPhoneNumberCrawler
       Jets.logger.error("CRM TARGET : Error occurred while fetching phone number: #{e.message}")
       return nil
     end
-
-    if response.nil? || response.body.nil?
+    
+    if response.nil?
       return nil
     end
 
-    response_body = JSON.parse(response.body)
-    phone_number = response_body.dig('phoneNumber')
-
-    if phone_number.present?
+    phone_number = response.dig('phoneNumber')
+    unless phone_number.present?
       return nil
     end
 
