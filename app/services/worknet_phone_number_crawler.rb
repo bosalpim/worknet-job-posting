@@ -4,7 +4,7 @@ class WorknetPhoneNumberCrawler
       response = HTTParty.post(
         ENV["WORKNET_CRAWLER_API"] + '/api/worknet-phone-number',
         body: { url: url },
-        timeout: 10
+        timeout: 20
       )
     rescue Net::ReadTimeout, Net::OpenTimeout => e
       # 타임아웃 예외가 발생하면 로그를 기록합니다.
