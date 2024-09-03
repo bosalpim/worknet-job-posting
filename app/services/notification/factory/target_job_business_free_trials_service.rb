@@ -12,7 +12,7 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
     radius = params[:radius].nil? ? 3000 : params[:radius]
     @list = User
               .receive_job_notifications
-              .where("preferred_work_types ?| array[:work_types]", work_types: [@job_posting.work_type]) unless @job_posting.work_type.nil?
+              .where("preferred_work_types ?| array[:work_types]", work_types: [@job_posting.work_type])
               .where.not(phone_number: nil)
               .within_radius(
                 radius,
@@ -60,11 +60,13 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
     )
   end
   def generate_message_content
+    is_under_10000 = ([@job_posting.min_wage.nil? ? 0 : @job_posting.min_wage , @job_posting.max_wage.nil? ? 0 : @job_posting.max_wage].max) < 10000
+    pay_text = @job_posting.scraped_worknet_job_posting&.info&.dig('pay_text').nil? || is_under_10000 ? "12,500원 (협의 후 결정)" : @job_posting.scraped_worknet_job_posting&.info&.dig('pay_text')
     grade_info = translate_type('job_posting_customer', @job_posting, 'grade') || '등급 정보 없음'
     gender_info = translate_type('job_posting_customer', @job_posting, 'gender') || '성별 정보 없음'
     "#{@job_posting.title}
 
-■ 급여 : #{@job_posting.scraped_worknet_job_posting&.info&.dig('pay_text') || '급여정보 없음'}
+■ 급여 : #{pay_text}
 
 ■ 근무 장소 : #{@job_posting.address}
 
