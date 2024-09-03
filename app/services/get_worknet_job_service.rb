@@ -12,33 +12,32 @@ class GetWorknetJobService
   end
 
   def crm_target_worknet_process(worknet_job_posting)
-    # 0.03 기준 버림 처리
+    # 이미 경험한 기관이라면 신규 일자리 알림 무료발송 테스터에서 제외시킴
+    business_free_trial = BusinessFreeTrial.find_by(business_id: worknet_job_posting.business_id)
+    return if business_free_trial.nil?
+    # 0.03 기준 버림 처리 후 타켓 지역 확인
     rounded_worknet_job_lng = ((worknet_job_posting.lng/0.03).floor * 0.03).round(2)
     rounded_worknet_job_lat = ((worknet_job_posting.lat/0.03).floor * 0.03).round(2)
     matching_record = BusinessFreeTrialTargetPosition.find_by(lat: rounded_worknet_job_lat, lng: rounded_worknet_job_lng)
-
-    if matching_record.nil?
-      return
-    end
+    return if matching_record.nil?
 
     Jets.logger.info("CRM TARGET : MATCH LAT/LNG : #{matching_record.lat}, #{matching_record.lng}, JOB_POSTING_PUBLICID : #{worknet_job_posting.public_id}")
 
     # 핸드폰 번호 크롤링 요청
     phone_number = WorknetPhoneNumberCrawler.get_phone_number(worknet_job_posting.scraped_worknet_job_posting.url)
-    if phone_number.nil?
-      Jets.logger.info("CRM TARGET : UNEXIST PHONENUMBER URL : #{worknet_job_posting.scraped_worknet_job_posting.url}")
-      return
-    end
-
-    trials = BusinessFreeTrial.create!(
+    BusinessFreeTrial.create!(
       business_id: worknet_job_posting.business_id,
       job_posting_id: worknet_job_posting.id,
       phone_number: phone_number,
       public_id: worknet_job_posting.public_id,
       feature: 'auto_new_job_posting'
-      ) rescue nil
-
+    ) rescue nil # phone_number가 Null인 대상도 row를 남겨서 후속 대응에 활용
     Jets.logger.info("CRM TARGET : CREATE FREE TRIALS PUBLICID : #{trials.public_id}")
+
+    if phone_number.nil?
+      Jets.logger.info("CRM TARGET : UNEXIST PHONENUMBER URL : #{worknet_job_posting.scraped_worknet_job_posting.url}")
+      return
+    end
 
     NotificationServiceJob.perform_later(:notify, {
       message_template_id: MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS],

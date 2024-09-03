@@ -12,11 +12,13 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
     radius = params[:radius].nil? ? 3000 : params[:radius]
     @list = User
               .receive_job_notifications
+              .where("preferred_work_types ?| array[:work_types]", work_types: [@job_posting.work_type]) unless @job_posting.work_type.nil?
+              .where.not(phone_number: nil)
               .within_radius(
                 radius,
                 @job_posting.lat,
                 @job_posting.lng
-              ).where.not(phone_number: nil)
+              ).limit(200)
     create_message
   end
 
