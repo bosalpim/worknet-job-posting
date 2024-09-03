@@ -40,8 +40,13 @@ class Newspaper::PrepareService
   private
 
   def fetch_users
-    yesterday_start = DateTime.now.beginning_of_day
-    yesterday_end = DateTime.now.end_of_day
+    today = DateTime.now
+    yesterday_start = if today.sunday?
+                        today.ago(2.days).beginning_of_day
+                      else
+                        today.beginning_of_day
+                      end
+    yesterday_end = today.end_of_day
 
     User
       .receive_job_notifications
