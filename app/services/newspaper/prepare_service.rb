@@ -48,14 +48,11 @@ class Newspaper::PrepareService
                       end
     yesterday_end = today.end_of_day
 
-    base_query = User
-                   .receive_job_notifications
-                   .where.not(phone_number: nil)
-
-    # 실험을 위해 짝수 홀수로 집단을 분리
-    odd_users = base_query.where('id % 2 != 0')
-
-    even_users = base_query.where('id % 2 = 0').select do |user|
+    User
+      .receive_job_notifications
+      .where
+      .not(phone_number: nil)
+      .select do |user|
       preferred_work_types = user.preferred_work_types
 
       job_postings = JobPosting
@@ -65,8 +62,6 @@ class Newspaper::PrepareService
 
       job_postings.exists?
     end
-
-    odd_users + even_users
   end
 
   def log(message)
