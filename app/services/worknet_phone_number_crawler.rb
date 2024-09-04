@@ -6,6 +6,17 @@ class WorknetPhoneNumberCrawler
         body: { url: url },
         timeout: 20
       ).parsed_response
+
+      if response.nil?
+        return nil
+      end
+
+      phone_number = response.dig('phoneNumber')
+      unless phone_number.present?
+        return nil
+      end
+
+      return phone_number
     rescue Net::ReadTimeout, Net::OpenTimeout => e
       # 타임아웃 예외가 발생하면 로그를 기록합니다.
       Jets.logger.error("CRM TARGET : Timeout occurred while fetching phone number: #{e.message}")
@@ -15,16 +26,5 @@ class WorknetPhoneNumberCrawler
       Jets.logger.error("CRM TARGET : Error occurred while fetching phone number: #{e.message}")
       return nil
     end
-    
-    if response.nil?
-      return nil
-    end
-
-    phone_number = response.dig('phoneNumber')
-    unless phone_number.present?
-      return nil
-    end
-
-    return phone_number
   end
 end

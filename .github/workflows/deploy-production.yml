@@ -47,7 +47,8 @@ jobs:
           echo "NEWSPAPER_JOB_QUEUE_URL=$NEWSPAPER_JOB_QUEUE_URL" >> .env.production
           echo "SLACK_NOTI_NEWSPAPER_URL=$SLACK_NOTI_NEWSPAPER_URL" >> .env.production
           echo "SLACK_NOTI_NONE_LTC_CONSULTING_ALERT=$SLACK_NOTI_NONE_LTC_CONSULTING_ALERT" >> .env.production
-          echo "WORKNET_CRAWLER_API" >> .env.production
+          echo "WORKNET_CRAWLER_API=$WORKNET_CRAWLER_API" >> .env.production
+          echo "BUSINESS_FREE_TRIAL_ALERT=$BUSINESS_FREE_TRIAL_ALERT" >> .env.production
 
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
@@ -69,6 +70,7 @@ jobs:
           SLACK_NOTI_NEWSPAPER_URL: ${{ secrets.SLACK_NOTI_NEWSPAPER_URL }}
           SLACK_NOTI_NONE_LTC_CONSULTING_ALERT: ${{ secrets.SLACK_NOTI_NONE_LTC_CONSULTING_ALERT }}
           WORKNET_CRAWLER_API: ${{ secrets.WORKNET_CRAWLER_API }}
+          BUSINESS_FREE_TRIAL_ALERT: ${{ BUSINESS_FREE_TRIAL_ALERT_PROD }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1

@@ -12,9 +12,11 @@ class GetWorknetJobService
   end
 
   def crm_target_worknet_process(worknet_job_posting)
+    return if @stag_test_only_one
+    @stag_test_only_one = true unless Jets.env.production?
     # 이미 경험한 기관이라면 신규 일자리 알림 무료발송 테스터에서 제외시킴
     business_free_trial = BusinessFreeTrial.find_by(business_id: worknet_job_posting.business_id)
-    return if business_free_trial.nil?
+    return unless business_free_trial.nil?
     # 0.03 기준 버림 처리 후 타켓 지역 확인
     rounded_worknet_job_lng = ((worknet_job_posting.lng/0.03).floor * 0.03).round(2)
     rounded_worknet_job_lat = ((worknet_job_posting.lat/0.03).floor * 0.03).round(2)
@@ -24,11 +26,11 @@ class GetWorknetJobService
     Jets.logger.info("CRM TARGET : MATCH LAT/LNG : #{matching_record.lat}, #{matching_record.lng}, JOB_POSTING_PUBLICID : #{worknet_job_posting.public_id}")
 
     # 핸드폰 번호 크롤링 요청
-    phone_number = WorknetPhoneNumberCrawler.get_phone_number(worknet_job_posting.scraped_worknet_job_posting.url)
-    BusinessFreeTrial.create!(
+    phone_number = WorknetPhoneNumberCrawler.get_phone_number(worknet_job_posting.scraped_worknet_job_posting.url) rescue nil
+    trials = BusinessFreeTrial.create!(
       business_id: worknet_job_posting.business_id,
       job_posting_id: worknet_job_posting.id,
-      phone_number: phone_number,
+      phone_number: phone_number.nil? ? 'error' : phone_number,
       public_id: worknet_job_posting.public_id,
       feature: 'auto_new_job_posting'
     ) rescue nil # phone_number가 Null인 대상도 row를 남겨서 후속 대응에 활용
@@ -36,6 +38,31 @@ class GetWorknetJobService
 
     if phone_number.nil?
       Jets.logger.info("CRM TARGET : UNEXIST PHONENUMBER URL : #{worknet_job_posting.scraped_worknet_job_posting.url}")
+      SlackWebhookService.call(:business_free_trial, {
+        blocks: [
+          {
+            type: 'header',
+            text: {
+              type: 'plain_text',
+              text: '타켓 지역 워크넷 휴대폰번호 안 긁힘 확인 필요'
+            }
+          },
+          {
+            type: 'section',
+            text: {
+              type: 'plain_text',
+              text: "공고 publicId : #{@job_posting.public_id}"
+            }
+          },
+          {
+            type: 'section',
+            text: {
+              type: 'plain_text',
+              text: "#{@list.count} 명 발송"
+            }
+          }
+        ]
+      })
       return
     end
 
@@ -73,6 +100,7 @@ class GetWorknetJobService
 
   def create_worknet_job_postings(jobs)
     search_api_service = PostSearchEngineApiService.new rescue nil
+    @stag_test_only_one = false
     if jobs.class == Array
       jobs.each do |job_info|
         parse_and_create_job_posting(job_info, search_api_service)
