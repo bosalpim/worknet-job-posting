@@ -106,9 +106,7 @@ module KakaoNotificationLoggingHelper
       return get_draft_conversion_msg_logging_data(template_id, tem_params)
     when JOB_APPLICATION
       return get_job_application(template_id, tem_params)
-    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
-      return get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
-    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
+    when MessageTemplateName::CLOSE_JOB_POSTING_REMIND_1DAY_AGO
       return get_notify_free_job_posting_close(template_id, tem_params, target_public_id)
     when CAREER_CERTIFICATION_V2
       return get_career_certification_v2(template_id, tem_params)

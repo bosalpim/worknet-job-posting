@@ -59,9 +59,8 @@ module MessageTemplateName
   # 간편 지원
   JOB_APPLICATION = 'job_application (close_avail)'.freeze
 
-  # 과금 대상 무료공고 종료 관련
-  NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO = 'free_job_posting_close_1dayago'.freeze
-  NOTIFY_FREE_JOB_POSTING_CLOSE = 'free_job_posting_close'.freeze
+  # 공고 자동종료 1일전 알림
+  CLOSE_JOB_POSTING_REMIND_1DAY_AGO = 'close_jobposting_remind_1dago'
 
   # 룰렛 수령 알림
   ROULETTE = 'roulette'.freeze
