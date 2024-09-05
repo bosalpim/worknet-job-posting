@@ -71,7 +71,7 @@ jobs:
           SLACK_NOTI_NEWSPAPER_URL: ${{ secrets.SLACK_TEST_WEBHOOK_URL }}
           SLACK_NOTI_NONE_LTC_CONSULTING_ALERT: ${{ secrets.SLACK_NOTI_NONE_LTC_CONSULTING_ALERT_STAG }}
           WORKNET_CRAWLER_API: ${{ secrets.WORKNET_CRAWLER_API }}
-          BUSINESS_FREE_TRIAL_ALERT: ${{ BUSINESS_FREE_TRIAL_ALERT_STAG }}
+          BUSINESS_FREE_TRIAL_ALERT: ${{ secrets.BUSINESS_FREE_TRIAL_ALERT_STAG }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
