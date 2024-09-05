@@ -11,6 +11,6 @@ class CloseExpiredJobPostingsJob < ApplicationJob
   cron "0 19 * * ? *"
 
   def notify_will_close
-    NotificationServiceJob.perform_later(:notify, { message_template_id: MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO })
+    NotificationServiceJob.perform_later(:notify, { message_template_id: MessageTemplateName::CLOSE_JOB_POSTING_REMIND_1DAY_AGO })
   end
 end
