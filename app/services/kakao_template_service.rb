@@ -149,8 +149,8 @@ class KakaoTemplateService
       get_connect_result_user_survey_B(tem_params)
     when MessageTemplateName::JOB_APPLICATION
       get_job_application(tem_params)
-    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
-      get_notify_free_job_posting_close_one_day_ago(tem_params)
+    when MessageTemplateName::CLOSE_JOB_POSTING_REMIND_1DAY_AGO
+      close_job_posting_remind_one_day_ago(tem_params)
     when MessageTemplateName::ROULETTE
       get_roulette_ticket_receive(tem_params)
     when MessageTemplateName::CONTACT_MESSAGE
@@ -1941,22 +1941,20 @@ carepartner.kr#{path}
     }
   end
 
-  def get_notify_free_job_posting_close_one_day_ago(tem_params)
+  def close_job_posting_remind_one_day_ago(tem_params)
     {
-      title: "무료 공고 종료 1일전 안내",
-      message: "#{tem_params[:title]} 공고가 1일 후 자동 종료될 예정입니다.
-아직 채용되지 않았다면 케어파트너 [번개채용] 공고를 통해 요양보호사님을 만나보세요!
+      title: "공고 자동종료 1일전 안내",
+      message: "등록하신 공고가 1일 후 자동 종료될 예정입니다.
+▶종료 예정 공고: #{tem_params[:title]}
 
-[번개채용] 공고는
-1. 공고를 무제한 연장하실 수 있습니다.
-2. 요양보호사 프로필을 먼저 조회하고, 면접 제안을 할 수 있습니다.
-3. 채용되지 않으면 무료!
+종료될 공고의 채용 결과를 입력해주세요.
+이번에 채용 결과를 알려주시면, 다음 공고때 더 적합한 요양보호사를 추천받을 수 있어요!
 
-👇공고 연장하러가기👇",
+👇채용 결과 입력하러가기👇",
       buttons: [
         {
           type: "WL",
-          name: "공고 연장하러 가기!",
+          name: "채용 결과 입력하기",
           url_mobile: tem_params[:link],
           url_pc: tem_params[:link],
         }

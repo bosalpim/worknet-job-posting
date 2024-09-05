@@ -16,7 +16,7 @@ class Notification::FactoryService
       return Notification::Factory::AccumulatedPreparativeCbt.new
     when MessageTemplateName::TARGET_USER_RESIDENT_POSTING
       return Notification::Factory::TargetUserResidentJobPostingService.new(params)
-    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
+    when MessageTemplateName::CLOSE_JOB_POSTING_REMIND_1DAY_AGO
       return Notification::Factory::NotifyCloseFreeJobPosting.call_1day_ago
     when MessageTemplateName::JOB_APPLICATION
       return Notification::Factory::NewJobApplication.new(params[:id] || params["id"])
