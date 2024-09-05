@@ -5,17 +5,13 @@ class Notification::Factory::NotifyCloseFreeJobPosting < Notification::Factory::
   include KakaoNotificationLoggingHelper
 
   def self.call_1day_ago
-    new(true, nil)
-  end
-
-  def self.call_close(job_postings)
-    new(false, job_postings)
+    new(true)
   end
 
   private
-  def initialize(one_day_ago, job_postings)
-    super(one_day_ago ? MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO : MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE)
-    one_day_ago ? init_close_1day_ago : init_close(job_postings)
+  def initialize(one_day_ago)
+    super(MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO)
+    init_close_1day_ago
   end
 
   def init_close_1day_ago
@@ -30,11 +26,6 @@ class Notification::Factory::NotifyCloseFreeJobPosting < Notification::Factory::
 
     Jets.logger.info "금일, 내일 완전 종료 대상 : #{job_postings.pluck(:public_id)}"
 
-    @list = job_postings
-    create_message
-  end
-
-  def init_close(job_postings)
     @list = job_postings
     create_message
   end

@@ -18,8 +18,6 @@ class Notification::FactoryService
       return Notification::Factory::TargetUserResidentJobPostingService.new(params)
     when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO
       return Notification::Factory::NotifyCloseFreeJobPosting.call_1day_ago
-    when MessageTemplateName::NOTIFY_FREE_JOB_POSTING_CLOSE
-      return Notification::Factory::NotifyCloseFreeJobPosting.call_close(params[:job_postings])
     when MessageTemplateName::JOB_APPLICATION
       return Notification::Factory::NewJobApplication.new(params[:id] || params["id"])
     when MessageTemplateName::CONTACT_MESSAGE

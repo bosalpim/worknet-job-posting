@@ -39,7 +39,6 @@ class NotificationResult < ApplicationRecord
 
   # 과금 대상 무료공고 종료 관련
   NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO = 'free_job_posting_close_1dayago'.freeze
-  NOTIFY_FREE_JOB_POSTING_CLOSE = 'free_job_posting_close'.freeze
 
   BUSINESS_JOB_POSTING_COMPLETE = 'business_job_posting_complete'.freeze
 
@@ -86,7 +85,6 @@ class NotificationResult < ApplicationRecord
     ACCUMULATED_DRAFT => ACCUMULATED_DRAFT,
     ACCUMULATED_PREPARATIVE => ACCUMULATED_PREPARATIVE,
     NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO => NOTIFY_FREE_JOB_POSTING_CLOSE_ONE_DAY_AGO,
-    NOTIFY_FREE_JOB_POSTING_CLOSE => NOTIFY_FREE_JOB_POSTING_CLOSE,
     ROULETTE => ROULETTE,
     NEWSPAPER_JOB_ALARM => NEWSPAPER_JOB_ALARM,
     PROPOSAL_ACCEPT => PROPOSAL_ACCEPT,
