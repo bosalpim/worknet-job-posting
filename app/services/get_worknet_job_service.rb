@@ -12,31 +12,31 @@ class GetWorknetJobService
   end
 
   def crm_target_worknet_process(worknet_job_posting)
-    return if @stag_test_only_one
-    @stag_test_only_one = true unless Jets.env.production?
+    return if @stag_test_only_one && !Jets.env.production?
+
     # 이미 경험한 기관이라면 신규 일자리 알림 무료발송 테스터에서 제외시킴
     business_free_trial = BusinessFreeTrial.find_by(business_id: worknet_job_posting.business_id)
-    return unless business_free_trial.nil?
+    return if !business_free_trial.nil? && Jets.env.production?
+
     # 0.03 기준 버림 처리 후 타켓 지역 확인
     rounded_worknet_job_lng = ((worknet_job_posting.lng/0.03).floor * 0.03).round(2)
     rounded_worknet_job_lat = ((worknet_job_posting.lat/0.03).floor * 0.03).round(2)
     matching_record = BusinessFreeTrialTargetPosition.find_by(lat: rounded_worknet_job_lat, lng: rounded_worknet_job_lng)
-    return if matching_record.nil?
-
-    Jets.logger.info("CRM TARGET : MATCH LAT/LNG : #{matching_record.lat}, #{matching_record.lng}, JOB_POSTING_PUBLICID : #{worknet_job_posting.public_id}")
+    return if matching_record.nil? && Jets.env.production?
 
     # 핸드폰 번호 크롤링 요청
     phone_number = WorknetPhoneNumberCrawler.get_phone_number(worknet_job_posting.scraped_worknet_job_posting.url) rescue nil
+    is_phone_number_crawl_error = phone_number.nil? || !phone_number.start_with?("010")
     trials = BusinessFreeTrial.create!(
       business_id: worknet_job_posting.business_id,
       job_posting_id: worknet_job_posting.id,
-      phone_number: phone_number.nil? ? 'error' : phone_number,
+      phone_number: is_phone_number_crawl_error ? 'error' : phone_number,
       public_id: worknet_job_posting.public_id,
       feature: 'auto_new_job_posting'
     ) rescue nil # phone_number가 Null인 대상도 row를 남겨서 후속 대응에 활용
     Jets.logger.info("CRM TARGET : CREATE FREE TRIALS PUBLICID : #{trials.public_id}")
 
-    if phone_number.nil?
+    if is_phone_number_crawl_error
       Jets.logger.info("CRM TARGET : UNEXIST PHONENUMBER URL : #{worknet_job_posting.scraped_worknet_job_posting.url}")
       SlackWebhookService.call(:business_free_trial, {
         blocks: [
@@ -58,7 +58,14 @@ class GetWorknetJobService
             type: 'section',
             text: {
               type: 'plain_text',
-              text: "#{@list.count} 명 발송"
+              text: "비즈니스 Id : #{@job_posting.business_id}"
+            }
+          },
+          {
+            type: 'section',
+            text: {
+              type: 'plain_text',
+              text: "error : #{phone_number}"
             }
           }
         ]
@@ -72,8 +79,9 @@ class GetWorknetJobService
         job_posting_id: worknet_job_posting.id,
         radius: 3000,
       }
-    }) rescue nil if Jets.env == 'production'
+    }) rescue nil
 
+    @stag_test_only_one = true unless Jets.env.production?
     Jets.logger.info("CRM TARGET : MESSAGE COMPLETE FREE TRIALS PUBLICID : #{trials.public_id}")
   end
 
@@ -330,8 +338,11 @@ class GetWorknetJobService
   end
 
   def build_job_posting(worknet_job, business_info, search_api_service)
+    Jets.logger.info "BUILD JOB POSTING"
     return if worknet_job.job_posting.present?
     return if worknet_job.closed?
+
+    Jets.logger.info "NOT CLOSED"
 
     worknet_job_info = worknet_job.info
     business_number = worknet_job_info.dig("center_business_number")
@@ -397,8 +408,10 @@ class GetWorknetJobService
     search_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" && search_api_service.present?
 
     if job_posting.lat.present? && job_posting.lng.present?
+      Jets.logger.info "CHECK REGISTERED"
       registered_business = BusinessClient.find_by(business_id: business.id)
       if registered_business.nil? # 가입되지 않은 기관에게만 실행
+        Jets.logger.info "TAGET WORKNET CRM PROCESS"
         crm_target_worknet_process(job_posting) rescue nil
       end
     end
