@@ -1,0 +1,2 @@
+class BusinessFreeTrial < ApplicationRecord
+end
