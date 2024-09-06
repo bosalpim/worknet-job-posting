@@ -106,7 +106,6 @@ class GetWorknetJobService
 
   def create_worknet_job_postings(jobs)
     search_api_service = PostSearchEngineApiService.new rescue nil
-    @stag_test_only_one = false
     if jobs.class == Array
       jobs.each do |job_info|
         parse_and_create_job_posting(job_info, search_api_service)
@@ -336,11 +335,8 @@ class GetWorknetJobService
   end
 
   def build_job_posting(worknet_job, business_info, search_api_service)
-    Jets.logger.info "BUILD JOB POSTING"
     return if worknet_job.job_posting.present?
     return if worknet_job.closed?
-
-    Jets.logger.info "NOT CLOSED"
 
     worknet_job_info = worknet_job.info
     business_number = worknet_job_info.dig("center_business_number")
