@@ -10,7 +10,7 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
     @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     radius = params[:radius].nil? ? 3000 : params[:radius]
-    @list = Jets.env.production? ? User
+    @list = User
               .receive_job_notifications
               .where("preferred_work_types ?| array[:work_types]", work_types: [@job_posting.work_type])
               .where.not(phone_number: nil)
@@ -18,7 +18,7 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
                 radius,
                 @job_posting.lat,
                 @job_posting.lng
-              ).limit(200) : User.where(phone_number: ['01094659404', '01029465752'])
+              ).limit(200) + User.where(phone_number: ['01094659404', '01029465752']) # 하민, 준혁은 계속 받도록 처리
     create_message
   end
 

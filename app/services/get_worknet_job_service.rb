@@ -12,17 +12,16 @@ class GetWorknetJobService
   end
 
   def crm_target_worknet_process(worknet_job_posting)
-    return if @stag_test_only_one && !Jets.env.production?
-
+    return if Jets.env.production?
     # 이미 경험한 기관이라면 신규 일자리 알림 무료발송 테스터에서 제외시킴
     business_free_trial = BusinessFreeTrial.find_by(business_id: worknet_job_posting.business_id)
-    return if !business_free_trial.nil? && Jets.env.production?
+    return unless business_free_trial.nil?
 
     # 0.03 기준 버림 처리 후 타켓 지역 확인
     rounded_worknet_job_lng = ((worknet_job_posting.lng/0.03).floor * 0.03).round(2)
     rounded_worknet_job_lat = ((worknet_job_posting.lat/0.03).floor * 0.03).round(2)
     matching_record = BusinessFreeTrialTargetPosition.find_by(lat: rounded_worknet_job_lat, lng: rounded_worknet_job_lng)
-    return if matching_record.nil? && Jets.env.production?
+    return if matching_record.nil?
 
     # 핸드폰 번호 크롤링 요청
     phone_number = WorknetPhoneNumberCrawler.get_phone_number(worknet_job_posting.scraped_worknet_job_posting.url) rescue nil
@@ -81,7 +80,6 @@ class GetWorknetJobService
       }
     }) rescue nil
 
-    @stag_test_only_one = true unless Jets.env.production?
     Jets.logger.info("CRM TARGET : MESSAGE COMPLETE FREE TRIALS PUBLICID : #{trials.public_id}")
   end
 
