@@ -12,7 +12,7 @@ class GetWorknetJobService
   end
 
   def crm_target_worknet_process(worknet_job_posting)
-    return if Jets.env.production?
+    return unless Jets.env.production?
     # 이미 경험한 기관이라면 신규 일자리 알림 무료발송 테스터에서 제외시킴
     business_free_trial = BusinessFreeTrial.find_by(business_id: worknet_job_posting.business_id)
     return unless business_free_trial.nil?
