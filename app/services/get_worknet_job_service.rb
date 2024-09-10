@@ -31,7 +31,8 @@ class GetWorknetJobService
       job_posting_id: worknet_job_posting.id,
       phone_number: is_phone_number_crawl_error ? 'error' : phone_number,
       public_id: worknet_job_posting.public_id,
-      feature: 'auto_new_job_posting'
+      feature: 'auto_new_job_posting',
+      business_free_trial_target_positions_id: matching_record.id
     ) rescue nil # phone_number가 Null인 대상도 row를 남겨서 후속 대응에 활용
     Jets.logger.info("CRM TARGET : CREATE FREE TRIALS PUBLICID : #{trials.public_id}")
 
