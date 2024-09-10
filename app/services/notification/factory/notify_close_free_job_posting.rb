@@ -54,7 +54,6 @@ class Notification::Factory::NotifyCloseFreeJobPosting < Notification::Factory::
       target_public_id: client.public_id
     }
 
-    reserved_dt = DateTime.now.strftime("%Y%m%d") + "100000"
-    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, client.phone_number, params, client.public_id, 'AI', reserved_dt))
+    @bizm_post_pay_list.push(BizmPostPayMessage.new(@message_template_id, client.phone_number, params, client.public_id, 'AI'))
   end
 end
