@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :newspapers, dependent: :destroy
   has_many :job_posting_connects
   has_many :job_support_project_participants
+  has_many :job_posting_results
 
   enum gender: { male: 'male', female: 'female' }
 
