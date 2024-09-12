@@ -14,11 +14,11 @@ class JobSupportProject::SubmitRemindService
     @job_posting_results = JobPostingResult
                              .where('job_posting_results.created_at >= ? AND job_posting_results.created_at < ?', start_time.utc, end_time.utc)
                              .where(result_type: 'success')
-                             .joins(job_postings_connect: :user )
-                             .where('users.birth_year <= ?', Time.now.year - 60)
+                             .joins("LEFT JOIN users ON users.id = job_posting_results.users_id")
+                             .where('job_posting_results.users_id IS NULL OR users.birth_year <= ?', Time.now.year - 60)
                              .left_joins(job_posting: :job_support_project_participants)
                              .where('job_support_project_participants.id IS NULL OR job_support_project_participants.is_done = ?', false)
-                             .joins("LEFT JOIN job_support_project_participants AS jsp ON job_postings_connects.user_id = jsp.user_id AND jsp.is_done = TRUE AND jsp.created_at BETWEEN '#{current_year_start.utc}' AND '#{current_year_end.utc}'")
+                             .joins("LEFT JOIN job_support_project_participants AS jsp ON job_posting_results.users_id = jsp.user_id AND jsp.is_done = TRUE AND jsp.created_at BETWEEN '#{current_year_start.utc}' AND '#{current_year_end.utc}'")
                              .where('jsp.id IS NULL')
   end
 
@@ -29,7 +29,7 @@ class JobSupportProject::SubmitRemindService
       Jets.logger.info "#{job_posting_result.id} 대상 리마인드 발송\n"
 
       business_registration = job_posting_result.job_posting.business.business_registration
-      user_name = job_posting_result.job_postings_connect.user.name
+      user_name = job_posting_result.user.name
       due_date = (@kst_now + @due_day.days).in_time_zone('Asia/Seoul').strftime('%m.%d')
 
       if business_registration.nil?
