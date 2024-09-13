@@ -10,16 +10,29 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
     @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     radius = params[:radius].nil? ? 3000 : params[:radius]
-    @list = User
-              .receive_job_notifications
-              .where("preferred_work_types ?| array[:work_types]", work_types: [@job_posting.work_type])
-              .where.not(phone_number: nil)
-              .within_radius(
-                radius,
-                @job_posting.lat,
-                @job_posting.lng
-              ).limit(200) + User.where(phone_number: ['01094659404', '01029465752']) # 하민, 준혁은 계속 받도록 처리
+    @list = fetch_users(radius)
     create_message
+  end
+
+  def fetch_users(radius)
+    # 사용자 지정 work_type에 따라 다른 쿼리 조건을 설정
+    if ['facility', 'resident'].include?(@job_posting.work_type)
+      # facility 또는 resident일 때는 workable_hours_per_day를 기준으로 필터링
+      base_query = User
+                     .receive_job_notifications
+                     .where(workable_hours_per_day: 8..)
+                     .where.not(phone_number: nil)
+                     .within_radius(5000, @job_posting.lat, @job_posting.lng)
+    else
+      # 다른 work_type일 때는 preferred_work_types를 기준으로 필터링
+      base_query = User
+                     .receive_job_notifications
+                     .where("preferred_work_types ?| array[:work_types]", work_types: [@job_posting.work_type])
+                     .where.not(phone_number: nil)
+                     .within_radius(radius, @job_posting.lat, @job_posting.lng)
+    end
+
+    base_query.limit(200) + User.where(phone_number: ['01094659404', '01029465752'])
   end
 
   def save_result
@@ -38,6 +51,13 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
           text: {
             type: 'plain_text',
             text: "공고 publicId : #{@job_posting.public_id}"
+          }
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'plain_text',
+            text: "공고 타입 : #{@job_posting.work_type}"
           }
         },
         {
