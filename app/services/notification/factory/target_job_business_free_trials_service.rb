@@ -56,6 +56,13 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
           type: 'section',
           text: {
             type: 'plain_text',
+            text: "공고 타입 : #{@job_posting.work_type}"
+          }
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'plain_text',
             text: "#{@list.count} 명 발송"
           }
         }
