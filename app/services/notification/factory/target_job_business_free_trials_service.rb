@@ -21,6 +21,7 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
       base_query = User
                      .receive_job_notifications
                      .where(workable_hours_per_day: 8..)
+                     .where.not(phone_number: nil)
                      .within_radius(5000, @job_posting.lat, @job_posting.lng)
     else
       # 다른 work_type일 때는 preferred_work_types를 기준으로 필터링
