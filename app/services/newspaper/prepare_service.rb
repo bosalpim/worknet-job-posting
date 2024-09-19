@@ -39,6 +39,33 @@ class Newspaper::PrepareService
 
   private
 
+  # 마지막 접속일이 4주 경과했다면 알림 off
+  def update_job_notification_enabled
+    four_weeks_ago = DateTime.now - 28.days
+    User
+      .where('last_used_at <= ?', four_weeks_ago)
+      .update_all(job_notification_enabled: 'false')
+  end
+
+  # 최근 접속일이 1주일 이내라면 매일 발송.
+  # 최근 접속일이 1주일 이상 경과했다면 마지막 접속일로부터 1주일 단위로 발송
+  def should_send_notification?(last_use_at, today)
+    return false if last_use_at.nil?
+
+    days_since_last_use = (today.to_date - last_use_at.to_date).to_i
+
+    if days_since_last_use <= 7
+      # 최근 7일 이내 접속: 매일 알림 발송
+      true
+    elsif days_since_last_use <= 28 && days_since_last_use % 7 == 0
+      # 최근 접속일로부터 7, 14, 21, 28일째 되는 날: 알림 발송
+      true
+    else
+      # 그 외의 경우: 알림 발송하지 않음
+      false
+    end
+  end
+
   def fetch_users
     today = DateTime.now
     yesterday_start = if today.sunday?
@@ -48,11 +75,16 @@ class Newspaper::PrepareService
                       end
     yesterday_end = today.end_of_day
 
+    update_job_notification_enabled
+
     User
       .receive_job_notifications
       .where
       .not(phone_number: nil)
       .select do |user|
+      send_notification = should_send_notification?(user.last_used_at, today)
+      next false unless send_notification
+
       preferred_work_types = user.preferred_work_types
 
       job_postings = JobPosting
