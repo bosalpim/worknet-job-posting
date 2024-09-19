@@ -6,10 +6,10 @@ default: &default
 development:
   <<: *default
   ########  staging ######
-#  database: backend_production
+#  database: backend_staging
 #  username: rails_user
-#  password: <%#= ENV["DB_PASSWORD_STAGING"] %>
-#  host: '127.0.0.1'
+#  host:  <%= ENV["DB_HOST_STAGING"] || 'localhost' %>
+#  password: <%= ENV['DB_PASSWORD_STAGING'] %>
 #  port: 5433
   ########  localhost ######
   database: bosalpim_development
