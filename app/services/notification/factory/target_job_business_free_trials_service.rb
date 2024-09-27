@@ -22,6 +22,7 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
                      .receive_job_notifications
                      .where(workable_hours_per_day: 8..)
                      .where.not(phone_number: nil)
+                     .where.not(last_used_at: nil)
                      .within_radius(5000, @job_posting.lat, @job_posting.lng)
     else
       # 다른 work_type일 때는 preferred_work_types를 기준으로 필터링
@@ -29,10 +30,11 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
                      .receive_job_notifications
                      .where("preferred_work_types ?| array[:work_types]", work_types: [@job_posting.work_type])
                      .where.not(phone_number: nil)
+                     .where.not(last_used_at: nil)
                      .within_radius(radius, @job_posting.lat, @job_posting.lng)
     end
 
-    base_query.limit(200) + User.where(phone_number: ['01094659404', '01029465752'])
+    base_query.order(last_used_at: 'desc').limit(100) + User.where(phone_number: ['01094659404', '01029465752'])
   end
 
   def save_result
