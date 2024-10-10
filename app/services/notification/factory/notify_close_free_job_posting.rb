@@ -38,11 +38,11 @@ class Notification::Factory::NotifyCloseFreeJobPosting < Notification::Factory::
   def create_bizm_post_pay_message(job_posting)
     suffix = '/recruitment_management'
     link = if Jets.env.production?
-             "https://business.carepartner.kr#{suffix}"
+             "http://business.carepartner.kr#{suffix}"
            elsif Jets.env.staging?
-             "https://staging-business.vercel.app#{suffix}"
+             "http://staging-business.vercel.app#{suffix}"
            else
-             "https://localhost:3001#{suffix}"
+             "http://localhost:3001#{suffix}"
            end
     title = job_posting.title
     business_client = BusinessClient.find_by(business_id: job_posting.business_id)
