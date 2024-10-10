@@ -34,7 +34,7 @@ class Notification::Factory::TargetJobBusinessFreeTrialsService < Notification::
                      .within_radius(radius, @job_posting.lat, @job_posting.lng)
     end
 
-    base_query.order(last_used_at: 'desc').limit(100) + User.where(phone_number: ['01094659404', '01029465752'])
+    base_query.order(last_used_at: 'desc').limit(50) + User.where(phone_number: ['01094659404', '01029465752'])
   end
 
   def save_result
