@@ -12,19 +12,24 @@ class JobSupportProject::SubmitRemindService
     current_year_start = Time.now.beginning_of_year
     current_year_end = Time.now.end_of_year
 
-    @job_posting_results = JobPostingResult
-                             .where('job_posting_results.created_at >= ? AND job_posting_results.created_at < ?', start_time.utc, end_time.utc)
-                             .where(result_type: 'success')
-                             .left_joins(:user)
-                             .where('job_posting_results.user_id IS NULL OR users.birth_year <= ?', Time.now.year - 60)
-                             .left_joins(job_posting: :job_support_project_participants)
-                             .where('job_support_project_participants.id IS NULL OR job_support_project_participants.is_done = ?', false)
-                             .joins("LEFT JOIN job_support_project_participants AS jsp ON job_posting_results.user_id = jsp.user_id AND jsp.is_done = TRUE AND jsp.created_at BETWEEN '#{current_year_start.utc}' AND '#{current_year_end.utc}'")
-                             .where('jsp.id IS NULL')
+    @job_posting_results = JobPostingResult.where(id: 11)
+    # @job_posting_results = JobPostingResult
+    #                          .where('job_posting_results.created_at >= ? AND job_posting_results.created_at < ?', start_time.utc, end_time.utc)
+    #                          .where(result_type: 'success')
+    #                          .left_joins(:user)
+    #                          .where('job_posting_results.user_id IS NULL OR users.birth_year <= ?', Time.now.year - 60)
+    #                          .left_joins(job_posting: :job_support_project_participants)
+    #                          .where('job_support_project_participants.id IS NULL OR job_support_project_participants.is_done = ?', false)
+    #                          .joins("LEFT JOIN job_support_project_participants AS jsp ON job_posting_results.user_id = jsp.user_id AND jsp.is_done = TRUE AND jsp.created_at BETWEEN '#{current_year_start.utc}' AND '#{current_year_end.utc}'")
+    #                          .where('jsp.id IS NULL')
   end
 
   def call
+    Jets.logger.info "-------------- REMIND NOTIFY --------------\n"
     @job_posting_results.each do |job_posting_result|
+      logger_prefix = "JOB_POSTING_RESULT_ID : #{job_posting_result.id} 공고"
+      Jets.logger.info "#{logger_prefix} 리마인드 발송\n"
+
       business_registration = job_posting_result.job_posting.business.business_registration
       user_name = job_posting_result.user.name
       due_date = (@kst_now + @due_day.days).in_time_zone('Asia/Seoul').strftime('%m.%d')
@@ -60,9 +65,16 @@ class JobSupportProject::SubmitRemindService
         }
       }
 
-      p body
-      res = request_post_pay(body)
-      p res
+      response = request_post_pay(body)
+      if response.dig("result") == "Y"
+        if response.dig("code") == "K000"
+          Jets.logger.info "#{logger_prefix} 알림톡 발송 성공\n"
+        else
+          Jets.logger.info "#{logger_prefix} 대체문자 발송 성공\n"
+        end
+      else
+        Jets.logger.info "#{logger_prefix} 발송 실패\n"
+      end
     end
   end
 end
