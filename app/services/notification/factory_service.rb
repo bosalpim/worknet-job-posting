@@ -50,6 +50,8 @@ class Notification::FactoryService
       return Notification::Factory::EmploymentConfirmationService.new(params)
     when MessageTemplates[MessageNames::TARGET_JOB_POSTING_AD_2]
       return Notification::Factory::TargetJobPostingAdAfterPostingDaysService.new(params)
+    when MessageTemplates[MessageNames::PLUSTALK_ADS]
+      return Notification::Factory::PlustalkAdsService.new(params)
     when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
       return Notification::Factory::TargetJobBusinessFreeTrialsService.new(params)
     else

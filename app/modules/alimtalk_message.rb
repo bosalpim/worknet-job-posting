@@ -12,6 +12,7 @@ module AlimtalkMessage
     TWO_DAY_CAREPARTNER_DRAFT_CRM = 'two_day_carepartner_draft_crm'
     CBT_DRAFT_CRM = 'cbt_draft_crm'
     TARGET_JOB_BUSINESS_FREE_TRIALS = 'target_user_business_free_trials'
+    PLUSTALK_ADS = 'plustalk_ads'
   end
 
   module MessageTemplates
@@ -23,7 +24,8 @@ module AlimtalkMessage
       MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM => 'carepartner-present',
       MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM => 'well-fitted-job-1',
       MessageNames::CBT_DRAFT_CRM => 'CBT-draft',
-      MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS => 'target_user_business_tutorial'
+      MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS => 'target_user_business_tutorial',
+      MessageNames::PLUSTALK_ADS => 'plustalk_ads',
     }.freeze
 
     def self.[](message_name)
