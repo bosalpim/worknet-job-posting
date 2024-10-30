@@ -33,7 +33,7 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
                 @job_posting.lng,
                 min_radius
               ).where.not(phone_number: nil)
-              .order("earth_distance(ll_to_earth(#{@job_posting.lat}, #{@job_posting.lng}), ll_to_earth(users.lat, users.lng)) ASC")
+              .order(Arel.sql("earth_distance(ll_to_earth(#{@job_posting.lat}, #{@job_posting.lng}), ll_to_earth(users.lat, users.lng)) ASC"))
               .limit(count)
 
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
