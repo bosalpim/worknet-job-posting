@@ -23,16 +23,14 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
     rescue ArgumentError, TypeError
       @radius = @job_posting.is_facility? ? 5000 : 3000
     end
-    min_radius = params[:min_radius].nil? ? nil : params[:min_radius]
     count = params[:count].nil? ? nil : params[:count]
+
+    previousUserIds = DispatchedNotification.where(notification_relate_instance_types_id:4, notification_relate_instance_id:@job_posting.id).pluck(:receiver_id)
+
     @list = User
               .receive_job_notifications
-              .within_radius(
-                @radius,
-                @job_posting.lat,
-                @job_posting.lng,
-                min_radius
-              ).where.not(phone_number: nil)
+              .where.not(phone_number: nil)
+              .where.not(id: previousUserIds)
               .order(Arel.sql("earth_distance(ll_to_earth(#{@job_posting.lat}, #{@job_posting.lng}), ll_to_earth(users.lat, users.lng)) ASC"))
               .limit(count)
 
