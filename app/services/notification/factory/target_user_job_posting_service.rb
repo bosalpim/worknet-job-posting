@@ -10,6 +10,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
   def initialize(params)
     super(MessageTemplates::TEMPLATES[MessageNames::TARGET_USER_JOB_POSTING])
     @job_posting = JobPosting.find(params[:job_posting_id])
+    treatment_key = params[:treatment_key]
     paid_job_posting = PaidJobPostingFeature.find_by_job_posting_id(params[:job_posting_id])
     @is_free = paid_job_posting.nil? ? true : false
     @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
@@ -25,14 +26,28 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
       @radius = @job_posting.is_facility? ? 5000 : 3000
     end
     min_radius = params[:min_radius].nil? ? nil : params[:min_radius]
-    @list = User
-              .receive_job_notifications
-              .within_radius(
-                @radius,
-                @job_posting.lat,
-                @job_posting.lng,
-                min_radius
-              ).where.not(phone_number: nil)
+
+    if treatment_key === 'A'
+      @list = User
+        .receive_job_notifications
+        .within_radius(
+          @radius,
+          @job_posting.lat,
+          @job_posting.lng,
+          min_radius
+        ).where.not(phone_number: nil)
+    else
+      @list = User
+        .receive_job_notifications
+        .within_radius(
+          3000,
+          @job_posting.lat,
+          @job_posting.lng,
+          0
+        ).where.not(phone_number: nil)
+        .order("RANDOM()")
+        .limit(20)
+    end
 
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
