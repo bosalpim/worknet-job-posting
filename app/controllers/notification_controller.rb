@@ -162,7 +162,8 @@ class NotificationController < ApplicationController
           params: {
             job_posting_id: params[:job_posting_id],
             radius: params[:radius],
-            min_radius: params[:min_radius]
+            min_radius: params[:min_radius],
+            treatment_key: params[:treatment_key]
           }
         }
         Jets.env.development? ?
