@@ -186,13 +186,13 @@ class NotificationController < ApplicationController
           :notify,
           {
             message_template_id: params[:template],
-            params: params.to_h
+            params: params.to_unsafe_h
           }) if Jets.env.development?
         NotificationServiceJob.perform_later(
           :notify,
           {
             message_template_id: params[:template],
-            params: params.to_h
+            params: params.to_unsafe_h
           }) unless Jets.env.development?
       end
 
