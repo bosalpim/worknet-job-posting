@@ -162,7 +162,8 @@ class NotificationController < ApplicationController
           params: {
             job_posting_id: params[:job_posting_id],
             radius: params[:radius],
-            min_radius: params[:min_radius]
+            min_radius: params[:min_radius],
+            treatment_key: params[:treatment_key]
           }
         }
         Jets.env.development? ?
@@ -185,13 +186,13 @@ class NotificationController < ApplicationController
           :notify,
           {
             message_template_id: params[:template],
-            params: params
+            params: params.to_unsafe_h
           }) if Jets.env.development?
         NotificationServiceJob.perform_later(
           :notify,
           {
             message_template_id: params[:template],
-            params: params
+            params: params.to_unsafe_h
           }) unless Jets.env.development?
       end
 
