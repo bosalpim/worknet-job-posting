@@ -43,8 +43,6 @@ module MessageTemplateName
 
   # 동네광고 관련
   TARGET_USER_JOB_POSTING = 'target_user_job_posting'.freeze # 신규일자리 알림을 타겟 사용자에게 전송
-  TARGET_JOB_POSTING_AD = 'target_job_posting_ad'.freeze # 공고 작성 직후 동네 광고 유도
-  TARGET_JOB_POSTING_AD_2 = 'target_job_posting_ad_2' # 공고 작성 경과 3일 이후 동네광고 유도
   TARGET_JOB_POSTING_PERFORMANCE = 'target_job_posting_performance'.freeze # 동네광고 성과
   TARGET_JOB_POSTING_AD_APPLY = 'target_job_posting_ad_apply_v2'.freeze # 동네광고 타겟 사용자의 지원시 기관 알림
 

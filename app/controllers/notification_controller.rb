@@ -90,25 +90,6 @@ class NotificationController < ApplicationController
         Jets.env.development? ?
           NotificationServiceJob.perform_now(meth, event)
           : NotificationServiceJob.perform_later(meth, event)
-      when TARGET_JOB_POSTING_AD
-        NotificationServiceJob.perform_now(
-          :notify,
-          {
-            message_template_id: TARGET_JOB_POSTING_AD,
-            params: {
-              job_posting_id: params[:job_posting_id],
-              count: params[:count]
-            }
-          }) if Jets.env.development?
-        NotificationServiceJob.perform_later(
-          :notify,
-          {
-            message_template_id: TARGET_JOB_POSTING_AD,
-            params: {
-              job_posting_id: params[:job_posting_id],
-              count: params[:count]
-            }
-          }) unless Jets.env.development?
       when JOB_SUPPORT_REQUEST_AGREEMENT
         NotificationServiceJob.perform_now(
           :notify,
