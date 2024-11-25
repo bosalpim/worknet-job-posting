@@ -112,8 +112,6 @@ module KakaoNotificationLoggingHelper
       return get_career_certification_v2(template_id, tem_params)
     when CONTACT_MESSAGE
       return get_contact_message(template_id, tem_params)
-    when MessageTemplateName::SATISFACTION_SURVEY
-      return get_satisfaction_survey(tem_params, template_id)
     when MessageTemplateName::CONFIRM_CAREER_CERTIFICATION
       return get_confirm_career_certification(tem_params, template_id)
     when MessageTemplateName::BUSINESS_JOB_POSTING_COMPLETE
@@ -163,26 +161,6 @@ module KakaoNotificationLoggingHelper
         "receiver_type" => RECEIVER_TYPE_BUSINESS,
         "jobPostingId" => job_posting_public_id,
         "title" => title,
-        "send_at" => Time.current + (9 * 60 * 60)
-      }
-    }
-  end
-
-  def self.get_satisfaction_survey(tem_params, template_id)
-    target_public_id = tem_params.dig(:target_public_id)
-    job_posting_public_id = tem_params.dig(:job_posting_public_id)
-    title = tem_params.dig(:job_posting_title)
-
-    return {
-      "user_id" => target_public_id,
-      "event_type" => NOTIFICATION_EVENT_NAME,
-      "event_properties" => {
-        "template" => template_id,
-        "sender_type" => SENDER_TYPE_CAREPARTNER,
-        "receiver_type" => RECEIVER_TYPE_BUSINESS,
-        "jobPostingId" => job_posting_public_id,
-        "title" => title,
-        "centerName" => tem_params[:business_name],
         "send_at" => Time.current + (9 * 60 * 60)
       }
     }

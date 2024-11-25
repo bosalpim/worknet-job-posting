@@ -6,8 +6,6 @@ class NotificationResult < ApplicationRecord
   EXTRA_BENEFIT = "extra_benefit_notification".freeze
   PROPOSAL_ACCEPTED = "proposal_accepted".freeze
   PROPOSAL_REJECTED = "proposal_refused".freeze
-  SATISFACTION_SURVEY = "business_call_survey".freeze
-  USER_SATISFACTION_SURVEY = "user_satisfaction_survey".freeze
   USER_CALL_FAILURE_ALERT = "user_calls_failure_alert".freeze
   BUSINESS_CALL_FAILURE_ALERT = "business_calls_failure_alert".freeze
   BUSINESS_CALL_APPLY_USER_FAILURE_ALERT = "business_call_apply_user_failure_alert".freeze
@@ -55,10 +53,8 @@ class NotificationResult < ApplicationRecord
     EXTRA_BENEFIT => "extra_benefit_notification",
     PROPOSAL_ACCEPTED => "proposal_accepted",
     PROPOSAL_REJECTED => "proposal_refused",
-    SATISFACTION_SURVEY => SATISFACTION_SURVEY,
     TARGET_USER_JOB_POSTING_V2 => TARGET_USER_JOB_POSTING_V2,
     TARGET_JOB_POSTING_AD_APPLY => TARGET_JOB_POSTING_AD_APPLY,
-    USER_SATISFACTION_SURVEY => USER_SATISFACTION_SURVEY,
     USER_CALL_FAILURE_ALERT => USER_CALL_FAILURE_ALERT,
     BUSINESS_CALL_FAILURE_ALERT => BUSINESS_CALL_FAILURE_ALERT,
     CALL_REQUEST_ALARM => CALL_REQUEST_ALARM,
