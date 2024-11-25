@@ -36,8 +36,6 @@ class Notification::FactoryService
       return Notification::Factory::SmartMemo.new(params)
     when MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE
       return Notification::Factory::TargetJobPostingPerformance.new
-    when MessageTemplateName::TARGET_JOB_POSTING_AD
-      return Notification::Factory::TargetJobPostingAd.new(params)
     when MessageTemplateName::NONE_LTC_REQUEST
       return Notification::Factory::NewNoneLtcRequest.new(params)
     when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
@@ -50,8 +48,6 @@ class Notification::FactoryService
       return Notification::Factory::PlustalkService.new(params)
     when MessageTemplateName::CAREER_CERTIFICATION_V3
       return Notification::Factory::EmploymentConfirmationService.new(params)
-    when MessageTemplates[MessageNames::TARGET_JOB_POSTING_AD_2]
-      return Notification::Factory::TargetJobPostingAdAfterPostingDaysService.new(params)
     when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
       return Notification::Factory::TargetJobBusinessFreeTrialsService.new(params)
     else
