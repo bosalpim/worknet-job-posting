@@ -11,8 +11,6 @@ Jets.application.routes.draw do
   resources :job_postings, only: :create do
     member do
       post :new_notification
-      post :new_satisfaction_survey
-      post :new_user_satisfaction_survey
       post :job_ads_messages
     end
     collection do

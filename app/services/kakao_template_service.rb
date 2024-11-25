@@ -75,10 +75,6 @@ class KakaoTemplateService
       get_proposal_rejected_data(tem_params)
     when MessageTemplateName::PROPOSAL_RESPONSE_EDIT
       get_proposal_response_edit_data(tem_params)
-    when MessageTemplateName::SATISFACTION_SURVEY
-      get_satisfaction_survey_data(tem_params)
-    when MessageTemplateName::USER_SATISFACTION_SURVEY
-      get_user_satisfaction_survey_data(tem_params)
     when MessageTemplateName::USER_CALL_REMINDER
       get_user_call_reminder_data(tem_params)
     when MessageTemplateName::MISSED_CAREGIVER_TO_BUSINESS_CALL
@@ -698,53 +694,6 @@ class KakaoTemplateService
           name: "다른 요양보호사 찾기",
           type: "WL",
           url_mobile: "https://business.carepartner.kr/recruitment_management/users/#{tem_params[:job_posting_public_id]}&utm_source=message&utm_medium+arlimtalk&utm_campaign=proposal_refused",
-        },
-      ]
-    }
-  end
-
-  def get_satisfaction_survey_data(tem_params)
-    base_url = business_base_url
-    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=business_call_survey"
-    close_link = "#{base_url}/recruitment_management/#{tem_params[:job_posting_public_id]}/close?#{utm}"
-    survey_link = "#{base_url}/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&#{utm}"
-
-    return {
-      title: "방금 요양보호사와 통화한 공고가 아직 채용중 인가요?",
-      message: "방금 요양보호사와 통화한 공고가 아직 채용중 인가요?
-
-더 이상 채용하지 않는다면, 아래 ‘채용 종료하기' 버튼을 눌러주세요.
-
-■ 공고
-#{tem_params[:job_posting_title]}
-
-(설문 참여 시 매주 추첨을 통해 커피 쿠폰을 드려요)",
-      buttons: [
-        {
-          name: "채용종료하기",
-          type: "WL",
-          url_mobile: close_link,
-          url_pc: close_link
-        },
-        {
-          name: "설문조사 참여하기",
-          type: "WL",
-          url_mobile: survey_link,
-          url_pc: survey_link
-        },
-      ]
-    }
-  end
-
-  def get_user_satisfaction_survey_data(tem_params)
-    return {
-      message: "안녕하세요, #{tem_params[:user_name]} 님\n방금 통화하신 공고의 일자리를 구하셨나요?\n≫ 공고명: #{tem_params[:job_posting_title]}\n\n아래 버튼을 눌러 1분 취업결과 조사에 참여해주세요.\n매주 추첨을 통해 커피 쿠폰을 드립니다.\n여러 번 참여하면 당첨 확률 상승!\n#{tem_params[:link]}\n\n※설문 미참여시 취업지원금 대상에서 제외됩니다",
-      buttons: [
-        {
-          name: "설문조사 참여하기",
-          type: "WL",
-          url_mobile: "https://www.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=user_satisfaction_survey",
-          url_pc: "https://www.carepartner.kr/satisfaction_surveys/#{tem_params[:job_posting_public_id]}/form?is_new=true&utm_source=message&utm_medium=arlimtalk&utm_campaign=user_satisfaction_survey",
         },
       ]
     }
