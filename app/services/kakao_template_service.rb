@@ -97,7 +97,7 @@ class KakaoTemplateService
       get_career_certification_alarm(tem_params)
     when MessageTemplateName::CAREER_CERTIFICATION_V2
       get_career_certification_v2_alarm(tem_params)
-    when MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION
+    when MessageTemplates[MessageNames::CLOSE_JOB_POSTING_NOTIFICATION]
       get_close_job_posting_notification(tem_params)
     when MessageTemplateName::CANDIDATE_RECOMMENDATION
       get_candidate_recommendation(tem_params)
@@ -956,10 +956,10 @@ class KakaoTemplateService
       title: "[케어파트너] 채용종료 안내",
       message: "'#{tem_params[:title]}' 공고의 채용이 종료되었나요?
 
-공고를 ‘채용종료' 상태로 변경하면 요양보호사에게 즉시 전화할 수 있는 ≪무료 번호 열람권≫을 드려요.
+'채용 종료하기' 버튼을 눌러 공고를 마감해주세요.
+공고를 마감하면 요양보호사에게 직접 메세지를 보낼 수 있는 전화면접 제안권을 드려요.
 
-(안내) 공고는 자동으로 종료되지 않아요.
-채용을 종료하지 않으면 요양보호사들이 계속해서 연락할 수 있으니 꼭 채용을 종료해주세요!
+(안내) 자동으로 마감된 공고의 경우는 전화면접 제안권이 제공되지 않으니 꼭 직접 채용 종료를 해주세요!
 
 👇 공고 채용 종료하기 클릭 👇",
       buttons: [

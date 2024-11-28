@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class JobPosting::NotifyExpirationDateService
-
+  include AlimtalkMessage
   def self.call(date)
     self.new(date).call
   end
@@ -46,12 +46,12 @@ class JobPosting::NotifyExpirationDateService
           raise 'client not exists' unless client.present? and client.phone_number.present?
 
           host = "https://business.carepartner.kr"
-          params = "/recruitment_management/#{job_posting.public_id}/close?a=b"
+          params = "/jobs/#{job_posting.public_id}/close?a=b"
           link = "#{host}#{params}&utm_source=message&utm_medium=arlimtalk&utm_campaign=close_job_posting_notification"
 
           message = {
             message_type: 'AI',
-            template_id: MessageTemplateName::CLOSE_JOB_POSTING_NOTIFICATION,
+            template_id: MessageTemplates[MessageNames::CLOSE_JOB_POSTING_NOTIFICATION],
             phone: Jets.env.production? ? client.phone_number : (ENV['TEST_PHONE_NUMBER'] or '01037863607'),
             template_params: {
               target_public_id: client.public_id,
