@@ -27,7 +27,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     end
     min_radius = params[:min_radius].nil? ? nil : params[:min_radius]
 
-    if treatment_key.nil? || treatment_key === 'A'
+    if !@is_free
       @list = User
         .receive_job_notifications
         .within_radius(
