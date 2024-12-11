@@ -77,7 +77,11 @@ jobs:
       - name: Build GLIBC Layer
         run: |
           docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace amazonlinux:2 bash -c "
-            yum install -y gcc make tar gzip wget &&
+            yum update -y &&
+            yum install -y gcc make tar gzip wget bison python3 &&
+            alternatives --install /usr/bin/python python /usr/bin/python3 1 &&
+            alternatives --set python /usr/bin/python3 &&
+          
             wget http://ftp.gnu.org/gnu/libc/glibc-2.38.tar.gz &&
             tar -xvf glibc-2.38.tar.gz &&
             cd glibc-2.38 &&
