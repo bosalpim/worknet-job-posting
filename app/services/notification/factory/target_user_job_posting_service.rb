@@ -6,6 +6,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
   include AlimtalkMessage
 
   DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
+  BexService = Bex::FetchTreatmentByUserIdService
 
   def initialize(params)
     super(MessageTemplates::TEMPLATES[MessageNames::TARGET_USER_JOB_POSTING])
@@ -26,6 +27,8 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
       @radius = @job_posting.is_facility? ? 5000 : 3000
     end
     min_radius = params[:min_radius].nil? ? nil : params[:min_radius]
+    bex_service = BexService.new(experiment_key: 'free-alert-count', user_id: @job_posting.client.public_id)
+    treatment_key = bex_service.call.key rescue nil
 
     if !@is_free
       @list = User
@@ -46,7 +49,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
           0
         ).where.not(phone_number: nil)
         .order("RANDOM()")
-        .limit(20)
+        .limit(treatment_key === "A" ? 20 : 50)
     end
 
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
