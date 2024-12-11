@@ -73,6 +73,22 @@ jobs:
           WORKNET_CRAWLER_API: ${{ secrets.WORKNET_CRAWLER_API }}
           BUSINESS_FREE_TRIAL_ALERT: ${{ secrets.BUSINESS_FREE_TRIAL_ALERT_STAG }}
 
+      - name: Build GLIBC Layer
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace amazonlinux:2 bash -c "
+            yum install -y gcc make tar gzip wget &&
+            wget http://ftp.gnu.org/gnu/libc/glibc-2.38.tar.gz &&
+            tar -xvf glibc-2.38.tar.gz &&
+            cd glibc-2.38 &&
+            mkdir build &&
+            cd build &&
+            ../configure --prefix=/opt &&
+            make -j$(nproc) &&
+            make install &&
+            cd /opt &&
+            zip -r /workspace/glibc-layer.zip .
+          "
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -80,6 +96,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
+      - name: Upload GLIBC Layer to AWS Lambda
+        run: |
+          aws lambda publish-layer-version \
+            --layer-name glibc-layer \
+            --description "GLIBC 2.38 for Lambda" \
+            --license-info "MIT" \
+            --compatible-runtimes ruby3.2 \
+            --zip-file fileb://glibc-layer.zip
 
       - name: Jets deploy
         env:
