@@ -24,6 +24,7 @@ gem "connection_pool"
 gem "nokogiri", "~> 1.16", platforms: [:ruby]
 gem "authorizer", "~> 0.0.6"
 gem "slack-notifier"
+gem 'date', '3.3.3'
 
 # development and test groups are not bundled as part of the deployment
 group :development, :test do
