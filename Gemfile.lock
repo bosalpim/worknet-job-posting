@@ -363,6 +363,7 @@ DEPENDENCIES
   byebug
   capybara
   connection_pool
+  date (~> 3.3.3)
   dotenv (= 2.8.1)
   dynomite (~> 2.0.0)
   faraday
