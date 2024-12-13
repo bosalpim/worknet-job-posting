@@ -40,6 +40,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
           min_radius
         ).where.not(phone_number: nil)
     else
+      AmplitudeService.instance.log_array([{user_id: @job_posting.client.public_id, event_type: "[Action] JobPosting Free Alert", event_properties: { treatment_key: treatment_key}}])
       @list = User
         .receive_job_notifications
         .within_radius(
