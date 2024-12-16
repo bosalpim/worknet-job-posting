@@ -14,3 +14,4 @@ tmp
 .gitmessage.txt
 /public/assets
 FIREBASE_ADMIN_JSON.json
+vendor
