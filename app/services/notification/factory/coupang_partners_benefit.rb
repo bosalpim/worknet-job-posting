@@ -19,6 +19,18 @@ class Notification::Factory::CoupangPartnersBenefit < Notification::Factory::Not
 
       if user_push_token&.present?
         link = "#{base_path}&utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=button-press-alert&referral=app_push"
+        AmplitudeService.instance.log_array([{
+                                               "user_id" => user.public_id,
+                                               "event_type" => "[Action] Receive Notification",
+                                               "event_properties" => {
+                                                 "template" => MessageTemplateName::COUPANG_PARTNERS_BENEFIT,
+                                                 "sender_type" => SENDER_TYPE_CAREPARTNER,
+                                                 "receiver_type" => RECEIVER_TYPE_BUSINESS,
+                                                 "send_at" => Time.current + (9 * 60 * 60),
+                                                 "notiName" => "benefit_buttonclick",
+                                                 "itemId" => "coupang partners"
+                                               }
+                                             }])
         if Jets.env.production?
           @app_push_list.push(
             AppPush.new(
