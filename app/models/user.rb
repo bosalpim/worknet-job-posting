@@ -13,6 +13,8 @@ class User < ApplicationRecord
   has_many :job_posting_connects
   has_many :job_support_project_participants
   has_many :job_posting_results
+  has_many :user_alert_agreed
+  has_many :alerts, through: :user_alert_agreed
 
   enum gender: { male: 'male', female: 'female' }
 
