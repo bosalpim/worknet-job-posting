@@ -67,9 +67,6 @@ class NaverApi
           :'Accept' => 'application/json',
         },
         ) do |f|
-        f.request :retry, max: 2, interval: 0.05,
-                  interval_randomness: 0.5, backoff_factor: 2,
-                  exceptions: [Exception, 'Timeout::Error']
         f.response :json
         f.adapter :net_http
       end
