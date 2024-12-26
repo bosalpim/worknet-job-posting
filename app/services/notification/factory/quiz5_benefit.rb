@@ -1,9 +1,9 @@
-class Notification::Factory::CoupangPartnersBenefit < Notification::Factory::NotificationFactoryClass
+class Notification::Factory::Quiz5Benefit < Notification::Factory::NotificationFactoryClass
   include KakaoNotificationLoggingHelper
 
   def initialize
-    super(MessageTemplateName::COUPANG_PARTNERS_BENEFIT)
-    alert = Alert.find_by(name: 'coupang_partners')
+    super(MessageTemplateName::QUIZ_5_BENEFIT)
+    alert = Alert.find_by(name: 'quiz_5')
 
     @list = alert ? alert.users : []
 
@@ -13,22 +13,22 @@ class Notification::Factory::CoupangPartnersBenefit < Notification::Factory::Not
   def create_message
     @list.each do |user |
 
-      base_path = "benefit/button-press"
+      base_path = "quiz/daily-proverbs"
 
       user_push_token = user.user_push_tokens.first&.token
 
       if user_push_token&.present?
-        link = "#{base_path}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=button-press-alert&referral=app_push"
+        link = "#{base_path}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=quiz-5-alert&referral=app_push"
         AmplitudeService.instance.log_array([{
                                                "user_id" => user.public_id,
                                                "event_type" => "[Action] Receive Notification",
                                                "event_properties" => {
-                                                 "template" => MessageTemplateName::COUPANG_PARTNERS_BENEFIT,
+                                                 "template" => MessageTemplateName::QUIZ_5_BENEFIT,
                                                  "sender_type" => SENDER_TYPE_CAREPARTNER,
                                                  "receiver_type" => RECEIVER_TYPE_BUSINESS,
                                                  "send_at" => Time.current + (9 * 60 * 60),
-                                                 "notiName" => "benefit_buttonclick",
-                                                 "itemId" => "coupang partners"
+                                                 "notiName" => "benefit_quiz_5",
+                                                 "itemId" => "quiz_5"
                                                }
                                              }])
         if Jets.env.production?
@@ -38,8 +38,8 @@ class Notification::Factory::CoupangPartnersBenefit < Notification::Factory::Not
               user_push_token,
               nil,
               {
-                title: "👆 버튼 누르고 10원 받기 알림 👆",
-                body: "지금 바로 포인트 10원 받을 수 있어요",
+                title: "💡 퀴즈 풀고 15원 받기 알림 💡",
+                body: "지금 우리말 속담을 맞춰보세요",
                 link: "#{Main::Application::DEEP_LINK_SCHEME}/#{link}"
               },
               user.public_id,
