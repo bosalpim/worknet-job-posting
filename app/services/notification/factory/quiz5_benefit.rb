@@ -13,7 +13,7 @@ class Notification::Factory::Quiz5Benefit < Notification::Factory::NotificationF
   def create_message
     @list.each do |user |
 
-      base_path = "benefit"
+      base_path = "quiz/daily-proverbs"
 
       user_push_token = user.user_push_tokens.first&.token
 
