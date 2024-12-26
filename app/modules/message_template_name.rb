@@ -40,6 +40,7 @@ module MessageTemplateName
   NEW_JOB_FACILITY_V2 = 'new_job_facility(23-09-2w)'.freeze
   NEWSPAPER_V2 = 'newspaper_job_alarm'.freeze
   COUPANG_PARTNERS_BENEFIT = 'coupang_partners_benefit'.freeze
+  QUIZ_5_BENEFIT = 'quiz_5_benefit'.freeze
 
   # 동네광고 관련
   TARGET_USER_JOB_POSTING = 'target_user_job_posting'.freeze # 신규일자리 알림을 타겟 사용자에게 전송
