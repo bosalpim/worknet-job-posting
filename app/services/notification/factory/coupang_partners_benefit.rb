@@ -8,8 +8,6 @@ class Notification::Factory::CoupangPartnersBenefit < Notification::Factory::Not
                 .where(alerts: { name: 'coupang_partners' })
                 .distinct
 
-    Jets.logger.info "list: #{@list}"
-
     create_message
   end
 
