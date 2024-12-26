@@ -3,9 +3,10 @@ class Notification::Factory::Quiz5Benefit < Notification::Factory::NotificationF
 
   def initialize
     super(MessageTemplateName::QUIZ_5_BENEFIT)
-    alert = Alert.find_by(name: 'quiz_5')
 
-    @list = alert ? alert.users : []
+    @list = User.joins(:alerts, :user_push_tokens)
+                .where(alerts: { name: 'quiz_5' })
+                .distinct
 
     create_message
   end
