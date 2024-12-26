@@ -3,9 +3,12 @@ class Notification::Factory::CoupangPartnersBenefit < Notification::Factory::Not
 
   def initialize
     super(MessageTemplateName::COUPANG_PARTNERS_BENEFIT)
-    alert = Alert.find_by(name: 'coupang_partners')
 
-    @list = alert ? alert.users : []
+    @list = User.joins(:alerts, :user_push_tokens)
+                .where(alerts: { name: 'coupang_partners' })
+                .distinct
+
+    Jets.logger.info "list: #{@list}"
 
     create_message
   end
