@@ -18,7 +18,7 @@ class Notification::Factory::CoupangPartnersBenefit < Notification::Factory::Not
       user_push_token = user.user_push_tokens.first&.token
 
       if user_push_token&.present?
-        link = "#{base_path}&utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=button-press-alert&referral=app_push"
+        link = "#{base_path}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=button-press-alert&referral=app_push"
         AmplitudeService.instance.log_array([{
                                                "user_id" => user.public_id,
                                                "event_type" => "[Action] Receive Notification",

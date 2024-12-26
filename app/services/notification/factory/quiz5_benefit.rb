@@ -15,11 +15,10 @@ class Notification::Factory::Quiz5Benefit < Notification::Factory::NotificationF
 
       base_path = "benefit"
 
-      # user_push_token = user.user_push_tokens.first&.token
-      user_push_token = 'caZn4fHBSbyJ4GjYlXqrcj:APA91bFcki9uOKKUUZu1UhJlTjB64bQ9kMk6A_FJqCnj1iAQAoJdcgaL3swcXrfraOfcL-FWx5DsSEeHmFM4AJ5JaMLyyCi_xgPn-Rm447xI9egmDe8PF-k'
+      user_push_token = user.user_push_tokens.first&.token
 
       if user_push_token&.present?
-        link = "#{base_path}&utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=quiz-5-alert&referral=app_push"
+        link = "#{base_path}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=quiz-5-alert&referral=app_push"
         AmplitudeService.instance.log_array([{
                                                "user_id" => user.public_id,
                                                "event_type" => "[Action] Receive Notification",
@@ -32,7 +31,7 @@ class Notification::Factory::Quiz5Benefit < Notification::Factory::NotificationF
                                                  "itemId" => "quiz_5"
                                                }
                                              }])
-        unless Jets.env.production?
+        if Jets.env.production?
           @app_push_list.push(
             AppPush.new(
               @message_template_id,
