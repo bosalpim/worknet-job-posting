@@ -38,7 +38,7 @@ class Notification::Factory::CoupangPartnersBenefit < Notification::Factory::Not
           }
         }
 
-        unless Jets.env.production?
+        if Jets.env.production?
           @app_push_list.push(
             AppPush.new(
               @message_template_id,
