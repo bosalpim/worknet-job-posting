@@ -66,9 +66,12 @@ class Notification::Factory::CoupangPartnersBenefit < Notification::Factory::Not
   def send_log_batches
     return if @log_data.empty?
 
-    batch_size = 2000
+    batch_size = 1000
+
     @log_data.each_slice(batch_size) do |batch|
       AmplitudeService.instance.log_array(batch)
+      sleep(2)
     end
   end
+
 end
