@@ -8,11 +8,15 @@ class Notification::Factory::Quiz5Benefit < Notification::Factory::NotificationF
                 .where(alerts: { name: 'quiz_5' })
                 .distinct
 
+    @batch_size = 20
+
     create_message
+    send_log_batches
   end
 
   def create_message
     @list.each do |user |
+      @log_data = []
 
       base_path = "quiz/daily-proverbs"
 
@@ -20,18 +24,19 @@ class Notification::Factory::Quiz5Benefit < Notification::Factory::NotificationF
 
       if user_push_token&.present?
         link = "#{base_path}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=quiz-5-alert&referral=app_push"
-        AmplitudeService.instance.log_array([{
-                                               "user_id" => user.public_id,
-                                               "event_type" => "[Action] Receive Notification",
-                                               "event_properties" => {
-                                                 "template" => MessageTemplateName::QUIZ_5_BENEFIT,
-                                                 "sender_type" => SENDER_TYPE_CAREPARTNER,
-                                                 "receiver_type" => RECEIVER_TYPE_BUSINESS,
-                                                 "send_at" => Time.current + (9 * 60 * 60),
-                                                 "notiName" => "benefit_quiz_5",
-                                                 "itemId" => "quiz_5"
-                                               }
-                                             }])
+
+        @log_data << {
+          "user_id" => user.public_id,
+          "event_type" => "[Action] Receive Notification",
+          "event_properties" => {
+            "template" => MessageTemplateName::QUIZ_5_BENEFIT,
+            "sender_type" => SENDER_TYPE_CAREPARTNER,
+            "receiver_type" => RECEIVER_TYPE_BUSINESS,
+            "send_at" => Time.current + (9 * 60 * 60),
+            "notiName" => "benefit_quiz_5",
+            "itemId" => "quiz_5"
+          }
+        }
         if Jets.env.production?
           @app_push_list.push(
             AppPush.new(
@@ -54,6 +59,15 @@ class Notification::Factory::Quiz5Benefit < Notification::Factory::NotificationF
           )
         end
       end
+    end
+  end
+
+  def send_log_batches
+    return if @log_data.empty?
+
+    batch_size = 2000
+    @log_data.each_slice(batch_size) do |batch|
+      AmplitudeService.instance.log_array(batch)
     end
   end
 end
