@@ -36,6 +36,9 @@ class Notification::Factory::NotificationFactoryClass
 
     @fail_alert_message_payload = nil
 
+    # 알림 보내는 batch 크기
+    @batch_size = 10
+
     message_template = MessageTemplate.find_by(name: message_template_id)
     target_medium = MessageTemplate.find_by(name: message_template_id).nil? ? KAKAO_ARLIMTALK : MessageTemplate.find_by(name: message_template_id).target_medium
     Jets.logger.info "요청하신 #{message_template_id}가 message_templates Table에 존재하지 않습니다." if message_template.nil? & Jets.env.development?
@@ -122,7 +125,8 @@ class Notification::Factory::NotificationFactoryClass
   def send_process(message_list, result_list)
     Jets.logger.info "#{__method__} called by: #{caller[0][/`(.*)'/, 1]}"
     Jets.logger.info "target_notification_count: #{message_list.count}"
-    message_list.each_slice(10) do |batch|
+    Jets.logger.info "batch_size: #{@batch_size}"
+    message_list.each_slice(@batch_size) do |batch|
       threads = []
 
       batch.each do |message|

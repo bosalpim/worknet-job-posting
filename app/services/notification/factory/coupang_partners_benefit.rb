@@ -8,6 +8,8 @@ class Notification::Factory::CoupangPartnersBenefit < Notification::Factory::Not
                 .where(alerts: { name: 'coupang_partners' })
                 .distinct
 
+    @batch_size = 20
+
     create_message
     send_log_batches
   end
