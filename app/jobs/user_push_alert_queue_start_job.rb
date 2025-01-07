@@ -5,7 +5,7 @@ class UserPushAlertQueueStartJob < ApplicationJob
   # 월요일 오전 10시 발송 시작
   iam_policy 'sqs'
 
-  cron "15 7 * * ? *"
+  cron "55 7 * * ? *"
   def start_send_yoyang_run_push
     start_send_sqs("yoyang_run")
   end

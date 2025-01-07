@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserPushAlertQueuePrepareJob < ApplicationJob
-  cron "10 7 * * ? *"
+  cron "50 7 * * ? *"
   def prepare_yoyang_run_push_alert
     prepare_user_push_alert("yoyang_run")
   end
