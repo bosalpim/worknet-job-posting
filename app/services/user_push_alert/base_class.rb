@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class UserPushAlert::BaseClass
-  include Jets::AwsServices
-  # 월요일 오전 10시 발송 시작
-  iam_policy 'sqs'
 
   def initialize(
     alert_name: "",
@@ -48,20 +45,6 @@ class UserPushAlert::BaseClass
     rescue => e
       log error_message e
     end
-  end
-
-  def start
-    group = 0
-    sqs.send_message(
-      queue_url: Main::USER_PUSH_JOB_QUEUE_URL,
-      message_group_id: "#{@alert.id}-#{@date}",
-      message_deduplication_id: "#{@alert.id}-#{@date}-#{group}",
-      message_body: JSON.dump({
-                                alert_id: @alert.id,
-                                date: @date,
-                                group: group
-                              })
-    )
   end
 
   private
