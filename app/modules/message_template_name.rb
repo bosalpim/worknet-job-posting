@@ -84,6 +84,8 @@ module MessageTemplateName
   # 돌봄플러스 신청 알림
   NONE_LTC_REQUEST = 'nonltc_01'.freeze
 
+  USER_PUSH_ALERT = 'user_push_alert'.freeze
+
   TARGET_USER_JOB_POSTING_V3 = 'target_user_job_posting_V3'.freeze
   TARGET_USER_JOB_POSTING_V2 = 'target_user_job_posting_V2'.freeze
   TARGET_USER_RESIDENT_POSTING = 'target_user_resident_posting'.freeze

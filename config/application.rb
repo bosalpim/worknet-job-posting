@@ -127,4 +127,5 @@ module Main
                        end
 
   NEWSPAPER_JOB_QUEUE_URL = ENV['NEWSPAPER_JOB_QUEUE_URL']
+  USER_PUSH_JOB_QUEUE_URL = ENV['USER_PUSH_JOB_QUEUE_URL']
 end
