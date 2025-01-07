@@ -58,7 +58,7 @@ class UserPushAlert::BaseClass
       message_deduplication_id: "#{@alert.id}-#{@date}-#{group}",
       message_body: JSON.dump({
                                 alert_id: @alert.id,
-                                date: date,
+                                date: @date,
                                 group: group
                               })
     )
