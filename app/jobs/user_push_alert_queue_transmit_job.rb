@@ -19,8 +19,8 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
     when "quiz_5"
       factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
                                                          base_path = "/quiz/daily-proverbs",
-                                                         title = "🐱 게임하고 포인트 무제한 받기 알림",
-                                                         body = "지금 달려라 요양이 게임 한판 해보세요",
+                                                         title = "💡퀴즈 풀고 15원 받기 알림💡",
+                                                         body = "지금 우리말 속담을 맞춰보세요",
                                                          campaign_name = "quiz-5-alert")
     when "yoyang_run"
       factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
