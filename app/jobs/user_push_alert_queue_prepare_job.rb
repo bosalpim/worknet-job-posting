@@ -3,14 +3,18 @@
 class UserPushAlertQueuePrepareJob < ApplicationJob
   cron "10 7 * * ? *"
   def prepare_yoyang_run_push_alert
+    prepare_user_push_alert("yoyang_run")
+  end
+
+  def prepare_user_push_alert(alert_name)
     if Jets.env.production?
       UserPushAlert::BaseClass.new(
-        alert_name: "yoyang_run",
+        alert_name: alert_name,
         date: DateTime.now,
         ).prepare
     elsif Jets.env.staging?
       UserPushAlert::BaseClass.new(
-        alert_name: "yoyang_run",
+        alert_name: alert_name,
         date: DateTime.now,
         batch: 2
       ).prepare

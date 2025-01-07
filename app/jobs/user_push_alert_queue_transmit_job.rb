@@ -6,6 +6,22 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
   iam_policy 'sqs'
   sqs_event Jets.env.production? ? "user_push_job_queue.fifo" : "user_push_job_queue_stag.fifo"
 
+  def send_push(alert_name, user_push_queue)
+    case alert_name
+    when "yoyang_run"
+      factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
+                                                         base_path = "/benefit/games/yoyang-run",
+                                                         title = "🐱 게임하고 포인트 무제한 받기 알림",
+                                                         body = "지금 달려라 요양이 게임 한판 해보세요",
+                                                         campaign_name = alert_name)
+    else
+      Jets.logger.info "alert Name not found"
+      return
+    end
+    factory.notify
+    factory.save_result
+  end
+
   def execute
     Jets.logger.info "#{JSON.dump(event)}"
 
@@ -37,19 +53,7 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
 
     Jets.logger.info "Alert=#{alert_name} [DATE=#{date}, GROUP=#{group}] #{user_push_queue.processing.length}건 발송 시작"
 
-    case alert_name
-    when "yoyang_run"
-      factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
-                                                         base_path = "/benefit/games/yoyang-run",
-                                                         title = "🐱 게임하고 포인트 무제한 받기 알림",
-                                                         body = "지금 달려라 요양이 게임 한판 해보세요",
-                                                         campaign_name = "yoyang_run")
-    else
-      Jets.logger.info "alert Name not found"
-      return
-    end
-    factory.notify
-    factory.save_result
+    send_push(alert_name, user_push_queue)
 
     Jets.logger.info "[Alert=#{alert_name} DATE=#{date}, GROUP=#{group}] #{user_push_queue.processing.length}건 발송 종료"
 

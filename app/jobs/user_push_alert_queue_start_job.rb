@@ -7,8 +7,11 @@ class UserPushAlertQueueStartJob < ApplicationJob
 
   cron "15 7 * * ? *"
   def start_send_yoyang_run_push
+    start_send_sqs("yoyang_run")
+  end
+
+  def start_send_sqs(alert_name)
     date = DateTime.now.at_beginning_of_day.strftime('%Y/%m/%d')
-    alert_name = 'yoyang_run'
     group = 0
     sqs.send_message(
       queue_url: Main::USER_PUSH_JOB_QUEUE_URL,
