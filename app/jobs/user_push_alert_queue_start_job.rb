@@ -2,8 +2,10 @@
 
 class UserPushAlertQueueStartJob < ApplicationJob
   include Jets::AwsServices
-  # 월요일 오전 10시 발송 시작
   iam_policy 'sqs'
+
+  # user_push_alert_queues table에 있는 데이터를 바탕으로 첫 sqs queue를 생성하는 job입니다
+  # 메세지 보내는 시간에 맞춰서 실행합니다.
 
   cron "55 7 * * ? *"
   def start_send_yoyang_run_push

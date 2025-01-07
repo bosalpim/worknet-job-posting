@@ -6,6 +6,8 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
   iam_policy 'sqs'
   sqs_event Jets.env.production? ? "user_push_job_queue.fifo" : "user_push_job_queue_stag.fifo"
 
+  # queue에서 순차적으로 보내온 이벤트를 처리하는 job입니다
+
   def send_push(alert_name, user_push_queue)
     case alert_name
     when "yoyang_run"
