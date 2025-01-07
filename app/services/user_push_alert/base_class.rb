@@ -1,15 +1,51 @@
 # frozen_string_literal: true
 
-class UserPushAlert::YoyangRunService
+class UserPushAlert::BaseClass
   def initialize(
+    alert_name: "",
     date: DateTime.now,
     batch: 3000
   )
     @batch = batch
     @date = date.at_beginning_of_day.strftime('%Y/%m/%d')
+    @alert_name = alert_name
   end
 
   def prepare
+    begin
+      users = User.joins(:alerts, :user_push_tokens)
+                  .where(alerts: { name: @alert_name })
+                  .distinct
+
+      @count = users.count
+
+      log start_message
+
+      alert = Alert.where(name: @alert_name).first
+
+      total_users = users.size
+      batch_size = @batch
+
+      (0...total_users).step(batch_size) do |offset|
+        batch = users[offset, batch_size]
+        batch.each_slice(500) do |slice|
+          begin
+            UserPushAlertQueue.insert_all(
+              slice.map { |user| { date: @date, group: offset / batch_size, status: 'pending', user_id: user.id, alert_id: alert.id, push_token: user.push_token&.token } }
+            )
+          rescue => e
+            Jets.logger.error e
+          end
+        end
+      end
+
+      log end_message
+    rescue => e
+      log error_message e
+    end
+  end
+
+  def start
     begin
       users = User.joins(:alerts, :user_push_tokens)
                   .where(alerts: { name: 'yoyang_run' })
@@ -61,7 +97,7 @@ class UserPushAlert::YoyangRunService
           type: 'header',
           text: {
             type: 'plain_text',
-            text: "요양이 달리기 게임 푸시 발송 생성 시작"
+            text: "#{@alert_name} 푸시 발송 생성 시작"
           }
         },
         {
@@ -88,7 +124,7 @@ class UserPushAlert::YoyangRunService
           type: 'header',
           text: {
             type: 'plain_text',
-            text: "요양이 달리기 게임 푸시 생성 종료"
+            text: "#{@alert_name} 푸시 생성 종료"
           }
         },
         {
@@ -115,7 +151,7 @@ class UserPushAlert::YoyangRunService
           type: 'header',
           text: {
             type: 'plain_text',
-            text: "요양이 달리기 게임 푸시 생성 오류"
+            text: "#{@alert_name} 푸시 생성 오류"
           }
         },
         {
