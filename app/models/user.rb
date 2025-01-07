@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :user_push_tokens, dependent: :destroy
   has_many :notifications, as: :notifiable, dependent: :destroy
   has_many :newspapers, dependent: :destroy
+  has_many :user_push_alert_queues, dependent: :destroy
   has_many :job_posting_connects
   has_many :job_support_project_participants
   has_many :job_posting_results
