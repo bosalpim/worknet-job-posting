@@ -37,11 +37,19 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
 
     Jets.logger.info "Alert=#{alert_name} [DATE=#{date}, GROUP=#{group}] #{user_push_queue.processing.length}건 발송 시작"
 
-    if Jets.env.production?
-      factory = Notification::Factory::SendNewsPaperV2.new(user_push_queue.processing)
-      factory.notify
-      factory.save_result
+    case alert_name
+    when "yoyang_run"
+      factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
+                                                         base_path = "/benefit/games/yoyang-run",
+                                                         title = "🐱 게임하고 포인트 무제한 받기 알림",
+                                                         body = "지금 달려라 요양이 게임 한판 해보세요",
+                                                         campaign_name = "yoyang_run")
+    else
+      Jets.logger.info "alert Name not found"
+      return
     end
+    factory.notify
+    factory.save_result
 
     Jets.logger.info "[Alert=#{alert_name} DATE=#{date}, GROUP=#{group}] #{user_push_queue.processing.length}건 발송 종료"
 
@@ -60,16 +68,5 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
                                 group: next_group
                               })
     )
-  end
-
-  def send_log_batches
-    return if @log_data.empty?
-
-    batch_size = 1000
-
-    @log_data.each_slice(batch_size) do |batch|
-      AmplitudeService.instance.log_array(batch)
-      sleep(2)
-    end
   end
 end
