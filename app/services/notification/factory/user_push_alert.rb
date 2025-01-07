@@ -40,6 +40,8 @@ class Notification::Factory::UserPushAlert < Notification::Factory::Notification
               }
             )
           )
+        else
+          Jets.logger.info "send #{@campaign_name} to #{user.public_id}"
         end
     end
     end

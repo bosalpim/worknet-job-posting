@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserPushAlertQueuePrepareJob < ApplicationJob
-  cron "0 3 * * ? *"
+  cron "0 6 * * ? *"
   def prepare_yoyang_run_push_alert
     if Jets.env.production?
       UserPushAlert::BaseClass.new(
