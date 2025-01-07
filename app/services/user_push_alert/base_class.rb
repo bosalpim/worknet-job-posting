@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class UserPushAlert::BaseClass
+  include Jets::AwsServices
+  # 월요일 오전 10시 발송 시작
+  iam_policy 'sqs'
+
   def initialize(
     alert_name: "",
     date: DateTime.now,
@@ -9,6 +13,7 @@ class UserPushAlert::BaseClass
     @batch = batch
     @date = date.at_beginning_of_day.strftime('%Y/%m/%d')
     @alert_name = alert_name
+    @alert = Alert.where(name: 'yoyang_run').first
   end
 
   def prepare
@@ -46,41 +51,17 @@ class UserPushAlert::BaseClass
   end
 
   def start
-    begin
-      users = User.joins(:alerts, :user_push_tokens)
-                  .where(alerts: { name: 'yoyang_run' })
-                  .distinct
-
-      Jets.logger.info "users: #{users}"
-
-      @count = users.count
-
-      log start_message
-
-      alert = Alert.where(name: 'yoyang_run').first
-
-      Jets.logger.info "alerts: #{alert}"
-
-      total_users = users.size
-      batch_size = @batch
-
-      (0...total_users).step(batch_size) do |offset|
-        batch = users[offset, batch_size]
-        batch.each_slice(500) do |slice|
-          begin
-            UserPushAlertQueue.insert_all(
-              slice.map { |user| { date: @date, group: offset / batch_size, status: 'pending', user_id: user.id, alert_id: alert.id, push_token: user.push_token&.token } }
-            )
-          rescue => e
-            Jets.logger.error e
-          end
-        end
-      end
-
-      log end_message
-    rescue => e
-      log error_message e
-    end
+    group = 0
+    sqs.send_message(
+      queue_url: Main::USER_PUSH_JOB_QUEUE_URL,
+      message_group_id: "#{@alert.id}-#{@date}",
+      message_deduplication_id: "#{@alert.id}-#{@date}-#{group}",
+      message_body: JSON.dump({
+                                alert_id: @alert.id,
+                                date: date,
+                                group: group
+                              })
+    )
   end
 
   private
