@@ -27,8 +27,8 @@ class UserPushAlertQueueStartJob < ApplicationJob
     group = 0
     sqs.send_message(
       queue_url: Main::USER_PUSH_JOB_QUEUE_URL,
-      message_group_id: "push #{alert_name}-#{date}",
-      message_deduplication_id: "push #{alert_name}-#{date}-#{group}",
+      message_group_id: "push-#{alert_name}-#{date}",
+      message_deduplication_id: "push-#{alert_name}-#{date}-#{group}",
       message_body: JSON.dump({
                                 alert_name: alert_name,
                                 date: date,
