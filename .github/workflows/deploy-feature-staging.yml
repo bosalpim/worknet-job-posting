@@ -50,6 +50,7 @@ jobs:
           echo "SLACK_NOTI_NONE_LTC_CONSULTING_ALERT=$SLACK_NOTI_NONE_LTC_CONSULTING_ALERT" >> .env.staging
           echo "WORKNET_CRAWLER_API=$WORKNET_CRAWLER_API" >> .env.staging
           echo "BUSINESS_FREE_TRIAL_ALERT=$BUSINESS_FREE_TRIAL_ALERT" >> .env.staging
+          echo "USER_PUSH_JOB_QUEUE_URL=$USER_PUSH_JOB_QUEUE_URL" >> .env.staging
 
         env:
           DB_HOST_STAGING: ${{ secrets.DB_HOST_STAGING }}
@@ -72,6 +73,7 @@ jobs:
           SLACK_NOTI_NONE_LTC_CONSULTING_ALERT: ${{ secrets.SLACK_NOTI_NONE_LTC_CONSULTING_ALERT_STAG }}
           WORKNET_CRAWLER_API: ${{ secrets.WORKNET_CRAWLER_API }}
           BUSINESS_FREE_TRIAL_ALERT: ${{ secrets.BUSINESS_FREE_TRIAL_ALERT_STAG }}
+          USER_PUSH_JOB_QUEUE_URL: ${{ secrets.USER_PUSH_JOB_QUEUE_STAG_URL }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
