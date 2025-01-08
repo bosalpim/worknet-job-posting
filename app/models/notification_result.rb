@@ -34,6 +34,7 @@ class NotificationResult < ApplicationRecord
   NEWSPAPER_JOB_ALARM = 'newspaper_job_alarm'.freeze
   TARGET_USER_JOB_POSTING_V2 = MessageTemplateName::TARGET_USER_JOB_POSTING_V2
   TARGET_JOB_POSTING_AD_APPLY = MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
+  USER_PUSH_ALERT = 'user_push_alert'.freeze
 
   CLOSE_JOB_POSTING_REMIND_1DAY_AGO = 'close_jobposting_remind_1dago'
 
@@ -74,6 +75,7 @@ class NotificationResult < ApplicationRecord
     CALL_SAVED_JOB_CAREGIVER => CALL_SAVED_JOB_CAREGIVER,
     CALL_SAVED_JOB_POSTING_V2 => CALL_SAVED_JOB_POSTING_V2,
     NEWSPAPER_V2 => NEWSPAPER_V2,
+    USER_PUSH_ALERT => USER_PUSH_ALERT,
     NEW_JOB_VISIT_V2 => NEW_JOB_VISIT_V2,
     NEW_JOB_FACILITY_V2 => NEW_JOB_FACILITY_V2,
     ASK_ACTIVE => ASK_ACTIVE,

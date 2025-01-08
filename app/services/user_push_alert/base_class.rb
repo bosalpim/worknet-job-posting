@@ -10,7 +10,6 @@ class UserPushAlert::BaseClass
     @batch = batch
     @date = date.at_beginning_of_day.strftime('%Y/%m/%d')
     @alert_name = alert_name
-    @alert = Alert.where(name: 'yoyang_run').first
   end
 
   def prepare

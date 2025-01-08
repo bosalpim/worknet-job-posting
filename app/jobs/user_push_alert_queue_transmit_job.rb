@@ -3,11 +3,6 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
   include MessageTemplateName
   include KakaoNotificationLoggingHelper
 
-  iam_policy 'sqs'
-  sqs_event Jets.env.production? ? "user_push_job_queue.fifo" : "user_push_job_queue_stag.fifo"
-
-  # queue에서 순차적으로 보내온 이벤트를 처리하는 job입니다
-
   def send_push(alert_name, user_push_queue)
     case alert_name
     when "coupang_partners"
@@ -36,6 +31,10 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
     factory.save_result
   end
 
+  iam_policy 'sqs'
+  sqs_event Jets.env.production? ? "user_push_job_queue.fifo" : "user_push_job_queue_stag.fifo"
+
+  # queue에서 순차적으로 보내온 이벤트를 처리하는 job입니다
   def execute
     Jets.logger.info "#{JSON.dump(event)}"
 
@@ -50,13 +49,13 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
     alert = Alert.where(name: alert_name).first
 
     user_push_queue = UserPushAlertQueue
-                   .where(
-                     alert_id: alert.id,
-                     date: date,
-                     group: group,
-                     )
-                   .joins(:user)
-                   .limit(3_000)
+                        .where(
+                          alert_id: alert.id,
+                          date: date,
+                          group: group,
+                          )
+                        .joins(:user)
+                        .limit(3_000)
 
     if user_push_queue.empty?
       Jets.logger.info "[Alert=#{alert_name} DATE=#{date}, GROUP=#{group}] 발송 완료"
@@ -78,8 +77,8 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
     next_group = group + 1
     sqs.send_message(
       queue_url: Main::USER_PUSH_JOB_QUEUE_URL,
-      message_group_id: "#{alert_name}-#{date}",
-      message_deduplication_id: "#{alert_name}-#{date}-#{next_group}",
+      message_group_id: "push-#{alert_name}-#{date}",
+      message_deduplication_id: "push-#{alert_name}-#{date}-#{next_group}",
       message_body: JSON.dump({
                                 alert_name: alert_name,
                                 date: date,
@@ -87,4 +86,5 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
                               })
     )
   end
+
 end

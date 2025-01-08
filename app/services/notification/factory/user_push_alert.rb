@@ -18,7 +18,7 @@ class Notification::Factory::UserPushAlert < Notification::Factory::Notification
       user = user_push_alert_queue.user
 
       if user_push_alert_queue.push_token&.present?
-        link = "#{@base_path}&utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=#{@campaign_name}&referral=app_push"
+        link = "#{@base_path}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=#{@campaign_name}&referral=app_push"
         if Jets.env.production?
           @app_push_list.push(
             AppPush.new(
