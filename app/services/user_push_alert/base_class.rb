@@ -41,6 +41,11 @@ class UserPushAlert::BaseClass
       end
 
       log end_message
+
+      UserPushAlertQueue
+        .where(alert_id: alert.id)
+        .where("date < ?", 1.week.ago)
+        .delete_all
     rescue => e
       log error_message e
     end
