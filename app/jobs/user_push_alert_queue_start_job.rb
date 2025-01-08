@@ -7,7 +7,7 @@ class UserPushAlertQueueStartJob < ApplicationJob
   # 메세지 보내는 시간에 맞춰서 실행합니다.
 
   iam_policy 'sqs'
-  cron "0 9 * * ? *"
+  cron "20 1 * * ? *"
   def start_send_coupang_partners
     start_send_sqs("coupang_partners")
   end

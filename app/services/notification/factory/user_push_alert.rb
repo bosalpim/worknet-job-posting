@@ -19,30 +19,30 @@ class Notification::Factory::UserPushAlert < Notification::Factory::Notification
 
       if user_push_alert_queue.push_token&.present?
         link = "#{@base_path}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=#{@campaign_name}&referral=app_push"
-        if Jets.env.production?
-          @app_push_list.push(
-            AppPush.new(
-              @message_template_id,
-              user_push_alert_queue.push_token,
-              nil,
-              {
-                title: @title,
-                body: @body,
-                link: "#{Main::Application::DEEP_LINK_SCHEME}/#{link}"
-              },
-              user.public_id,
-              {
-                "sender_type" => SENDER_TYPE_CAREPARTNER,
-                "receiver_type" => RECEIVER_TYPE_USER,
-                "template" => @message_template_id,
-                "type" => NOTIFICATION_TYPE_APP_PUSH,
-                "campaign_name" => @campaign_name,
-              }
-            )
+        # if Jets.env.production?
+        @app_push_list.push(
+          AppPush.new(
+            @message_template_id,
+            user_push_alert_queue.push_token,
+            nil,
+            {
+              title: @title,
+              body: @body,
+              link: "#{Main::Application::DEEP_LINK_SCHEME}/#{link}"
+            },
+            user.public_id,
+            {
+              "sender_type" => SENDER_TYPE_CAREPARTNER,
+              "receiver_type" => RECEIVER_TYPE_USER,
+              "template" => @message_template_id,
+              "type" => NOTIFICATION_TYPE_APP_PUSH,
+              "campaign_name" => @campaign_name,
+            }
           )
-        else
-          Jets.logger.info "send #{@campaign_name} to #{user.public_id}"
-        end
+        )
+        # else
+        #   Jets.logger.info "send #{@campaign_name} to #{user.public_id}"
+        # end
     end
     end
   end
