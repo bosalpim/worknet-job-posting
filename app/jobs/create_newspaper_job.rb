@@ -27,7 +27,7 @@ class CreateNewspaperJob < ApplicationJob
       Newspaper::PrepareService.new(
         date: DateTime.now,
         batch: 2
-      )
+      ).call
     end
   end
 
