@@ -32,6 +32,10 @@ class Newspaper::PrepareService
       end
 
       log end_message
+
+      Newspaper
+        .where("date < ?", 1.week.ago)
+        .delete_all
     rescue => e
       log error_message e
     end
