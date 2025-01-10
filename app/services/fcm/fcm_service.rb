@@ -60,6 +60,14 @@ class Fcm::FcmService
         },
         data: {
           deeplink: message[:link]
+        },
+        android: {
+          priority: 'high',
+          notification: {
+            channelId: 'high_importance_channel',
+            title: message[:title],
+            body: message[:body],
+          }
         }
       }
     }
