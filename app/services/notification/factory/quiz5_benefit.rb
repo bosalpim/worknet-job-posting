@@ -44,8 +44,8 @@ class Notification::Factory::Quiz5Benefit < Notification::Factory::NotificationF
               user_push_token,
               nil,
               {
-                title: "💡 퀴즈 풀고 15원 받기 알림 💡",
-                body: "지금 우리말 속담을 맞춰보세요",
+                title: "💡 퀴즈 풀고 포인트 받기 알림 💡",
+                body: "다양한 속담, 사자성어 퀴즈를 맞춰보세요",
                 link: "#{Main::Application::DEEP_LINK_SCHEME}/#{link}"
               },
               user.public_id,
