@@ -54,21 +54,20 @@ class Fcm::FcmService
     {
       message: {
         token: token,
-        notification: {
-          title: message[:title],
-          body: message[:body]
-        },
         data: {
+          title: message[:title],
+          body: message[:body],
           deeplink: message[:link]
         },
-        android: {
-          priority: 'high',
-          notification: {
-            channelId: 'high_importance_channel',
-            title: message[:title],
-            body: message[:body],
-          }
-        }
+        # flutter에서만 필요한 데이터
+        # android: {
+        #   priority: 'high',
+        #   notification: {
+        #     channelId: 'high_importance_channel',
+        #     title: message[:title],
+        #     body: message[:body],
+        #   }
+        # }
       }
     }
   end
