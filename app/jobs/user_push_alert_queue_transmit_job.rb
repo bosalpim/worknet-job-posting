@@ -5,12 +5,6 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
 
   def send_push(alert_name, user_push_queue)
     case alert_name
-    when "coupang_partners"
-      factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
-                                                         base_path = "/benefit/button-press",
-                                                         title = "버튼 누르고 10원 받기 알림💎",
-                                                         body = "지금 바로 포인트 10원 받을 수 있어요",
-                                                         campaign_name = "button-press-alert")
     when "quiz_5"
       factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
                                                          base_path = "/quiz/daily-proverbs",
