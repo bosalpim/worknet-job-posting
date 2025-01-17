@@ -33,7 +33,11 @@ class SendNewspaperJob < ApplicationJob
     Jets.logger.info "[DATE=#{date}, GROUP=#{group}] #{newspapers.processing.length}건 발송 시작"
 
     if Jets.env.production?
-      factory = Notification::Factory::SendNewsPaperV2.new(newspapers.processing)
+      if user.id.even?
+        factory = Notification::Factory::SendNewsPaperV3.new(newspapers.processing)
+      else
+        factory = Notification::Factory::SendNewsPaperV2.new(newspapers.processing)
+      end
       factory.notify
       factory.save_result
     end
