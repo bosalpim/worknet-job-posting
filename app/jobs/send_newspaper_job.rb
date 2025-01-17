@@ -33,13 +33,22 @@ class SendNewspaperJob < ApplicationJob
     Jets.logger.info "[DATE=#{date}, GROUP=#{group}] #{newspapers.processing.length}건 발송 시작"
 
     if Jets.env.production?
-      if user.id.even?
-        factory = Notification::Factory::SendNewsPaperV3.new(newspapers.processing)
-      else
-        factory = Notification::Factory::SendNewsPaperV2.new(newspapers.processing)
+      even_newspapers = newspapers.processing.joins(:user).where("users.id % 2 = 0")
+      odd_newspapers  = newspapers.processing.joins(:user).where("users.id % 2 = 1")
+
+      # 짝수 그룹 처리
+      if even_newspapers.any?
+        factory_evens = Notification::Factory::SendNewsPaperV3.new(even_newspapers)
+        factory_evens.notify
+        factory_evens.save_result
       end
-      factory.notify
-      factory.save_result
+
+      # 홀수 그룹 처리
+      if odd_newspapers.any?
+        factory_odds = Notification::Factory::SendNewsPaperV2.new(odd_newspapers)
+        factory_odds.notify
+        factory_odds.save_result
+      end
     end
 
     Jets.logger.info "[DATE=#{date}, GROUP=#{group}] #{newspapers.processing.length}건 발송 종료"
