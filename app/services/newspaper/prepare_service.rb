@@ -7,23 +7,33 @@ class Newspaper::PrepareService
   )
     @batch = batch
     @date = date.tomorrow.at_beginning_of_day.strftime('%Y/%m/%d')
-    @users = fetch_users
-    @count = @users.count
+    @user_with_counts = fetch_users  # -> [[user, count], [user, count], ...]
+    @count = @user_with_counts.count
   end
 
   def call
     begin
       log start_message
 
-      total_users = @users.size
+      total_users = @user_with_counts.size
       batch_size = @batch
 
       (0...total_users).step(batch_size) do |offset|
-        batch = @users[offset, batch_size]
+        batch = @user_with_counts[offset, batch_size]
         batch.each_slice(500) do |slice|
           begin
             Newspaper.insert_all(
-              slice.map { |user| { date: @date, group: offset / batch_size, status: 'pending', user_id: user.id, push_token: user.push_token&.token } }
+              slice.map do |user_count_pair|
+                user, job_count = user_count_pair
+                {
+                  date:         @date,
+                  group:        offset / batch_size,
+                  status:       'pending',
+                  user_id:      user.id,
+                  push_token:   user.push_token&.token,
+                  yesterday_job_count: job_count
+                }
+              end
             )
           rescue => e
             Jets.logger.error e
@@ -81,22 +91,21 @@ class Newspaper::PrepareService
 
     update_job_notification_enabled
 
-    User
-      .receive_job_notifications
-      .where
-      .not(phone_number: nil)
-      .select do |user|
-      send_notification = should_send_notification?(user.last_used_at, today)
-      next false unless send_notification
+    users = User
+              .receive_job_notifications
+              .where.not(phone_number: nil)
+              .select do |user|
+      should_send_notification?(user.last_used_at, today)
+    end
 
-      preferred_work_types = user.preferred_work_types
+    users.map do |user|
+      job_postings_count = JobPosting
+                             .where('created_at >= ? AND created_at <= ?', yesterday_start, yesterday_end)
+                             .within_radius(3000, user.lat, user.lng)
+                             .where(work_type: user.preferred_work_types)
+                             .count
 
-      job_postings = JobPosting
-                       .where('created_at >= ? AND created_at <= ?', yesterday_start, yesterday_end)
-                       .within_radius(3000, user.lat, user.lng)
-                       .where(work_type: preferred_work_types)
-
-      job_postings.exists?
+      [user, job_postings_count]
     end
   end
 
