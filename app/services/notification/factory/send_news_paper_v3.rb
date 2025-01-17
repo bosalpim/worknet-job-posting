@@ -26,7 +26,7 @@ class Notification::Factory::SendNewsPaperV3 < Notification::Factory::Notificati
       base_path = "newspaper?lat=#{user.lat}&lng=#{user.lng}&userId=#{user.public_id}"
 
       if newspaper.push_token&.present?
-        link = "#{base_path}&utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=newspaper_job_alarm"
+        link = "#{base_path}&utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=newspaper_job_alarm_v3"
         if Jets.env.production?
           @app_push_list.push(
             AppPush.new(
