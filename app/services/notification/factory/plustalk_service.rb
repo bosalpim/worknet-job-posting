@@ -67,12 +67,18 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
     contact_link = "#{@base_url}/contact-messages?referral=target_notification&#{utm}" + contact_notification_param
     share_link = "#{@base_url}/share?#{utm}"
 
+    message, eclipse_content_group = if user.id.even?
+                                       [generate_message_eclipse_content, "B"]
+                                     else
+                                       [generate_message_all_content(user), "A"]
+                                     end
+
     BizmPostPayMessage.new(
       @message_template_id,
       user.phone_number,
       {
         title: @job_posting.title,
-        message: generate_message_content(user),
+        message: message,
         view_link: view_link,
         application_link: application_link,
         contact_link: contact_link,
@@ -81,7 +87,8 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
         job_posting_public_id: @job_posting.public_id,
         business_name: @job_posting.business.name,
         job_posting_type: @job_posting.work_type,
-        is_free: @is_free
+        is_free: @is_free,
+        eclipse_content_group: eclipse_content_group
       },
       user.public_id,
       "AI",
@@ -105,5 +112,37 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
 이 메세지는 일자리알림을 신청한 분에게만 발송돼요
 
 👇'일자리 확인하기' 버튼을 누르고 자세한 정보를 확인하세요👇"
+  end
+
+  def generate_message_eclipse_content
+    short_address = truncate_address(@job_posting.address)
+    "#{@job_posting.title}
+
+■ 근무 시간: #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
+■ 급여: 시급 ???원
+■ 근무 장소: #{short_address}\n - 걸어서 ??분
+
+상세한 내용과 센터 전화번호를 확인하려면
+👇'일자리 확인하기' 버튼을 누르세요👇"
+  end
+
+  def generate_message_all_content(user)
+    "#{@job_posting.title}
+
+■ 근무 시간: #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
+■ 급여: #{get_pay_text(@job_posting)}
+■ 근무 장소: #{@job_posting.address}\n - #{user.simple_distance_from_ko(@job_posting)}
+
+상세한 내용과 센터 전화번호를 확인하려면
+👇'일자리 확인하기' 버튼을 누르세요👇"
+  end
+
+  def truncate_address(address)
+    parts = address.to_s.split(' ')
+    if parts.size > 3
+      parts.first(3).join(' ') + ' ???'
+    else
+      address
+    end
   end
 end

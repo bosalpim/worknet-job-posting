@@ -85,11 +85,11 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     contact_link = "#{@base_url}/contact-messages?referral=target_notification&#{utm}" + contact_notification_param
     share_link = "#{@base_url}/share?#{utm}"
 
-    message = if user.id.even?
-                generate_message_eclipse_content
-              else
-                generate_message_all_content(user)
-              end
+    message, eclipse_content_group = if user.id.even?
+                                       [generate_message_eclipse_content, "B"]
+                                     else
+                                       [generate_message_all_content(user), "A"]
+                                     end
 
     BizmPostPayMessage.new(
       @message_template_id,
@@ -105,7 +105,8 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
         job_posting_public_id: @job_posting.public_id,
         business_name: @job_posting.business.name,
         job_posting_type: @job_posting.work_type,
-        is_free: @is_free
+        is_free: @is_free,
+        eclipse_content_group: eclipse_content_group
       },
       user.public_id,
       "AI",
