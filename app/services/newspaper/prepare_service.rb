@@ -102,7 +102,6 @@ class Newspaper::PrepareService
       job_postings_count = JobPosting
                              .where('created_at >= ? AND created_at <= ?', yesterday_start, yesterday_end)
                              .within_radius(3000, user.lat, user.lng)
-                             .where(work_type: user.preferred_work_types)
                              .count
 
       [user, job_postings_count]
