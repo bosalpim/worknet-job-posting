@@ -39,6 +39,7 @@ module MessageTemplateName
   NEW_JOB_VISIT_V2 = 'new_job_visit(23-09-2w)'.freeze
   NEW_JOB_FACILITY_V2 = 'new_job_facility(23-09-2w)'.freeze
   NEWSPAPER_V2 = 'newspaper_job_alarm'.freeze
+  NEWSPAPER_V3 = 'newspaper_job_alarm_v2'.freeze
   COUPANG_PARTNERS_BENEFIT = 'coupang_partners_benefit'.freeze
   QUIZ_5_BENEFIT = 'quiz_5_benefit'.freeze
 
