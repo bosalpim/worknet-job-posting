@@ -88,7 +88,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     message = if user.id.even?
                 generate_message_eclipse_content
               else
-                generate_message_all_content
+                generate_message_all_content(user)
               end
 
     BizmPostPayMessage.new(
@@ -126,7 +126,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
 👇'일자리 확인하기' 버튼을 누르세요👇"
   end
 
-  def generate_message_all_content
+  def generate_message_all_content(user)
     "#{@job_posting.title}
 
 ■ 근무 시간: #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
