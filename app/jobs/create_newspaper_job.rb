@@ -46,18 +46,4 @@ class CreateNewspaperJob < ApplicationJob
     end
   end
 
-  cron "0 20 ? * FRI *"
-
-  def create_saturday_test_newspaper
-    if Jets.env.production?
-      Newspaper::PrepareService.new(
-        date: DateTime.now,
-        ).call
-    elsif Jets.env.staging?
-      Newspaper::PrepareService.new(
-        date: DateTime.now,
-        batch: 2
-      )
-    end
-  end
 end

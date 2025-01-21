@@ -277,7 +277,6 @@ class KakaoTemplateService
 
   def get_target_user_job_posting_v2_data(tem_params)
     view_link = tem_params[:view_link]
-    application_link = tem_params[:application_link]
     share_link = tem_params[:share_link]
 
     {
@@ -285,17 +284,12 @@ class KakaoTemplateService
       message: tem_params[:message],
       buttons: [
         {
-          name: '🔎 일자리 확인하기',
+          name: '일자리 확인하기',
           type: 'WL',
           url_mobile: view_link
         },
         {
-          name: '⚡️ 간편 지원하기',
-          type: 'WL',
-          url_mobile: application_link
-        },
-        {
-          name: '✉️ 친구에게 공유하기',
+          name: '친구에게 공유하기',
           type: 'WL',
           url_mobile: share_link
         }
