@@ -58,13 +58,9 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
     end
 
     dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "plustalk", @job_posting.id, "yobosa", user.id, "job_detail")
-    application_notification_param = create_dispatched_notification_params(@message_template_id, "plustalk", @job_posting.id, "yobosa", user.id, "application")
-    contact_notification_param = create_dispatched_notification_params(@message_template_id, "plustalk", @job_posting.id, "yobosa", user.id, "contact_message")
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
     view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}" + dispatched_notification_param
-    application_link = "#{@base_url}/application?referral=target_notification&#{utm}" + application_notification_param
-    contact_link = "#{@base_url}/contact-messages?referral=target_notification&#{utm}" + contact_notification_param
     share_link = "#{@base_url}/share?#{utm}"
 
     message, eclipse_content_group = if user.id.even?
@@ -80,8 +76,6 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
         title: @job_posting.title,
         message: message,
         view_link: view_link,
-        application_link: application_link,
-        contact_link: contact_link,
         share_link: share_link,
         job_posting_id: @job_posting.id,
         job_posting_public_id: @job_posting.public_id,
