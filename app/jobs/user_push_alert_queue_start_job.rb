@@ -18,6 +18,12 @@ class UserPushAlertQueueStartJob < ApplicationJob
     start_send_sqs("yoyang_run")
   end
 
+  iam_policy 'sqs'
+  cron "0 0 * * ? *"
+  def start_send_zodiac_fortune
+    start_send_sqs("daily_chinese_zodiac_fortune")
+  end
+
   def start_send_sqs(alert_name)
     date = DateTime.now.at_beginning_of_day.strftime('%Y/%m/%d')
     group = 0
