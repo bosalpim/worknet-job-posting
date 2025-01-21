@@ -110,10 +110,12 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
 
   def generate_message_eclipse_content
     short_address = truncate_address(@job_posting.address)
+    pay_type_text =
+      I18n.t("activerecord.attributes.job_posting.pay_type.#{@job_posting.pay_type}")
     "#{@job_posting.title}
 
 ■ 근무 시간: #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
-■ 급여: 시급 ???원
+■ 급여: #{pay_type_text} ???원
 ■ 근무 장소: #{short_address}\n - 걸어서 ??분
 
 상세한 내용과 센터 전화번호를 확인하려면
