@@ -12,7 +12,7 @@ module JobPostingsHelper
         I18n.t("activerecord.attributes.job_posting.pay_type.#{object.pay_type}")
       if min_wage > 0 && max_wage > 0 && min_wage != max_wage
         return(
-          pay_type_text + convert_currency(object.min_wage) + ' ~ ' +
+          pay_type_text + " " + convert_currency(object.min_wage) + '~' +
             convert_currency(object.max_wage)
         )
       elsif min_wage > 0
@@ -31,7 +31,7 @@ module JobPostingsHelper
     if !object.normal?
       I18n.t("activerecord.attributes.job_posting.working_hours_type.#{object.working_hours_type}")
     elsif object.work_start_time && object.work_end_time
-      object.work_start_time&.strftime('%H:%M') + ' ~ ' + object.work_end_time&.strftime('%H:%M')
+      object.work_start_time&.strftime('%H:%M') + '~' + object.work_end_time&.strftime('%H:%M')
     else
       object.scraped_worknet_job_posting&.info&.dig('hours_text')
     end
@@ -130,13 +130,13 @@ module JobPostingsHelper
     if consecutive
       I18n.t(
         "activerecord.attributes.job_posting.working_days.#{sorted.first}",
-      ) + ' ~ ' +
+      ) + '~' +
         I18n.t(
           "activerecord.attributes.job_posting.working_days.#{sorted.last}",
-        ) + " (주 #{object.working_days.count} 일)"
+        ) + " (주 #{object.working_days.count}일)"
     else
       translate_type('job_posting', object, :working_days) +
-        " (주 #{object.working_days.count} 일)"
+        " (주 #{object.working_days.count}일)"
     end
   rescue => e
     nil

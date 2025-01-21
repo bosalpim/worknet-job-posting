@@ -96,7 +96,7 @@ module Main
     # 예시) '["01037863607", "01050502020"]'
     PHONE_NUMBER_WHITELIST = ENV['PHONE_NUMBER_WHITELIST']
     PHONE_NUMBER_WHITELIST = PHONE_NUMBER_WHITELIST.present? ? JSON.parse(PHONE_NUMBER_WHITELIST) :
-                               %w[01037863607 01025179362 01094659404 01066121746 01049195808 01091372316 01029685055 01051119300 01098651017 01057513286 01034308850 01057540629 01029465752 01047974098]
+                               %w[01037863607 01025179362 01094659404 01066121746 01049195808 01091372316 01029685055 01051119300 01098651017 01057513286 01034308850 01057540629 01029465752 01047974098 01046781989]
     TEST_PHONE_NUMBER = ENV['TEST_PHONE_NUMBER'] || '01029685055'
     BEX_API_URL = ENV['BEX_API_URL']
     BIZMSG_PROFILE = ENV['KAKAO_BIZMSG_PROFILE']
@@ -115,6 +115,14 @@ module Main
                         "http://www.dev-carepartner.kr/"
                       else
                         "http://127.0.0.1:3000/"
+                      end
+
+    HTTPS_CAREPARTNER_URL = if Jets.env.production?
+                        "https://www.carepartner.kr/"
+                      elsif Jets.env.staging?
+                        "https://www.dev-carepartner.kr/"
+                      else
+                        "https://127.0.0.1:3000/"
                       end
   end
 

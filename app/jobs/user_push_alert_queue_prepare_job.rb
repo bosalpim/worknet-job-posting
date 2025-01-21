@@ -16,7 +16,7 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
   end
 
   cron "30 23 * * ? *"
-  def prepare_zodiac_fortune_push_alert
+  def prepare_zodiac_push_alert
     prepare_user_push_alert("daily_chinese_zodiac_fortune")
   end
 
