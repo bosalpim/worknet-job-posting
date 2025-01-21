@@ -26,8 +26,6 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
       @radius = @job_posting.is_facility? ? 5000 : 3000
     end
     min_radius = params[:min_radius].nil? ? nil : params[:min_radius]
-    bex_service = BexService.new(experiment_key: 'free-alert-count', user_id: @job_posting.client.public_id)
-    treatment_key = bex_service.call.key rescue nil
 
     if !@is_free
       @list = User
@@ -39,7 +37,6 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
           min_radius
         ).where.not(phone_number: nil)
     else
-      AmplitudeService.instance.log_array([{user_id: @job_posting.client.public_id, event_type: "[Action] JobPosting Free Alert", event_properties: { treatment_key: treatment_key}}])
       @list = User
         .receive_job_notifications
         .within_radius(
@@ -49,7 +46,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
           0
         ).where.not(phone_number: nil)
         .order("RANDOM()")
-        .limit(treatment_key === "A" ? 20 : 50)
+        .limit(20)
     end
 
     @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
