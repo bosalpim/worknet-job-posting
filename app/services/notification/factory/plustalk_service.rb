@@ -12,7 +12,7 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
     @job_posting = JobPosting.find(params[:job_posting_id])
     paid_job_posting = PaidJobPostingFeature.find_by_job_posting_id(params[:job_posting_id])
     @is_free = paid_job_posting.nil? ? true : false
-    @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
+    @base_url = "#{Main::Application::HTTPS_CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     begin
       @radius = if params[:radius]
