@@ -45,4 +45,5 @@ class CreateNewspaperJob < ApplicationJob
       )
     end
   end
+
 end

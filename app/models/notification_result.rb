@@ -28,6 +28,7 @@ class NotificationResult < ApplicationRecord
   NEW_JOB_VISIT_V2 = 'new_job_visit_v2'.freeze
   NEW_JOB_FACILITY_V2 = 'new_job_facility(23-09-2w)'.freeze
   NEWSPAPER_V2 = 'newspaper_v2'.freeze
+  NEWSPAPER_V3 = 'newspaper_job_alarm_v2'.freeze
   ACCUMULATED_DRAFT = 'accumulated_draft'.freeze
   ACCUMULATED_PREPARATIVE = 'accumulated_preparative'.freeze
   ROULETTE = 'roulette'.freeze
@@ -75,6 +76,7 @@ class NotificationResult < ApplicationRecord
     CALL_SAVED_JOB_CAREGIVER => CALL_SAVED_JOB_CAREGIVER,
     CALL_SAVED_JOB_POSTING_V2 => CALL_SAVED_JOB_POSTING_V2,
     NEWSPAPER_V2 => NEWSPAPER_V2,
+    NEWSPAPER_V3 => NEWSPAPER_V3,
     USER_PUSH_ALERT => USER_PUSH_ALERT,
     NEW_JOB_VISIT_V2 => NEW_JOB_VISIT_V2,
     NEW_JOB_FACILITY_V2 => NEW_JOB_FACILITY_V2,

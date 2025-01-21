@@ -15,6 +15,11 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
     prepare_user_push_alert("yoyang_run")
   end
 
+  cron "30 23 * * ? *"
+  def prepare_zodiac_fortune_push_alert
+    prepare_user_push_alert("daily_chinese_zodiac_fortune")
+  end
+
   def prepare_user_push_alert(alert_name)
     if Jets.env.production?
       UserPushAlert::BaseClass.new(

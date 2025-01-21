@@ -38,6 +38,7 @@ class KakaoTemplateService
           sms_message += btn[:name] + "↓"
           sms_message += "\n"
           sms_message += (@template_id === MessageTemplateName::NEWSPAPER_V2 ||
+                          @template_id === MessageTemplateName::NEWSPAPER_V3 ||
                           @template_id === MessageTemplates::TEMPLATES[MessageNames::TARGET_USER_JOB_POSTING]) ?
                            btn[:url_mobile] :
                            ShortUrl.build(btn[:url_mobile]).url
@@ -131,6 +132,8 @@ class KakaoTemplateService
       get_new_job_facility_v2(tem_params)
     when MessageTemplateName::NEWSPAPER_V2
       get_newspaper_v2(tem_params)
+    when MessageTemplateName::NEWSPAPER_V3
+      get_newspaper_v3(tem_params)
     when MessageTemplates[MessageNames::CBT_DRAFT_CRM]
       get_cbt_draft(tem_params)
     when MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM]
@@ -1647,6 +1650,30 @@ carepartner.kr#{path}
           name: '그만 받을래요',
           url_mobile: mute_url,
           url_pc: mute_url,
+        }
+      ]
+    }
+  end
+
+  def get_newspaper_v3(tem_params)
+    today = NewsPaper.get_today
+    url = tem_params[:link]
+
+    {
+      title: '아직 일자리를 찾고 있나요?',
+      message: "#{today} 일자리 신문 도착!
+
+오늘 새로운 일자리가 #{tem_params[:yesterday_job_count]}개 등록됐어요.
+마음에 드는 일자리가 있는지
+빠르게 확인해보세요!
+
+👇'신문 확인하기' 버튼을 클릭하세요👇",
+      buttons: [
+        {
+          type: 'WL',
+          name: '신문 확인하기',
+          url_mobile: url,
+          url_pc: url
         }
       ]
     }
