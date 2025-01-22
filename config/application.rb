@@ -137,6 +137,12 @@ module Main
   NEWSPAPER_JOB_QUEUE_URL = ENV['NEWSPAPER_JOB_QUEUE_URL']
   USER_PUSH_JOB_QUEUE_URL = ENV['USER_PUSH_JOB_QUEUE_URL']
 
-  CBT_API_URL = ENV['CBT_API_URL']
+  CBT_API_URL = if Jets.env.production?
+                  ENV['CBT_API_URL']
+                elsif Jets.env.staging?
+                  ENV['CBT_API_URL_STAG']
+                else
+                  ENV['CBT_API_URL']
+                end
   CBT_DELIVERY_BEARER_TOKEN = ENV['CBT_DELIVERY_BEARER_TOKEN']
 end

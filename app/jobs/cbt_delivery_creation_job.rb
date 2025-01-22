@@ -5,7 +5,9 @@ class CbtDeliveryCreationJob < ApplicationJob
 
   cron "0 0 * * SUN *"
   def cbt_delivery_creation
-    CbtDeliveryCreationService.call
+    if Jets.env.production?
+      CbtDeliveryCreationService.call
+    end
   end
 
 
