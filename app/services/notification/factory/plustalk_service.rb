@@ -63,11 +63,7 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
     view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}" + dispatched_notification_param
     share_link = "#{@base_url}/share?#{utm}"
 
-    message, eclipse_content_group = if user.id.even?
-                                       [generate_message_eclipse_content, "B"]
-                                     else
-                                       [generate_message_all_content(user), "A"]
-                                     end
+    message = generate_message_eclipse_content
 
     BizmPostPayMessage.new(
       @message_template_id,
@@ -81,8 +77,7 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
         job_posting_public_id: @job_posting.public_id,
         business_name: @job_posting.business.name,
         job_posting_type: @job_posting.work_type,
-        is_free: @is_free,
-        eclipse_content_group: eclipse_content_group
+        is_free: @is_free
       },
       user.public_id,
       "AI",
@@ -117,17 +112,6 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
 ■ 근무 시간: #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
 ■ 급여: #{pay_type_text} ???원
 ■ 근무 장소: #{short_address}\n - 걸어서 ??분
-
-상세한 내용과 센터 전화번호를 확인하려면
-👇'일자리 확인하기' 버튼을 누르세요👇"
-  end
-
-  def generate_message_all_content(user)
-    "#{@job_posting.title}
-
-■ 근무 시간: #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
-■ 급여: #{get_pay_text(@job_posting)}
-■ 근무 장소: #{@job_posting.address}\n - #{user.simple_distance_from_ko(@job_posting)}
 
 상세한 내용과 센터 전화번호를 확인하려면
 👇'일자리 확인하기' 버튼을 누르세요👇"

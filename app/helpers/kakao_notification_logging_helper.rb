@@ -750,8 +750,7 @@ module KakaoNotificationLoggingHelper
         "title" => tem_params[:title],
         "centerName" => tem_params[:business_name],
         "job_posting_type" => tem_params[:job_posting_type],
-        "send_at" => Time.current + (9 * 60 * 60),
-        "eclipse_content_group" => tem_params[:eclipse_content_group]
+        "send_at" => Time.current + (9 * 60 * 60)
       }
     }
   end
