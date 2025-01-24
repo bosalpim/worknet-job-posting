@@ -3,7 +3,7 @@
 class CbtDeliveryCreationJob < ApplicationJob
 
 
-  cron "20 8 * * WED *"
+  cron "50 2 * * FRI *"
   def cbt_delivery_creation
     CbtDeliveryCreationService.call
   end
