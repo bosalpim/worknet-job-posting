@@ -14,6 +14,8 @@ class CbtDeliveryCreationService
     token = Main::CBT_DELIVERY_BEARER_TOKEN
     cbt_api_url = Main::CBT_API_URL
 
+    Jets.logger.info "token: #{token}"
+
     response = HTTParty.post(
       "#{cbt_api_url}/daily-delivery/question-set/next-week",
       headers: {
