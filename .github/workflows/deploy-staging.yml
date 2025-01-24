@@ -52,6 +52,7 @@ jobs:
           echo "BUSINESS_FREE_TRIAL_ALERT=$BUSINESS_FREE_TRIAL_ALERT" >> .env.staging
           echo "USER_PUSH_JOB_QUEUE_URL=$USER_PUSH_JOB_QUEUE_URL" >> .env.staging
           echo "CBT_API_URL_STAG=$CBT_API_URL_STAG" >> .env.staging
+          echo "CBT_DELIVERY_BEARER_TOKEN=$CBT_DELIVERY_BEARER_TOKEN" >> .env.staging
 
         env:
           DB_HOST_STAGING: ${{ secrets.DB_HOST_STAGING }}
@@ -76,6 +77,7 @@ jobs:
           BUSINESS_FREE_TRIAL_ALERT: ${{ secrets.BUSINESS_FREE_TRIAL_ALERT_STAG }}
           USER_PUSH_JOB_QUEUE_URL: ${{ secrets.USER_PUSH_JOB_QUEUE_STAG_URL }}
           CBT_API_URL_STAG: ${{ secrets.CBT_API_URL_STAG }}
+          CBT_DELIVERY_BEARER_TOKEN: ${{ secrets.CBT_DELIVERY_BEARER_TOKEN }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
