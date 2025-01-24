@@ -3,7 +3,7 @@
 class CbtDeliveryCreationJob < ApplicationJob
   include AlimtalkMessage
 
-  cron "31 4 ? * FRI *"
+  cron "10 0 ? * SUN *"
   def create_cbt_delivery
     CbtDeliveryCreationService.call
   end
