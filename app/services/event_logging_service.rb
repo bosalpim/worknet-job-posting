@@ -48,8 +48,6 @@ class EventLoggingService
   end
 
   def log_to_mixpanel(events)
-    Jets.logger.info "Mixpanel event loggin start"
-
     events.each do |event|
       mixpanel_event = {
         "event" => event[:event_type],
@@ -67,15 +65,6 @@ class EventLoggingService
           "Accept" => "text/plain"
         }
       )
-
-      Jets.logger.info({
-        service: 'EventLoggingService',
-        action: 'log_to_mixpanel',
-        status: 'failed',
-        event: mixpanel_event,
-        response_code: response.code,
-        response_body: response.body
-      }.to_json)
 
       unless response.success?
         Jets.logger.info "Mixpanel event logging failed: #{mixpanel_event}"
