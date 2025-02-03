@@ -572,7 +572,7 @@ module KakaoNotificationLoggingHelper
         logging_data["event_properties"]["type"] = NOTIFICATION_TYPE_TEXT_MESSAGE
       end
 
-      AmplitudeService.instance.log_array([logging_data])
+      EventLoggingService.instance.log_events([logging_data])
     else
       return
     end
@@ -600,7 +600,7 @@ module KakaoNotificationLoggingHelper
         logging_data2["event_properties"]["type"] = NOTIFICATION_TYPE_TEXT_MESSAGE
       end
 
-      AmplitudeService.instance.log_array([logging_data, logging_data2])
+      EventLoggingService.instance.log_events([logging_data, logging_data2])
     else
       return
     end

@@ -30,7 +30,7 @@ class JobPosting::CloseExpiredJobPostingsService
       }
     end
 
-    AmplitudeService.instance.log_array(client_events)
+    EventLoggingService.instance.log_events(client_events)
 
     job_postings.update_all(status: 'closed')
   end

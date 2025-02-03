@@ -1,4 +1,4 @@
-class AmplitudeService
+class EventLoggingService
   include Singleton
 
   def initialize
@@ -6,7 +6,7 @@ class AmplitudeService
     @api_key = Jets.env.production? ? ENV['AMPLITUDE_PRODUCTION'] : ENV['AMPLITUDE_STAGING']
   end
 
-  def log_array(array = [{user_id: nil, event_type: nil, event_properties: nil}])
+  def log_events(array = [{ user_id: nil, event_type: nil, event_properties: nil}])
     body = {
       "api_key" => @api_key,
       "events" => array
