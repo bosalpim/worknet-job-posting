@@ -48,6 +48,8 @@ class EventLoggingService
   end
 
   def log_to_mixpanel(events)
+    Jets.logger.info "Mixpanel event loggin start"
+
     events.each do |event|
       mixpanel_event = {
         "event" => event[:event_type],
