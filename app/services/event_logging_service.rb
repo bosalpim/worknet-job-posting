@@ -49,6 +49,7 @@ class EventLoggingService
 
   def log_to_mixpanel(events)
     events.each do |event|
+      event = event.transform_keys(&:to_sym)
       mixpanel_event = {
         "event" => event[:event_type],
         "properties" => {
@@ -57,17 +58,30 @@ class EventLoggingService
         }.merge(event[:event_properties] || {})
       }
 
-      response = HTTParty.post(
-        @mixpanel_endpoint,
-        body: [mixpanel_event].to_json,
-        headers: {
-          "Content-Type" => "application/json",
-          "Accept" => "text/plain"
-        }
-      )
+      begin
+        response = HTTParty.post(
+          @mixpanel_endpoint,
+          body: [mixpanel_event].to_json,
+          headers: {
+            "Content-Type" => "application/json",
+            "Accept" => "text/plain"
+          }
+        )
 
-      unless response.success?
-        Jets.logger.info "Mixpanel event logging failed: #{mixpanel_event}"
+        if response.success?
+          Jets.logger.info "Mixpanel event logged successfully: #{mixpanel_event}" if Jets.env != 'production'
+        else
+          Jets.logger.warn "Mixpanel event logging failed with status #{response.code}: #{response.body}" if Jets.env != 'production'
+        end
+
+      rescue HTTParty::Error => e
+        Jets.logger.error "HTTParty error occurred: #{e.message}" if Jets.env != 'production'
+      rescue SocketError => e
+        Jets.logger.error "Network connection error: #{e.message}" if Jets.env != 'production'
+      rescue StandardError => e
+        Jets.logger.error "Unexpected error occurred while logging to Mixpanel: #{e.message}" if Jets.env != 'production'
+      ensure
+        Jets.logger.info "Mixpanel logging attempt finished for event: #{event[:event_type]}" if Jets.env != 'production'
       end
     end
   end
