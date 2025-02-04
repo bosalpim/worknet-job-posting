@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: [ '3.2.0' ]
+        ruby-version: [ '3.2.2' ]
 
     steps:
       - uses: actions/checkout@v3
@@ -52,6 +52,7 @@ jobs:
           echo "USER_PUSH_JOB_QUEUE_URL=$USER_PUSH_JOB_QUEUE_URL" >> .env.production
           echo "CBT_API_URL=$CBT_API_URL" >> .env.production
           echo "CBT_DELIVERY_BEARER_TOKEN=$CBT_DELIVERY_BEARER_TOKEN" >> .env.production
+          echo "MIXPANEL_PRODUCTION=$MIXPANEL_PRODUCTION" >> .env.production
 
         env:
           DB_HOST_PRODUCTION: ${{ secrets.DB_HOST_PRODUCTION }}
@@ -77,6 +78,7 @@ jobs:
           USER_PUSH_JOB_QUEUE_URL: ${{ secrets.USER_PUSH_JOB_QUEUE_URL }}
           CBT_API_URL: ${{ secrets.CBT_API_URL }}
           CBT_DELIVERY_BEARER_TOKEN: ${{ secrets.CBT_DELIVERY_BEARER_TOKEN }}
+          MIXPANEL_PRODUCTION: ${{ secrets.MIXPANEL_PRODUCTION }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
