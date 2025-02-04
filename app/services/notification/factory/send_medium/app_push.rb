@@ -37,7 +37,7 @@ class Notification::Factory::SendMedium::AppPush < Notification::Factory::SendMe
   end
 
   def amplitude_log
-    AmplitudeService.instance.log_array([{
+    EventLoggingService.instance.log_events([{
                                            "user_id" => @target_public_id,
                                            "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,
                                            "event_properties" => @logging_properties
