@@ -21,7 +21,7 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
   end
 
   cron "30 11 * * ? *"
-  def prepare_7_daily_check_in_push_alert
+  def prepare_7d_checkin_push_alert
     prepare_user_push_alert("7_daily_check_in")
   end
 

@@ -26,7 +26,7 @@ class UserPushAlertQueueStartJob < ApplicationJob
 
   iam_policy 'sqs'
   cron "0 12 * * ? *"
-  def start_send_7_daily_check_in_push_alert
+  def start_send_7d_checkin_push_alert
     start_send_sqs("7_daily_check_in")
   end
 
