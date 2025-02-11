@@ -24,6 +24,11 @@ class UserPushAlertQueueStartJob < ApplicationJob
     start_send_sqs("daily_chinese_zodiac_fortune")
   end
 
+  cron "0 12 * * ? *"
+  def start_send_7_daily_check_in_push_alert
+    start_send_sqs("7_daily_check_in")
+  end
+
   def start_send_sqs(alert_name)
     date = DateTime.now.at_beginning_of_day.strftime('%Y/%m/%d')
     group = 0
