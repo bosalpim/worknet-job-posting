@@ -5,16 +5,10 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
 
   def send_push(alert_name, user_push_queue)
     case alert_name
-    when "coupang_partners"
-      factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
-                                                         base_path = "/benefit/button-press",
-                                                         title = "버튼 누르고 10원 받기 알림💎",
-                                                         body = "지금 바로 포인트 10원 받을 수 있어요",
-                                                         campaign_name = "button-press-alert")
     when "quiz_5"
       factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
                                                          base_path = "/quiz/daily-proverbs",
-                                                         title = "💡퀴즈 풀고 15원 받기 알림💡",
+                                                         title = "💡퀴즈 풀고 포인트 받기 알림💡",
                                                          body = "지금 우리말 속담을 맞춰보세요",
                                                          campaign_name = "quiz-5-alert")
     when "yoyang_run"
@@ -23,6 +17,12 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
                                                          title = "🐱 게임하고 포인트 무제한 받기",
                                                          body = "지금 달려라 요양이 게임 한판 해보세요",
                                                          campaign_name = "yoyang-run-alert")
+    when "daily_chinese_zodiac_fortune"
+      factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
+                                                         base_path = "/czf",
+                                                         title = "🍀 오늘의 띠별 운세 🍀",
+                                                         body = "내 띠에 맞는 운세 보고 행운 받아가세요",
+                                                         campaign_name = "zodiac-fortune-alert")
     else
       Jets.logger.info "alert Name not found"
       return

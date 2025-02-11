@@ -7,12 +7,6 @@ class UserPushAlertQueueStartJob < ApplicationJob
   # 메세지 보내는 시간에 맞춰서 실행합니다.
 
   iam_policy 'sqs'
-  cron "0 9 * * ? *"
-  def start_send_coupang_partners
-    start_send_sqs("coupang_partners")
-  end
-
-  iam_policy 'sqs'
   cron "30 23 * * ? *"
   def start_send_quiz_5
     start_send_sqs("quiz_5")
@@ -22,6 +16,12 @@ class UserPushAlertQueueStartJob < ApplicationJob
   cron "0 10 * * ? *"
   def start_send_yoyang_run_push
     start_send_sqs("yoyang_run")
+  end
+
+  iam_policy 'sqs'
+  cron "0 0 * * ? *"
+  def start_send_zodiac_fortune
+    start_send_sqs("daily_chinese_zodiac_fortune")
   end
 
   def start_send_sqs(alert_name)

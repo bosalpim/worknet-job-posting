@@ -12,7 +12,7 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
     @job_posting = JobPosting.find(params[:job_posting_id])
     paid_job_posting = PaidJobPostingFeature.find_by_job_posting_id(params[:job_posting_id])
     @is_free = paid_job_posting.nil? ? true : false
-    @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
+    @base_url = "#{Main::Application::HTTPS_CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     begin
       @radius = if params[:radius]
@@ -58,24 +58,20 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
     end
 
     dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "plustalk", @job_posting.id, "yobosa", user.id, "job_detail")
-    application_notification_param = create_dispatched_notification_params(@message_template_id, "plustalk", @job_posting.id, "yobosa", user.id, "application")
-    contact_notification_param = create_dispatched_notification_params(@message_template_id, "plustalk", @job_posting.id, "yobosa", user.id, "contact_message")
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
     view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}" + dispatched_notification_param
-    application_link = "#{@base_url}/application?referral=target_notification&#{utm}" + application_notification_param
-    contact_link = "#{@base_url}/contact-messages?referral=target_notification&#{utm}" + contact_notification_param
     share_link = "#{@base_url}/share?#{utm}"
+
+    message = generate_message_eclipse_content
 
     BizmPostPayMessage.new(
       @message_template_id,
       user.phone_number,
       {
         title: @job_posting.title,
-        message: generate_message_content(user),
+        message: message,
         view_link: view_link,
-        application_link: application_link,
-        contact_link: contact_link,
         share_link: share_link,
         job_posting_id: @job_posting.id,
         job_posting_public_id: @job_posting.public_id,
@@ -105,5 +101,28 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
 이 메세지는 일자리알림을 신청한 분에게만 발송돼요
 
 👇'일자리 확인하기' 버튼을 누르고 자세한 정보를 확인하세요👇"
+  end
+
+  def generate_message_eclipse_content
+    short_address = truncate_address(@job_posting.address)
+    pay_type_text =
+      I18n.t("activerecord.attributes.job_posting.pay_type.#{@job_posting.pay_type}")
+    "#{@job_posting.title}
+
+■ 근무 시간: #{get_days_text(@job_posting)} #{get_hours_text(@job_posting)}
+■ 급여: #{pay_type_text} ???원
+■ 근무 장소: #{short_address}\n - 걸어서 ??분
+
+상세한 내용과 센터 전화번호를 확인하려면
+👇'일자리 확인하기' 버튼을 누르세요👇"
+  end
+
+  def truncate_address(address)
+    parts = address.to_s.split(' ')
+    if parts.size > 3
+      parts.first(3).join(' ') + ' ???'
+    else
+      address
+    end
   end
 end

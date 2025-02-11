@@ -46,6 +46,8 @@ module KakaoNotificationLoggingHelper
     case template_id
     when MessageTemplateName::NEWSPAPER_V2
       return get_news_paper_logging_data(template_id, target_public_id, tem_params)
+    when MessageTemplateName::NEWSPAPER_V3
+      return get_news_paper_v3_logging_data(template_id, target_public_id, tem_params)
     when MessageTemplates[MessageNames::CLOSE_JOB_POSTING_NOTIFICATION]
       return get_close_job_posting_notification_logging_data(tem_params, template_id, target_public_id)
     when MessageTemplateName::CANDIDATE_RECOMMENDATION
@@ -207,7 +209,19 @@ module KakaoNotificationLoggingHelper
         "receiver_type" => RECEIVER_TYPE_USER,
         "template" => template_id,
         "send_at" => Time.current + (9 * 60 * 60),
-        "allday_news_exp_group" => tem_params.dig(:allday_news_exp_group)
+      }
+    }
+  end
+
+  def self.get_news_paper_v3_logging_data(template_id, target_public_id, tem_params)
+    return {
+      "user_id" => target_public_id,
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "sender_type" => SENDER_TYPE_CAREPARTNER,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "template" => template_id,
+        "send_at" => Time.current + (9 * 60 * 60),
       }
     }
   end
@@ -558,7 +572,7 @@ module KakaoNotificationLoggingHelper
         logging_data["event_properties"]["type"] = NOTIFICATION_TYPE_TEXT_MESSAGE
       end
 
-      AmplitudeService.instance.log_array([logging_data])
+      EventLoggingService.instance.log_events([logging_data])
     else
       return
     end
@@ -586,7 +600,7 @@ module KakaoNotificationLoggingHelper
         logging_data2["event_properties"]["type"] = NOTIFICATION_TYPE_TEXT_MESSAGE
       end
 
-      AmplitudeService.instance.log_array([logging_data, logging_data2])
+      EventLoggingService.instance.log_events([logging_data, logging_data2])
     else
       return
     end

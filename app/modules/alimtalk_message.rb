@@ -17,7 +17,7 @@ module AlimtalkMessage
 
   module MessageTemplates
     TEMPLATES = {
-      MessageNames::TARGET_USER_JOB_POSTING => "target_user_job_posting_V5",
+      MessageNames::TARGET_USER_JOB_POSTING => "target_user_job_posting_V6",
       MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM => "high-salary-job",
       MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM => 'enter-location-1',
       MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM => 'carepartner-present',

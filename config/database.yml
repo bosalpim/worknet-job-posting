@@ -8,8 +8,8 @@ development:
   ########  staging ######
 #  database: backend_staging
 #  username: rails_user
-#  host:  <%= ENV["DB_HOST_STAGING"] || 'localhost' %>
-#  password: <%= ENV['DB_PASSWORD_STAGING'] %>
+#  host:  <%#= ENV["DB_HOST_STAGING"] || 'localhost' %>
+#  password: <%#= ENV['DB_PASSWORD_STAGING'] %>
 #  port: 5433
   ########  localhost ######
   database: bosalpim_development
