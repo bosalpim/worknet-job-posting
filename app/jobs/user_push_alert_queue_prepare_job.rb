@@ -20,10 +20,10 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
     prepare_user_push_alert("daily_chinese_zodiac_fortune")
   end
 
-  # cron "30 11 * * ? *"
-  # def prepare_7_daily_check_in_push_alert
-  #   prepare_user_push_alert("7_daily_check_in")
-  # end
+  cron "30 11 * * ? *"
+  def prepare_7_daily_check_in_push_alert
+    prepare_user_push_alert("7_daily_check_in")
+  end
 
   def prepare_user_push_alert(alert_name)
     if Jets.env.production?
