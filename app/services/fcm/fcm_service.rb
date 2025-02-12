@@ -72,13 +72,6 @@ class Fcm::FcmService
       {
         message: {
           token: token,
-          notification: {
-            title: message[:title],
-            body: message[:body]
-          },
-          data: {
-            deeplink: message[:link]
-          },
           android: {
             priority: 'high',
             notification: {
