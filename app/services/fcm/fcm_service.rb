@@ -31,6 +31,7 @@ class Fcm::FcmService
       result
     rescue StandardError => e
       # 예외 발생 시 안전한 결과 반환
+      Jets.logger.info "ERROR MESSAGE: #{e.message}"
       Jets.logger.info "Token: #{token}, Body: #{message}"
       { success: false, errorCode: "UNKNWON" }
     end
