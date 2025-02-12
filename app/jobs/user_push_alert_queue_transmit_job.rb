@@ -23,6 +23,13 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
                                                          title = "🍀 오늘의 띠별 운세 🍀",
                                                          body = "내 띠에 맞는 운세 보고 행운 받아가세요",
                                                          campaign_name = "zodiac-fortune-alert")
+    when "7_daily_check_in"
+      factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
+                                                         base_path = "/benefit/seven-daily-check-in",
+                                                         title = "🥃 박카스 받기 미션 🥃",
+                                                         body = "매일 출석체크하고 박카스 받으세요!",
+                                                         campaign_name = "7-daily-check-in-alert")
+
     else
       Jets.logger.info "alert Name not found"
       return
