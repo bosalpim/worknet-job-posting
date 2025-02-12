@@ -7,6 +7,11 @@ class Fcm::FcmService
     authorize
   end
 
+  @candidate_token_list = nil
+  def get_candidate_push_token_info(tokens)
+    @candidate_token_list = UserPushToken.where(token: tokens).pluck(:token, :app_version)
+  end
+
   def send_message(token, message)
     response = self.class.post('/v1/projects/carepartner-app-v1/messages:send',
                                headers: { 'Authorization' => "Bearer #{@auth_token}", 'Content-Type' => 'application/json' },
@@ -51,24 +56,32 @@ class Fcm::FcmService
   end
 
   def message_body(token, message)
-    {
-      message: {
-        token: token,
-        data: {
-          title: message[:title],
-          body: message[:body],
-          deeplink: message[:link]
-        },
-        # flutter에서만 필요한 데이터
-        # android: {
-        #   priority: 'high',
-        #   notification: {
-        #     channelId: 'high_importance_channel',
-        #     title: message[:title],
-        #     body: message[:body],
-        #   }
-        # }
+    candidate = @candidate_token_list.find { |entry| entry[0] == token }
+    if candidate && candidate[1] == "2.0.0"
+      {
+        message: {
+          token: token,
+          data: {
+            title: message[:title],
+            body: message[:body],
+            deeplink: message[:link]
+          },
+        }
       }
-    }
+    else
+      {
+        message: {
+          token: token,
+          android: {
+            priority: 'high',
+            notification: {
+              channelId: 'high_importance_channel',
+              title: message[:title],
+              body: message[:body],
+            }
+          }
+        }
+      }
+    end
   end
 end
