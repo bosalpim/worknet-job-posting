@@ -10,10 +10,6 @@ class Notification::Factory::SendMedium::AppPush < Notification::Factory::SendMe
     @logging_properties = logging_properties
   end
 
-  def to
-    @to
-  end
-
   # FCM
   def send_request
     begin

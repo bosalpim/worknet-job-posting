@@ -99,7 +99,6 @@ class Notification::Factory::NotificationFactoryClass
   end
 
   def send_app_push
-    Fcm::FcmService.instance.get_candidate_push_token_info(@app_push_list.map(&:to))
     return unless check_class_type(@app_push_list, AppPush) == true
     send_process(@app_push_list, @app_push_result)
   end
