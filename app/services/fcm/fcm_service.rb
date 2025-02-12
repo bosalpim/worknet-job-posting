@@ -5,9 +5,9 @@ class Fcm::FcmService
 
   def initialize
     authorize
+    @candidate_token_list = []
   end
 
-  @candidate_token_list = nil
   def get_candidate_push_token_info(tokens)
     @candidate_token_list = UserPushToken.where(token: tokens).pluck(:token, :app_version)
   end
