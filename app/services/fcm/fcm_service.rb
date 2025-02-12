@@ -5,11 +5,6 @@ class Fcm::FcmService
 
   def initialize
     authorize
-    @candidate_token_list = []
-  end
-
-  def get_candidate_push_token_info(tokens)
-    @candidate_token_list = UserPushToken.where(token: tokens).pluck(:token, :app_version)
   end
 
   def send_message(token, message)
@@ -56,39 +51,25 @@ class Fcm::FcmService
   end
 
   def message_body(token, message)
-    candidate = @candidate_token_list.find { |entry| entry[0] == token }
-    if candidate && candidate[1] == "2.0.0"
-      {
-        message: {
-          token: token,
-          data: {
+    {
+      message: {
+        token: token,
+        notification: {
+          title: message[:title],
+          body: message[:body]
+        },
+        data: {
+          deeplink: message[:link]
+        },
+        android: {
+          priority: 'high',
+          notification: {
+            channelId: 'high_importance_channel',
             title: message[:title],
             body: message[:body],
-            deeplink: message[:link]
-          },
-        }
-      }
-    else
-      {
-        message: {
-          token: token,
-          notification: {
-            title: message[:title],
-            body: message[:body]
-          },
-          data: {
-            deeplink: message[:link]
-          },
-          android: {
-            priority: 'high',
-            notification: {
-              channelId: 'high_importance_channel',
-              title: message[:title],
-              body: message[:body],
-            }
           }
         }
       }
-    end
+    }
   end
 end
