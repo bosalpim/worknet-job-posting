@@ -13,7 +13,6 @@ class Fcm::FcmService
   end
 
   def send_message(token, message)
-    Jets.logger.info message_body(token, message).to_json
     begin
       response = self.class.post('/v1/projects/carepartner-app-v1/messages:send',
                                  headers: { 'Authorization' => "Bearer #{@auth_token}", 'Content-Type' => 'application/json' },
