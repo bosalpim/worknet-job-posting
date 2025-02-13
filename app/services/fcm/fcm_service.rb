@@ -8,11 +8,12 @@ class Fcm::FcmService
     @candidate_token_list = []
   end
 
-  def get_candidate_push_token_info(tokens)
-    @candidate_token_list = UserPushToken.where(token: tokens).pluck(:token, :app_version)
+  def set_candidate_push_token_info(tokens)
+    @candidate_token_list = UserPushToken.where(token: tokens).map { |token| { "token": token.token, "app_version": token.app_version } }
   end
 
   def send_message(token, message)
+    Jets.logger.info message_body(token, message).to_json
     begin
       response = self.class.post('/v1/projects/carepartner-app-v1/messages:send',
                                  headers: { 'Authorization' => "Bearer #{@auth_token}", 'Content-Type' => 'application/json' },
@@ -44,6 +45,10 @@ class Fcm::FcmService
 
   private
 
+  def candidate_token_list
+    @candidate_token_list
+  end
+
   def authorize
     json = nil
     if Jets.env.development?
@@ -69,8 +74,8 @@ class Fcm::FcmService
   end
 
   def message_body(token, message)
-    candidate = @candidate_token_list.find { |entry| entry[0] == token }
-    if candidate && candidate[1] == "2.0.0"
+    candidate = candidate_token_list.find { |entry| entry.dig(:token) == token }
+    if candidate && candidate.dig(:app_version) == "2.0.0"
       {
         message: {
           token: token,
