@@ -76,7 +76,7 @@ class User < ApplicationRecord
   end
 
   def push_token
-    self.user_push_tokens.vaild_tokens.first
+    self.user_push_tokens.vaild_tokens.last
   end
 
   def distance_from(object)
