@@ -31,19 +31,19 @@ class UserPushAlertQueueStartJob < ApplicationJob
   end
 
   iam_policy 'sqs'
-  cron "0 3 * * *"
+  cron "0 3 * * ? *"
   def start_send_cp_roulette_12
     start_send_sqs("coupang_roulette")
   end
 
   iam_policy 'sqs'
-  cron "0 9 * * *"
+  cron "0 9 * * ? *"
   def start_send_cp_roulette_18
     start_send_sqs("coupang_roulette")
   end
 
   iam_policy 'sqs'
-  cron "0 12 * * *"
+  cron "0 12 * * ? *"
   def start_send_cp_roulette_21
     start_send_sqs("coupang_roulette")
   end
