@@ -25,17 +25,17 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
     prepare_user_push_alert("7_daily_check_in")
   end
 
-  cron "30 2 * * *"
+  cron "30 2 * * ? *"
   def prepare_cp_roulette_12
     prepare_user_push_alert("coupang_roulette")
   end
 
-  cron "30 8 * * *"
+  cron "30 8 * * ? *"
   def prepare_cp_roulette_18
     prepare_user_push_alert("coupang_roulette")
   end
 
-  cron "30 11 * * *"
+  cron "30 11 * * ? *"
   def prepare_cp_roulette_21
     prepare_user_push_alert("coupang_roulette")
   end
