@@ -29,6 +29,12 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
                                                          title = "🥃 박카스 받기 미션 🥃",
                                                          body = "매일 출석체크하고 박카스 받으세요!",
                                                          campaign_name = "7-daily-check-in-alert")
+    when "coupang_roulette"
+      factory = Notification::Factory::UserPushAlert.new(user_push_queue.processing,
+                                                         base_path = "/benefit/roulette",
+                                                         title = "룰렛 돌리고 랜덤 주머니 받기",
+                                                         body = "시간 지나면 당첨 기회가 사라져요!",
+                                                         campaign_name = "coupang-roulette")
 
     else
       Jets.logger.info "alert Name not found"
