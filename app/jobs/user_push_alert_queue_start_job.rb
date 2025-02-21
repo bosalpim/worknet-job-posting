@@ -30,6 +30,24 @@ class UserPushAlertQueueStartJob < ApplicationJob
     start_send_sqs("7_daily_check_in")
   end
 
+  iam_policy 'sqs'
+  cron "0 3 * * ? *"
+  def start_send_cp_roulette_12
+    start_send_sqs("coupang_roulette")
+  end
+
+  iam_policy 'sqs'
+  cron "0 9 * * ? *"
+  def start_send_cp_roulette_18
+    start_send_sqs("coupang_roulette")
+  end
+
+  iam_policy 'sqs'
+  cron "0 12 * * ? *"
+  def start_send_cp_roulette_21
+    start_send_sqs("coupang_roulette")
+  end
+
   def start_send_sqs(alert_name)
     date = DateTime.now.at_beginning_of_day.strftime('%Y/%m/%d')
     group = 0
