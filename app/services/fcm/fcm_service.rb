@@ -74,7 +74,7 @@ class Fcm::FcmService
 
   def message_body(token, message)
     candidate = candidate_token_list.find { |entry| entry.dig(:token) == token }
-    if candidate && (candidate.dig(:app_version) == "2.0.0" || candidate.dig(:app_version) == "2.0.1")
+    if candidate && candidate.dig(:app_version)&.match?(/^2\./)
       {
         message: {
           token: token,
