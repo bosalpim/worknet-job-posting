@@ -5,11 +5,6 @@ class Fcm::FcmService
 
   def initialize
     authorize
-    @candidate_token_list = []
-  end
-
-  def set_candidate_push_token_info(tokens)
-    @candidate_token_list = UserPushToken.where(token: tokens).map { |token| { "token": token.token, "app_version": token.app_version } }
   end
 
   def send_message(token, message)
@@ -44,10 +39,6 @@ class Fcm::FcmService
 
   private
 
-  def candidate_token_list
-    @candidate_token_list
-  end
-
   def authorize
     json = nil
     if Jets.env.development?
@@ -73,8 +64,6 @@ class Fcm::FcmService
   end
 
   def message_body(token, message)
-    candidate = candidate_token_list.find { |entry| entry.dig(:token) == token }
-    if candidate && candidate.dig(:app_version)&.match?(/^2\./)
       {
         message: {
           token: token,
@@ -85,27 +74,5 @@ class Fcm::FcmService
           },
         }
       }
-    else
-      {
-        message: {
-          token: token,
-          notification: {
-            title: message[:title],
-            body: message[:body]
-          },
-          data: {
-            deeplink: message[:link]
-          },
-          android: {
-            priority: 'high',
-            notification: {
-              channelId: 'high_importance_channel',
-              title: message[:title],
-              body: message[:body],
-            }
-          }
-        }
-      }
-    end
   end
 end
