@@ -19,7 +19,7 @@ class Notification::Factory::SendMedium::AppPush < Notification::Factory::SendMe
     begin
       response = Fcm::FcmService.instance.send_message(@to, @notification)
       if response.dig(:success)
-        amplitude_log unless @logging_properties.nil?
+        event_log unless @logging_properties.nil?
         return { status: 'success', response: response, target_public_id: @target_public_id }
       else
         begin
@@ -40,7 +40,7 @@ class Notification::Factory::SendMedium::AppPush < Notification::Factory::SendMe
     end
   end
 
-  def amplitude_log
+  def event_log
     EventLoggingService.instance.log_events([{
                                            "user_id" => @target_public_id,
                                            "event_type" => KakaoNotificationLoggingHelper::NOTIFICATION_EVENT_NAME,

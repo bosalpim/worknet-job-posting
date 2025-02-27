@@ -13,7 +13,7 @@ class Notification::Factory::SendMedium::BizmPrePayMessage < Notification::Facto
     begin
       response = request_pre_pay(request_params)
       response.class == Array ? response.first : response
-      amplitude_log(response)
+      event_log(response)
       { status: 'success', response: response, target_public_id: @target_public_id }
     rescue Net::ReadTimeout
       { status: 'fail', response: "NET::TIMEOUT", target_public_id: @target_public_id }
@@ -22,7 +22,7 @@ class Notification::Factory::SendMedium::BizmPrePayMessage < Notification::Facto
     end
   end
 
-  def amplitude_log(response)
+  def event_log(response)
     KakaoNotificationLoggingHelper.send_log(response, @message_template_id, @params)
   end
 end
