@@ -141,7 +141,7 @@ module KakaoNotificationLoggingHelper
     when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
       return get_target_business_free_trials(template_id, tem_params)
     else
-      puts "WARNING: Amplitude Logging Missing else case!"
+      puts "WARNING: Event Logging Missing else case!"
     end
   end
 

@@ -2,7 +2,6 @@ class EventLoggingService
   include Singleton
 
   def initialize
-    setup_amplitude
     setup_mixpanel
   end
 
@@ -21,7 +20,6 @@ class EventLoggingService
   public
 
   def log_events(events = [{ user_id: nil, event_type: nil, event_properties: nil}])
-    log_to_amplitude(events)
     log_to_mixpanel(events)
   end
 

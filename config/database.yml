@@ -13,7 +13,7 @@ development:
 #  port: 5433
   ########  localhost ######
   database: bosalpim_development
-  username: ken
+  username: <%= ENV["DB_USERNAME_DEV"] || 'ken' %>
   host: <%= ENV["DB_HOST_DEV"] || 'localhost' %>
   password: <%= ENV["DB_PASSWORD_DEV"] %>
 

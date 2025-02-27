@@ -41,7 +41,6 @@ jobs:
           echo "NAVER_SEARCH_API_KEY=$NAVER_SEARCH_API_KEY" >> .env.staging
           echo "KAKAO_REST_API_KEY=$KAKAO_REST_API_KEY" >> .env.staging
           echo "KAKAO_BIZMSG_PROFILE=$KAKAO_BIZMSG_PROFILE" >> .env.staging
-          echo "AMPLITUDE_STAGING=$AMPLITUDE_STAGING" >> .env.staging
           echo "FCM_APP_PUSH_AUTHORIZATION=$FCM_APP_PUSH_AUTHORIZATION" >> .env.staging
           echo "BEX_API_URL=$BEX_STAGING_API_URL" >> .env.staging
           echo "SLACK_DEV_ALERT_URL=$SLACK_DEV_ALERT_URL" >> .env.staging
@@ -67,7 +66,6 @@ jobs:
           NAVER_SEARCH_API_KEY: ${{ secrets.NAVER_SEARCH_API_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           KAKAO_BIZMSG_PROFILE: ${{ secrets.KAKAO_BIZMSG_PROFILE }}
-          AMPLITUDE_STAGING: ${{ secrets.AMPLITUDE_STAGING }}
           FCM_APP_PUSH_AUTHORIZATION: ${{ secrets.FCM_APP_PUSH_AUTHORIZATION }}
           BEX_STAGING_API_URL: ${{ secrets.BEX_STAGING_API_URL }}
           SLACK_DEV_ALERT_URL: ${{ secrets.SLACK_DEV_ALERT_URL }}
