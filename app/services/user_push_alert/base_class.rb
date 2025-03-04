@@ -31,9 +31,35 @@ class UserPushAlert::BaseClass
         batch = users[offset, batch_size]
         batch.each_slice(500) do |slice|
           begin
-            UserPushAlertQueue.insert_all(
-              slice.map { |user| { date: @date, group: offset / batch_size, status: 'pending', user_id: user.id, alert_id: alert.id, push_token: user.push_token&.token } }
-            )
+            # 각 사용자별로 현재 최대 시퀀스 번호 조회
+            user_ids = slice.map(&:id)
+
+            # 각 사용자의 기존 최대 시퀀스 값 조회
+            existing_sequences = UserPushAlertQueue
+                                   .where(alert_id: alert.id, date: @date, user_id: user_ids)
+                                   .group(:user_id)
+                                   .maximum(:sequence)
+
+            # 증가된 시퀀스 번호로 레코드 생성
+            records = slice.map do |user|
+              # 현재 최대값 조회 (기존 레코드가 없으면 nil을 반환)
+              current_max = existing_sequences[user.id]
+
+              # 새 시퀀스 값 설정 (기존 레코드가 있으면 max+1, 없으면 1)
+              new_sequence = current_max ? current_max + 1 : 1
+
+              {
+                date: @date,
+                group: offset / batch_size,
+                status: 'pending',
+                user_id: user.id,
+                alert_id: alert.id,
+                push_token: user.push_token&.token,
+                sequence: current_max + 1
+              }
+            end
+
+            UserPushAlertQueue.insert_all(records)
           rescue => e
             Jets.logger.error e
           end
