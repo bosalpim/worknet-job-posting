@@ -55,7 +55,7 @@ class UserPushAlert::BaseClass
                 user_id: user.id,
                 alert_id: alert.id,
                 push_token: user.push_token&.token,
-                sequence: current_max + 1
+                sequence: new_sequence
               }
             end
 
