@@ -16,11 +16,11 @@ class JobSupportProject::SubmitRemindService
                              .where('job_posting_results.created_at >= ? AND job_posting_results.created_at < ?', start_time.utc, end_time.utc)
                              .where(result_type: 'success')
                              .left_joins(:user)
-                             .where('job_posting_results.user_id IS NULL OR users.birth_year <= ?', Time.now.year - 60)
-                             .left_joins(job_posting: :job_support_project_participants)
-                             .where('job_support_project_participants.id IS NULL OR job_support_project_participants.is_done = ?', false)
-                             .joins("LEFT JOIN job_support_project_participants AS jsp ON job_posting_results.user_id = jsp.user_id AND jsp.is_done = TRUE AND jsp.created_at BETWEEN '#{current_year_start.utc}' AND '#{current_year_end.utc}'")
-                             .where('jsp.id IS NULL')
+                             # .where('job_posting_results.user_id IS NULL OR users.birth_year <= ?', Time.now.year - 60)
+                             # .left_joins(job_posting: :job_support_project_participants)
+                             # .where('job_support_project_participants.id IS NULL OR job_support_project_participants.is_done = ?', false)
+                             # .joins("LEFT JOIN job_support_project_participants AS jsp ON job_posting_results.user_id = jsp.user_id AND jsp.is_done = TRUE AND jsp.created_at BETWEEN '#{current_year_start.utc}' AND '#{current_year_end.utc}'")
+                             # .where('jsp.id IS NULL')
   end
 
   def call
@@ -29,6 +29,7 @@ class JobSupportProject::SubmitRemindService
       logger_prefix = "JOB_POSTING_RESULT_ID : #{job_posting_result.id} 공고"
       Jets.logger.info "#{logger_prefix} 리마인드 발송\n"
 
+      message_target_number = "01034308850"
       business_registration = job_posting_result.job_posting.business.business_registration
       user_name = job_posting_result.user.name
       due_date = (@kst_now + @due_day.days).in_time_zone('Asia/Seoul').strftime('%m.%d')
@@ -40,31 +41,32 @@ class JobSupportProject::SubmitRemindService
       end
       message += "\n■ #{user_name}님 근로계약서 (주소, 주민등록번호 전체 포함)"
       message += "\n\n[서류 제출 방법]\n아래 방법 중 하나로 제출 해주세요 (세 가지 중 택 1)\n"
-      sms_message = message + "■ 1588-5877로 문자 제출\n■ Fax : 07080157158\n■ https://business.carepartner.kr/jspp에서 바로 제출"
-      message += "■ 바로 제출하기 > 하단 \"바로 제출하기\" 버튼을 눌러서 서류를 제출헤주세요.\n■ 문자로 제출하기 > 하단 \"문자로 제출하기\" 버튼을 눌러서 서류를 제출해주세요.\n■ Fax > 07080157158로 서류를 제출해주세요."
+      sms_message = message + "■ #{message_target_number} 문자 제출\n■ Fax : 0260009470\n■ https://business.carepartner.kr/jspp에서 바로 제출"
       sms_message += "\n\n제출 기한: #{due_date}까지"
+
+      message += "■ 하단 \"서류 제출하기\" 버튼을 눌러서 서류를 제출헤주세요.\n■ 하단 \"문자로 제출하기\" 버튼을 눌러서 서류를 제출해주세요.\n■ Fax: 0260009470로 서류를 제출해주세요."
       message += "\n\n제출 기한: #{due_date}까지"
 
       body = {
-        message_type: "AI",
+        message_type: "AL",
         receiver_num: job_posting_result.job_posting.manager_phone_number,
         profile_key: ENV['KAKAO_BIZMSG_PROFILE'],
-        template_code: 'job_support_document_reminder',
+        template_code: 'B2G_document_reminder',
         sender_num: '15885877',
         msgid: "WEB#{Time.now.strftime("%y%m%d%H%M%S")}_#{SecureRandom.uuid.gsub('-', '')[0, 7]}",
         message: message,
         reserved_time: '00000000000000',
         button1: {
-          name: '바로 제출하기',
+          name: '서류 제출',
           type: 'WL',
           url_mobile: "https://business.carepartner.kr/jspp",
           url_pc: "https://business.carepartner.kr/jspp"
         },
         button2: {
-          name: '문자로 제출하기',
+          name: '문자 제출',
           type: 'AL',
-          scheme_android: "sms://15885877?body=#{send_sms_link_body}",
-          scheme_ios: "sms://15885877&body=#{send_sms_link_body}",
+          scheme_android: "sms://#{message_target_number}?body=#{send_sms_link_body}",
+          scheme_ios: "sms://#{message_target_number}&body=#{send_sms_link_body}",
         },
         sms_kind: 'L',
         sms_message: sms_message,
