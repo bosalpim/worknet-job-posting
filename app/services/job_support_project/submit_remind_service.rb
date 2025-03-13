@@ -16,11 +16,11 @@ class JobSupportProject::SubmitRemindService
                              .where('job_posting_results.created_at >= ? AND job_posting_results.created_at < ?', start_time.utc, end_time.utc)
                              .where(result_type: 'success')
                              .left_joins(:user)
-                             # .where('job_posting_results.user_id IS NULL OR users.birth_year <= ?', Time.now.year - 60)
-                             # .left_joins(job_posting: :job_support_project_participants)
-                             # .where('job_support_project_participants.id IS NULL OR job_support_project_participants.is_done = ?', false)
-                             # .joins("LEFT JOIN job_support_project_participants AS jsp ON job_posting_results.user_id = jsp.user_id AND jsp.is_done = TRUE AND jsp.created_at BETWEEN '#{current_year_start.utc}' AND '#{current_year_end.utc}'")
-                             # .where('jsp.id IS NULL')
+                             .where('job_posting_results.user_id IS NULL OR users.birth_year <= ?', Time.now.year - 60)
+                             .left_joins(job_posting: :job_support_project_participants)
+                             .where('job_support_project_participants.id IS NULL OR job_support_project_participants.is_done = ?', false)
+                             .joins("LEFT JOIN job_support_project_participants AS jsp ON job_posting_results.user_id = jsp.user_id AND jsp.is_done = TRUE AND jsp.created_at BETWEEN '#{current_year_start.utc}' AND '#{current_year_end.utc}'")
+                             .where('jsp.id IS NULL')
   end
 
   def call
