@@ -138,6 +138,8 @@ module KakaoNotificationLoggingHelper
       return get_employment_confirmation_logging_data(template_id, tem_params)
     when MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING]
       return get_target_user_job_posting_logging_data(template_id, tem_params)
+    when MessageNames::TARGET_USER_JOB_POSTING_WITH_APP_LINK
+      return get_target_user_job_posting_logging_data(template_id, tem_params)
     when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
       return get_target_business_free_trials(template_id, tem_params)
     else
@@ -750,7 +752,8 @@ module KakaoNotificationLoggingHelper
         "title" => tem_params[:title],
         "centerName" => tem_params[:business_name],
         "job_posting_type" => tem_params[:job_posting_type],
-        "send_at" => Time.current + (9 * 60 * 60)
+        "send_at" => Time.current + (9 * 60 * 60),
+        "experment" => tem_params[:experiment]
       }
     }
   end

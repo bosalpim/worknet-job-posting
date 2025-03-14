@@ -5,6 +5,7 @@ module Bex
 
   module Experiment
     CAREER_CERTIFICATION = 'career_certification'
+    TARGET_JOB_POSTING_WITH_APP_LINK = 'exp_jobposting_noti_landing_App'
   end
 
   module FetchMode
