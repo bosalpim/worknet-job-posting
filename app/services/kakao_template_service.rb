@@ -169,7 +169,10 @@ class KakaoTemplateService
     when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
       get_job_support_agreement(tem_params)
     when MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING]
-      get_target_user_job_posting_v2_data(tem_params)
+      get_target_user_job_posting_v6_data(tem_params)
+    when MessageNames::TARGET_USER_JOB_POSTING_WITH_APP_LINK
+      # 실험용 템플릿 임시 분기
+      get_target_user_job_posting_v7_data(tem_params)
     when MessageTemplateName::CAREER_CERTIFICATION_V3
       get_employment_confirmation_alarm(tem_params)
     when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
@@ -275,9 +278,10 @@ class KakaoTemplateService
     }
   end
 
-  def get_target_user_job_posting_v2_data(tem_params)
-    view_link = tem_params[:view_link]
-    share_link = tem_params[:share_link]
+  def get_target_user_job_posting_v6_data(tem_params)
+    base_url = tem_params[:base_url]
+    view_web_link = base_url + tem_params[:view_link_path]
+    share_link = base_url + tem_params[:share_link_path]
 
     {
       title: tem_params[:title],
@@ -286,7 +290,32 @@ class KakaoTemplateService
         {
           name: '일자리 확인하기',
           type: 'WL',
-          url_mobile: view_link
+          url_mobile: view_web_link
+        },
+        {
+          name: '친구에게 공유하기',
+          type: 'WL',
+          url_mobile: share_link
+        }
+      ]
+    }
+  end
+
+  def get_target_user_job_posting_v7_data(tem_params)
+    base_url = tem_params[:base_url]
+    view_app_link = Main::Application::DEEP_LINK_SCHEME + "/" + tem_params[:app_view_link_path]
+    view_web_link = base_url + tem_params[:view_link_path]
+    share_link = base_url + tem_params[:share_link_path]
+
+    {
+      title: tem_params[:title],
+      message: tem_params[:message],
+      buttons: [
+        {
+          name: '일자리 확인하기',
+          type: 'AL',
+          scheme_android: view_app_link,
+          url_mobile: view_web_link
         },
         {
           name: '친구에게 공유하기',
