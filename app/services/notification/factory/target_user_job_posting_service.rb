@@ -121,7 +121,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
         job_posting_type: @job_posting.work_type,
         is_free: @is_free,
         experiment: target_job_posting_with_app_link_treatment_key.present? ? {
-          target_job_posting_with_app_link_treatment_key: target_job_posting_with_app_link_treatment_key,
+          exp_jobposting_noti_landing_App: target_job_posting_with_app_link_treatment_key,
         } : nil
       },
       user.public_id,
