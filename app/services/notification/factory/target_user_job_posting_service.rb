@@ -90,6 +90,8 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     end
 
     treatment = BexService.new(experiment_key: Bex::Experiment::TARGET_JOB_POSTING_WITH_APP_LINK, user_id: user.public_id).call
+    Jets.logger.info "treatment"
+    Jets.logger.info treatment.key
     if treatment.key == "B"
       create_arlimtalk_content(true, user, treatment.key)
     else
