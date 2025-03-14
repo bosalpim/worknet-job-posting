@@ -13,7 +13,8 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     @job_posting = JobPosting.find(params[:job_posting_id])
     paid_job_posting = PaidJobPostingFeature.find_by_job_posting_id(params[:job_posting_id])
     @is_free = paid_job_posting.nil? ? true : false
-    @base_url = "#{Main::Application::HTTPS_CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
+    @base_url = "#{Main::Application::HTTPS_CAREPARTNER_URL}"
+    @base_path = "jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
 
     begin
@@ -72,27 +73,53 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
       return nil
     end
 
-    dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "target_message", @job_posting.id, "yobosa", user.id, "job_detail")
+    push_token_app_version = user.push_token.nil? ? nil : user.push_token.app_version
+    # 유저가 푸쉬토큰이 없어 -> 기존 알림톡
+    if push_token_app_version.nil?
+      return create_arlimtalk_content(false, user, nil)
+    end
+    # 유저가 푸쉬토큰이 있지만, 타켓 앱버전이 아니야 -> 기존 알림톡
+    use_detail_button_app_link = push_token_app_version.nil? ? false : push_token_app_version == "2.2.3"
+    unless use_detail_button_app_link
+      return create_arlimtalk_content(false, user,nil)
+    end
 
-    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}" + dispatched_notification_param
-    share_link = "#{@base_url}/share?#{utm}"
+    treatment = BexService.new(experiment_key: Bex::Experiment::TARGET_JOB_POSTING_WITH_APP_LINK, user_id: user.public_id).call
+    if treatment.key == "B"
+      create_arlimtalk_content(true, user, treatment.key)
+    else
+      create_arlimtalk_content(false, user, treatment.key)
+    end
+  end
 
+  def create_arlimtalk_content(use_detail_button_app_link, user, target_job_posting_with_app_link_treatment_key = nil)
+    message_template_id = use_detail_button_app_link ? MessageNames::TARGET_USER_JOB_POSTING_WITH_APP_LINK : @message_template_id
+    dispatched_notification_param = create_dispatched_notification_params(message_template_id, "target_message", @job_posting.id, "yobosa", user.id, "job_detail")
+
+    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{message_template_id}"
+    app_view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification_app&#{utm}" + dispatched_notification_param
+    view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}" + dispatched_notification_param
+    share_link_path = "/share?#{utm}"
     message = generate_message_eclipse_content
 
     BizmPostPayMessage.new(
-      @message_template_id,
+      message_template_id,
       user.phone_number,
       {
         title: @job_posting.title,
         message: message,
-        view_link: view_link,
-        share_link: share_link,
+        base_url: @base_url,
+        app_view_link_path: @base_path + app_view_link_query,
+        view_link_path: @base_path + view_link_query,
+        share_link_path: @base_path + share_link_path,
         job_posting_id: @job_posting.id,
         job_posting_public_id: @job_posting.public_id,
         business_name: @job_posting.business.name,
         job_posting_type: @job_posting.work_type,
-        is_free: @is_free
+        is_free: @is_free,
+        experiment: target_job_posting_with_app_link_treatment_key.present? ? {
+          target_job_posting_with_app_link_treatment_key: target_job_posting_with_app_link_treatment_key,
+        } : nil
       },
       user.public_id,
       "AI",
