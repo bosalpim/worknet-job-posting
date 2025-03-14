@@ -56,6 +56,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
 
   def create_message
     @list.each do |user|
+      Jets.logger.info user.public_id + user.name + user.phone_number
       unless user.is_a?(User)
         next
       end
@@ -75,11 +76,15 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
 
     push_token_app_version = user.push_token.nil? ? nil : user.push_token.app_version
     # 유저가 푸쉬토큰이 없어 -> 기존 알림톡
+    Jets.logger.info "push_token_app_version"
+    Jets.logger.info push_token_app_version
     if push_token_app_version.nil?
       return create_arlimtalk_content(false, user, nil)
     end
     # 유저가 푸쉬토큰이 있지만, 타켓 앱버전이 아니야 -> 기존 알림톡
     use_detail_button_app_link = push_token_app_version.nil? ? false : push_token_app_version == "2.2.3"
+    Jets.logger.info "use_detail_button_app_link"
+    Jets.logger.info use_detail_button_app_link
     unless use_detail_button_app_link
       return create_arlimtalk_content(false, user,nil)
     end
