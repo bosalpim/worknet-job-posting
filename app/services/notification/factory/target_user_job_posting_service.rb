@@ -84,13 +84,24 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
       return create_arlimtalk_content(false, user,nil)
     end
 
-    treatment = BexService.new(experiment_key: Bex::Experiment::TARGET_JOB_POSTING_WITH_APP_LINK, user_id: user.public_id).call
+    treatment = nil
+    begin
+      treatment = BexService.new(experiment_key: Bex::Experiment::TARGET_JOB_POSTING_WITH_APP_LINK, user_id: user.public_id).call
+    rescue => e
+      Jets.logger.error "Error occurred: #{e.message}"
+    end
+
     Jets.logger.info "treatment"
-    Jets.logger.info treatment.key
-    if treatment.key == "B"
-      create_arlimtalk_content(true, user, treatment.key)
+    Jets.logger.info treatment&.key # 안전하게 호출
+
+    if treatment.present?
+      if treatment.key == "B"
+        create_arlimtalk_content(true, user, treatment.key)
+      else
+        create_arlimtalk_content(false, user, treatment.key)
+      end
     else
-      create_arlimtalk_content(false, user, treatment.key)
+      create_arlimtalk_content(false, user, nil)
     end
   end
 
