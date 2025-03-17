@@ -94,11 +94,11 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     Jets.logger.info "treatment"
     Jets.logger.info treatment&.key # 안전하게 호출
 
-    if treatment.present?
+    if treatment&.key.present?
       if treatment.key == "B"
-        create_arlimtalk_content(true, user, treatment.key)
+        return create_arlimtalk_content(true, user, treatment.key)
       else
-        create_arlimtalk_content(false, user, treatment.key)
+        return create_arlimtalk_content(false, user, treatment.key)
       end
     else
       create_arlimtalk_content(false, user, nil)
