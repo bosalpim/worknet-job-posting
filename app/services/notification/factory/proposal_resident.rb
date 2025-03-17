@@ -2,9 +2,6 @@ class Notification::Factory::ProposalResident < Notification::Factory::Notificat
   include JobPostingsHelper
   include TranslationHelper
   include DayHelper
-  include DispatchedNotificationsHelper
-
-  DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
 
   def initialize(params)
     super(MessageTemplateName::PROPOSAL_RESIDENT)
@@ -35,11 +32,8 @@ class Notification::Factory::ProposalResident < Notification::Factory::Notificat
       return nil
     end
 
-    dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "target_message", @job_posting.id, "yobosa", user.id, "job_detail")
-
-
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=#{@message_template_id}&#{utm}" + dispatched_notification_param + "&check_proposed_content=true"
+    view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=#{@message_template_id}&#{utm}" + "&check_proposed_content=true"
     tel_link = "tel://#{@receive_vn}"
 
     BizmPostPayMessage.new(

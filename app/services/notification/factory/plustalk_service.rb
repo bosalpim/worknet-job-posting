@@ -2,10 +2,8 @@
 
 class Notification::Factory::PlustalkService < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
-  include DispatchedNotificationsHelper
   include AlimtalkMessage
 
-  DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
   BexService = Bex::FetchTreatmentByUserIdService
 
   def initialize(params)
@@ -91,11 +89,10 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
 
   def create_arlimtalk_content(use_detail_button_app_link, user, target_job_posting_with_app_link_treatment_key = nil)
     message_template_id = use_detail_button_app_link ? MessageNames::TARGET_USER_JOB_POSTING_WITH_APP_LINK : @message_template_id
-    dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "plustalk", @job_posting.id, "yobosa", user.id, "job_detail")
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{message_template_id}"
-    app_view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification_app&#{utm}" + dispatched_notification_param
-    view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}" + dispatched_notification_param
+    app_view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification_app&#{utm}"
+    view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}"
     share_link_path = "/share?#{utm}"
     message = generate_message_eclipse_content
 

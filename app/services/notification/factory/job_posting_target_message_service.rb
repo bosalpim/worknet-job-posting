@@ -4,10 +4,8 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
   include TranslationHelper
   include JobPostingsHelper
   include KakaoNotificationLoggingHelper
-  include DispatchedNotificationsHelper
 
   JobPostingTargetUserService = Notification::Factory::SearchTarget::JobPostingTargetUserService
-  DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
 
   def initialize(params)
     super(MessageTemplateName::TARGET_USER_JOB_POSTING)
@@ -44,14 +42,12 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
 
   def create_message
     @list.each do |user|
-      dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "target_message", @job_posting.id, "yobosa", user.id, "job_detail")
-      application_notification_param = create_dispatched_notification_params(@message_template_id, "target_message", @job_posting.id, "yobosa", user.id, "application")
-      create_bizm_post_pay_message(user, dispatched_notification_param, application_notification_param) if Jets.env == 'production' || (Main::Application::PHONE_NUMBER_WHITELIST.is_a?(Array) && Main::Application::PHONE_NUMBER_WHITELIST.include?(user.phone_number))
+      create_bizm_post_pay_message(user) if Jets.env == 'production' || (Main::Application::PHONE_NUMBER_WHITELIST.is_a?(Array) && Main::Application::PHONE_NUMBER_WHITELIST.include?(user.phone_number))
     end
   end
 
   private
-  def create_bizm_post_pay_message(user, dispatched_notification_param, application_notification_param)
+  def create_bizm_post_pay_message(user)
     base_url = if Jets.env.production?
                             "http://www.carepartner.kr"
                           elsif Jets.env.staging?
@@ -59,9 +55,9 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
                           else
                             "http://localhost:3000"
                           end
-    view_endpoint = "#{@end_point}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}&lat=#{user.lat}&lng=#{user.lng}" + dispatched_notification_param
+    view_endpoint = "#{@end_point}?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}&lat=#{user.lat}&lng=#{user.lng}"
     origin_url = "#{base_url}#{view_endpoint}"
-    application_url = "#{base_url}/jobs/#{@job_posting.public_id}/application?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}" + application_notification_param
+    application_url = "#{base_url}/jobs/#{@job_posting.public_id}/application?utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
 
     params = {
       title: "일자리 동네 광고",

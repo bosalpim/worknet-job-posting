@@ -2,9 +2,6 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
   include JobPostingsHelper
   include TranslationHelper
   include DayHelper
-  include DispatchedNotificationsHelper
-
-  DispatchedNotificationService = Notification::Factory::DispatchedNotifications::Service
 
   def initialize(params)
     super(MessageTemplateName::TARGET_USER_RESIDENT_POSTING)
@@ -46,12 +43,9 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
       return nil
     end
 
-    dispatched_notification_param = create_dispatched_notification_params(@message_template_id, "target_message", @job_posting.id, "yobosa", user.id, "job_detail")
-    application_notification_param = create_dispatched_notification_params(@message_template_id, "target_message", @job_posting.id, "yobosa", user.id, "application")
-
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}" + dispatched_notification_param
-    application_link = "#{@base_url}/application?referral=target_notification&#{utm}" + application_notification_param
+    view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}"
+    application_link = "#{@base_url}/application?referral=target_notification&#{utm}"
 
     BizmPostPayMessage.new(
       @message_template_id,
