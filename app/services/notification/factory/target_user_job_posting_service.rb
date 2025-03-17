@@ -80,16 +80,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
       return create_arlimtalk_content(false, user,nil)
     end
 
-    treatment = nil
-    begin
-      treatment = BexService.new(experiment_key: Bex::Experiment::TARGET_JOB_POSTING_WITH_APP_LINK, user_id: user.public_id).call
-    rescue => e
-      Jets.logger.error "Error occurred: #{e.message}"
-    end
-
-    Jets.logger.info "treatment"
-    Jets.logger.info treatment&.key # 안전하게 호출
-
+    treatment = BexService.new(experiment_key: Bex::Experiment::TARGET_JOB_POSTING_WITH_APP_LINK, user_id: user.public_id).call
     if treatment&.key.present?
       if treatment.key == "B"
         return create_arlimtalk_content(true, user, treatment.key)
@@ -102,6 +93,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
   end
 
   def create_arlimtalk_content(use_detail_button_app_link, user, target_job_posting_with_app_link_treatment_key = nil)
+    Jets.logger.info "#{user.public_id}, #{use_detail_button_app_link}, #{target_job_posting_with_app_link_treatment_key}"
     message_template_id = use_detail_button_app_link ? MessageNames::TARGET_USER_JOB_POSTING_WITH_APP_LINK : @message_template_id
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{message_template_id}"
     app_view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification_app&#{utm}"
