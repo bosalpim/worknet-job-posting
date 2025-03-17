@@ -14,11 +14,15 @@ class Bex::FetchTreatmentByUserIdService
     response = HTTParty.get(endpoint)
     data = response.parsed_response.dig('data')
 
-    treatment = TreatmentMapper.from_hash!(data)
-
-    return treatment
+    begin
+      TreatmentMapper.from_hash!(data)
+    rescue StandardError => e
+      Jets.logger.error "Treatment mapping error: #{e.message}"
+      nil
+    end
   rescue StandardError => e
     Jets.logger.error e
+    nil
   end
 
   private
