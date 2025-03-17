@@ -13,7 +13,6 @@ class Notification::Factory::ProposalResident < Notification::Factory::Notificat
     @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
     @list = [User.find(params[:user_id])]
-    @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
   end
 

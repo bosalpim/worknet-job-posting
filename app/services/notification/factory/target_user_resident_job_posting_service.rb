@@ -24,7 +24,6 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
                 @job_posting.lng,
                 min_radius
                 ).where.not(phone_number: nil)
-    @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
   end
 

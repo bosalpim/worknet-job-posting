@@ -49,7 +49,6 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
         .limit(20)
     end
 
-    @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     create_message
   end
 

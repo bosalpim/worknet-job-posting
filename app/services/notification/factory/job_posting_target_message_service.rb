@@ -17,7 +17,6 @@ class Notification::Factory::JobPostingTargetMessageService < Notification::Fact
     @job_posting = job_posting
     @end_point = "/jobs/#{@job_posting.public_id}"
     @list = JobPostingTargetUserService.call(@job_posting.lat, @job_posting.lng)
-    @dispatched_notifications_service = DispatchedNotificationService.call(@message_template_id, "target_message", @job_posting.id, "yobosa")
     @fail_alert_message_payload = {
       text: '동네광고 전송 실패!',
       attachments: [
