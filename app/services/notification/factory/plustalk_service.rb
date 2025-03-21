@@ -55,34 +55,12 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
       return nil
     end
 
-    push_token_app_version = user.push_token.nil? ? nil : user.push_token.app_version
-    # 유저가 푸쉬토큰이 없어 -> 기존 알림톡
-    if push_token_app_version.nil?
-      return create_arlimtalk_content(false, user, nil)
-    end
-    # 유저가 푸쉬토큰이 있지만, 타켓 앱버전이 아니야 -> 기존 알림톡
-    is_target_app_version = push_token_app_version.nil? ? false : push_token_app_version == "2.2.3"
-    unless is_target_app_version
-      return create_arlimtalk_content(false, user,nil)
-    end
-
-
-    treatment = BexService.new(experiment_key: Bex::Experiment::TARGET_JOB_POSTING_WITH_APP_LINK, user_id: user.public_id).call
-    if treatment&.key.present?
-      if treatment.key == "B"
-        return create_arlimtalk_content(true, user, treatment.key)
-      else
-        return create_arlimtalk_content(false, user, treatment.key)
-      end
-    else
-      create_arlimtalk_content(false, user, nil)
-    end
+    create_arlimtalk_content(user)
   end
 
-  def create_arlimtalk_content(use_detail_button_app_link, user, target_job_posting_with_app_link_treatment_key = nil)
-    Jets.logger.info "#{user.public_id}, #{use_detail_button_app_link}, #{target_job_posting_with_app_link_treatment_key}"
-    message_template_id = use_detail_button_app_link ? MessageNames::TARGET_USER_JOB_POSTING_WITH_APP_LINK : @message_template_id
-    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{message_template_id}"
+  def create_arlimtalk_content(user)
+    Jets.logger.info "#{user.public_id}"
+    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
     app_view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification_app&#{utm}"
     view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}"
     share_link_path = "/share?#{utm}"
