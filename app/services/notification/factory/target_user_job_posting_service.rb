@@ -5,8 +5,6 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
   include AlimtalkMessage
   include VersionCheckerHelper
 
-  BexService = Bex::FetchTreatmentByUserIdService
-
   def initialize(params)
     super(MessageTemplates::TEMPLATES[MessageNames::TARGET_USER_JOB_POSTING])
     @job_posting = JobPosting.find(params[:job_posting_id])

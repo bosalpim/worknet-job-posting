@@ -3,8 +3,7 @@
 class Notification::Factory::PlustalkService < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
   include AlimtalkMessage
-
-  BexService = Bex::FetchTreatmentByUserIdService
+  include VersionCheckerHelper
 
   def initialize(params)
     super(MessageTemplates::TEMPLATES[MessageNames::TARGET_USER_JOB_POSTING])
