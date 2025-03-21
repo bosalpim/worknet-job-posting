@@ -182,8 +182,6 @@ class KakaoTemplateService
   private
 
   def set_phone(phone)
-    @phone = phone
-    return
     @phone = if Jets.env == 'production'
                phone
              elsif Main::Application::PHONE_NUMBER_WHITELIST.is_a?(Array) && Main::Application::PHONE_NUMBER_WHITELIST.include?(phone)
