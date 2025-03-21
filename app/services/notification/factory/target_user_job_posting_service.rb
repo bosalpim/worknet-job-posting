@@ -75,8 +75,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
 
   def create_arlimtalk_content(user)
     Jets.logger.info "#{user.public_id}"
-    message_template_id = @message_template_id
-    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{message_template_id}"
+    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
     app_view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification_app&#{utm}"
     view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}"
     share_link_path = "/share?#{utm}"

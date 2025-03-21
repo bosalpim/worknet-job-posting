@@ -80,10 +80,7 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
         job_posting_public_id: @job_posting.public_id,
         business_name: @job_posting.business.name,
         job_posting_type: @job_posting.work_type,
-        is_free: @is_free,
-        experiment: target_job_posting_with_app_link_treatment_key.present? ? {
-          exp_jobposting_noti_landing_App: target_job_posting_with_app_link_treatment_key,
-        } : nil
+        is_free: @is_free
       },
       user.public_id,
       "AI",
