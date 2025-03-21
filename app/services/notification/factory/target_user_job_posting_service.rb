@@ -3,7 +3,6 @@
 class Notification::Factory::TargetUserJobPostingService < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
   include AlimtalkMessage
-  include VersionCheckerHelper
 
   BexService = Bex::FetchTreatmentByUserIdService
 
