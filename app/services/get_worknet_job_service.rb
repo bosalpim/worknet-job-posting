@@ -38,49 +38,16 @@ class GetWorknetJobService
 
     if is_phone_number_crawl_error
       Jets.logger.info("CRM TARGET : UNEXIST PHONENUMBER URL : #{worknet_job_posting.scraped_worknet_job_posting.url}")
-      SlackWebhookService.call(:business_free_trial, {
-        blocks: [
-          {
-            type: 'header',
-            text: {
-              type: 'plain_text',
-              text: '타켓 지역 워크넷 휴대폰번호 안 긁힘 확인 필요'
-            }
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'plain_text',
-              text: "공고 publicId : #{@job_posting.public_id}"
-            }
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'plain_text',
-              text: "비즈니스 Id : #{@job_posting.business_id}"
-            }
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'plain_text',
-              text: "error : #{phone_number}"
-            }
-          }
-        ]
-      })
       return
     end
 
-    NotificationServiceJob.perform_later(:notify, {
-      message_template_id: MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS],
-      params: {
-        job_posting_id: worknet_job_posting.id,
-        radius: 3000,
-      }
-    }) rescue nil
-
+    # NotificationServiceJob.perform_later(:notify, {
+    #   message_template_id: MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS],
+    #   params: {
+    #     job_posting_id: worknet_job_posting.id,
+    #     radius: 3000,
+    #   }
+    # }) rescue nil
     Jets.logger.info("CRM TARGET : MESSAGE COMPLETE FREE TRIALS PUBLICID : #{trials.public_id}")
   end
 
@@ -89,6 +56,8 @@ class GetWorknetJobService
   # attr_reader :test
 
   def create_job_postings_by_worknet
+    WorknetPhoneNumberCrawler.login
+
     loop.with_index do |_, index|
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
       if data.present?
@@ -403,7 +372,6 @@ class GetWorknetJobService
     search_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" && search_api_service.present?
 
     if job_posting.lat.present? && job_posting.lng.present?
-      Jets.logger.info "CHECK REGISTERED"
       registered_business = BusinessClient.find_by(business_id: business.id)
       if registered_business.nil? # 가입되지 않은 기관에게만 실행
         Jets.logger.info "TAGET WORKNET CRM PROCESS"
