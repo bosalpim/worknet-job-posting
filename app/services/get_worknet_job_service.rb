@@ -89,6 +89,8 @@ class GetWorknetJobService
   # attr_reader :test
 
   def create_job_postings_by_worknet
+    WorknetPhoneNumberCrawler.login
+
     loop.with_index do |_, index|
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
       if data.present?
@@ -403,7 +405,6 @@ class GetWorknetJobService
     search_api_service.call("https://www.carepartner.kr/jobs/" + job_posting.public_id) if Jets.env == "production" && search_api_service.present?
 
     if job_posting.lat.present? && job_posting.lng.present?
-      Jets.logger.info "CHECK REGISTERED"
       registered_business = BusinessClient.find_by(business_id: business.id)
       if registered_business.nil? # 가입되지 않은 기관에게만 실행
         Jets.logger.info "TAGET WORKNET CRM PROCESS"
