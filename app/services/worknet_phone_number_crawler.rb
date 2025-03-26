@@ -1,10 +1,28 @@
 class WorknetPhoneNumberCrawler
+
+  def self.login
+    begin
+      response = HTTParty.post(
+        ENV["WORKNET_CRAWLER_API"] + '/api/worknet-login',
+        timeout: 30
+      ).parsed_response
+
+      return response
+    rescue Net::ReadTimeout, Net::OpenTimeout => e
+      Jets.logger.error("Crawler Worknet Login : Timeout occurred while fetching phone number: #{e.message}")
+      return nil
+    rescue => e
+      Jets.logger.error("Crawler Worknet Login : Error occurred while fetching phone number: #{e.message}")
+      return nil
+    end
+  end
+  
   def self.get_phone_number(url)
     begin
       response = HTTParty.post(
         ENV["WORKNET_CRAWLER_API"] + '/api/worknet-phone-number',
         body: { url: url },
-        timeout: 20
+        timeout: 30
       ).parsed_response
 
       if response.nil?
