@@ -38,38 +38,6 @@ class GetWorknetJobService
 
     if is_phone_number_crawl_error
       Jets.logger.info("CRM TARGET : UNEXIST PHONENUMBER URL : #{worknet_job_posting.scraped_worknet_job_posting.url}")
-      SlackWebhookService.call(:business_free_trial, {
-        blocks: [
-          {
-            type: 'header',
-            text: {
-              type: 'plain_text',
-              text: '타켓 지역 워크넷 휴대폰번호 안 긁힘 확인 필요'
-            }
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'plain_text',
-              text: "공고 publicId : #{@job_posting.public_id}"
-            }
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'plain_text',
-              text: "비즈니스 Id : #{@job_posting.business_id}"
-            }
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'plain_text',
-              text: "error : #{phone_number}"
-            }
-          }
-        ]
-      })
       return
     end
 
@@ -80,7 +48,6 @@ class GetWorknetJobService
         radius: 3000,
       }
     }) rescue nil
-
     Jets.logger.info("CRM TARGET : MESSAGE COMPLETE FREE TRIALS PUBLICID : #{trials.public_id}")
   end
 
