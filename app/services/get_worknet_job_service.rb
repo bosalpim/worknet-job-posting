@@ -41,13 +41,13 @@ class GetWorknetJobService
       return
     end
 
-    NotificationServiceJob.perform_later(:notify, {
-      message_template_id: MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS],
-      params: {
-        job_posting_id: worknet_job_posting.id,
-        radius: 3000,
-      }
-    }) rescue nil
+    # NotificationServiceJob.perform_later(:notify, {
+    #   message_template_id: MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS],
+    #   params: {
+    #     job_posting_id: worknet_job_posting.id,
+    #     radius: 3000,
+    #   }
+    # }) rescue nil
     Jets.logger.info("CRM TARGET : MESSAGE COMPLETE FREE TRIALS PUBLICID : #{trials.public_id}")
   end
 
