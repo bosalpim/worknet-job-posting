@@ -16,6 +16,7 @@ class WorknetPhoneNumberCrawler
       return nil
     end
   end
+  
   def self.get_phone_number(url)
     begin
       response = HTTParty.post(
