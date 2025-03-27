@@ -56,7 +56,7 @@ class GetWorknetJobService
   # attr_reader :test
 
   def create_job_postings_by_worknet
-    WorknetPhoneNumberCrawler.login
+    WorknetPhoneNumberCrawler.login if Jets.env.production?
 
     loop.with_index do |_, index|
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
