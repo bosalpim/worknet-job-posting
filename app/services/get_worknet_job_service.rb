@@ -11,52 +11,11 @@ class GetWorknetJobService
     create_job_postings_by_worknet
   end
 
-  def crm_target_worknet_process(worknet_job_posting)
-    return unless Jets.env.production?
-    # 이미 경험한 기관이라면 신규 일자리 알림 무료발송 테스터에서 제외시킴
-    business_free_trial = BusinessFreeTrial.find_by(business_id: worknet_job_posting.business_id)
-    return unless business_free_trial.nil?
-
-    # 0.03 기준 버림 처리 후 타켓 지역 확인
-    rounded_worknet_job_lng = ((worknet_job_posting.lng/0.03).floor * 0.03).round(2)
-    rounded_worknet_job_lat = ((worknet_job_posting.lat/0.03).floor * 0.03).round(2)
-    matching_record = BusinessFreeTrialTargetPosition.find_by(lat: rounded_worknet_job_lat, lng: rounded_worknet_job_lng)
-    return if matching_record.nil?
-
-    # 핸드폰 번호 크롤링 요청
-    phone_number = WorknetPhoneNumberCrawler.get_phone_number(worknet_job_posting.scraped_worknet_job_posting.url) rescue nil
-    is_phone_number_crawl_error = phone_number.nil? || !phone_number.start_with?("010")
-    trials = BusinessFreeTrial.create!(
-      business_id: worknet_job_posting.business_id,
-      job_posting_id: worknet_job_posting.id,
-      phone_number: is_phone_number_crawl_error ? 'error' : phone_number,
-      public_id: worknet_job_posting.public_id,
-      feature: 'auto_new_job_posting',
-      business_free_trial_target_positions_id: matching_record.id
-    ) rescue nil # phone_number가 Null인 대상도 row를 남겨서 후속 대응에 활용
-    Jets.logger.info("CRM TARGET : CREATE FREE TRIALS PUBLICID : #{trials.public_id}")
-
-    if is_phone_number_crawl_error
-      Jets.logger.info("CRM TARGET : UNEXIST PHONENUMBER URL : #{worknet_job_posting.scraped_worknet_job_posting.url}")
-      return
-    end
-
-    # NotificationServiceJob.perform_later(:notify, {
-    #   message_template_id: MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS],
-    #   params: {
-    #     job_posting_id: worknet_job_posting.id,
-    #     radius: 3000,
-    #   }
-    # }) rescue nil
-    Jets.logger.info("CRM TARGET : MESSAGE COMPLETE FREE TRIALS PUBLICID : #{trials.public_id}")
-  end
-
   private
 
-  # attr_reader :test
-
   def create_job_postings_by_worknet
-    WorknetPhoneNumberCrawler.login if Jets.env.production?
+    # WorknetPhoneNumberCrawler.login if Jets.env.production?
+    WorknetPhoneNumberCrawler.login
 
     loop.with_index do |_, index|
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
@@ -374,7 +333,6 @@ class GetWorknetJobService
     if job_posting.lat.present? && job_posting.lng.present?
       registered_business = BusinessClient.find_by(business_id: business.id)
       if registered_business.nil? # 가입되지 않은 기관에게만 실행
-        Jets.logger.info "TAGET WORKNET CRM PROCESS"
         crm_target_worknet_process(job_posting) rescue nil
       end
     end
@@ -508,6 +466,39 @@ class GetWorknetJobService
     gender
   end
 
+  def crm_target_worknet_process(worknet_job_posting)
+    # return unless Jets.env.production?
+
+    business_free_trial = BusinessFreeTrial.find_by(business_id: worknet_job_posting.business_id, created_at: 2.months.ago..Time.current)
+    if business_free_trial.present? && business_free_trial.phone_number != 'error'
+      Jets.logger.info("EXIST CRALWED : #{worknet_job_posting.public_id}, #{business_free_trial.phone_number}")
+      BusinessFreeTrial.create!(
+        business_id: worknet_job_posting.business_id,
+        job_posting_id: worknet_job_posting.id,
+        phone_number: business_free_trial.phone_number,
+        public_id: worknet_job_posting.public_id,
+        feature: 'auto_new_job_posting',
+        )
+    else
+      Jets.logger.info("START CRALW")
+      phone_number = WorknetPhoneNumberCrawler.get_phone_number(worknet_job_posting.scraped_worknet_job_posting.url) rescue nil
+      is_phone_number_crawl_error = phone_number.nil? || !phone_number.start_with?("010")
+      if is_phone_number_crawl_error
+        Jets.logger.info("CRM TARGET : UNEXIST PHONENUMBER URL : #{worknet_job_posting.scraped_worknet_job_posting.url}")
+      else
+        Jets.logger.info("NEW CRALWED : #{worknet_job_posting.public_id}, #{phone_number}")
+      end
+
+      BusinessFreeTrial.create!(
+        business_id: worknet_job_posting.business_id,
+        job_posting_id: worknet_job_posting.id,
+        phone_number: is_phone_number_crawl_error ? 'error' : phone_number,
+        public_id: worknet_job_posting.public_id,
+        feature: 'auto_new_job_posting',
+        ) rescue nil
+    end
+  end
+
   def text_converter(text)
     text&.gsub("\r\n", "\n")
       &.gsub("&nbsp;", " ")
@@ -518,24 +509,4 @@ class GetWorknetJobService
       &.gsub("&#035;", '#')
       &.gsub("&#039;", "'")
   end
-
-  # def extract_time(raw_hours_text)
-  #   case1 = /\d\d:\d\d~\d\d:\d\d/
-  #   case2 = /\d\d:\d\d-\d\d:\d\d/
-  #   case3 = /\d\d시~\d\d시/
-  #   case4 = /\d\d시-\d\d시/
-  #   case5 = /\d\d시\d\d분~\d\d시\d\d분/
-  #   case6 = /\d\d시\d\d분-\d\d시\d\d분/
-  #
-  #   start_hour = nil
-  #   start_min = nil
-  #   end_hour = nil
-  #   end_min = nil
-  #
-  #   if raw_hours_text.match?(case1)
-  #     start_text, end_text = raw_hours_text[case1].split('~')
-  #     start_hour, start_min = start_text.split(':')
-  #     end_hour, end_min = end_text.split(':')
-  #   end
-  # end
 end
