@@ -14,8 +14,8 @@ class GetWorknetJobService
   private
 
   def create_job_postings_by_worknet
-    # WorknetPhoneNumberCrawler.login if Jets.env.production?
-    WorknetPhoneNumberCrawler.login
+    WorknetPhoneNumberCrawler.login if Jets.env.production?
+    # WorknetPhoneNumberCrawler.login
 
     loop.with_index do |_, index|
       data = WorknetApiService.call(index + 1, "L", nil, 100, "D-0")&.dig("wantedRoot")
@@ -467,7 +467,7 @@ class GetWorknetJobService
   end
 
   def crm_target_worknet_process(worknet_job_posting)
-    # return unless Jets.env.production?
+    return unless Jets.env.production?
 
     business_free_trial = BusinessFreeTrial.find_by(business_id: worknet_job_posting.business_id, created_at: 2.months.ago..Time.current)
     if business_free_trial.present? && business_free_trial.phone_number != 'error'
