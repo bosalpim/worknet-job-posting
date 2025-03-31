@@ -744,7 +744,8 @@ module KakaoNotificationLoggingHelper
       "user_id" => tem_params[:target_public_id],
       "event_type" => NOTIFICATION_EVENT_NAME,
       "event_properties" => {
-        "template" => tem_params[:is_free] ? 'free_user_job_posting' : template_id,
+        "template" => template_id,
+        "is_free" => tem_params[:is_free],
         "jobPostingId" => tem_params[:job_posting_id],
         "jobPostingPublicId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:title],
