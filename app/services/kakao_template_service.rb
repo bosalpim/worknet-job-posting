@@ -56,7 +56,7 @@ class KakaoTemplateService
 
   def get_template_data(tem_params)
     case @template_id
-    when MessageTemplateName::TARGET_USER_RESIDENT_POSTING
+    when MessageTemplates[MessageNames::TARGET_USER_RESIDENT_JOB_POSTING]
       get_target_user_resident_posting_data(tem_params)
     when MessageTemplateName::PROPOSAL_RESIDENT
       get_target_user_resident_proposal_data(tem_params)
@@ -347,9 +347,8 @@ class KakaoTemplateService
   end
 
   def get_target_user_resident_posting_data(tem_params)
-    view_link = tem_params[:view_link]
-    application_link = tem_params[:application_link]
-    contact_link = tem_params[:contact_link]
+    base_url = tem_params[:base_url]
+    deeplink_scheme = tem_params[:deeplink_scheme]
 
     {
       title: tem_params[:title],
@@ -357,13 +356,15 @@ class KakaoTemplateService
       buttons: [
         {
           name: '🔎 일자리 확인하기',
-          type: 'WL',
-          url_mobile: view_link
+          type: 'AL',
+          scheme_android: deeplink_scheme + tem_params[:app_view_link_path],
+          url_mobile: base_url + tem_params[:view_link_path]
         },
         {
           name: '⚡️ 간편 지원하기',
-          type: 'WL',
-          url_mobile: application_link
+          type: 'AL',
+          scheme_android: deeplink_scheme + tem_params[:app_application_link_path],
+          url_mobile: base_url + tem_params[:application_link_path]
         }
       ]
     }

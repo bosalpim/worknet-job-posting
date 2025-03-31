@@ -2,14 +2,18 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
   include JobPostingsHelper
   include TranslationHelper
   include DayHelper
+  include AlimtalkMessage
 
   def initialize(params)
-    super(MessageTemplateName::TARGET_USER_RESIDENT_POSTING)
+    super(MessageTemplates[MessageNames::TARGET_USER_RESIDENT_JOB_POSTING])
     @job_posting = JobPosting.find(params[:job_posting_id])
     paid_job_posting = PaidJobPostingFeature.find_by_job_posting_id(params[:job_posting_id])
     @is_free = paid_job_posting.nil? ? true : false
-    @base_url = "#{Main::Application::CAREPARTNER_URL}jobs/#{@job_posting.public_id}"
+    @base_url = "#{Main::Application::CAREPARTNER_URL}"
+    @base_path = "jobs/#{@job_posting.public_id}"
+    @application_path = @base_path + '/application'
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
+
     radius = params[:radius].nil? ? 7000 : params[:radius]
     min_radius = params[:min_radius].nil? ? nil : params[:min_radius]
     @list = User
@@ -44,8 +48,13 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
     end
 
     utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
-    view_link = "#{@base_url}?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}"
-    application_link = "#{@base_url}/application?referral=target_notification&#{utm}"
+    referral_app = "referral=target_notification_app"
+    referral_web = "referral=target_notification"
+
+    app_view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&#{referral_app}&#{utm}"
+    view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&#{referral_web}&#{utm}"
+    app_application_link_query = "?#{referral_app}&#{utm}"
+    application_link_query = "?#{referral_web}&#{utm}"
 
     BizmPostPayMessage.new(
       @message_template_id,
@@ -53,8 +62,12 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
       {
         title: @job_posting.title,
         message: generate_message_content,
-        view_link: view_link,
-        application_link: application_link,
+        base_url: @base_url,
+        deeplink_scheme: @deeplink_scheme,
+        app_view_link_path: @base_path + app_view_link_query,
+        view_link_path: @base_path + view_link_query,
+        app_application_link_path: @application_path + app_application_link_query,
+        application_link_path: @application_path + application_link_query,
         job_posting_id: @job_posting.id,
         job_posting_public_id: @job_posting.public_id,
         business_name: @job_posting.business.name,

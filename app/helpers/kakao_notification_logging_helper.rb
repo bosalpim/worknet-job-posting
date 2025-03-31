@@ -130,7 +130,7 @@ module KakaoNotificationLoggingHelper
       return get_target_job_posting_ad_apply_logging_data(template_id, tem_params)
     when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
       return get_job_support_request_logging_data(template_id, tem_params)
-    when MessageTemplateName::TARGET_USER_RESIDENT_POSTING
+    when MessageTemplates[MessageNames::TARGET_USER_RESIDENT_JOB_POSTING]
       return get_target_resident_posting_message_logging_data(template_id, tem_params)
     when MessageTemplateName::PROPOSAL_RESIDENT
       return get_proposal_resident_logging_data(template_id, tem_params)
