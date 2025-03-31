@@ -169,9 +169,6 @@ class KakaoTemplateService
     when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
       get_job_support_agreement(tem_params)
     when MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING]
-      get_target_user_job_posting_v6_data(tem_params)
-    when MessageNames::TARGET_USER_JOB_POSTING_WITH_APP_LINK
-      # 실험용 템플릿 임시 분기
       get_target_user_job_posting_v7_data(tem_params)
     when MessageTemplateName::CAREER_CERTIFICATION_V3
       get_employment_confirmation_alarm(tem_params)
