@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Notification::Factory::TargetUserJobPostingService < Notification::Factory::NotificationFactoryClass
   include JobPostingsHelper
   include AlimtalkMessage
@@ -79,7 +77,7 @@ class Notification::Factory::TargetUserJobPostingService < Notification::Factory
     message = generate_message_eclipse_content
 
     BizmPostPayMessage.new(
-      message_template_id,
+      @message_template_id,
       user.phone_number,
       {
         title: @job_posting.title,

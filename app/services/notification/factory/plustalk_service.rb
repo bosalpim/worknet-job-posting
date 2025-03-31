@@ -65,7 +65,7 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
     message = generate_message_eclipse_content
 
     BizmPostPayMessage.new(
-      message_template_id,
+      @message_template_id,
       user.phone_number,
       {
         title: @job_posting.title,
