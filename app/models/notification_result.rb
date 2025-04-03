@@ -95,6 +95,7 @@ class NotificationResult < ApplicationRecord
     MessageTemplateName::NONE_LTC_REQUEST => MessageTemplateName::NONE_LTC_REQUEST,
     MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT => MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT,
     MessageTemplateName::PROPOSAL_RESIDENT => MessageTemplateName::PROPOSAL_RESIDENT,
+    MessageTemplates[MessageNames::TARGET_USER_RESIDENT_JOB_POSTING] => MessageNames::TARGET_USER_RESIDENT_JOB_POSTING,
     MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING] => MessageNames::TARGET_USER_JOB_POSTING,
     MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM] => MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM,
     MessageTemplates[MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM] => MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM,
