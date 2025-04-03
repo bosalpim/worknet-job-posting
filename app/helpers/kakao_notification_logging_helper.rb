@@ -130,15 +130,13 @@ module KakaoNotificationLoggingHelper
       return get_target_job_posting_ad_apply_logging_data(template_id, tem_params)
     when MessageTemplateName::JOB_SUPPORT_REQUEST_AGREEMENT
       return get_job_support_request_logging_data(template_id, tem_params)
-    when MessageTemplateName::TARGET_USER_RESIDENT_POSTING
+    when MessageTemplates[MessageNames::TARGET_USER_RESIDENT_JOB_POSTING]
       return get_target_resident_posting_message_logging_data(template_id, tem_params)
     when MessageTemplateName::PROPOSAL_RESIDENT
       return get_proposal_resident_logging_data(template_id, tem_params)
     when MessageTemplateName::CAREER_CERTIFICATION_V3
       return get_employment_confirmation_logging_data(template_id, tem_params)
     when MessageTemplates[MessageNames::TARGET_USER_JOB_POSTING]
-      return get_target_user_job_posting_logging_data(template_id, tem_params)
-    when MessageNames::TARGET_USER_JOB_POSTING_WITH_APP_LINK
       return get_target_user_job_posting_logging_data(template_id, tem_params)
     when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
       return get_target_business_free_trials(template_id, tem_params)
@@ -746,7 +744,8 @@ module KakaoNotificationLoggingHelper
       "user_id" => tem_params[:target_public_id],
       "event_type" => NOTIFICATION_EVENT_NAME,
       "event_properties" => {
-        "template" => tem_params[:is_free] ? 'free_user_job_posting' : template_id,
+        "template" => template_id,
+        "is_free" => tem_params[:is_free],
         "jobPostingId" => tem_params[:job_posting_id],
         "jobPostingPublicId" => tem_params[:job_posting_public_id],
         "title" => tem_params[:title],
