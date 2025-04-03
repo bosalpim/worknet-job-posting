@@ -54,18 +54,31 @@ class Notification::Factory::PlustalkService < Notification::Factory::Notificati
       return nil
     end
 
-    create_arlimtalk_content(user)
+    push_token_app_version = user.push_token.nil? ? nil : user.push_token.app_version
+    # 유저가 푸쉬토큰이 없어 -> 기존 알림톡
+    if push_token_app_version.nil?
+      return create_arlimtalk_content(false, user)
+    end
+    # 유저가 푸쉬토큰이 있지만, 타켓 앱버전이 아니야 -> 기존 알림톡
+    is_target_app_version = push_token_app_version.nil? ? false : is_version_or_higher("2.2.3", push_token_app_version)
+    unless is_target_app_version
+      return create_arlimtalk_content(false, user)
+    end
+
+    create_arlimtalk_content(true, user)
   end
 
-  def create_arlimtalk_content(user)
-    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{@message_template_id}"
+  def create_arlimtalk_content(use_detail_button_app_link, user)
+    Jets.logger.info "#{user.public_id}, #{use_detail_button_app_link}"
+    message_template_id = use_detail_button_app_link ? MessageNames::TARGET_USER_JOB_POSTING_WITH_APP_LINK : @message_template_id
+    utm = "utm_source=message&utm_medium=arlimtalk&utm_campaign=#{message_template_id}"
     app_view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification_app&#{utm}"
     view_link_query = "?lat=#{user.lat}&lng=#{user.lng}&referral=target_notification&#{utm}"
     share_link_path = "/share?#{utm}"
     message = generate_message_eclipse_content
 
     BizmPostPayMessage.new(
-      @message_template_id,
+      message_template_id,
       user.phone_number,
       {
         title: @job_posting.title,
