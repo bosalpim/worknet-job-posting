@@ -13,19 +13,20 @@ module AlimtalkMessage
     CBT_DRAFT_CRM = 'cbt_draft_crm'
     TARGET_JOB_BUSINESS_FREE_TRIALS = 'target_user_business_free_trials'
     CLOSE_JOB_POSTING_NOTIFICATION='close_job_posting_notification'
-    TARGET_USER_JOB_POSTING_WITH_APP_LINK = "target_user_job_posting_V7"
+    TARGET_USER_RESIDENT_JOB_POSTING = "target_user_resident_posting"
   end
 
   module MessageTemplates
     TEMPLATES = {
-      MessageNames::TARGET_USER_JOB_POSTING => "target_user_job_posting_V6",
+      MessageNames::TARGET_USER_JOB_POSTING => "target_user_job_posting_V7",
       MessageNames::ONE_DAY_CAREPARTNER_DRAFT_CRM => "high-salary-job",
       MessageNames::ONE_DAY_CAREPARTNER_ADDRESS_LEAK_CRM => 'enter-location-1',
       MessageNames::ONE_DAY_CAREPARTNER_CERTFICATION_LEAK_CRM => 'carepartner-present',
       MessageNames::TWO_DAY_CAREPARTNER_DRAFT_CRM => 'well-fitted-job-1',
       MessageNames::CBT_DRAFT_CRM => 'CBT-draft',
       MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS => 'target_user_business_tutorial',
-      MessageNames::CLOSE_JOB_POSTING_NOTIFICATION => 'noti_job_posting_auto_close'
+      MessageNames::CLOSE_JOB_POSTING_NOTIFICATION => 'noti_job_posting_auto_close',
+      MessageNames::TARGET_USER_RESIDENT_JOB_POSTING => 'target_user_resident_posting1'
     }.freeze
 
     def self.[](message_name)
