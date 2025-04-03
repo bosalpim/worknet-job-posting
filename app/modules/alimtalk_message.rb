@@ -26,7 +26,7 @@ module AlimtalkMessage
       MessageNames::CBT_DRAFT_CRM => 'CBT-draft',
       MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS => 'target_user_business_tutorial',
       MessageNames::CLOSE_JOB_POSTING_NOTIFICATION => 'noti_job_posting_auto_close',
-      MessageNames::TARGET_USER_RESIDENT_JOB_POSTING => '	target_user_resident_posting1'
+      MessageNames::TARGET_USER_RESIDENT_JOB_POSTING => 'target_user_resident_posting1'
     }.freeze
 
     def self.[](message_name)

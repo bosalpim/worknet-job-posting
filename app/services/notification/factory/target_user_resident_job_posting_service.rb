@@ -63,7 +63,7 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
         title: @job_posting.title,
         message: generate_message_content,
         base_url: @base_url,
-        deeplink_scheme: @deeplink_scheme,
+        deeplink_scheme: @deeplink_scheme + '/',
         app_view_link_path: @base_path + app_view_link_query,
         view_link_path: @base_path + view_link_query,
         app_application_link_path: @application_path + app_application_link_query,
