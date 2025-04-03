@@ -64,10 +64,10 @@ class NotificationController < ApplicationController
               bizcall_callback_id: params[:bizcall_callback_id]
             }
           }) unless Jets.env.development?
-      when TARGET_USER_RESIDENT_POSTING
+      when MessageNames::TARGET_USER_RESIDENT_JOB_POSTING
         meth = :notify
         event = {
-          message_template_id: TARGET_USER_RESIDENT_POSTING,
+          message_template_id: MessageTemplates[MessageNames::TARGET_USER_RESIDENT_JOB_POSTING],
           params: {
             job_posting_id: params[:job_posting_id],
             radius: params[:radius]
