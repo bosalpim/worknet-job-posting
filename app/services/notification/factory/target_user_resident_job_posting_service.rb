@@ -9,7 +9,7 @@ class Notification::Factory::TargetUserResidentJobPostingService < Notification:
     @job_posting = JobPosting.find(params[:job_posting_id])
     paid_job_posting = PaidJobPostingFeature.find_by_job_posting_id(params[:job_posting_id])
     @is_free = paid_job_posting.nil? ? true : false
-    @base_url = "#{Main::Application::CAREPARTNER_URL}"
+    @base_url = "#{Main::Application::HTTPS_CAREPARTNER_URL}"
     @base_path = "jobs/#{@job_posting.public_id}"
     @application_path = @base_path + '/application'
     @deeplink_scheme = Main::Application::DEEP_LINK_SCHEME
