@@ -16,6 +16,7 @@ class User < ApplicationRecord
   has_many :job_posting_results
   has_many :user_alert_agreed
   has_many :alerts, through: :user_alert_agreed
+  has_many :user_alert_page_visits
 
   enum gender: { male: 'male', female: 'female' }
 

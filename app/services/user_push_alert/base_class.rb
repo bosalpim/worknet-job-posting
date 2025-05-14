@@ -15,8 +15,12 @@ class UserPushAlert::BaseClass
   def prepare
     begin
       users = User.joins(:alerts, :user_push_tokens)
-                  .where(alerts: { name: @alert_name })
-                  .distinct
+            .joins("LEFT JOIN user_alert_page_visits ON users.id = user_alert_page_visits.user_id AND user_alert_page_visits.alert_id = alerts.id")
+            .where(alerts: { name: @alert_name })
+            .where(
+              ["user_alert_page_visits.last_visited_at >= ? OR user_alert_page_visits.last_visited_at IS NULL", 2.weeks.ago]
+            )
+            .distinct
 
       @count = users.count
 
