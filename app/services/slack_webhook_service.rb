@@ -12,23 +12,24 @@ class SlackWebhookService
   def call(payload)
     notifier = get_notifier
     p notifier
+    return if notifier.nil? || notifier.endpoint.nil? # webhook_url이 없으면 아무것도 하지 않음
     notifier.post(payload)
   end
 
   private
 
   def get_notifier
-    notifier = nil
-    case webhook_type
+    webhook_url = case webhook_type
     when :dev_alert
-      notifier = Slack::Notifier.new(ENV['SLACK_DEV_ALERT_URL'])
+      ENV['SLACK_DEV_ALERT_URL']
     when :newspaper
-      notifier = Slack::Notifier.new(ENV['SLACK_NOTI_NEWSPAPER_URL'])
+      ENV['SLACK_NOTI_NEWSPAPER_URL']
     when :none_ltc_consulting_alert
-      notifier = Slack::Notifier.new(ENV['SLACK_NOTI_NONE_LTC_CONSULTING_ALERT'])
+      ENV['SLACK_NOTI_NONE_LTC_CONSULTING_ALERT']
     when :business_free_trial
-      notifier = Slack::Notifier.new(ENV['BUSINESS_FREE_TRIAL_ALERT'])
+      ENV['BUSINESS_FREE_TRIAL_ALERT']
     end
-    notifier
+return nil if webhook_url.nil? || webhook_url.empty?
+Slack::Notifier.new(webhook_url)
   end
 end

@@ -14,9 +14,11 @@ class UserPushAlert::BaseClass
 
   def prepare
     begin
+      disable_old_alerts
+
       users = User.joins(:alerts, :user_push_tokens)
-                  .where(alerts: { name: @alert_name })
-                  .distinct
+            .where(alerts: { name: @alert_name })
+            .distinct
 
       @count = users.count
 
@@ -72,6 +74,23 @@ class UserPushAlert::BaseClass
         .where(alert_id: alert.id)
         .where("date < ?", 1.week.ago)
         .delete_all
+    rescue => e
+      log error_message e
+    end
+  end
+
+  def disable_old_alerts
+    begin
+      # 혜택페이지에 접근한지 2주 이상 지난 알림 동의를 찾아서 삭제
+      disabled_count = UserAlertAgreed.joins(:alert)
+                    .joins("LEFT JOIN user_alert_page_visits ON user_alert_agreed.user_id = user_alert_page_visits.user_id AND user_alert_page_visits.alert_id = user_alert_agreed.alert_id")
+                    .where(alerts: { name: @alert_name })
+                    .where(
+                      ["user_alert_page_visits.last_visited_at < ? AND user_alert_page_visits.last_visited_at IS NOT NULL", 2.weeks.ago]
+                    )
+                    .delete_all
+
+      log disable_message(disabled_count)
     rescue => e
       log error_message e
     end
