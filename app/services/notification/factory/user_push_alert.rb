@@ -1,7 +1,7 @@
 class Notification::Factory::UserPushAlert < Notification::Factory::NotificationFactoryClass
   include KakaoNotificationLoggingHelper
 
-  def initialize(user_push_alert_queues = UserPushAlertQueue.where(id: nil).limit(10), base_path = "", title = "", body = "", campaign_name = "")
+  def initialize(user_push_alert_queues = UserPushAlertQueue.where(id: nil).limit(10), base_path = "", title = "", body = "", campaign_name = "", message_map = {})
     super(MessageTemplateName::USER_PUSH_ALERT)
 
     @list = user_push_alert_queues
@@ -9,6 +9,7 @@ class Notification::Factory::UserPushAlert < Notification::Factory::Notification
     @title = title
     @body = body
     @campaign_name = campaign_name
+    @message_map = message_map
 
     create_message
   end
@@ -19,6 +20,11 @@ class Notification::Factory::UserPushAlert < Notification::Factory::Notification
 
       if user_push_alert_queue.push_token&.present?
         link = "#{@base_path}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=#{@campaign_name}&referral=app_push"
+        
+        # queue별 맞춤 메시지가 있는 경우 사용
+        title = @message_map[user_push_alert_queue.id]&.dig(:title) || @title
+        body = @message_map[user_push_alert_queue.id]&.dig(:body) || @body
+
         if Jets.env.production?
           @app_push_list.push(
             AppPush.new(
@@ -26,8 +32,8 @@ class Notification::Factory::UserPushAlert < Notification::Factory::Notification
               user_push_alert_queue.push_token,
               nil,
               {
-                title: @title,
-                body: @body,
+                title: title,
+                body: body,
                 link: "#{Main::Application::DEEP_LINK_SCHEME}/#{link}"
               },
               user.public_id,
@@ -43,7 +49,7 @@ class Notification::Factory::UserPushAlert < Notification::Factory::Notification
         else
           Jets.logger.info "send #{@campaign_name} to #{user.public_id}"
         end
-    end
+      end
     end
   end
 end

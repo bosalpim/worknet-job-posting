@@ -7,4 +7,6 @@ class UserPushAlertQueue < ApplicationRecord
 
   belongs_to :user
   belongs_to :alert
+
+  attribute :user_data, :json
 end

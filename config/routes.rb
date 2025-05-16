@@ -66,6 +66,7 @@ Jets.application.routes.draw do
   post '/notification/sms', to: 'notification#sms'
   post '/point_histories/add_point_changed_active_user', to: 'point_histories#add_point_changed_active_user'
   post '/gamification/misson_complete', to: 'gamification#missionComplete'
+  post '/push_alerts/prepare_academy_boost', to: 'push_alerts#prepare_academy_boost'
 end
 
 # updated by jets upgrade

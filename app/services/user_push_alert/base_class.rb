@@ -5,20 +5,23 @@ class UserPushAlert::BaseClass
   def initialize(
     alert_name: "",
     date: DateTime.now,
-    batch: 3000
+    batch: 3000,
+    users: nil
   )
     @batch = batch
     @date = date.at_beginning_of_day.strftime('%Y/%m/%d')
     @alert_name = alert_name
+    @users = users
   end
 
   def prepare
     begin
       disable_old_alerts
 
-      users = User.joins(:alerts, :user_push_tokens)
-            .where(alerts: { name: @alert_name })
-            .distinct
+      # users가 전달되지 않은 경우에만 기존 로직으로 유저 조회
+      users = @users || User.joins(:alerts, :user_push_tokens)
+                           .where(alerts: { name: @alert_name })
+                           .distinct
 
       @count = users.count
 
@@ -35,7 +38,6 @@ class UserPushAlert::BaseClass
           begin
             # 각 사용자별로 현재 최대 시퀀스 번호 조회
             user_ids = slice.map(&:id)
-
             # 각 사용자의 기존 최대 시퀀스 값 조회
             existing_sequences = UserPushAlertQueue
                                    .where(alert_id: alert.id, date: @date, user_id: user_ids)
@@ -50,15 +52,30 @@ class UserPushAlert::BaseClass
               # 새 시퀀스 값 설정 (기존 레코드가 있으면 max+1, 없으면 1)
               new_sequence = current_max ? current_max + 1 : 1
 
-              {
+              record = {
                 date: @date,
                 group: offset / batch_size,
                 status: 'pending',
                 user_id: user.id,
                 alert_id: alert.id,
                 push_token: user.push_token&.token,
-                sequence: new_sequence
+                sequence: new_sequence,
+                user_data: user.user_data
               }
+
+              record
+            end
+
+            # SQL 쿼리 확인을 위한 로그
+            # Jets.logger.info "Records to insert: #{records.inspect}"
+            # Jets.logger.info "First record user_data: #{records.first[:user_data].inspect}"
+    
+
+            # PostgreSQL JSON 타입으로 변환
+            records.each do |record|
+              if record[:user_data].present?
+                record[:user_data] = Arel.sql("'#{record[:user_data].to_json}'::jsonb")
+              end
             end
 
             UserPushAlertQueue.insert_all(records)
@@ -82,15 +99,13 @@ class UserPushAlert::BaseClass
   def disable_old_alerts
     begin
       # 혜택페이지에 접근한지 2주 이상 지난 알림 동의를 찾아서 삭제
-      disabled_count = UserAlertAgreed.joins(:alert)
-                    .joins("LEFT JOIN user_alert_page_visits ON user_alert_agreed.user_id = user_alert_page_visits.user_id AND user_alert_page_visits.alert_id = user_alert_agreed.alert_id")
-                    .where(alerts: { name: @alert_name })
-                    .where(
-                      ["user_alert_page_visits.last_visited_at < ? AND user_alert_page_visits.last_visited_at IS NOT NULL", 2.weeks.ago]
-                    )
-                    .delete_all
-
-      log disable_message(disabled_count)
+      UserAlertAgreed.joins(:alert)
+        .joins("LEFT JOIN user_alert_page_visits ON user_alert_agreed.user_id = user_alert_page_visits.user_id AND user_alert_page_visits.alert_id = user_alert_agreed.alert_id")
+        .where(alerts: { name: @alert_name })
+        .where(
+          ["user_alert_page_visits.last_visited_at < ? AND user_alert_page_visits.last_visited_at IS NOT NULL", 2.weeks.ago]
+        )
+        .delete_all
     rescue => e
       log error_message e
     end
