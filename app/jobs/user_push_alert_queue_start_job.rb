@@ -48,6 +48,12 @@ class UserPushAlertQueueStartJob < ApplicationJob
     start_send_sqs("coupang_roulette")
   end
 
+  iam_policy 'sqs'
+  cron "30 9 * * ? *"
+  def start_send_academy_boost
+    start_send_sqs("academy_boost")
+  end
+
   def start_send_sqs(alert_name)
     date = DateTime.now.at_beginning_of_day.strftime('%Y/%m/%d')
     group = 0
