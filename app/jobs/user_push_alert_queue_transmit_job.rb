@@ -35,7 +35,51 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
                                                          title = "룰렛 돌리고 랜덤 주머니 받기",
                                                          body = "시간 지나면 당첨 기회가 사라져요!",
                                                          campaign_name = "coupang-roulette")
+    when "academy_boost"
+      # 유저별로 맞춤 메시지를 생성
+      message_map = {}
+      user_push_queue.processing.each do |queue|
+        user = queue.user
+        user_data = queue.user_data
+        days_since_start = user_data["days_since_enrollment"] if user_data.present?
 
+        title = case days_since_start
+        when 1
+          "동기 수강생의 90%가 이미 강의 듣기 시작했어요."
+        when 2
+          "동기 수강생 이번주 Top10은 모두 진도율 20% 달성!"
+        when 3
+          "동기 수강생 이번주 Top10은 모두 진도율 30% 달성!"
+        when 4
+          "동기 수강생 이번주 Top10은 모두 진도율 35% 달성!"
+        when 5
+          "동기 수강생 이번주 Top10은 모두 진도율 40% 달성!"
+        when 6
+          "동기 수강생 이번주 Top10은 모두 진도율 45% 달성!"
+        when 7
+          "동기 수강생 이번주 Top10은 모두 진도율 50% 달성!"
+        else
+          nil
+        end
+
+        # 7일차 이후에는 푸시를 보내지 않음
+        next if title.nil?
+
+        body = "#{user.name}님도 도전해보세요!"
+        
+        # queue별 맞춤 메시지 저장
+        message_map[queue.id] = { title: title, body: body }
+      end
+
+      # 모든 queue에 대해 한 번에 factory 생성
+      factory = Notification::Factory::UserPushAlert.new(
+        user_push_queue.processing,
+        base_path = "/academy/my",
+        title = "",  # message_map에서 가져올 예정
+        body = "",   # message_map에서 가져올 예정
+        campaign_name = "academy-boost-alert",
+        message_map = message_map
+      )
     else
       Jets.logger.info "alert Name not found"
       return
