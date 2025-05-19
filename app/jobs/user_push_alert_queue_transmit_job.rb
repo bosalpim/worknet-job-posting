@@ -42,7 +42,7 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
         user = queue.user
         user_data = queue.user_data
         days_since_start = user_data["days_since_enrollment"] if user_data.present?
-
+        course_id = user_data["course_id"] if user_data.present?
         title = case days_since_start
         when 1
           "동기 수강생의 90%가 이미 강의 듣기 시작했어요."
@@ -74,7 +74,7 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
       # 모든 queue에 대해 한 번에 factory 생성
       factory = Notification::Factory::UserPushAlert.new(
         user_push_queue.processing,
-        base_path = "/academy/my",
+        base_path = "/academy/my/#{course_id}",
         title = "",  # message_map에서 가져올 예정
         body = "",   # message_map에서 가져올 예정
         campaign_name = "academy-boost-alert",
