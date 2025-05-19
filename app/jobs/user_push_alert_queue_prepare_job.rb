@@ -39,7 +39,7 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
     prepare_user_push_alert("coupang_roulette")
   end
 
-  cron "30 7 * * ? *"
+  cron "45 7 * * ? *"
   def prepare_academy_boost_alert
     # query = User.joins(:user_push_tokens)
     #             .joins("INNER JOIN academy_course_enrollments ON academy_course_enrollments.user_id = users.id")
@@ -91,7 +91,8 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
       # user_data 속성 추가
       users.each do |user|
         user.instance_variable_set(:@user_data, {
-          days_since_enrollment: user.days_since_enrollment
+          days_since_enrollment: user.days_since_enrollment,
+          course_id: user.course_id
         })
         def user.user_data
           @user_data
