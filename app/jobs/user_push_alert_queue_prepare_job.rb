@@ -39,7 +39,7 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
     prepare_user_push_alert("coupang_roulette")
   end
 
-  cron "30 2 * * ? *"
+  cron "30 8 * * ? *"
   def prepare_academy_boost_alert
     query = User.joins(:user_push_tokens)
                   .joins("INNER JOIN academy_course_enrollments ON academy_course_enrollments.user_id = users.id")
@@ -50,7 +50,7 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
                           user_push_tokens.token")
                   .where("(academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul')::date >= CURRENT_DATE - INTERVAL '7 days'
                           AND (academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul')::date <= CURRENT_DATE
-                          AND users.name = '이동금'")
+                          AND academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul' >= '2025-05-19'")
                   .order("days_since_enrollment")
 
       # 실제 SQL 쿼리 출력
