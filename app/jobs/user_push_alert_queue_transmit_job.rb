@@ -74,7 +74,7 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
       # 모든 queue에 대해 한 번에 factory 생성
       factory = Notification::Factory::UserPushAlert.new(
         user_push_queue.processing,
-        base_path = "/academy/my/#{course_id}",
+        base_path = course_id ? "/academy/my/#{course_id}" : "/academy/my",
         title = "",  # message_map에서 가져올 예정
         body = "",   # message_map에서 가져올 예정
         campaign_name = "academy-boost-alert",
