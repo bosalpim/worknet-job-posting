@@ -19,11 +19,14 @@ class Notification::Factory::UserPushAlert < Notification::Factory::Notification
       user = user_push_alert_queue.user
 
       if user_push_alert_queue.push_token&.present?
-        link = "#{@base_path}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=#{@campaign_name}&referral=app_push"
+
         
         # queue별 맞춤 메시지가 있는 경우 사용
         title = @message_map[user_push_alert_queue.id]&.dig(:title) || @title
         body = @message_map[user_push_alert_queue.id]&.dig(:body) || @body
+        base_path = @message_map[user_push_alert_queue.id]&.dig(:base_path) || @base_path
+
+        link = "#{base_path}?utm_source=message&utm_medium=#{NOTIFICATION_TYPE_APP_PUSH}&utm_campaign=#{@campaign_name}&referral=app_push"
 
         if Jets.env.production?
           @app_push_list.push(
