@@ -39,26 +39,8 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
     prepare_user_push_alert("coupang_roulette")
   end
 
-  cron "50 6 * * ? *"
+  cron "30 8 * * ? *"
   def prepare_academy_boost_alert
-    # query = User.joins(:user_push_tokens)
-    #             .joins("INNER JOIN academy_course_enrollments ON academy_course_enrollments.user_id = users.id")
-    #             .joins("INNER JOIN academy_courses ON academy_courses.id = academy_course_enrollments.course_id")
-    #             .joins("INNER JOIN academy_videos av ON av.course_id = academy_course_enrollments.course_id")
-    #             .joins("LEFT JOIN academy_course_video_progresses acvp ON acvp.video_id = av.id AND acvp.user_id = users.id")
-    #             .select("academy_courses.id as course_id, academy_courses.title, users.name, users.id, 
-    #                     academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul' as created_at,
-    #                     CURRENT_DATE - (academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul')::date as days_since_enrollment,
-    #                     user_push_tokens.token,
-    #                     COALESCE(sum(acvp.watched_ratio), 0) / count(av.id) as avg_watched_ratio")
-    #             .where("(academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul')::date >= CURRENT_DATE - INTERVAL '7 days'
-    #                     AND (academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul')::date <= CURRENT_DATE
-    #                     AND academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul' >= '2025-05-19'")
-    #             .group("academy_courses.id, academy_courses.title, users.name, users.id, 
-    #                     academy_course_enrollments.created_at, user_push_tokens.token")
-    #             .having("COALESCE(sum(acvp.watched_ratio), 0) / count(av.id) <= ?", 0.5)
-    #             .order("days_since_enrollment")
-
     query = User.joins(:user_push_tokens)
                 .joins("INNER JOIN academy_course_enrollments ON academy_course_enrollments.user_id = users.id")
                 .joins("INNER JOIN academy_courses ON academy_courses.id = academy_course_enrollments.course_id")
@@ -71,7 +53,7 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
                         COALESCE(sum(acvp.watched_ratio), 0) / count(av.id) as avg_watched_ratio")
                 .where("(academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul')::date >= CURRENT_DATE - INTERVAL '7 days'
                         AND (academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul')::date <= CURRENT_DATE
-                        AND users.name = ?", '이동금')
+                        AND academy_course_enrollments.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Seoul' >= '2025-05-19'")
                 .group("academy_courses.id, academy_courses.title, users.name, users.id, 
                         academy_course_enrollments.created_at, user_push_tokens.token")
                 .having("COALESCE(sum(acvp.watched_ratio), 0) / count(av.id) <= ?", 0.5)
