@@ -39,7 +39,7 @@ class UserPushAlertQueuePrepareJob < ApplicationJob
     prepare_user_push_alert("coupang_roulette")
   end
 
-  cron "50 6 * * ? *"
+  cron "0 8 * * ? *"
   def prepare_academy_boost_alert
     # query = User.joins(:user_push_tokens)
     #             .joins("INNER JOIN academy_course_enrollments ON academy_course_enrollments.user_id = users.id")

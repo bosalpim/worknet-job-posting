@@ -68,13 +68,18 @@ class UserPushAlertQueueTransmitJob < ApplicationJob
         body = "#{user.name}님도 도전해보세요!"
         
         # queue별 맞춤 메시지 저장
-        message_map[queue.id] = { title: title, body: body }
+        message_map[queue.id] = { 
+          title: title, 
+          body: body,
+          course_id: course_id,
+          base_path: course_id ? "/academy/my/#{course_id}" : "/academy/my"
+        }
       end
 
       # 모든 queue에 대해 한 번에 factory 생성
       factory = Notification::Factory::UserPushAlert.new(
         user_push_queue.processing,
-        base_path = course_id ? "/academy/my/#{course_id}" : "/academy/my",
+        base_path = "",  # message_map에서 가져올 예정
         title = "",  # message_map에서 가져올 예정
         body = "",   # message_map에서 가져올 예정
         campaign_name = "academy-boost-alert",
