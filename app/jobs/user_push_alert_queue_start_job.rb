@@ -49,7 +49,7 @@ class UserPushAlertQueueStartJob < ApplicationJob
   end
 
   iam_policy 'sqs'
-  cron "0 8 * * ? *"
+  cron "10 7 * * ? *"
   def start_send_academy_boost
     start_send_sqs("academy_boost")
   end
