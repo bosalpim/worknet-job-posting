@@ -9,8 +9,8 @@ class KakaoTemplateService
 
   attr_reader :template_id, :message_type
 
-  def initialize(template_id, message_type, phone, reserve_dt, alt_sms_btn_indexes = [])
-    profile = ENV['KAKAO_BIZMSG_PROFILE']
+  def initialize(template_id, message_type, phone, reserve_dt, alt_sms_btn_indexes = [], profile = "CarePartner")
+    profile = profile === "CareAcademy" ? ENV['KAKAO_BIZMSG_CAREACADEMY_PROFILE']: ENV['KAKAO_BIZMSG_PROFILE']
     @template_id = template_id
     @message_type = message_type
     @profile = profile
@@ -162,6 +162,10 @@ class KakaoTemplateService
       get_smart_memo_data(tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE
       get_target_job_posting_performance_data(tem_params)
+    when MessageTemplateName::ACADEMY_EXAM_GUIDE
+      get_academy_exam_guide(tem_params)
+    when MessageTemplateName::ACADEMY_EXAM_TRANSITION
+      get_academy_exam_transition(tem_params)
     when MessageTemplateName::TARGET_JOB_POSTING_AD_APPLY
       get_target_job_posting_ad_apply_data(tem_params)
     when MessageTemplateName::NONE_LTC_REQUEST
@@ -2253,6 +2257,67 @@ carepartner.kr#{path}
         {
           type: "WL",
           name: "동의하기",
+          url_mobile: link,
+        }
+      ]
+    }
+  end
+
+  def get_academy_exam_guide(tem_params)
+    user_name = tem_params[:user_name]
+    course_title = tem_params[:course_title]
+    video_watched_ratio = tem_params[:video_watched_ratio]
+    link = tem_params[:link]
+
+    {
+      title: "케어아카데미 시험 안내",
+      message: "안녕하세요 #{user_name}님!
+#{course_title} 강의를 #{video_watched_ratio}%까지 열심히 수강하고 계시네요!
+
+📌 시험 응시 준비가 완료되었습니다!
+(강의 수강률 50% 이상 달성 시 자동으로 응시 기회가 제공됩니다.)
+
+⏰ 모바일로 간편하게 5분 내 시험 완료!
+🔄 응시는 여러 번 가능하니 부담 없이 도전!
+📊 시험 합격률 90% 이상!
+
+지금 바로 시험에 응시하고 자격증 취득을 시작하세요!
+(아래 버튼을 클릭하면 시험보기로 이동해요👇 )",
+      buttons: [
+        {
+          type: "WL",
+          name: "지금 바로 시험 보기 📝",
+          url_mobile: link,
+        }
+      ]
+    }
+  end
+
+  def get_academy_exam_transition(tem_params)
+    user_name = tem_params[:user_name]
+    course_title = tem_params[:course_title]
+    video_watched_ratio = tem_params[:video_watched_ratio]
+    link = tem_params[:link]
+
+    {
+      title: "케어아카데미 시험 안내",
+      message: "안녕하세요! #{user_name}님,
+#{course_title} 강의를 #{video_watched_ratio}%나 수강하셨네요!
+
+📌 시험 응시 준비가 완료되었습니다!
+(강의 수강률 50% 이상 달성 시 자동으로 응시 기회가 제공됩니다.)
+
+🎯 지금까지 공부한 내용만으로도 충분해요!
+⏰ 모바일로 5분이면 시험 완료!
+🔄 여러 번 응시 가능하니 부담 없이 도전해보세요
+📊 합격률 90% 이상의 높은 성공률!
+
+지금 바로 시험에 응시하고 자격증 취득하세요!
+(아래 버튼을 클릭하면 시험보기로 이동해요👇 )",
+      buttons: [
+        {
+          type: "WL",
+          name: "지금 바로 시험 보기 📝",
           url_mobile: link,
         }
       ]
