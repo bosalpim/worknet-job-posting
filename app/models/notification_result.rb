@@ -41,6 +41,10 @@ class NotificationResult < ApplicationRecord
 
   BUSINESS_JOB_POSTING_COMPLETE = 'business_job_posting_complete'.freeze
 
+  # 아카데미
+  ACADEMY_EXAM_GUIDE = 'exam_guide'.freeze
+  ACADEMY_EXAM_TRANSITION = 'exam_transition'.freeze
+
   validates :used_medium, inclusion: { in: %w(kakao_arlimtalk app_push) }
   validates :send_type, presence: true
   validates :template_id, presence: true
@@ -88,6 +92,8 @@ class NotificationResult < ApplicationRecord
     NEWSPAPER_JOB_ALARM => NEWSPAPER_JOB_ALARM,
     PROPOSAL_ACCEPT => PROPOSAL_ACCEPT,
     BUSINESS_JOB_POSTING_COMPLETE => BUSINESS_JOB_POSTING_COMPLETE,
+    ACADEMY_EXAM_GUIDE => ACADEMY_EXAM_GUIDE,
+    ACADEMY_EXAM_TRANSITION => ACADEMY_EXAM_TRANSITION,
     MessageTemplateName::SMART_MEMO => MessageTemplateName::SMART_MEMO,
     MessageTemplateName::TARGET_USER_JOB_POSTING => MessageTemplateName::TARGET_USER_JOB_POSTING,
     MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE => MessageTemplateName::TARGET_JOB_POSTING_PERFORMANCE,
