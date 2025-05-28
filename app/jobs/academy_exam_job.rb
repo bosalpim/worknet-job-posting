@@ -2,7 +2,7 @@
 
 class AcademyExamJob < ApplicationJob
   # 매일 아침 8시에 실행
-  # TODO: cron "0 23 * * ? *"
+  cron "0 23 * * ? *"
 
   def academy_exam_guide
     Academy::AcademyExamGuideService.new.call
