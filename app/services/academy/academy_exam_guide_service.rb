@@ -15,10 +15,11 @@ class Academy::AcademyExamGuideService
     response = KakaoNotificationService.call(
       template_id: MessageTemplateName::ACADEMY_EXAM_GUIDE,
       phone: result['phone_number'],
+      message_type: 'AI',
       template_params: {
         user_name: result['user_name'].presence || '수강생',
         course_title: result['course_title'],
-        progress_rate: (result['video_watched_ratio'] * 100).floor(1),
+        video_watched_ratio: "#{(result['video_watched_ratio'] * 100).floor(1)}",
         link: 'https://www.carepartner.kr/academy/my?tab=courses'
       },
       profile: "CareAcademy",
