@@ -90,7 +90,7 @@ JOIN not_attempted na ON na.course_id = cp.course_id AND na.user_id = cp.user_id
 JOIN users u ON u.id = cp.user_id
 WHERE cp.video_watched_ratio >= 0.5
   AND cp.last_watched_at >= NOW() - INTERVAL '72 hours'
-  AND cp.last_watched_at < NOW() - INTERVAL '48 hours'
+  AND cp.last_watched_at < NOW() - INTERVAL '48 hours';
     SQL
   end
 end

@@ -77,6 +77,11 @@ not_attempted AS (
     WHERE aea.user_id = cp.user_id
     AND ae.certification_id = ac.certification_id
   )
+),
+notified_users AS (
+  SELECT DISTINCT send_id::bigint AS user_id
+  FROM notification_results
+  WHERE template_id = '#{MessageTemplateName::ACADEMY_EXAM_GUIDE}'
 )
 SELECT 
   cp.course_title,
@@ -87,13 +92,10 @@ SELECT
 FROM course_progress cp
 JOIN not_attempted na ON na.course_id = cp.course_id AND na.user_id = cp.user_id
 JOIN users u ON u.id = cp.user_id
+LEFT JOIN notified_users nu
+  ON nu.user_id = u.id
 WHERE cp.video_watched_ratio >= 0.5
-  AND NOT EXISTS (
-    SELECT 1
-    FROM notification_results nr
-    WHERE nr.send_id::bigint = u.id
-    AND nr.template_id = '#{MessageTemplateName::ACADEMY_EXAM_GUIDE}'
-  );
+  AND nu.user_id IS NULL;
     SQL
   end
 end
