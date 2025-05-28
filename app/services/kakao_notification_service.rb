@@ -1,19 +1,20 @@
 class KakaoNotificationService
   include NotificationRequestHelper
 
-  def self.call(template_id:, phone:, message_type: "AT", reserve_dt: nil, template_params:, alt_sms_btn_indexes: [])
+  def self.call(template_id:, phone:, message_type: "AT", reserve_dt: nil, template_params:, alt_sms_btn_indexes: [], profile: "CarePartner")
     new(
       template_id: template_id,
       phone: phone,
       message_type: message_type,
       reserve_dt: reserve_dt,
       template_params: template_params,
-      alt_sms_btn_indexes: alt_sms_btn_indexes
+      alt_sms_btn_indexes: alt_sms_btn_indexes,
+      profile: profile
     ).call
   end
 
-  def initialize(template_id:, phone:, message_type:, reserve_dt:, template_params:, alt_sms_btn_indexes:)
-    @template_service = KakaoTemplateService.new(template_id, message_type, phone, reserve_dt, alt_sms_btn_indexes)
+  def initialize(template_id:, phone:, message_type:, reserve_dt:, template_params:, alt_sms_btn_indexes:, profile:)
+    @template_service = KakaoTemplateService.new(template_id, message_type, phone, reserve_dt, alt_sms_btn_indexes, profile)
     @template_params = template_params
     @template_id = template_id
   end

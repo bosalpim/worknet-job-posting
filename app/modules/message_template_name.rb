@@ -89,4 +89,8 @@ module MessageTemplateName
 
   TARGET_USER_JOB_POSTING_V3 = 'target_user_job_posting_V3'.freeze
   TARGET_USER_JOB_POSTING_V2 = 'target_user_job_posting_V2'.freeze
+
+  # 아카데미
+  ACADEMY_EXAM_GUIDE = 'exam_guide'.freeze
+  ACADEMY_EXAM_TRANSITION = 'exam_transition'.freeze
 end

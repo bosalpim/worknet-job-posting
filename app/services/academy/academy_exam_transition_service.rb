@@ -1,0 +1,119 @@
+# frozen_string_literal: true
+
+class Academy::AcademyExamTransitionService
+  def call
+    target_users = find_exam_target_users
+
+    target_users.each do |result|
+      send_notification(result)
+    end
+  end
+
+  private
+
+  def send_notification(result)
+    response = KakaoNotificationService.call(
+      template_id: MessageTemplateName::ACADEMY_EXAM_TRANSITION,
+      phone: result['phone_number'],
+      template_params: {
+        user_name: result['user_name'].presence || '수강생',
+        course_title: result['course_title'],
+        progress_rate: (result['video_watched_ratio'] * 100).floor(1),
+        link: 'https://www.carepartner.kr/academy/my?tab=courses'
+      },
+      profile: "CareAcademy",
+    )
+
+    save_notification_result(response, result['user_id'])
+  end
+
+  def save_notification_result(response, user_id)
+    success_count = 0
+    tms_success_count = 0
+    fail_count = 0
+    fail_reason = ""
+
+    if response.dig("code") == "success"
+      if response.dig("message") == "K000"
+        success_count += 1
+      else
+        tms_success_count += 1
+      end
+    else
+      fail_count += 1
+      fail_reason = response.dig("originMessage")
+    end
+
+    NotificationResult.create!(
+      send_type: NotificationResult::ACADEMY_EXAM_TRANSITION,
+      send_id: user_id,
+      template_id: MessageTemplateName::ACADEMY_EXAM_TRANSITION,
+      success_count: success_count,
+      tms_success_count: tms_success_count,
+      fail_count: fail_count,
+      fail_reasons: fail_reason
+    )
+  end
+
+  def find_exam_target_users
+    results = ActiveRecord::Base.connection.execute(<<-SQL)
+WITH latest_progress AS (
+  SELECT DISTINCT ON (video_id, user_id)
+    video_id,
+    user_id,
+    watched_ratio,
+    updated_at
+  FROM academy_course_video_progresses
+  ORDER BY video_id, user_id, updated_at DESC
+),
+video_stats AS (
+  SELECT 
+    ac.id as course_id,
+    ac.title AS course_title,
+    lp.user_id,
+    v.duration,
+    COALESCE(lp.watched_ratio, 0) AS watched_ratio,
+    lp.updated_at
+  FROM academy_courses ac
+  JOIN academy_videos v ON v.course_id = ac.id
+  LEFT JOIN latest_progress lp ON lp.video_id = v.id
+  WHERE ac.status = 'ACTIVE'
+    AND v.status = 'ACTIVE'
+),
+course_progress AS (
+  SELECT 
+    course_id,
+    course_title,
+    user_id,
+    SUM(duration * watched_ratio) / SUM(duration) as video_watched_ratio,
+    MAX(updated_at) as last_watched_at
+  FROM video_stats
+  GROUP BY course_id, course_title, user_id
+),
+not_attempted AS (
+  SELECT DISTINCT cp.course_id, cp.user_id
+  FROM course_progress cp
+  JOIN academy_courses ac ON ac.id = cp.course_id
+  WHERE NOT EXISTS (
+    SELECT 1 
+    FROM academy_exam_attempts aea
+    JOIN academy_exams ae ON ae.id = aea.exam_id
+    WHERE aea.user_id = cp.user_id
+    AND ae.certification_id = ac.certification_id
+  )
+)
+SELECT 
+  cp.course_title,
+  cp.user_id,
+  u.name as user_name,
+  u.phone_number,
+  cp.video_watched_ratio
+FROM course_progress cp
+JOIN not_attempted na ON na.course_id = cp.course_id AND na.user_id = cp.user_id
+JOIN users u ON u.id = cp.user_id
+WHERE cp.video_watched_ratio >= 0.5
+  AND cp.last_watched_at >= NOW() - INTERVAL '72 hours'
+  AND cp.last_watched_at < NOW() - INTERVAL '48 hours'
+    SQL
+  end
+end
