@@ -57,35 +57,14 @@ class Academy::AcademyExamGuideService
 
   def find_exam_target_users
     results = ActiveRecord::Base.connection.execute(<<-SQL)
-WITH latest_progress AS (
-  SELECT DISTINCT ON (video_id, user_id)
-    video_id,
-    user_id,
-    watched_ratio
-  FROM academy_course_video_progresses
-  ORDER BY video_id, user_id, updated_at DESC
-),
-video_stats AS (
+WITH course_progress AS (
   SELECT 
     ac.id as course_id,
-    ac.title AS course_title,
-    lp.user_id,
-    v.duration,
-   	COALESCE(lp.watched_ratio, 0) AS watched_ratio
-  FROM academy_courses ac
-  JOIN academy_videos v ON v.course_id = ac.id
-  LEFT JOIN latest_progress lp ON lp.video_id = v.id
+    ac.title as course_title,
+    gl.user_id,
+    gl.progress_rate as video_watched_ratio
+  FROM academy_courses ac, get_course_leaderboard(ac.id::int) gl
   WHERE ac.status = 'ACTIVE'
-    AND v.status = 'ACTIVE'
-),
-course_progress AS (
-  SELECT 
-    course_id,
-    course_title,
-    user_id,
-    SUM(duration * watched_ratio) / SUM(duration) as video_watched_ratio
-  FROM video_stats
-  GROUP BY course_id, course_title, user_id
 ),
 not_attempted AS (
   SELECT DISTINCT cp.course_id, cp.user_id
