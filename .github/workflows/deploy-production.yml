@@ -40,7 +40,7 @@ jobs:
           echo "NAVER_SEARCH_API_KEY=$NAVER_SEARCH_API_KEY" >> .env.production
           echo "KAKAO_REST_API_KEY=$KAKAO_REST_API_KEY" >> .env.production
           echo "KAKAO_BIZMSG_PROFILE=$KAKAO_BIZMSG_PROFILE" >> .env.production
-          echo "KAKAO_BIZMSG_CAREACADEMY_PROFILE=KAKAO_BIZMSG_CAREACADEMY_PROFILE" >> .env.staging
+          echo "KAKAO_BIZMSG_CAREACADEMY_PROFILE=$KAKAO_BIZMSG_CAREACADEMY_PROFILE" >> .env.production
           echo "FCM_APP_PUSH_AUTHORIZATION=$FCM_APP_PUSH_AUTHORIZATION" >> .env.production
           echo "BEX_API_URL=$BEX_PRODUCTION_API_URL" >> .env.production
           echo "SLACK_DEV_ALERT_URL=$SLACK_DEV_ALERT_URL" >> .env.production
