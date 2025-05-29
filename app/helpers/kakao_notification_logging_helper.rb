@@ -789,7 +789,7 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREACADEMY,
         "video_watched_ratio" => tem_params[:video_watched_ratio],
         "course_title" => tem_params[:course_title],
-        "send_at" => Time.current + (9 * 60 * 60)
+        "send_at" => Time.current
       }
     }
   end
@@ -806,7 +806,7 @@ module KakaoNotificationLoggingHelper
         "sender_type" => SENDER_TYPE_CAREACADEMY,
         "video_watched_ratio" => tem_params[:video_watched_ratio],
         "course_title" => tem_params[:course_title],
-        "send_at" => Time.current + (9 * 60 * 60)
+        "send_at" => Time.current
       }
     }
   end
