@@ -6,6 +6,7 @@ module KakaoNotificationLoggingHelper
   NOTIFICATION_EVENT_NAME2 = '[Action] Receive Notification2'
 
   SENDER_TYPE_CAREPARTNER = 'carepartner'
+  SENDER_TYPE_CAREACADEMY = 'careacademy'
   SENDER_TYPE_BUSINESS = 'business'
   SENDER_TYPE_USER = 'user'
 
@@ -140,6 +141,10 @@ module KakaoNotificationLoggingHelper
       return get_target_user_job_posting_logging_data(template_id, tem_params)
     when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
       return get_target_business_free_trials(template_id, tem_params)
+    when MessageTemplates[MessageNames::ACADEMY_EXAM_GUIDE]
+      return get_academy_exam_guide_logging_data(template_id, tem_params)
+    when MessageTemplates[MessageNames::ACADEMY_EXAM_TRANSITION]
+      return get_academy_exam_transition_logging_data(template_id, tem_params)
     else
       puts "WARNING: Event Logging Missing else case!"
     end
@@ -772,4 +777,37 @@ module KakaoNotificationLoggingHelper
     }
   end
 
+  def self.get_academy_exam_guide_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => tem_params[:title],
+        "type" => NOTIFICATION_TYPE_KAKAO,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "sender_type" => SENDER_TYPE_CAREACADEMY,
+        "video_watched_ratio" => tem_params[:video_watched_ratio],
+        "course_title" => tem_params[:course_title],
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
+
+  def self.get_academy_exam_transition_logging_data(template_id, tem_params)
+    return {
+      "user_id" => tem_params[:target_public_id],
+      "event_type" => NOTIFICATION_EVENT_NAME,
+      "event_properties" => {
+        "template" => template_id,
+        "title" => tem_params[:title],
+        "type" => NOTIFICATION_TYPE_KAKAO,
+        "receiver_type" => RECEIVER_TYPE_USER,
+        "sender_type" => SENDER_TYPE_CAREACADEMY,
+        "video_watched_ratio" => tem_params[:video_watched_ratio],
+        "course_title" => tem_params[:course_title],
+        "send_at" => Time.current + (9 * 60 * 60)
+      }
+    }
+  end
 end
