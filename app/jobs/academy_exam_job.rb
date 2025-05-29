@@ -18,7 +18,7 @@ class AcademyExamJob < ApplicationJob
   # 테스트용으로 오후 4시에 발송
   cron "0 7 * * ? *"
 
-  def academy_exam_guide_test(event: {})
+  def academy_exam_guide_test(event)
     Jets.logger.info "event: #{event.inspect}"
     Jets.logger.info "event.class: #{event.class}"
     Jets.logger.info "event.keys: #{event.keys}"
@@ -47,7 +47,7 @@ class AcademyExamJob < ApplicationJob
   # 테스트용으로 오후 4시에 발송
   cron "0 7 * * ? *"
 
-  def academy_exam_transition_test(event: {})
+  def academy_exam_transition_test(event)
     Jets.logger.info "event: #{event.inspect}"
     Jets.logger.info "event.class: #{event.class}"
     Jets.logger.info "event.keys: #{event.keys}"
