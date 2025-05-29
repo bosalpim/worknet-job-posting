@@ -20,7 +20,8 @@ class Academy::AcademyExamTransitionService
         user_name: result['user_name'].presence || '수강생',
         course_title: result['course_title'],
         video_watched_ratio: "#{(result['video_watched_ratio'] * 100).floor(1)}",
-        link: 'https://www.carepartner.kr/academy/my?tab=courses'
+        link: 'https://www.carepartner.kr/academy/my?tab=courses',
+        target_public_id: result['user_id'],
       },
       profile: "CareAcademy",
     )
