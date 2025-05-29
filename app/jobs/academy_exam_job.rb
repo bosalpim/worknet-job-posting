@@ -15,11 +15,15 @@ class AcademyExamJob < ApplicationJob
     Academy::AcademyExamTransitionService.new.call
   end
 
-  # 테스트용으로 오후 3시에 발송
-  cron "0 6 * * ? *"
+  # 테스트용으로 오후 4시에 발송
+  cron "0 7 * * ? *"
 
-  def academy_exam_guide_test(event:)
+  def academy_exam_guide_test(event: {})
     user = User.where('phone_number = ?', event['phone_number'] || '01020748127').first
+    unless user
+      Jets.logger.info "사용자를 찾을 수 없습니다"
+      return
+    end
 
     KakaoNotificationService.call(
       template_id: MessageTemplateName::ACADEMY_EXAM_GUIDE,
