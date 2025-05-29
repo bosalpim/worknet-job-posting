@@ -21,7 +21,7 @@ class Academy::AcademyExamGuideService
         course_title: result['course_title'],
         video_watched_ratio: "#{(result['video_watched_ratio'] * 100).floor(1)}",
         link: 'https://www.carepartner.kr/academy/my?tab=courses',
-        target_public_id: result['user_id'],
+        target_public_id: result['user_public_id'],
       },
       profile: "CareAcademy",
     )
@@ -90,7 +90,8 @@ SELECT
   cp.user_id,
   u.name as user_name,
   u.phone_number,
-  cp.video_watched_ratio
+  cp.video_watched_ratio,
+  u.public_id as user_public_id
 FROM course_progress cp
 JOIN not_attempted na ON na.course_id = cp.course_id AND na.user_id = cp.user_id
 JOIN users u ON u.id = cp.user_id
