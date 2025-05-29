@@ -20,7 +20,10 @@ class AcademyExamJob < ApplicationJob
 
   def academy_exam_guide_test(event: {})
     Jets.logger.info "event: #{event.inspect}"
-    user = User.where('phone_number = ?', event['phone_number'] || event[:phone_number] || '01020748127').first
+    Jets.logger.info "event.class: #{event.class}"
+    Jets.logger.info "event.keys: #{event.keys}"
+
+    user = User.where('phone_number = ?', event['phone_number'] || event[:phone_number] || '01051119300').first
     unless user
       Jets.logger.info "사용자를 찾을 수 없습니다"
       return
@@ -46,7 +49,10 @@ class AcademyExamJob < ApplicationJob
 
   def academy_exam_transition_test(event: {})
     Jets.logger.info "event: #{event.inspect}"
-    user = User.where('phone_number = ?', event['phone_number'] || event[:phone_number] || '01020748127').first
+    Jets.logger.info "event.class: #{event.class}"
+    Jets.logger.info "event.keys: #{event.keys}"
+
+    user = User.where('phone_number = ?', event['phone_number'] || event[:phone_number] || '01051119300').first
     unless user
       Jets.logger.info "사용자를 찾을 수 없습니다"
       return
