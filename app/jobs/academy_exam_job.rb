@@ -15,8 +15,7 @@ class AcademyExamJob < ApplicationJob
     Academy::AcademyExamTransitionService.new.call
   end
 
-  # 테스트용으로 오후 4시에 발송
-  cron "0 7 * * ? *"
+  # cron "0 7 * * ? *"
 
   def academy_exam_guide_test
     user = User.where('phone_number = ?', '01051119300').first
@@ -40,8 +39,7 @@ class AcademyExamJob < ApplicationJob
       )
   end
 
-  # 테스트용으로 오후 4시에 발송
-  cron "0 7 * * ? *"
+  # cron "0 7 * * ? *"
 
   def academy_exam_transition_test
     user = User.where('phone_number = ?', '01051119300').first
