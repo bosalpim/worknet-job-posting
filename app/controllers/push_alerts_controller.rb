@@ -66,7 +66,8 @@ end
 
 class PushAlertsController < ApplicationController
   def leaderboard
-    render json: { status: 'success', message: 'Push leaderboard endpoint is working' }
+    UserPushLeaderboardJob.run
+    render json: { status: 'success', message: 'Leaderboard job started' }
   end
 
   def prepare_academy_boost
