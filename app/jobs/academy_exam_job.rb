@@ -18,12 +18,8 @@ class AcademyExamJob < ApplicationJob
   # 테스트용으로 오후 4시에 발송
   cron "0 7 * * ? *"
 
-  def academy_exam_guide_test(event)
-    Jets.logger.info "event: #{event.inspect}"
-    Jets.logger.info "event.class: #{event.class}"
-    Jets.logger.info "event.keys: #{event.keys}"
-
-    user = User.where('phone_number = ?', event['phone_number'] || event[:phone_number] || '01051119300').first
+  def academy_exam_guide_test
+    user = User.where('phone_number = ?', '01051119300').first
     unless user
       Jets.logger.info "사용자를 찾을 수 없습니다"
       return
@@ -47,12 +43,8 @@ class AcademyExamJob < ApplicationJob
   # 테스트용으로 오후 4시에 발송
   cron "0 7 * * ? *"
 
-  def academy_exam_transition_test(event)
-    Jets.logger.info "event: #{event.inspect}"
-    Jets.logger.info "event.class: #{event.class}"
-    Jets.logger.info "event.keys: #{event.keys}"
-
-    user = User.where('phone_number = ?', event['phone_number'] || event[:phone_number] || '01051119300').first
+  def academy_exam_transition_test
+    user = User.where('phone_number = ?', '01051119300').first
     unless user
       Jets.logger.info "사용자를 찾을 수 없습니다"
       return
