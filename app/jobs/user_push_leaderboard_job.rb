@@ -23,7 +23,7 @@ class LeaderboardPushAlert
     # 서비스에 유저 리스트를 한 번에 넘김
     notification = Notification::Factory::AcademyLeaderboardPushService.new(user_infos: user_infos)
     notification.create_message
-    # notification.notify # 한 번에 발송
+    notification.notify # 한 번에 발송
     Jets.logger.info "총 #{user_infos.size}명에게 푸시 발송"
   end
 end
