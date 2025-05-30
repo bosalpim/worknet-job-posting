@@ -27,6 +27,7 @@ class LeaderboardPushAlert
     notification = Notification::Factory::AcademyLeaderboardPushService.new(user_infos: user_infos)
     notification.create_message
     notification.notify # 한 번에 발송
+    notification.save_result
     Jets.logger.info "총 #{user_infos.size}명에게 푸시 발송"
   end
 end
