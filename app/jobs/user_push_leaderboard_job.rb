@@ -6,6 +6,9 @@ class LeaderboardPushAlert
     Jets.logger.info "Leaderboard data generated at: #{current_time}"
     Jets.logger.info "Current timezone: #{current_time.zone}"
 
+    # 강의 누적 진도율 50% 이하 &
+    # 2주 이내 수강 이력이 있으면서 &
+    # D-1에 수강이력이 없으면 D-0 아침 9시에 알림을 보낸다.
     results = ActiveRecord::Base.connection.execute(<<-SQL)
       SELECT	distinct u.public_id, t."token"
       FROM	get_course_leaderboard() l
