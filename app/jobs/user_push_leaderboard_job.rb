@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LeaderboardPushAlert
-  def self.log
+  def self.send_push
     current_time = Time.current
     Jets.logger.info "Leaderboard data generated at: #{current_time}"
     Jets.logger.info "Current timezone: #{current_time.zone}"
@@ -32,11 +32,11 @@ class UserPushLeaderboardJob < ApplicationJob
   
   cron "0 0 * * ? *"
   def leaderboard_push_alert_job
-    LeaderboardPushAlert.log
+    LeaderboardPushAlert.send_push
   end
 
   # API 호출을 위한 클래스 메소드
   def self.run
-    LeaderboardPushAlert.log
+    LeaderboardPushAlert.send_push
   end
 end 
