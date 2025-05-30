@@ -93,4 +93,6 @@ module MessageTemplateName
   # 아카데미
   ACADEMY_EXAM_GUIDE = 'exam_guide'.freeze
   ACADEMY_EXAM_TRANSITION = 'exam_transition'.freeze
+  ACADEMY_LEADERBOARD = 'academy_leaderboard'.freeze
+
 end

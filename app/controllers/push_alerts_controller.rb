@@ -65,6 +65,11 @@ module UserPushAlert
 end
 
 class PushAlertsController < ApplicationController
+  def leaderboard
+    UserPushLeaderboardJob.run
+    render json: { status: 'success', message: 'Leaderboard job started' }
+  end
+
   def prepare_academy_boost
     UserPushAlert::AcademyBoost.prepare
 

@@ -50,6 +50,8 @@ class Notification::FactoryService
       return Notification::Factory::EmploymentConfirmationService.new(params)
     when MessageTemplates[MessageNames::TARGET_JOB_BUSINESS_FREE_TRIALS]
       return Notification::Factory::TargetJobBusinessFreeTrialsService.new(params)
+    when MessageTemplate[MessageNames::ACADEMY_LEADERBOARD]
+      return Notification::Factory::AcademyLeaderboardPushService.new(params)
     else
       p "no template found : #{template_id}"
       return []

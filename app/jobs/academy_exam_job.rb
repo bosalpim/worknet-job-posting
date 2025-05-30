@@ -9,57 +9,9 @@ class AcademyExamJob < ApplicationJob
   end
 
   # 매일 아침 8시에 실행
-  # TODO: cron "0 23 * * ? *"
+  cron "0 23 * * ? *"
 
   def academy_exam_transition
     Academy::AcademyExamTransitionService.new.call
-  end
-
-  # cron "0 7 * * ? *"
-
-  def academy_exam_guide_test
-    user = User.where('phone_number = ?', '01051119300').first
-    unless user
-      Jets.logger.info "사용자를 찾을 수 없습니다"
-      return
-    end
-
-    KakaoNotificationService.call(
-      template_id: MessageTemplateName::ACADEMY_EXAM_GUIDE,
-      phone: user.phone_number,
-      message_type: 'AI',
-      template_params: {
-        user_name: user.name.presence || '수강생',
-        course_title: "병행동행매니저",
-        video_watched_ratio: "56.7",
-        link: 'https://www.carepartner.kr/academy/my?tab=courses',
-        target_public_id: user.public_id,
-      },
-      profile: "CareAcademy",
-      )
-  end
-
-  # cron "0 7 * * ? *"
-
-  def academy_exam_transition_test
-    user = User.where('phone_number = ?', '01051119300').first
-    unless user
-      Jets.logger.info "사용자를 찾을 수 없습니다"
-      return
-    end
-
-    KakaoNotificationService.call(
-      template_id: MessageTemplateName::ACADEMY_EXAM_TRANSITION,
-      phone: user.phone_number,
-      message_type: 'AI',
-      template_params: {
-        user_name: user.name.presence || '수강생',
-        course_title: "병행동행매니저",
-        video_watched_ratio: "56.7",
-        link: 'https://www.carepartner.kr/academy/my?tab=courses',
-        target_public_id: user.public_id,
-      },
-      profile: "CareAcademy",
-      )
   end
 end
